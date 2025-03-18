@@ -1,0 +1,161 @@
+// Prisma schema for the AWS Certification Study Web App
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// User model
+model User {
+  userId    String         @id @default(uuid())
+  email     String         @unique
+  firstName String         @unique
+  lastName  String
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  progress  UserProgress[]
+  purchases Purchase[]
+  quizAttempts QuizAttempt[]
+}
+
+// Quiz model
+model Quiz {
+  id           String         @id @default(uuid())
+  title        String
+  description  String?
+  level        DifficultyLevel? @default(BEGINER)
+  questions    Question[]
+  duration     Int?           // Duration of the quiz in minutes
+  isPublic     Boolean        @default(false)
+  free         Boolean?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  userProgress UserProgress[]
+  categoryId   String?
+  category     Category?      @relation(fields: [categoryId], references: [id])
+  attempts     QuizAttempt[]
+}
+
+// Question model
+model Question {
+  id            String   @id @default(uuid())
+  quizId        String
+  quiz          Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  content          String
+  options       QuestionOption[]
+  isMultiSelect Boolean @default(false)
+  correctAnswer String[]
+  explanation   String?
+  createdAt     DateTime @default(now())
+  categoryId    String?
+  category      Category? @relation(fields: [categoryId], references: [id])
+  difficultyLevel String?
+  awsService    String?
+  attempts      QuestionAttempt[]
+}
+
+// Flashcard model
+model Flashcard {
+  id         String    @id @default(uuid())
+  topic      String
+  question   String
+  answer     String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  categoryId String?
+  category   Category? @relation(fields: [categoryId], references: [id])
+}
+
+// UserProgress model
+model UserProgress {
+  id          String    @id @default(uuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  quizId      String
+  quiz        Quiz      @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  score       Int
+  completedAt DateTime?
+  timeTaken   Int?
+  attempts    Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+// Purchase model
+model Purchase {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  purchasedAt DateTime @default(now())
+  price       Float
+}
+
+// Category model (optional)
+model Category {
+  id         String      @id @default(uuid())
+  name       String      @unique
+  quizzes    Quiz[]
+  flashcards Flashcard[]
+  questions  Question[]
+  description String?
+  questionAttempts QuestionAttempt[]
+}
+
+// Enhanced Score Model for detailed performance tracking
+model QuizAttempt {
+  id            String         @id @default(uuid())
+  userId        String
+  quizId        String
+  totalScore    Int
+  percentageScore Float
+  timeSpentSecs Int            // Total time spent on the quiz in seconds
+  startedAt     DateTime       @default(now())
+  completedAt   DateTime?
+  questions     QuestionAttempt[]
+  quiz          Quiz           @relation(fields: [quizId], references: [id])
+  user          User?          @relation(fields: [userId], references: [userId])
+  
+  @@index([userId])
+  @@index([quizId])
+}
+
+model QuestionAttempt {
+  id            String        @id @default(uuid())
+  quizAttemptId String
+  questionId    String
+  userAnswer    String
+  isCorrect     Boolean
+  timeSpentSecs Int          // Time spent on this specific question
+  categoryId    String?      // Reference to the category of the question
+  difficultyLevel String     // e.g., "Easy", "Medium", "Hard"
+  awsService    String?      // Which AWS service this question relates to
+  
+  quizAttempt   QuizAttempt  @relation(fields: [quizAttemptId], references: [id], onDelete: Cascade)
+  question      Question     @relation(fields: [questionId], references: [id])
+  category      Category?    @relation(fields: [categoryId], references: [id])
+  
+  @@index([quizAttemptId])
+  @@index([questionId])
+  @@index([categoryId])
+}
+
+model QuestionOption {
+  id          String    @id @default(uuid())
+  questionId  String
+  content     String    @db.Text
+  isCorrect   Boolean
+  
+  question    Question  @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  
+  @@index([questionId])
+}
+
+enum DifficultyLevel {
+  BEGINER
+  INTERMEDIATE
+  ADVANCED
+  EXPERT
+}

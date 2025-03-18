@@ -1,16 +1,28 @@
 import type { Config } from "tailwindcss";
+const colors = require("tailwindcss/colors");
 
-const config: Config = {
+const config = {
     darkMode: ["class"],
     content: [
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "*.{js,ts,jsx,tsx,mdx}"
+    "./src/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/(auth)/*.{js,ts,jsx,tsx,mdx}",
+	"./src/app/(dashboard)/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  safelist: [
+    // Add dynamic color classes that need to be preserved
+    'bg-emerald-100', 'text-emerald-800', 'dark:bg-emerald-900', 'dark:text-emerald-300',
+    'bg-orange-100', 'text-orange-800', 'dark:bg-orange-900', 'dark:text-orange-300',
+    'bg-red-100', 'text-red-800', 'dark:bg-red-900', 'dark:text-red-300',
+    'text-emerald-500', 'text-emerald-600',
+    'text-orange-300'
   ],
   theme: {
   	extend: {
   		colors: {
+			...colors,
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
@@ -68,29 +80,18 @@ const config: Config = {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		keyframes: {
-  			'accordion-down': {
+  			shimmer: {
   				from: {
-  					height: '0'
+  					backgroundPosition: '0 0'
   				},
   				to: {
-  					height: 'var(--radix-accordion-content-height)'
-  				}
-  			},
-  			'accordion-up': {
-  				from: {
-  					height: 'var(--radix-accordion-content-height)'
-  				},
-  				to: {
-  					height: '0'
+  					backgroundPosition: '-200% 0'
   				}
   			}
-  		},
-  		animation: {
-  			'accordion-down': 'accordion-down 0.2s ease-out',
-  			'accordion-up': 'accordion-up 0.2s ease-out'
   		}
   	}
   },
   plugins: [require("tailwindcss-animate")],
-};
+} satisfies Config;
+
 export default config;

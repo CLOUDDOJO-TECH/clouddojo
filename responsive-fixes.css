@@ -1,0 +1,42 @@
+@layer base {
+  html {
+    @apply overflow-x-hidden;
+  }
+
+  body {
+    @apply overflow-x-hidden min-h-screen;
+  }
+}
+
+@layer utilities {
+  /* Helper classes for debugging responsive issues */
+  .debug-screens::before {
+    @apply fixed bottom-0 left-0 z-50 bg-black text-white px-1 text-xs;
+    content: "xs";
+  }
+
+  @screen sm {
+    .debug-screens::before {
+      content: "sm";
+    }
+  }
+
+  @screen md {
+    .debug-screens::before {
+      content: "md";
+    }
+  }
+
+  @screen lg {
+    .debug-screens::before {
+      content: "lg";
+    }
+  }
+
+  @screen xl {
+    .debug-screens::before {
+      content: "xl";
+    }
+  }
+}
+
