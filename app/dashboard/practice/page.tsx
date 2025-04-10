@@ -10,7 +10,7 @@ import {
 } from "lucide-react"
 
 import { practiceTests, categories, levels, type PracticeTest } from "@/public/data/test-data"
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 
@@ -18,11 +18,13 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import FilterComponent from "@/components/dashboard/filter-component"
 import SearchBar from "@/components/dashboard/search-bar"
 import Link from "next/link"
-import { GetPracticeTests } from "@/app/(actions)/get-quizes"
+import { GetPracticeTests } from "@/app/(actions)/quiz/get-quizes"
 import prisma from "@/lib/prisma"
 import { useQuery } from "@tanstack/react-query"
 import { type DifficultyLevel, type Quiz } from "@prisma/client"
-import { UpgradeBadge } from "@/components/ui/upgrade-badge"
+import { cn } from "@/lib/utils"
+import PracticeTestsSkeleton from "./components/PracticeTestsSkeleton"
+import UpgradeButton from "@/components/upgrade-button"
 
 export default function PracticeTestsPage() {
   const [searchQuery, setSearchQuery] = useState("")
@@ -33,41 +35,52 @@ export default function PracticeTestsPage() {
   const [view, setView] = useState<"grid" | "list">("grid")
   const [isFilterOpen, setIsFilterOpen] = useState(false)
 
-  const { data, isSuccess, isLoading, isError} = useQuery({
+  const { data, isSuccess, isLoading, isError } = useQuery({
     queryKey: ["practiceTests"],
     queryFn: async () => await GetPracticeTests()
   })
-
-  {isError && <div>Error fetching practice tests</div>}
-  {isLoading && <div>Loading practice tests...</div>}
-
-  useEffect(() => {
-    if (isSuccess && data) {
-      console.log("Practice tests fetched successfully:", data);
-      // Your success logic here
-    }
-  }, [isSuccess, data]);
-
-
 
   const applyFilters = () => {
     setIsFilterOpen(false)
   }
 
-  if (!data) return [];
+  // Show skeleton UI during loading
+  if (isLoading) {
+    return <PracticeTestsSkeleton view={view} />
+  }
+
+  // Show error state
+  if (isError) {
+    return (
+      <div className="container p-4 md:p-6 pt-16 md:pt-6">
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md">
+          <p className="font-medium">Error loading practice tests</p>
+          <p className="text-sm">Please try again later</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Return empty array if no data
+  if (!data) return []
   const tests = data.data
-
-
 
   return (
     <div className="flex min-h-screen bg-background">
-
       <div className="flex-1 container w-full">
         <div className="p-4 md:p-6 pt-16 md:pt-6">
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-4">
               <div className="flex items-center justify-between">
-                <h1 className="text-2xl font-bold">Practice Tests</h1>
+                <h1 className="text-2xl font-serif font-bold">Practice Tests</h1>
+                
+              </div>
+
+              <div className="flex flex-col md:flex-row gap-4 justify-between w-full">
+                <span className="flex space-x-3">
+                <SearchBar />
+                <FilterComponent />
+                </span>
                 <ToggleGroup
                   type="single"
                   value={view}
@@ -81,58 +94,11 @@ export default function PracticeTestsPage() {
                   </ToggleGroupItem>
                 </ToggleGroup>
               </div>
-
-              <div className="flex flex-col md:flex-row gap-4">
-                <SearchBar />
-
-                <FilterComponent />
-              </div>
-
-              {tests.length > 0 && (
-                <div className="flex flex-wrap gap-1.5">
-                  {selectedCategories.map((categoryId) => {
-                    const category = categories.find((c) => c.id === categoryId)
-                    return (
-                      <Badge key={categoryId} variant="secondary" className="flex items-center gap-1">
-                        {category?.label}
-                        <button
-                          className="ml-1 rounded-full hover:bg-muted p-0.5"
-                        >
-                          <Check className="h-3 w-3" />
-                        </button>
-                      </Badge>
-                    )
-                  })}
-
-                  {selectedLevel !== "all" && (
-                    <Badge variant="secondary" className="flex items-center gap-1">
-                      {levels.find((l) => l.id === selectedLevel)?.label}
-                      <button
-                        onClick={() => setSelectedLevel("all")}
-                        className="ml-1 rounded-full hover:bg-muted p-0.5"
-                      >
-                        <Check className="h-3 w-3" />
-                      </button>
-                    </Badge>
-                  )}
-
-                  {priceFilter !== "all" && (
-                    <Badge variant="secondary" className="flex items-center gap-1">
-                      {priceFilter === "free" ? "Free" : "Paid"}
-                      <button onClick={() => setPriceFilter("all")} className="ml-1 rounded-full hover:bg-muted p-0.5">
-                        <Check className="h-3 w-3" />
-                      </button>
-                    </Badge>
-                  )}
-                </div>
-              )}
+              
             </div>
 
-            <div className="mt-2">
-              <h2 className="text-lg font-medium mb-4">
-                {tests.length} {tests.length === 1 ? "Test" : "Tests"} Available
-              </h2>
 
+            <div className="mt-2">
               {view === "grid" ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {tests.map((test) => (
@@ -151,7 +117,6 @@ export default function PracticeTestsPage() {
                 <div className="flex flex-col items-center justify-center py-12 text-center">
                   <FileQuestion className="h-12 w-12 text-muted-foreground mb-4" />
                   <h3 className="text-lg font-medium">No tests found</h3>
-              
                 </div>
               )}
             </div>
@@ -162,8 +127,6 @@ export default function PracticeTestsPage() {
   )
 }
 
-
-
 interface TestCardProps {
   test: {
     id: string;
@@ -172,15 +135,9 @@ interface TestCardProps {
     level?: DifficultyLevel | null;
     duration?: number | null;
     free?: boolean | null;
-    questions: {
-      id: string;
-      content: string;
-      options: {
-        id: string;
-        content: string;
-        isCorrect: boolean;
-      }[];
-    }[] | null;
+    _count?: {
+      questions: number;
+    }
     category?: {
       id: string;
       name: string;
@@ -233,7 +190,7 @@ function TestCard({ test, view }: TestCardProps) {
           <div className="flex items-center gap-4 text-sm">
             <div className="flex items-center gap-1">
               <FileQuestion className="h-4 w-4 text-muted-foreground" />
-              <span>{test.questions?.length} questions</span>
+              <span>{test._count?.questions} questions</span>
             </div>
             <div className="flex items-center gap-1">
               <Clock className="h-4 w-4 text-muted-foreground" />
@@ -241,16 +198,26 @@ function TestCard({ test, view }: TestCardProps) {
             </div>
           </div>
         </CardContent>
-        <CardFooter className="p-4 pt-0 flex justify-between items-center">
-          {test.free ? (
-            <span className="text-emerald-500">Free</span>
-          ) : (
-            <span className="font-medium">Upgrade</span>
-          )}
-          <Link href={`/dashboard/practice/1`}>
-          <Button className="bg-green-600">Start Test</Button>
-          </Link>
-        </CardFooter>
+        {
+          test.free ?
+          <CardFooter className="p-4 pt-0 w-full flex items-end justify-end">
+            <Link 
+              href={`/dashboard/practice/${test.id}`}
+              className={buttonVariants({ 
+                variant: "default", 
+                size: "sm",
+                className: "bg-green-600 hover:bg-green-700"
+              })}
+            >
+              Start Test
+            </Link>
+          </CardFooter>
+          :
+          <CardFooter className="p-4 pt-0 flex w-full justify-end items-end">
+            <UpgradeButton />
+          </CardFooter>
+        }
+        
       </Card>
     )
   } else {
@@ -258,7 +225,7 @@ function TestCard({ test, view }: TestCardProps) {
       <Card className="overflow-hidden transition-all hover:shadow-md">
         <div className="flex flex-col md:flex-row">
           <div className="md:w-1/4 lg:w-1/5 aspect-video md:aspect-square relative overflow-hidden">
-            <img src="/aws-bg-image.jpg"className="object-cover w-full h-full" />
+            <img src="/aws-bg-image.jpg" className="object-cover w-full h-full transition-transform hover:scale-105"/>
             {test.free && (
               <Badge className="absolute top-2 right-2 bg-emerald-500 hover:bg-emerald-600">Free</Badge>
             )}
@@ -276,20 +243,27 @@ function TestCard({ test, view }: TestCardProps) {
                 }
                 <h3 className="font-semibold text-lg">{test.title}</h3>
               </div>
-              <div className="flex items-center gap-2">
+           
                 {test.free ? (
-                  <UpgradeBadge size="sm" />
+                  <Link 
+                    href={`/dashboard/practice/${test.id}`}
+                    className={buttonVariants({ 
+                      variant: "default", 
+                      size: "sm",
+                      className: "bg-green-600 hover:bg-green-700"  
+                    })}
+                  >
+                    Start Test
+                  </Link>
                 ) : (
-                  <span className="font-medium text-emerald-600">Free</span>
+                <UpgradeButton />
                 )}
-                <Button disabled={!(test.free)} className="bg-orange-500" >Start Test</Button>
-              </div>
-            </div>
+                </div>
             <p className="text-muted-foreground text-sm mb-3">{test.description}</p>
             <div className="flex items-center gap-4 text-sm">
               <div className="flex items-center gap-1">
                 <FileQuestion className="h-4 w-4 text-muted-foreground" />
-                <span>{test.questions?.length} questions</span>
+                <span>{test._count?.questions} questions</span>
               </div>
               <div className="flex items-center gap-1">
                 <Clock className="h-4 w-4 text-muted-foreground" />

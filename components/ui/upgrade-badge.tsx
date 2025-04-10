@@ -15,7 +15,7 @@ export function UpgradeBadge({ className, size = "md" }: UpgradeBadgeProps) {
 
   return (
     <Badge
-      className={`font-medium bg-gradient-to-r from-amber-500 to-purple-600 hover:from-amber-600 hover:to-purple-700 
+      className={`font-medium bg-gradient-to-r from-emerald-500 to-emerald-500/40 hover:from-emerald-600 hover:to-emerald-600/40 
       border-none text-white shadow-sm transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 
       flex items-center gap-1 cursor-pointer ${sizeClasses[size]} ${className}`}
     >

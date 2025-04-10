@@ -18,21 +18,48 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
+import React from "react"
 
 export default function DashboardPage() {
   const [view, setView] = useState<"grid" | "list">("grid")
   const [isLoading, setIsLoading] = useState(false)
+  const [performanceData, setPerformanceData] = useState({
+    totalAttempts: 5,
+    averageScore: 78,
+    highestScore: 92,
+    scoreHistory: [
+      { date: '2023-10-01', score: 65 },
+      { date: '2023-10-10', score: 72 },
+      { date: '2023-10-20', score: 78 },
+      { date: '2023-10-30', score: 85 },
+      { date: '2023-11-10', score: 92 },
+    ]
+  })
 
-  const handleRefresh = () => {
-    setIsLoading(true)
+  // Define a stable function using useCallback
+  const handleRefresh = React.useCallback(() => {
+    setIsLoading(true);
     // Simulate data fetching
     setTimeout(() => {
-      setIsLoading(false)
-    }, 1000)
-  }
+      setIsLoading(false);
+    }, 1000);
+  }, []); // Empty dependency array since it doesn't depend on any props/state
+
+  // Add effect to listen for refresh event
+  React.useEffect(() => {
+    const handleRefreshEvent = () => {
+      handleRefresh();
+    };
+    
+    window.addEventListener('performance-refresh-requested', handleRefreshEvent);
+    
+    return () => {
+      window.removeEventListener('performance-refresh-requested', handleRefreshEvent);
+    };
+  }, [handleRefresh]);
 
   return (
-    <div className="p-4 md:p-6">
+    <div className="p-4 md:p-6 max-w-7xl mx-auto">
       <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-4">
           <div className="flex items-center justify-between">
@@ -80,7 +107,12 @@ export default function DashboardPage() {
             <TabsContent value="overview" className="mt-0">
               <div className="flex flex-col gap-6">
                 {/* Performance Section with animated graph and stats */}
-                <PerformanceSection />
+                <PerformanceSection 
+                  hasAttempts={true}
+                  stats={performanceData}
+                  isLoading={isLoading}
+                  refetch={handleRefresh}
+                />
 
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <DateRangePicker onDateRangeChange={(range) => console.log("Date range:", range)} />

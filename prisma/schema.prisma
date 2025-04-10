@@ -10,15 +10,33 @@ generator client {
 
 // User model
 model User {
-  userId    String         @id @default(uuid())
-  email     String         @unique
-  firstName String         @unique
-  lastName  String
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
-  progress  UserProgress[]
-  purchases Purchase[]
-  quizAttempts QuizAttempt[]
+  userId        String         @id @default(uuid())
+  email         String         @unique
+  firstName     String         @unique
+  lastName      String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  progress      UserProgress[]
+  purchases     Purchase[]
+  quizAttempts  QuizAttempt[]
+  onboarding    UserOnboarding?
+  hasCompletedOnboarding Boolean @default(false)
+  aiAnalysisReports AIAnalysisReport[]
+}
+
+// UserOnboarding model
+model UserOnboarding {
+  id            String   @id @default(uuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  companyType   String?
+  companySize   String?
+  goals         String[]
+  preferredCertifications String[]
+  experience    String?
+  completedAt   DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 // Quiz model
@@ -101,7 +119,7 @@ model Category {
   flashcards Flashcard[]
   questions  Question[]
   description String?
-  questionAttempts QuestionAttempt[]
+  quizAttempt QuizAttempt[]
 }
 
 // Enhanced Score Model for detailed performance tracking
@@ -114,12 +132,19 @@ model QuizAttempt {
   timeSpentSecs Int            // Total time spent on the quiz in seconds
   startedAt     DateTime       @default(now())
   completedAt   DateTime?
+  categoryId    String?
+  category      Category?      @relation(fields: [categoryId], references: [id])
   questions     QuestionAttempt[]
   quiz          Quiz           @relation(fields: [quizId], references: [id])
   user          User?          @relation(fields: [userId], references: [userId])
   
+  // New fields for comprehensive analysis
+  analysisMetadata Json?       // Store additional analysis-related metadata
+  performanceFlags String[]    // Flags for performance characteristics
+  
   @@index([userId])
   @@index([quizId])
+  @@index([categoryId])
 }
 
 model QuestionAttempt {
@@ -135,8 +160,6 @@ model QuestionAttempt {
   
   quizAttempt   QuizAttempt  @relation(fields: [quizAttemptId], references: [id], onDelete: Cascade)
   question      Question     @relation(fields: [questionId], references: [id])
-  category      Category?    @relation(fields: [categoryId], references: [id])
-  
   @@index([quizAttemptId])
   @@index([questionId])
   @@index([categoryId])
@@ -158,4 +181,17 @@ enum DifficultyLevel {
   INTERMEDIATE
   ADVANCED
   EXPERT
+}
+
+// AIAnalysisReport model for caching AI analyses
+model AIAnalysisReport {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  reportData    Json     // Stores the full AI analysis report as JSON
+  generatedAt   DateTime @default(now())
+  expiresAt     DateTime // When this report expires (new one generated weekly)
+  lastRequestedAt DateTime @default(now()) // Track when the report was last viewed
+  
+  @@index([userId])
 }

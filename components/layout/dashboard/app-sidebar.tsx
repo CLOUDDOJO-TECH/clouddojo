@@ -41,6 +41,7 @@ import { RiLogoutBoxLine } from "@remixicon/react";
 import { SignOutButton } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import UpgradeCard from "@/components/upgrade-card";
 
 const data = {
   teams: [
@@ -118,18 +119,20 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
                     asChild
-                    className={isActive(item.url) ? "group/menu-button font-medium gap-3 h-9 rounded-md bg-gradient-to-r hover:bg-transparent from-emerald-500 to-emerald-500/40 data-[active=true]:bg-gradient-to-r data-[active=true]:from-primary/20 data-[active=true]:to-primary/5 [&>svg]:size-auto" : "group/menu-button font-medium gap-3 h-9 rounded-md bg-gradient-to-r hover:bg-transparent hover:from-emerald-500 hover:to-emerald-500/40"}
+                    className={isActive(item.url) 
+                      ? "group/menu-button font-medium gap-3 h-9 rounded-md bg-gradient-to-r from-emerald-500 to-emerald-500/40 [&>svg]:size-auto" 
+                      : "group/menu-button font-medium gap-3 h-9 rounded-md hover:bg-gradient-to-r hover:from-emerald-500 hover:to-emerald-500/40"}
                     isActive={isActive(item.url)}
                   >
                     <a href={item.url}>
                       {item.icon && (
                         <item.icon
-                          className={cn("text-muted-foreground/60", { "text-emerald-500": isActive(item.url) })}
+                          className={cn("text-muted-foreground/60", { "text-white": isActive(item.url) })}
                           size={22}
                           aria-hidden="true"
                         />
                       )}
-                      <span>{item.title}</span>
+                      <span className={isActive(item.url) ? "text-white" : ""}>{item.title}</span>
                     </a>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -140,6 +143,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       ))}
     </SidebarContent>
     <SidebarFooter>
+      <div className="px-4 mb-4">
+        <UpgradeCard />
+      </div>
       <hr className="border-t border-border mx-2 -mt-px" />
       <SidebarMenu>
         <SidebarMenuItem>
