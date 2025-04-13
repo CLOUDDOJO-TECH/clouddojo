@@ -27,14 +27,12 @@ interface PerformanceSectionProps {
   hasAttempts: boolean
   stats: any // Replace with proper type
   isLoading: boolean
-  refetch?: () => void  // Make refetch optional
 }
 
 export default function PerformanceSection({ 
   hasAttempts, 
   stats, 
   isLoading,
-  refetch = () => {} // Empty default function
 }: PerformanceSectionProps) {
   
   // If there are no attempts, show the empty state
@@ -128,25 +126,6 @@ export default function PerformanceSection({
                 </TooltipContent>
               </UITooltip>
             </TooltipProvider>
-
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              onClick={() => {
-                if (typeof refetch === 'function') {
-                  refetch();
-                } else {
-                  // Fallback behavior using custom event
-                  const event = new CustomEvent('performance-refresh-requested');
-                  window.dispatchEvent(event);
-                }
-              }}
-              disabled={isLoading}
-              className="h-8 w-8"
-            >
-              <RefreshCcwDot className={cn("h-4 w-4", { "animate-spin": isLoading })} />
-              <span className="sr-only">Refresh data</span>
-            </Button>
           </span>
         </div>
 

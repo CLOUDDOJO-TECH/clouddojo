@@ -1,0 +1,84 @@
+{
+  "/Users/glen/Desktop/Developers/clouddojo/serverless.yml": {
+    "versionFramework": "4.12.0",
+    "servicePath": "/Users/glen/Desktop/Developers/clouddojo/serverless.yml",
+    "serviceConfigFileName": "serverless.yml",
+    "service": {
+      "service": "aws-quiz-ai-analysis",
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs18.x",
+        "stage": "dev",
+        "region": "us-east-1",
+        "environment": {
+          "GOOGLE_API_KEY": "<REDACTED>"
+        }
+      },
+      "functions": {
+        "analyzeTest": {
+          "handler": "lambda/ai-analysis/dist/index.handler",
+          "events": [
+            {
+              "http": {
+                "path": "analyze-test",
+                "method": "post",
+                "cors": true
+              }
+            }
+          ]
+        }
+      },
+      "plugins": [
+        "serverless-plugin-typescript",
+        "serverless-offline",
+        "serverless-dotenv-plugin"
+      ],
+      "custom": {
+        "typescript": {
+          "srcPath": "lambda/ai-analysis",
+          "tsConfigFileLocation": "./lambda/ai-analysis/tsconfig.json"
+        },
+        "dotenv": {
+          "path": "./lambda/ai-analysis/.env"
+        }
+      },
+      "package": {
+        "individually": true,
+        "patterns": [
+          "!node_modules/.prisma/**",
+          "!node_modules/@prisma/client/**",
+          "!node_modules/prisma/**",
+          "!**/*.test.ts",
+          "!**/*.spec.ts",
+          "!.git/**",
+          "!.vscode/**",
+          "!.env*",
+          "!README.md"
+        ]
+      }
+    },
+    "provider": {
+      "name": "aws",
+      "runtime": "nodejs18.x",
+      "stage": "dev",
+      "region": "us-east-1",
+      "environment": {
+        "GOOGLE_API_KEY": "<REDACTED>"
+      }
+    },
+    "error": {
+      "message": "You must sign in or use a license key with Serverless Framework V.4 and later versions. Please use \"serverless login\".",
+      "stack": "Error: You must sign in or use a license key with Serverless Framework V.4 and later versions. Please use \"serverless login\".\n    at Authentication.getAuthenticatedData (file:///Users/glen/.serverless/releases/4.12.0/package/dist/sf-core.js:557:10892)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async Authentication.authenticate (file:///Users/glen/.serverless/releases/4.12.0/package/dist/sf-core.js:559:21808)\n    at async TraditionalRunner.resolveVariablesAndAuthenticate (file:///Users/glen/.serverless/releases/4.12.0/package/dist/sf-core.js:563:2377)\n    at async TraditionalRunner.run (file:///Users/glen/.serverless/releases/4.12.0/package/dist/sf-core.js:1053:27896)\n    at async route (file:///Users/glen/.serverless/releases/4.12.0/package/dist/sf-core.js:1084:2779)\n    at async Object.run (file:///Users/glen/.serverless/releases/4.12.0/package/dist/sf-core.js:1085:3661)\n    at async run2 (file:///Users/glen/.serverless/releases/4.12.0/package/dist/sf-core.js:1085:4814)"
+    },
+    "serviceRawFile": "service: aws-quiz-ai-analysis\n\nprovider:\n  name: aws\n  runtime: nodejs18.x\n  stage: ${opt:stage, 'dev'}\n  region: ${opt:region, 'us-east-1'}\n  environment:\n    GOOGLE_API_KEY: ${env:GOOGLE_API_KEY}\n\nfunctions:\n  analyzeTest:\n    handler: lambda/ai-analysis/dist/index.handler\n    events:\n      - http:\n          path: analyze-test\n          method: post\n          cors: true\n\nplugins:\n  - serverless-plugin-typescript\n  - serverless-offline\n  - serverless-dotenv-plugin\n\ncustom:\n  typescript:\n    srcPath: lambda/ai-analysis\n    tsConfigFileLocation: ./lambda/ai-analysis/tsconfig.json\n  dotenv:\n    path: ./lambda/ai-analysis/.env\n\npackage:\n  individually: true\n  patterns:\n    - '!node_modules/.prisma/**'\n    - '!node_modules/@prisma/client/**'\n    - '!node_modules/prisma/**'\n    - '!**/*.test.ts'\n    - '!**/*.spec.ts'\n    - '!.git/**'\n    - '!.vscode/**'\n    - '!.env*'\n    - '!README.md' ",
+    "command": [
+      "offline"
+    ],
+    "options": {},
+    "serviceProviderAwsCfStackId": null,
+    "serviceProviderAwsCfStackCreated": null,
+    "serviceProviderAwsCfStackUpdated": null,
+    "serviceProviderAwsCfStackStatus": null,
+    "serviceProviderAwsCfStackOutputs": null
+  }
+}

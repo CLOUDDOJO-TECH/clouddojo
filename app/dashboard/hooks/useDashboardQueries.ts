@@ -12,7 +12,6 @@ export function useDashboardQueries(enabled: boolean) {
   const { 
     data: performanceData,
     isLoading: isLoadingPerformance,
-    refetch: performanceRefetch
   } = useQuery({
     queryKey: ['performanceStats'],
     queryFn: async () => fetchUserPerformanceStats(),
@@ -52,7 +51,6 @@ export function useDashboardQueries(enabled: boolean) {
   return {
     performanceStats,
     activityHistory,
-    performanceRefetch,
     categories,
     hasAttempts: performanceData?.hasAttempts || false,
     isLoadingPerformance,

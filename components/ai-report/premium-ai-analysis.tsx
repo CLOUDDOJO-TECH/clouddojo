@@ -119,7 +119,7 @@ export default function PremiumAnalysisDashboard() {
     strengths: true,
     weaknesses: true,
     recommendations: true,
-    detailed: false,
+    detailed: true,
   })
   const chartRef = useRef(null)
 
@@ -147,6 +147,25 @@ export default function PremiumAnalysisDashboard() {
 
     try {
       const result = await analyzeTestData()
+
+      // lamda function to analyze test data
+      // const response = await fetch('/api/ai-analysis', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({
+      //     timestamp: new Date().toISOString(),
+      //   }),
+      // })
+
+      // if (!response.ok) {
+      //   const error = await response.json()
+      //   throw new Error(error.error || 'Failed to analyze test data')
+      // }
+
+      // const result = await response.json()
+      
       clearInterval(progressInterval)
 
       if (!result.success || !result.data) {
@@ -494,7 +513,7 @@ export default function PremiumAnalysisDashboard() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-white rounded-lg border border-gray-200 p-4">
+                {/* <div className="bg-white rounded-lg border border-gray-200 p-4">
                   <h3 className="text-md font-medium text-gray-800 mb-3 flex items-center">
                     <TrendingUp className="h-4 w-4 mr-2 text-emerald-500" />
                     Performance Trend
@@ -511,9 +530,9 @@ export default function PremiumAnalysisDashboard() {
                       </div>
                     ))}
                   </div>
-                </div>
+                </div> */}
 
-                <div className="bg-white rounded-lg border border-gray-200 p-4">
+                {/* <div className="bg-white rounded-lg border border-gray-200 p-4">
                   <h3 className="text-md font-medium text-gray-800 mb-3 flex items-center">
                     <Clock className="h-4 w-4 mr-2 text-blue-500" />
                     Time Distribution
@@ -539,7 +558,7 @@ export default function PremiumAnalysisDashboard() {
                       </div>
                     ))}
                   </div>
-                </div>
+                </div> */}
               </div>
             </TabsContent>
 

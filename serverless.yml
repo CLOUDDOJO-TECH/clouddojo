@@ -1,0 +1,43 @@
+service: aws-quiz-ai-analysis
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
+  environment:
+    GOOGLE_API_KEY: ${env:GOOGLE_API_KEY}
+
+functions:
+  analyzeTest:
+    handler: lambda/ai-analysis/dist/index.handler
+    events:
+      - http:
+          path: analyze-test
+          method: post
+          cors: true
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
+  - serverless-dotenv-plugin
+
+custom:
+  typescript:
+    srcPath: lambda/ai-analysis
+    tsConfigFileLocation: ./lambda/ai-analysis/tsconfig.json
+  dotenv:
+    path: ./lambda/ai-analysis/.env
+
+package:
+  individually: true
+  patterns:
+    - '!node_modules/.prisma/**'
+    - '!node_modules/@prisma/client/**'
+    - '!node_modules/prisma/**'
+    - '!**/*.test.ts'
+    - '!**/*.spec.ts'
+    - '!.git/**'
+    - '!.vscode/**'
+    - '!.env*'
+    - '!README.md' 

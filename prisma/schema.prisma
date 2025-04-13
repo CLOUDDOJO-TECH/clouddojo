@@ -1,81 +1,75 @@
-// Prisma schema for the AWS Certification Study Web App
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
-// User model
 model User {
-  userId        String         @id @default(uuid())
-  email         String         @unique
-  firstName     String         @unique
-  lastName      String
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  progress      UserProgress[]
-  purchases     Purchase[]
-  quizAttempts  QuizAttempt[]
-  onboarding    UserOnboarding?
-  hasCompletedOnboarding Boolean @default(false)
-  aiAnalysisReports AIAnalysisReport[]
+  userId                 String             @id @default(uuid())
+  email                  String             @unique
+  firstName              String             @unique
+  lastName               String
+  createdAt              DateTime           @default(now())
+  updatedAt              DateTime           @updatedAt
+  hasCompletedOnboarding Boolean            @default(false)
+  aiAnalysisReports      AIAnalysisReport[]
+  purchases              Purchase[]
+  quizAttempts           QuizAttempt[]
+  onboarding             UserOnboarding?
+  progress               UserProgress[]
 }
 
-// UserOnboarding model
 model UserOnboarding {
-  id            String   @id @default(uuid())
-  userId        String   @unique
-  user          User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  companyType   String?
-  companySize   String?
-  goals         String[]
+  id                      String    @id @default(uuid())
+  userId                  String    @unique
+  companyType             String?
+  companySize             String?
+  goals                   String[]
   preferredCertifications String[]
-  experience    String?
-  completedAt   DateTime?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  experience              String?
+  completedAt             DateTime?
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+  user                    User      @relation(fields: [userId], references: [userId], onDelete: Cascade)
 }
 
-// Quiz model
 model Quiz {
-  id           String         @id @default(uuid())
+  id           String           @id @default(uuid())
   title        String
   description  String?
+  isPublic     Boolean          @default(false)
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  categoryId   String?
+  duration     Int?
+  free         Boolean?
   level        DifficultyLevel? @default(BEGINER)
   questions    Question[]
-  duration     Int?           // Duration of the quiz in minutes
-  isPublic     Boolean        @default(false)
-  free         Boolean?
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  userProgress UserProgress[]
-  categoryId   String?
-  category     Category?      @relation(fields: [categoryId], references: [id])
+  category     Category?        @relation(fields: [categoryId], references: [id])
   attempts     QuizAttempt[]
+  userProgress UserProgress[]
 }
 
-// Question model
 model Question {
-  id            String   @id @default(uuid())
-  quizId        String
-  quiz          Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
-  content          String
-  options       QuestionOption[]
-  isMultiSelect Boolean @default(false)
-  correctAnswer String[]
-  explanation   String?
-  createdAt     DateTime @default(now())
-  categoryId    String?
-  category      Category? @relation(fields: [categoryId], references: [id])
+  id              String            @id @default(uuid())
+  quizId          String
+  isMultiSelect   Boolean           @default(false)
+  correctAnswer   String[]
+  explanation     String?
+  createdAt       DateTime          @default(now())
+  categoryId      String?
   difficultyLevel String?
-  awsService    String?
-  attempts      QuestionAttempt[]
+  awsService      String?
+  content         String
+  category        Category?         @relation(fields: [categoryId], references: [id])
+  quiz            Quiz              @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  attempts        QuestionAttempt[]
+  options         QuestionOption[]
 }
 
-// Flashcard model
 model Flashcard {
   id         String    @id @default(uuid())
   topic      String
@@ -87,93 +81,96 @@ model Flashcard {
   category   Category? @relation(fields: [categoryId], references: [id])
 }
 
-// UserProgress model
 model UserProgress {
   id          String    @id @default(uuid())
   userId      String
-  user        User      @relation(fields: [userId], references: [userId], onDelete: Cascade)
   quizId      String
-  quiz        Quiz      @relation(fields: [quizId], references: [id], onDelete: Cascade)
   score       Int
   completedAt DateTime?
   timeTaken   Int?
   attempts    Int       @default(0)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+  quiz        Quiz      @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [userId], onDelete: Cascade)
 }
 
-// Purchase model
 model Purchase {
   id          String   @id @default(uuid())
   userId      String
-  user        User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
   purchasedAt DateTime @default(now())
   price       Float
+  user        User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
 }
 
-// Category model (optional)
 model Category {
-  id         String      @id @default(uuid())
-  name       String      @unique
-  quizzes    Quiz[]
-  flashcards Flashcard[]
-  questions  Question[]
+  id          String        @id @default(uuid())
+  name        String        @unique
   description String?
+  flashcards  Flashcard[]
+  questions   Question[]
+  quizzes     Quiz[]
   quizAttempt QuizAttempt[]
 }
 
-// Enhanced Score Model for detailed performance tracking
 model QuizAttempt {
-  id            String         @id @default(uuid())
-  userId        String
-  quizId        String
-  totalScore    Int
+  id              String            @id @default(uuid())
+  userId          String
+  quizId          String
+  totalScore      Int
   percentageScore Float
-  timeSpentSecs Int            // Total time spent on the quiz in seconds
-  startedAt     DateTime       @default(now())
-  completedAt   DateTime?
-  categoryId    String?
-  category      Category?      @relation(fields: [categoryId], references: [id])
-  questions     QuestionAttempt[]
-  quiz          Quiz           @relation(fields: [quizId], references: [id])
-  user          User?          @relation(fields: [userId], references: [userId])
-  
-  // New fields for comprehensive analysis
-  analysisMetadata Json?       // Store additional analysis-related metadata
-  performanceFlags String[]    // Flags for performance characteristics
-  
+  timeSpentSecs   Int
+  startedAt       DateTime          @default(now())
+  completedAt     DateTime?
+  categoryId      String?
+  questions       QuestionAttempt[]
+  category        Category?         @relation(fields: [categoryId], references: [id])
+  quiz            Quiz              @relation(fields: [quizId], references: [id])
+  user            User              @relation(fields: [userId], references: [userId])
+
   @@index([userId])
   @@index([quizId])
   @@index([categoryId])
 }
 
 model QuestionAttempt {
-  id            String        @id @default(uuid())
-  quizAttemptId String
-  questionId    String
-  userAnswer    String
-  isCorrect     Boolean
-  timeSpentSecs Int          // Time spent on this specific question
-  categoryId    String?      // Reference to the category of the question
-  difficultyLevel String     // e.g., "Easy", "Medium", "Hard"
-  awsService    String?      // Which AWS service this question relates to
-  
-  quizAttempt   QuizAttempt  @relation(fields: [quizAttemptId], references: [id], onDelete: Cascade)
-  question      Question     @relation(fields: [questionId], references: [id])
+  id              String      @id @default(uuid())
+  quizAttemptId   String
+  questionId      String
+  userAnswer      String
+  isCorrect       Boolean
+  timeSpentSecs   Int
+  categoryId      String?
+  difficultyLevel String
+  awsService      String?
+  question        Question    @relation(fields: [questionId], references: [id])
+  quizAttempt     QuizAttempt @relation(fields: [quizAttemptId], references: [id], onDelete: Cascade)
+
   @@index([quizAttemptId])
   @@index([questionId])
   @@index([categoryId])
 }
 
 model QuestionOption {
-  id          String    @id @default(uuid())
-  questionId  String
-  content     String    @db.Text
-  isCorrect   Boolean
-  
-  question    Question  @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  
+  id         String   @id @default(uuid())
+  questionId String
+  content    String
+  isCorrect  Boolean
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
   @@index([questionId])
+}
+
+model AIAnalysisReport {
+  id              String   @id @default(uuid())
+  userId          String
+  reportData      Json
+  generatedAt     DateTime @default(now())
+  expiresAt       DateTime
+  lastRequestedAt DateTime @default(now())
+  user            User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 enum DifficultyLevel {
@@ -181,17 +178,4 @@ enum DifficultyLevel {
   INTERMEDIATE
   ADVANCED
   EXPERT
-}
-
-// AIAnalysisReport model for caching AI analyses
-model AIAnalysisReport {
-  id            String   @id @default(uuid())
-  userId        String
-  user          User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  reportData    Json     // Stores the full AI analysis report as JSON
-  generatedAt   DateTime @default(now())
-  expiresAt     DateTime // When this report expires (new one generated weekly)
-  lastRequestedAt DateTime @default(now()) // Track when the report was last viewed
-  
-  @@index([userId])
 }

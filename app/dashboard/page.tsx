@@ -2,6 +2,8 @@
 
 import { useUser } from "@clerk/nextjs";
 import { Suspense, useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
 import PerformanceSection from "@/components/dashboard/performance-section";
 import RecentActivitySection from "@/components/dashboard/recent-activity-section";
@@ -12,39 +14,86 @@ import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Zap } from "lucide-react";
 import PremiumAnalysisDashboard from "@/components/ai-report/premium-ai-analysis";
+import { CheckUser } from "@/app/(actions)/user/check-user";
 import React from "react";
 
 export default function DashboardPage() {
   const { user, isLoaded } = useUser();
+  const router = useRouter();
   const [progress, setProgress] = useState(0);
+  
+  // Check if user profile exists
+  const { data: userProfile, isLoading: isCheckingProfile } = useQuery({
+    queryKey: ["checkUserProfile"],
+    queryFn: () => CheckUser(),
+    enabled: isLoaded && !!user,
+  });
+
+  // Redirect to profile setup if needed
+  useEffect(() => {
+    if (!isLoaded || isCheckingProfile) return;
+    
+    if (userProfile?.exists === false) {
+      router.push("/dashboard/profile");
+    }
+  }, [userProfile, isLoaded, isCheckingProfile, router]);
+
   const {
     performanceStats,
     activityHistory,
-    performanceRefetch,
     hasAttempts,
     isLoadingPerformance,
     isLoadingActivity,
     isLoadingCategories,
   } = useDashboardQueries(isLoaded && !!user);
 
-  // Add effect to listen for refresh event as a fallback
+  // Handle progress bar
   useEffect(() => {
-    const handleRefreshEvent = () => {
-      if (typeof performanceRefetch === 'function') {
-        performanceRefetch();
-      }
-    };
-  }, [performanceRefetch]);
+    // Only start progress if we're loading data
+    if (isLoadingPerformance || isLoadingActivity || isLoadingCategories) {
+      const interval = setInterval(() => {
+        setProgress((prev) => {
+          if (prev >= 100) {
+            clearInterval(interval);
+            return 100;
+          }
+          return prev + 5;
+        });
+      }, 50);
 
-  const interval = setInterval(() => {
-    setProgress((prev) => {
-      if (prev >= 100) {
-        clearInterval(interval)
-        return 100
-      }
-      return prev + 5
-    })
-  }, 50)
+      // Cleanup interval on unmount or when loading completes
+      return () => clearInterval(interval);
+    } else {
+      // Reset progress when loading completes
+      setProgress(0);
+    }
+  }, [isLoadingPerformance, isLoadingActivity, isLoadingCategories]);
+
+  // Show loading state while checking profile
+  if (isCheckingProfile) {
+    return (
+      <div className="fixed inset-0 bg-white flex flex-col items-center justify-center z-50">
+        <div className="w-64 mb-8">
+          <svg viewBox="0 0 100 100" className="animate-pulse-subtle">
+            <circle
+              cx="50"
+              cy="50"
+              r="40"
+              stroke="#10b981"
+              strokeWidth="8"
+              fill="none"
+              strokeLinecap="round"
+              strokeDasharray="251.2"
+              strokeDashoffset="125.6"
+              className="animate-dash"
+            />
+          </svg>
+        </div>
+        <h2 className="text-2xl font-bold text-gray-800 mb-2">Checking Profile Status</h2>
+        <p className="text-gray-600 mb-6">Just a moment...</p>
+      </div>
+    );
+  }
 
   if (isLoadingPerformance || isLoadingActivity || isLoadingCategories) {
     return (
@@ -75,9 +124,8 @@ export default function DashboardPage() {
           Checking your performance...
         </div>
       </div>
-    )
+    );
   }
-
 
   return (
     <div className="py-6 space-y-8 max-w-7xl mx-auto container px-6">
@@ -102,7 +150,6 @@ export default function DashboardPage() {
                   hasAttempts={hasAttempts}
                   stats={performanceStats || {}}
                   isLoading={isLoadingPerformance}
-                  refetch={performanceRefetch}
                 />
               </Suspense>
 

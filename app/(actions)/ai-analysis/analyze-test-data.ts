@@ -156,7 +156,7 @@ IMPORTANT: Return ONLY the JSON object conforming to the structure above. No add
       
       return {
         success: false,
-        error: "Invalid response format from Gemini API"
+        error: "There wan an error please try again later"
       }
     }
 
