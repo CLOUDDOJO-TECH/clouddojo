@@ -1,34 +1,30 @@
-import Header from "@/components/header";
-import { Button } from "@/components/ui/button";
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  SignUpButton,
-  UserButton,
-} from "@clerk/nextjs";
-import Link from "next/link";
+import Navbar from "@/components/navbar"
+import HeroSection from "@/components/hero-section"
+import PartnersSection from "@/components/partners-section"
+import FeatureCards from "@/components/feature-cards"
+import JourneySection from "@/components/journey-section"
+import HowItWorks from "@/components/how-it-works"
+import Integration from "@/components/integration"
+import Testimonials from "@/components/testimonials"
+import FaqSection from "@/components/faq-section"
+import Footer from "@/components/footer"
 
-export default function HomePage() {
+export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <header className="flex justify-end items-center p-4 gap-4 h-16">
-        <SignedOut>
-          <SignInButton />
-          <SignUpButton />
-        </SignedOut>
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
-      </header>
-      <div className="flex flex-col items-center justify-center h-full">
-        Cloud dojo dot net
-        <Link href="/dashboard">
-          <Button variant="outline" size="lg">
-            Dashboard
-          </Button>
-        </Link>
-      </div>
+    <div className="min-h-screen bg-slate-950 text-white md:pt-8 pt-4 mx-auto">
+
+      <Navbar />
+      <main>
+        <HeroSection />
+        <PartnersSection />
+        <FeatureCards />
+        {/* <JourneySection /> */}
+        {/* <HowItWorks /> */}
+        {/* <Integration /> */}
+        {/* <Testimonials /> */}
+        <FaqSection />
+      </main>
+      <Footer />
     </div>
-  );
+  )
 }

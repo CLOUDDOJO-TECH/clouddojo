@@ -111,7 +111,6 @@ export default function DashboardPage() {
                   hasAttempts={true}
                   stats={performanceData}
                   isLoading={isLoading}
-                  refetch={handleRefresh}
                 />
 
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">

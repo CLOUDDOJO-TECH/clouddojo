@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 
+// TODO: send an email to me with the feedback content and also populate a google sheet with the feedback progressively
 export default function FeedbackDialog() {
   return (
     <Dialog>
@@ -17,7 +18,7 @@ export default function FeedbackDialog() {
           Feedback
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="md:max-w-2xl w-[90vw] rounded-lg">
         <DialogHeader>
           <DialogTitle>Send us feedback</DialogTitle>
           <DialogDescription>
@@ -25,7 +26,7 @@ export default function FeedbackDialog() {
             <a className="text-foreground hover:underline" href="#">
               tutorials
             </a>
-            , read Origin UI&lsquo;s{" "}
+            , read CloudDojo&lsquo;s{" "}
             <a className="text-foreground hover:underline" href="#">
               documentation
             </a>
@@ -39,11 +40,11 @@ export default function FeedbackDialog() {
         <form className="space-y-5">
           <Textarea
             id="feedback"
-            placeholder="How can we improve Origin UI?"
+            placeholder="How can we improve CloudDojo?"
             aria-label="Send feedback"
           />
           <div className="flex flex-col sm:flex-row sm:justify-end">
-            <Button type="button">Send feedback</Button>
+            <Button className="bg-emerald-500">Send feedback</Button>
           </div>
         </form>
       </DialogContent>

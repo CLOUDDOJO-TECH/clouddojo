@@ -36,7 +36,7 @@ export default function QuestionAnalysis({ quiz, answers }: QuestionAnalysisProp
               <div className="flex items-start gap-3">
                 <div
                   className={cn(
-                    "mt-1 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center",
+                    "mt-1 flex-shrink-0 w-6 h-6 rounded-full md:flex items-center justify-center hidden",
                     isCorrect
                       ? "bg-green-100 text-green-600"
                       : isSkipped
@@ -55,7 +55,7 @@ export default function QuestionAnalysis({ quiz, answers }: QuestionAnalysisProp
 
                 <div className="flex-1">
                   <div className="flex justify-between">
-                    <h3 className="font-medium">Question {index + 1}</h3>
+                    <h3 className="font-bold">Question {index + 1}</h3>
                     <div
                       className={cn(
                         "text-sm font-medium",
@@ -77,7 +77,7 @@ export default function QuestionAnalysis({ quiz, answers }: QuestionAnalysisProp
                         <div
                           key={option.id}
                           className={cn(
-                            "flex items-center p-2 rounded-md",
+                            "flex items-center p-2 rounded-md text-sm font-normal",
                             isCorrectOption
                               ? "bg-green-50 border border-green-200"
                               : isSelected && !isCorrectOption
@@ -85,7 +85,7 @@ export default function QuestionAnalysis({ quiz, answers }: QuestionAnalysisProp
                                 : "bg-gray-50 border border-gray-200",
                           )}
                         >
-                          <div className="mr-2">
+                          <div className="mr-2 ">
                             {question.isMultiSelect ? (
                               isSelected ? (
                                 <CheckSquare

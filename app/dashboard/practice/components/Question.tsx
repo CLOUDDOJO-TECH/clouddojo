@@ -36,7 +36,7 @@ export default function Question({
         </Button>
       </div>
 
-      <div className="text-lg">{question.content}</div>
+      <div className="md:text-lg text-md">{question.content}</div>
 
       <div className="mt-4 text-lg">
         {type === "single" ? (
@@ -62,7 +62,7 @@ export default function Question({
                     '--tw-ring-offset-color': 'rgb(147 197 253)' 
                   } as React.CSSProperties}
                 />
-                <Label htmlFor={option.id} className="flex-1 cursor-pointer py-2 text-lg font-light">
+                <Label htmlFor={option.id} className="flex-1 cursor-pointer py-2 text-sm md:text-lg font-light">
                   {option.content}
                 </Label>
               </div>
@@ -88,7 +88,7 @@ export default function Question({
                     '--tw-ring-offset-color': 'rgb(147 197 253)' 
                   } as React.CSSProperties}
                 />
-                <Label htmlFor={option.id} className="flex-1 cursor-pointer py-2 text-lg font-light">
+                <Label htmlFor={option.id} className="flex-1 cursor-pointer py-2 text-sm md:text-lg font-light">
                   {option.content}
                 </Label>
               </div>

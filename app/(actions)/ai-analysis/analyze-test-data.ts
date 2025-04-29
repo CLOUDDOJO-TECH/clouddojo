@@ -1,11 +1,168 @@
 "use server"
 
-import { GoogleGenerativeAI } from "@google/generative-ai"
-import { formatTestDataForAI } from "./format-test-data"
+import { GoogleGenerativeAI, GenerateContentResult } from "@google/generative-ai"
+import { formatDuration, intervalToDuration } from "date-fns"
 import { getUserTestData } from "./get-user-test-data"
-import type { TestData } from "./format-test-data"
+import type { TestData, FormattedTestData } from "./types"
+
+// Helper function to safely convert potential BigInt values to numbers
+const toNumber = (value: any): number => {
+  if (typeof value === 'bigint') {
+    return Number(value);
+  }
+  if (typeof value === 'number') {
+    return value;
+  }
+  return 0;
+};
+
+// Format test data for AI analysis
+const formatTestDataForAI = (data: TestData): FormattedTestData => {
+  const {
+    quizAttempts,
+    categoryPerformance,
+    servicePerformance,
+    difficultyPerformance,
+    timeMetrics,
+    performanceTrend
+  } = data
+
+  // Ensure we have at least one attempt
+  if (!quizAttempts?.length) {
+    throw new Error("No quiz attempts available for analysis")
+  }
+
+  // Most recent attempt for primary metrics
+  const primaryAttempt = quizAttempts[0]
+  const user = primaryAttempt.user
+
+  // User details
+  const userData = {
+    id: user?.userId || 'unknown',
+    name: user?.firstName ? `${user.firstName} ${user.lastName || ''}`.trim() : 'User',
+    experience: user?.onboarding?.experience || null,
+    preferredCertifications: user?.onboarding?.preferredCertifications || [],
+    goals: user?.onboarding?.goals || []
+  }
+
+  // Current test details
+  const currentTest = {
+    id: primaryAttempt.id,
+    name: primaryAttempt.quiz.title,
+    category: primaryAttempt.quiz.category?.name || null,
+    score: primaryAttempt.percentageScore,
+    timeSpent: {
+      seconds: primaryAttempt.timeSpentSecs,
+      formatted: formatDuration(
+        intervalToDuration({ start: 0, end: primaryAttempt.timeSpentSecs * 1000 })
+      )
+    },
+    questionsTotal: primaryAttempt.questions.length,
+    questionsCorrect: primaryAttempt.questions.filter(q => q.isCorrect).length,
+    questionsIncorrect: primaryAttempt.questions.filter(q => !q.isCorrect).length,
+    startedAt: primaryAttempt.startedAt.toISOString(),
+    completedAt: primaryAttempt.completedAt?.toISOString() || null
+  }
+
+  // Category Performance
+  const categoryPerformanceData = (categoryPerformance || []).map((cat: any) => ({
+    category: cat.categoryName || "Unknown Category",
+    totalQuestions: toNumber(cat._count__all),
+    correctQuestions: toNumber(cat._count_isCorrect),
+    accuracy: toNumber(cat.accuracyPercentage)
+  })).filter(cat => cat.totalQuestions > 0)
+
+  // Service Performance
+  const servicePerformanceData = (servicePerformance || []).map((service: any) => ({
+    service: service.awsService || "Unknown Service",
+    totalQuestions: toNumber(service._count__all),
+    correctQuestions: toNumber(service._count_isCorrect),
+    accuracy: toNumber(service.accuracyPercentage)
+  })).filter(service => service.totalQuestions > 0)
+
+  // Difficulty Breakdown
+  const difficultyBreakdown = (difficultyPerformance || []).map((diff: any) => ({
+    level: diff.difficultyLevel || "Unknown",
+    totalQuestions: toNumber(diff._count__all),
+    correctQuestions: toNumber(diff._count_isCorrect),
+    accuracy: toNumber(diff.accuracyPercentage),
+    averageTime: timeMetrics.timeByDifficulty.find(
+      (t: any) => t.level === diff.difficultyLevel
+    )?.averageTime || 0
+  })).filter(diff => diff.totalQuestions > 0)
+
+  // Time Analysis
+  const timeAnalysis = {
+    total: {
+      seconds: timeMetrics.totalTime,
+      formatted: formatDuration(
+        intervalToDuration({ start: 0, end: timeMetrics.totalTime * 1000 })
+      )
+    },
+    averagePerQuestion: {
+      seconds: timeMetrics.averageTimePerQuestion,
+      formatted: formatDuration(
+        intervalToDuration({ start: 0, end: timeMetrics.averageTimePerQuestion * 1000 })
+      )
+    },
+    byDifficulty: (timeMetrics.timeByDifficulty || []).map((metric: any) => ({
+      level: metric.level,
+      averageSeconds: toNumber(metric.averageTime),
+      formatted: formatDuration(
+        intervalToDuration({ start: 0, end: toNumber(metric.averageTime) * 1000 })
+      )
+    }))
+  }
+
+  // Progress History
+  const progressHistory = performanceTrend.map((trend, index) => ({
+    testId: trend.testId,
+    score: trend.score,
+    date: trend.date instanceof Date 
+      ? trend.date.toISOString() 
+      : trend.date,
+    improvement: index > 0 
+      ? trend.score - performanceTrend[index - 1].score 
+      : 0
+  }))
+
+  // Question Details - Limit to most recent test only for performance
+  const questionDetails = primaryAttempt.questions.map((q) => ({
+    id: q.questionId,
+    content: q.question.content,
+    category: q.question.category?.name || null,
+    service: q.question.awsService || null,
+    difficulty: q.question.difficultyLevel || "Unknown",
+    isCorrect: q.isCorrect,
+    timeSpent: {
+      seconds: q.timeSpentSecs,
+      formatted: formatDuration(
+        intervalToDuration({ start: 0, end: q.timeSpentSecs * 1000 })
+      )
+    },
+    userAnswer: q.userAnswer ? q.userAnswer.split(',') : [],
+    correctAnswer: q.question.correctAnswer || []
+  }))
+
+  return {
+    user: userData,
+    currentTest,
+    categoryPerformance: categoryPerformanceData,
+    servicePerformance: servicePerformanceData,
+    difficultyBreakdown,
+    timeAnalysis,
+    progressHistory,
+    questionDetails
+  }
+}
 
 export async function analyzeTestData() {
+  try {
+    // Add timeout for the entire operation
+    const TIMEOUT = 25000; // 25 seconds
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), TIMEOUT);
+
   try {
     // Get the API key from environment variables
     const apiKey = process.env.GEMINI_API_KEY
@@ -13,15 +170,15 @@ export async function analyzeTestData() {
       throw new Error("Gemini API key not configured")
     }
 
-    // Initialize the Gemini client
+      // Initialize the Gemini client with reduced tokens and temperature
     const genAI = new GoogleGenerativeAI(apiKey)
     const model = genAI.getGenerativeModel({
-      model: "gemini-2.0-flash-lite",
+        model: "gemini-2.0-flash-lite", // Updated model name
       generationConfig: {
-        temperature: 0.2,
-        topP: 0.8,
-        topK: 40,
-        maxOutputTokens: 8192,
+          temperature: 0.1, // Reduced for faster, more focused responses
+          topP: 0.7,
+          topK: 20,
+          maxOutputTokens: 4096, // Reduced token count
       },
     })
 
@@ -113,64 +270,53 @@ ${JSON.stringify(formattedData, null, 2)}
 IMPORTANT: Return ONLY the JSON object conforming to the structure above. No additional text or explanations.
 `
 
-    // Generate content from Gemini
-    const result = await model.generateContent(prompt)
-    const response = result.response
-    const text = response.text()
+      // Generate content from Gemini with timeout
+      const result = await Promise.race([
+        model.generateContent(prompt),
+        new Promise((_, reject) => 
+          setTimeout(() => reject(new Error("AI generation timeout")), 20000)
+        )
+      ]) as GenerateContentResult;
 
-    // Log the raw response first for debugging
-    console.log("Raw AI Response:", text.substring(0, 500) + "...") // First 500 chars for brevity
+      const response = result.response;
 
-    // Parse the response
-    try {
-      // Extract JSON from the response (handle markdown code blocks if present)
-      let jsonText = text;
-      
-      // Check if the response is wrapped in markdown code blocks
-      const jsonMatch = text.match(/```(?:json)?\s*\n([\s\S]*?)\n```/) || 
-                        text.match(/```(?:json)?([\s\S]*?)```/);
+      try {
+        let jsonText = response.text();
+        const jsonMatch = jsonText.match(/```(?:json)?\s*\n([\s\S]*?)\n```/) || 
+                         jsonText.match(/```(?:json)?([\s\S]*?)```/);
       
       if (jsonMatch && jsonMatch[1]) {
         jsonText = jsonMatch[1].trim();
-        console.log("Extracted JSON from markdown", jsonText.substring(0, 200) + "...");
       }
       
       const analysisReport = JSON.parse(jsonText);
       
-      // Log the parsed structure
-      console.log("Parsed Report Structure:", Object.keys(analysisReport));
-      
+        clearTimeout(timeoutId);
       return {
         success: true,
         data: analysisReport
       }
     } catch (parseError) {
-      console.error("Failed to parse Gemini response as JSON:", parseError);
-      // Additional error details for debugging
-      console.error("Response text format:", {
-        length: text.length,
-        startsWithBacktick: text.startsWith('```'),
-        startsWithJson: text.startsWith('```json'),
-        firstFewChars: text.substring(0, 50)
-      });
-      
+        throw new Error("Failed to parse AI response");
+      }
+    } finally {
+      clearTimeout(timeoutId);
+    }
+
+  } catch (error: any) {
+    if (error?.name === 'AbortError' || error?.message?.includes('timeout')) {
       return {
         success: false,
-        error: "There wan an error please try again later"
+        error: "Analysis took too long. Please try again."
       }
     }
 
-  } catch (error) {
     console.error("Error analyzing test data:", error)
-    
-    // Additional debug info
-    if (error instanceof Error) {
-      console.error("Error stack:", error.stack)
-    }
-    
     return {
       success: false,
-      error: error instanceof Error ? error.message : "Unknown error occurred"
+      error: error instanceof Error 
+        ? error.message 
+        : "An unexpected error occurred"
     }
   }
 } 

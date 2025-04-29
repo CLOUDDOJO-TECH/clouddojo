@@ -13,6 +13,7 @@ import Header from "@/components/header";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Providers from "@/components/providers";
+import { Spotlight } from "@/components/spotlight";
 
 const inter = Inter({ subsets: ["latin"] });
 export const metadata = {
@@ -26,7 +27,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="dark:dark">
       <body className={`${inter.className} dark:bg-gray-900`}>
-        <Providers>{children}</Providers>
+        <Providers>
+        <Spotlight
+        className="-top-40 left-0 md:-top-20 md:left-60"
+        fill="white"
+      />
+          {children}
+          </Providers>
       </body>
     </html>
   );

@@ -258,7 +258,7 @@ export default function QuizComponent({ quiz, quizId }: QuizComponentProps) {
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="default" size="sm" onClick={() => setShowSubmitDialog(true)} className="w-full p-2">
+                    <Button variant="outline" size="sm" onClick={() => setShowSubmitDialog(true)} className="w-full p-2 bg-emerald-600 border-none text-white rounded-full">
                       Submit Test
                     </Button>
                   </TooltipTrigger>
@@ -285,7 +285,24 @@ export default function QuizComponent({ quiz, quizId }: QuizComponentProps) {
 
           <Progress value={progress} className="h-2" />
 
-          <div className="flex flex-wrap gap-2 mt-4 mb-2">
+              
+           <div className="md:hidden flex flex-wrap gap-2 mt-4 mb-2">
+          
+            {markedQuestions.map((questionId, index) => (
+              <Button
+                key={questionId}
+                variant="outline"
+                size="sm"
+                className="mb-2 md:hidden mt-2 border-orange-600 text-orange-500"
+                onClick={() => goToQuestion(quiz.questions.findIndex(question => question.id === questionId))}
+              >
+                {index + 1}
+              </Button>
+            ))}
+          </div>
+          
+          
+          <div className="md:flex hidden flex-wrap gap-2 mt-4 mb-2">
             {quiz.questions.map((question, index) => (
               <TooltipProvider key={question.id}>
                 <Tooltip>

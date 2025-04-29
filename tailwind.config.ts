@@ -22,9 +22,17 @@ const config = {
   theme: {
   	extend: {
   		colors: {
-			...colors,
+                ...colors,
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
+			midnight: {
+				DEFAULT: "hsl(222, 47%, 4%)",
+				light: "hsl(222, 47%, 10%)",
+			  },
+			midnighttwo: {
+				DEFAULT: "hsl(231, 54, 14%)",
+				light: "hsl(231, 54%, 20%)",
+			},
   			card: {
   				DEFAULT: 'hsl(var(--card))',
   				foreground: 'hsl(var(--card-foreground))'
@@ -80,6 +88,16 @@ const config = {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		keyframes: {
+			'spotlight': {
+				"0%": {
+				  opacity: "0",
+				  transform: "translate(-72%, -62%) scale(0.5)",
+				},
+				"100%": {
+				  opacity: "1",
+				  transform: "translate(-50%,-40%) scale(1)",
+				},
+			  },
   			shimmer: {
   				from: {
   					backgroundPosition: '0 0'
@@ -87,11 +105,32 @@ const config = {
   				to: {
   					backgroundPosition: '-200% 0'
   				}
+  			},
+  			'accordion-down': {
+  				from: {
+  					height: '0'
+  				},
+  				to: {
+  					height: 'var(--radix-accordion-content-height)'
+  				}
+  			},
+  			'accordion-up': {
+  				from: {
+  					height: 'var(--radix-accordion-content-height)'
+  				},
+  				to: {
+  					height: '0'
+  				}
   			}
+  		},
+  		animation: {
+  			'accordion-down': 'accordion-down 0.2s ease-out',
+  			'accordion-up': 'accordion-up 0.2s ease-out',
+			'spotlight': "spotlight 2s ease .75s 1 forwards",
   		}
   	}
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), require('@tailwindcss/typography'),],
 } satisfies Config;
 
 export default config;

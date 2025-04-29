@@ -51,9 +51,9 @@ export default function DashboardPage() {
   useEffect(() => {
     // Only start progress if we're loading data
     if (isLoadingPerformance || isLoadingActivity || isLoadingCategories) {
-      const interval = setInterval(() => {
-        setProgress((prev) => {
-          if (prev >= 100) {
+  const interval = setInterval(() => {
+    setProgress((prev) => {
+      if (prev >= 100) {
             clearInterval(interval);
             return 100;
           }

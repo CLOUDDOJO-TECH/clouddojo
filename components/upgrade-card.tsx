@@ -1,12 +1,12 @@
 "use client"
 
-import { Sparkles, ArrowRight, Zap } from "lucide-react"
+import { Sparkles, ArrowRight, Zap, Check } from "lucide-react"
 import UpgradeButton from "@/components/upgrade-button"
 import { cn } from "@/lib/utils"
 
 export default function UpgradeCard() {
   return (
-    <div className="relative rounded-xl overflow-hidden">
+    <div className="relative rounded-xl overflow-hidden hover:shadow-sm">
       {/* Background with subtle pattern */}
       <div className="absolute inset-0 bg-gradient-to-br from-emerald-600 to-emerald-800 opacity-90"></div>
       <div className="absolute inset-0 bg-[url('/noise.png')] opacity-5 mix-blend-overlay"></div>
@@ -36,24 +36,23 @@ export default function UpgradeCard() {
         {/* Features list */}
         <ul className="space-y-1.5 mb-4 text-xs">
           <li className="flex items-center">
-            <ArrowRight size={10} className="mr-1.5 text-emerald-300" />
+            <Check size={14} className="mr-1.5 text-emerald-300" />
             <span>Unlimited practice exams</span>
           </li>
           <li className="flex items-center">
-            <ArrowRight size={10} className="mr-1.5 text-emerald-300" />
+            <Check size={14} className="mr-1.5 text-emerald-300" />
             <span>AI-powered explanations</span>
           </li>
           <li className="flex items-center">
-            <ArrowRight size={10} className="mr-1.5 text-emerald-300" />
+            <Check size={14} className="mr-1.5 text-emerald-300" />
             <span>Performance analytics</span>
           </li>
         </ul>
         
         <UpgradeButton 
           className={cn(
-            "w-full bg-white hover:bg-emerald-50",
+            "w-full bg-gradient-to-l from-emerald-500 to-emerald-800 hover:from-emerald-600 hover:to-emerald-800",
             "text-emerald-800 font-medium",
-            "border border-white/10 shadow-sm",
             "transition-all duration-200 hover:shadow-md"
           )}
           label="Upgrade Now"

@@ -1,38 +1,41 @@
 "use client"
 
 import type React from "react"
-
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { useDebounce } from "@/lib/hooks/use-debounce"
 
 export default function SearchBar({ onSearch }: { onSearch?: (query: string) => void }) {
   const [query, setQuery] = useState("")
+  const debouncedQuery = useDebounce(query, 300) // 300ms debounce
 
-  const handleSearch = (e: React.FormEvent) => {
+  // Trigger search when debounced query changes
+  useEffect(() => {
+    if (onSearch) onSearch(debouncedQuery)
+  }, [debouncedQuery, onSearch])
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value)
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (onSearch) onSearch(query)
   }
 
   return (
-    <form onSubmit={handleSearch} className="relative flex w-full md:max-w-sm items-center">
+    <form onSubmit={handleSubmit} className="relative flex w-full md:max-w-sm items-center">
       <Input
         type="search"
-        placeholder="Search..."
+        placeholder="Search tests..."
         className="pr-10"
         value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        onChange={handleChange}
       />
-      <Button
-        type="submit"
-        size="icon"
-        variant="ghost"
-        className="absolute right-0 top-0 h-full px-3 text-muted-foreground hover:text-foreground"
-      >
+      <div className="absolute right-0 top-0 h-full px-3 flex items-center text-muted-foreground">
         <Search className="h-4 w-4" />
-        <span className="sr-only">Search</span>
-      </Button>
+      </div>
     </form>
   )
 }

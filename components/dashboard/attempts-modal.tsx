@@ -107,7 +107,7 @@ export function AttemptsDialog({ attemptId }: { attemptId: string }) {
         </Tooltip>
       </TooltipProvider>
       
-      <DialogContent className="max-w-7xl max-h-[90vh] overflow-y-auto md:px-6">
+      <DialogContent className="md:max-w-7xl max-h-[90vh] w-[98vw] overflow-y-auto md:px-6 rounded-lg">
         {transformedQuiz && (
           <AttemptResults 
             quiz={transformedQuiz as QuizWithRelations}

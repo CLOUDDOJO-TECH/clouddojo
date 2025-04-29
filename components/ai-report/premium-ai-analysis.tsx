@@ -32,7 +32,10 @@ import {
   Layers,
   Shield,
   RefreshCw,
+  Brain,
 } from "lucide-react"
+import jsPDF from "jspdf"
+import html2canvas from "html2canvas"
 
 // --- Interface Definitions ---
 export type AIAnalysisProps = {
@@ -122,6 +125,8 @@ export default function PremiumAnalysisDashboard() {
     detailed: true,
   })
   const chartRef = useRef(null)
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false)
+  const reportRef = useRef<HTMLDivElement>(null)
 
   const toggleSection = (section: keyof ExpandedSections) => {
     setExpandedSections((prev) => ({
@@ -205,6 +210,106 @@ export default function PremiumAnalysisDashboard() {
     loadAnalysis()
   }
 
+  const generatePDF = async () => {
+    if (!reportRef.current || !report) return;
+    
+    try {
+      setIsGeneratingPDF(true);
+      
+      // Create new PDF document
+      const doc = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4",
+      });
+      
+      // Set font
+      doc.setFont("helvetica");
+      
+      // Add header
+      doc.setFontSize(22);
+      doc.setTextColor(44, 62, 80);
+      doc.text("AI Analysis Report by CloudDojo", 105, 20, { align: "center" });
+      
+      // Add date 
+      doc.setFontSize(10);
+      doc.setTextColor(100, 100, 100);
+      doc.text(`Generated on: ${new Date().toLocaleString()}`, 105, 27, { align: "center" });
+      
+      // Add separator line
+      doc.setDrawColor(200, 200, 200);
+      doc.line(20, 45, 190, 45);
+      
+      // Add summary section
+      doc.setFontSize(14);
+      doc.setTextColor(44, 62, 80);
+      doc.text("Performance Summary", 20, 55);
+      
+      doc.setFontSize(12);
+      doc.text(`Overall Score: ${report.summary.score}%`, 25, 65);
+      doc.text(`Total Questions: ${report.summary.totalQuestions}`, 25, 72);
+      doc.text(`Correct Answers: ${report.summary.correctAnswers}`, 25, 79);
+      doc.text(`Incorrect Answers: ${report.summary.incorrectAnswers}`, 25, 86);
+      doc.text(`Time Spent: ${report.summary.timeSpent}`, 25, 93);
+      doc.text(`Improvement: +${report.summary.improvement}%`, 25, 100);
+      
+      // Add strengths section
+      doc.setFontSize(14);
+      doc.text("Strengths", 20, 120);
+      let yPos = 130;
+      report.strengths.forEach((strength, index) => {
+        doc.setFontSize(12);
+        const lines = doc.splitTextToSize(strength, 160);
+        doc.text(lines, 25, yPos);
+        yPos += 10 * lines.length;
+      });
+      
+      // Add weaknesses section
+      yPos += 10;
+      doc.setFontSize(14);
+      doc.text("Areas for Improvement", 20, yPos);
+      yPos += 10;
+      report.weaknesses.forEach((weakness, index) => {
+        doc.setFontSize(12);
+        const lines = doc.splitTextToSize(weakness, 160);
+        doc.text(lines, 25, yPos);
+        yPos += 10 * lines.length;
+      });
+      
+      // Add recommendations section
+      if (yPos > 250) {
+        doc.addPage();
+        yPos = 20;
+      }
+      yPos += 10;
+      doc.setFontSize(14);
+      doc.text("Recommendations", 20, yPos);
+      yPos += 10;
+      report.recommendations.forEach((recommendation, index) => {
+        doc.setFontSize(12);
+        const lines = doc.splitTextToSize(recommendation, 160);
+        doc.text(lines, 25, yPos);
+        yPos += 10 * lines.length;
+      });
+      
+      // Add footer with page numbers
+      const pageCount = doc.getNumberOfPages();
+      for (let i = 1; i <= pageCount; i++) {
+        doc.setPage(i);
+        doc.setFontSize(10);
+        doc.setTextColor(150, 150, 150);
+        doc.text(`Page ${i} of ${pageCount}`, 105, 290, { align: "center" });
+      }
+      
+      // Save the PDF
+      doc.save("ai-analysis-report.pdf");
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+    } finally {
+      setIsGeneratingPDF(false);
+    }
+  };
+
   if (error) {
     return (
       <div className="p-6 text-center">
@@ -225,49 +330,33 @@ export default function PremiumAnalysisDashboard() {
   const data = report
 
   return (
-    <div className="container mx-auto py-6 px-4">
+    <div className=" mx-auto py-6 bg-none " ref={reportRef}>
       {/* Header with logo and actions */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 w-full">
         <div className="flex items-center mb-4 md:mb-0">
           <div className="mr-3">
-            {/* SVG Logo */}
-            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="40" height="40" rx="8" fill="#10b981" fillOpacity="0.1" />
-              <path
-                d="M20 10C14.477 10 10 14.477 10 20C10 25.523 14.477 30 20 30C25.523 30 30 25.523 30 20C30 14.477 25.523 10 20 10ZM20 28C15.582 28 12 24.418 12 20C12 15.582 15.582 12 20 12C24.418 12 28 15.582 28 20C28 24.418 24.418 28 20 28Z"
-                fill="#10b981"
-              />
-              <path d="M21 15H19V21H25V19H21V15Z" fill="#10b981" />
-            </svg>
+
           </div>
           <div>
             <h1 className="text-2xl font-bold text-gray-800">AWS Certification AI Coach</h1>
             <div className="flex items-center">
               {/* Use data from the report */}
               <p className="text-gray-500 text-sm">{data.summary.testName || "Overall Performance Analysis"}</p>
-              <Badge variant="outline" className="ml-2 bg-blue-50 text-blue-700 border-blue-200">
+              <Badge variant="outline" className="ml-2 bg-blue-50 text-blue-700 border-blue-200 text-center">
                 Premium Analysis
               </Badge>
             </div>
           </div>
         </div>
-        <div className="flex space-x-3">
-          {/* Report status */}
-          <div className="flex items-center mr-3">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={() => loadAnalysis()}
-              disabled={isLoading}
-              className="text-blue-600 hover:text-blue-800 flex items-center"
-            >
-              <RefreshCw className="h-3 w-3 mr-1" />
-              Refresh Analysis
-            </Button>
-          </div>
-          <Button variant="outline" className="border-emerald-200 text-emerald-700 hover:bg-emerald-50">
+        <div className="flex space-x-3 items-center justify-center w-full md:w-auto">
+          <Button 
+            variant="outline" 
+            className="border-emerald-200 text-emerald-700 hover:bg-emerald-50"
+            onClick={generatePDF}
+            disabled={isGeneratingPDF}
+          >
             <Download className="h-4 w-4 mr-2" />
-            Export PDF
+            {isGeneratingPDF ? "Generating..." : "Export PDF"}
           </Button>
           <Button className="bg-emerald-600 hover:bg-emerald-700 text-white">
             <Share2 className="h-4 w-4 mr-2" />
@@ -277,7 +366,7 @@ export default function PremiumAnalysisDashboard() {
       </div>
 
       {/* Score overview and certification readiness (Use data) */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 mt-4">
         <Card className="col-span-1 border-none shadow-lg overflow-hidden">
           <CardHeader className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white pb-0">
             <CardTitle className="flex justify-between items-center">
@@ -372,45 +461,120 @@ export default function PremiumAnalysisDashboard() {
         </Card>
       </div>
 
-      {/* Performance by category (Use data) */}
+      {/* Study Insights & Actions */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
         <Card className="col-span-1 lg:col-span-2 border-none shadow-lg">
           <CardHeader>
             <CardTitle className="flex items-center">
-              <BarChart2 className="h-5 w-5 mr-2 text-emerald-600" />
-              Performance by Category
+              <Zap className="h-5 w-5 mr-2 text-emerald-600" />
+              Study Insights & Actions
             </CardTitle>
-            <CardDescription>Your score breakdown across AWS service categories</CardDescription>
+            <CardDescription>Key metrics and recommended next steps for your exam preparation</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              {data.categoryScores.map((category) => (
-                <div key={category.name}>
-                  <div className="flex justify-between mb-1">
-                    <div className="flex items-center">
-                      <span className="text-sm font-medium text-gray-700">{category.name}</span>
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Info className="h-4 w-4 text-gray-400 ml-1 cursor-help" />
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Based on {category.questions} questions</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Quick Stats */}
+              <div className="space-y-6">
+                <div className="bg-blue-50 rounded-lg p-4 border border-blue-100">
+                  <h3 className="text-sm font-medium text-blue-800 mb-3">Study Progress</h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <div className="text-2xl font-bold text-blue-700">{data.summary.correctAnswers}</div>
+                      <div className="text-sm text-blue-600">Questions Correct</div>
                     </div>
-                    <span className="text-sm text-gray-500">{category.score}%</span>
-                  </div>
-                  <div className="h-2 relative max-w-xl rounded-full overflow-hidden">
-                    <div className="w-full h-full bg-gray-200 absolute"></div>
-                    <div
-                      className={`h-full absolute ${getCategoryColorClass(category.score)}`}
-                      style={{ width: `${category.score}%` }}
-                    ></div>
+                    <div>
+                      <div className="text-2xl font-bold text-blue-700">
+                        {Math.round((data.summary.timeSpent.split(' ')[0] as any) / 60)}h
+                      </div>
+                      <div className="text-sm text-blue-600">Study Time</div>
+                    </div>
                   </div>
                 </div>
-              ))}
+
+                <div className="bg-emerald-50 rounded-lg p-4 border border-emerald-100">
+                  <h3 className="text-sm font-medium text-emerald-800 mb-3">Performance Metrics</h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <div className="text-2xl font-bold text-emerald-700">{data.summary.improvement}%</div>
+                      <div className="text-sm text-emerald-600">Improvement</div>
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold text-emerald-700">{data.certificationReadiness}%</div>
+                      <div className="text-sm text-emerald-600">Exam Ready</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Items */}
+              <div className="bg-white rounded-lg border border-gray-200 p-4">
+                <h3 className="text-sm font-medium text-gray-800 mb-4">Recommended Actions</h3>
+                <div className="space-y-3">
+                  <div className="flex items-start space-x-3">
+                    <div className="bg-purple-100 rounded-full p-2">
+                      <Target className="h-4 w-4 text-purple-600" />
+                    </div>
+                    <div>
+                      <div className="text-sm font-medium text-gray-800">Focus on Weak Areas</div>
+                      <div className="text-sm text-gray-600">Review {data.topMissedTopics[0]?.topic}</div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-3">
+                    <div className="bg-blue-100 rounded-full p-2">
+                      <Clock className="h-4 w-4 text-blue-600" />
+                    </div>
+                    <div>
+                      <div className="text-sm font-medium text-gray-800">Time Management</div>
+                      <div className="text-sm text-gray-600">
+                        Aim for {Math.round(data.summary.totalQuestions / 65 * 60)} seconds per question
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-3">
+                    <div className="bg-emerald-100 rounded-full p-2">
+                      <BookOpen className="h-4 w-4 text-emerald-600" />
+                    </div>
+                    <div>
+                      <div className="text-sm font-medium text-gray-800">Next Study Session</div>
+                      <div className="text-sm text-gray-600">Practice {data.topMissedTopics[1]?.topic || 'mixed topics'}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Progress Indicators */}
+            <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="bg-gray-50 rounded-lg p-4 border border-gray-100">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium text-gray-700">Questions Completed</span>
+                  <span className="text-sm text-gray-500">{data.summary.totalQuestions}/1000</span>
+                </div>
+                <Progress value={(data.summary.totalQuestions / 1000) * 100} className="h-2" />
+              </div>
+
+              <div className="bg-gray-50 rounded-lg p-4 border border-gray-100">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium text-gray-700">Accuracy Rate</span>
+                  <span className="text-sm text-gray-500">
+                    {Math.round((data.summary.correctAnswers / data.summary.totalQuestions) * 100)}%
+                  </span>
+                </div>
+                <Progress 
+                  value={(data.summary.correctAnswers / data.summary.totalQuestions) * 100} 
+                  className="h-2" 
+                />
+              </div>
+
+              <div className="bg-gray-50 rounded-lg p-4 border border-gray-100">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium text-gray-700">Study Goal</span>
+                  <span className="text-sm text-gray-500">{data.certificationReadiness}%/85%</span>
+                </div>
+                <Progress value={(data.certificationReadiness / 85) * 100} className="h-2" />
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -454,6 +618,7 @@ export default function PremiumAnalysisDashboard() {
         </Card>
       </div>
 
+
       {/* Insights Tabs (Use data) */}
       <Card className="border-none shadow-lg mb-8">
         <CardHeader className="pb-0">
@@ -464,39 +629,39 @@ export default function PremiumAnalysisDashboard() {
           <CardDescription>Personalized analysis and recommendations based on your test performance</CardDescription>
         </CardHeader>
         <CardContent className="pt-4">
-          <Tabs value={activeInsightTab} onValueChange={setActiveInsightTab} className="w-full">
-            <TabsList className="grid grid-cols-4 mb-6">
+          <Tabs value={activeInsightTab} onValueChange={setActiveInsightTab} className="w-full overflow-hidden">
+            <TabsList className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6 p-1 bg-muted/50">
               <TabsTrigger
                 value="overview"
-                className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white"
+                className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white px-4 py-2 text-sm font-medium transition-all"
               >
                 <Layers className="mr-2 h-4 w-4" />
                 Overview
               </TabsTrigger>
               <TabsTrigger
                 value="strengths"
-                className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white"
+                className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white px-4 py-2 text-sm font-medium transition-all"
               >
                 <CheckCircle className="mr-2 h-4 w-4" />
                 Strengths
               </TabsTrigger>
               <TabsTrigger
                 value="weaknesses"
-                className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white"
+                className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white px-4 py-2 text-sm font-medium transition-all"
               >
                 <AlertCircle className="mr-2 h-4 w-4" />
                 Weaknesses
               </TabsTrigger>
               <TabsTrigger
                 value="recommendations"
-                className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white"
+                className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white px-4 py-2 text-sm font-medium transition-all"
               >
                 <BookOpen className="mr-2 h-4 w-4" />
                 Recommendations
               </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="overview" className="mt-0 space-y-4">
+            <TabsContent value="overview" className="mt-14 md:mt-0 space-y-4">
               <div className="p-4 rounded-lg bg-blue-50 border border-blue-100">
                 <div className="flex items-start">
                   <div className="bg-blue-100 rounded-full p-2 mr-4">
@@ -512,57 +677,10 @@ export default function PremiumAnalysisDashboard() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* <div className="bg-white rounded-lg border border-gray-200 p-4">
-                  <h3 className="text-md font-medium text-gray-800 mb-3 flex items-center">
-                    <TrendingUp className="h-4 w-4 mr-2 text-emerald-500" />
-                    Performance Trend
-                  </h3>
-                  <div className="h-40 flex items-end justify-between">
-                    {data.performanceHistory.map((item, index) => (
-                      <div key={index} className="flex flex-col items-center">
-                        <div className="text-sm text-gray-500 mb-2">{item.score}%</div>
-                        <div
-                          className="w-12 bg-gradient-to-t from-emerald-500 to-emerald-400 rounded-t-md"
-                          style={{ height: `${item.score * 0.35}%` }} // Adjust multiplier as needed
-                        ></div>
-                        <div className="text-sm text-gray-500 mt-2">{item.test}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div> */}
-
-                {/* <div className="bg-white rounded-lg border border-gray-200 p-4">
-                  <h3 className="text-md font-medium text-gray-800 mb-3 flex items-center">
-                    <Clock className="h-4 w-4 mr-2 text-blue-500" />
-                    Time Distribution
-                  </h3>
-                  <div className="space-y-4 mt-4">
-                    {data.timeDistribution.map((item, index) => (
-                      <div key={index}>
-                        <div className="flex justify-between mb-1">
-                          <span className="text-sm text-gray-600">
-                            {item.category} ({item.count})
-                          </span>
-                          <span className="text-sm text-gray-500">{Math.round(item.time / 60)} min</span>
-                        </div>
-                        <div className="h-2 relative rounded-full overflow-hidden">
-                          <div className="w-full h-full bg-gray-200 absolute"></div>
-                          <div
-                            className={`h-full absolute ${index === 0 ? "bg-emerald-500" : index === 1 ? "bg-blue-500" : "bg-purple-500"}`}
-                            style={{
-                              width: `${(item.time / data.timeDistribution.reduce((acc, curr) => acc + curr.time, 1)) * 100}%`, // Avoid division by zero
-                            }}
-                          ></div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div> */}
-              </div>
+            
             </TabsContent>
 
-            <TabsContent value="strengths" className="mt-0">
+            <TabsContent value="strengths" className="mt-14 md:mt-0">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {data.strengths.map((strength, index) => (
                   <div
@@ -580,7 +698,7 @@ export default function PremiumAnalysisDashboard() {
               </div>
             </TabsContent>
 
-            <TabsContent value="weaknesses" className="mt-0">
+            <TabsContent value="weaknesses" className="mt-14 md:mt-0">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {data.weaknesses.map((weakness, index) => (
                   <div
@@ -598,7 +716,7 @@ export default function PremiumAnalysisDashboard() {
               </div>
             </TabsContent>
 
-            <TabsContent value="recommendations" className="mt-0">
+            <TabsContent value="recommendations" className="mt-14 md:mt-0">
               <div className="space-y-4">
                 {data.recommendations.map((recommendation, index) => (
                   <div
@@ -674,9 +792,7 @@ export default function PremiumAnalysisDashboard() {
               ))}
             </div>
           </CardContent>
-          <CardFooter className="flex justify-end">
-            <Button className="bg-emerald-600 hover:bg-emerald-700 text-white">Generate Full Study Plan</Button>
-          </CardFooter>
+ 
         </Card>
       )}
     </div>
@@ -690,9 +806,9 @@ function ReadinessCard({ icon, title, value, description }: ReadinessCardProps) 
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-4 flex flex-col items-center text-center">
       <div className="mb-2">{icon}</div>
-      <div className="font-medium text-gray-800">{title}</div>
-      <div className="text-xl font-bold text-gray-900 my-1">{value}</div>
-      <div className="text-sm text-gray-500">{description}</div>
+      <div className="font-medium text-gray-800 text-sm px-2">{title}</div>
+      <div className="text-sm font-bold text-gray-900 my-1 ">{value}</div>
+      <div className="text-xs text-blue-500/70">{description}</div>
     </div>
   )
 }
@@ -737,7 +853,7 @@ function StudyPlanCard({ title, description, resources, priority }: StudyPlanCar
         : "bg-blue-100 text-blue-800 border-blue-200"
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+    <div className="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow h-auto">
       <div className="p-4">
         <Badge className={`mb-3 ${priorityColor}`}>{priority} Priority</Badge>
         <h3 className="font-semibold text-gray-800 mb-2">{title}</h3>
@@ -748,7 +864,7 @@ function StudyPlanCard({ title, description, resources, priority }: StudyPlanCar
           {resources.map((resource: string, index: number) => (
             <li key={index} className="flex items-start">
               <ArrowUpRight className="h-4 w-4 text-emerald-500 mr-2 mt-0.5" />
-              <span className="text-sm text-gray-600">{resource}</span>
+              <a href={resource} target="_blank" rel="noopener noreferrer" className="text-sm text-gray-600 cursor-pointer hover:text-blue-400">{resource}</a>
             </li>
           ))}
         </ul>

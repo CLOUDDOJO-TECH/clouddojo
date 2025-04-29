@@ -23,33 +23,42 @@ const topicOptions = [
 
 const levelOptions = [
   { id: "all", label: "All Levels" },
-  { id: "associate", label: "Associate" },
-  { id: "developer", label: "Developer" },
-  { id: "architect", label: "Architect" },
-  { id: "expert", label: "Expert" },
+  { id: "BEGINER", label: "Beginner" },
+  { id: "INTERMEDIATE", label: "Intermediate" },
+  { id: "ADVANCED", label: "Advanced" },
+  { id: "EXPERT", label: "Expert" },
 ]
 
-export default function FilterComponent() {
+interface FilterComponentProps {
+  onFilter: (filters: { topics: string[], level: string }) => void
+}
+
+export default function FilterComponent({ onFilter }: FilterComponentProps) {
   const [selectedTopics, setSelectedTopics] = useState<string[]>([])
   const [selectedLevel, setSelectedLevel] = useState("all")
   const [isOpen, setIsOpen] = useState(false)
 
   const handleTopicChange = (topicId: string) => {
-    setSelectedTopics((prev) => (prev.includes(topicId) ? prev.filter((id) => id !== topicId) : [...prev, topicId]))
+    const newTopics = selectedTopics.includes(topicId) 
+      ? selectedTopics.filter((id) => id !== topicId) 
+      : [...selectedTopics, topicId]
+    setSelectedTopics(newTopics)
+    onFilter({ topics: newTopics, level: selectedLevel })
   }
 
   const handleLevelChange = (value: string) => {
     setSelectedLevel(value)
+    onFilter({ topics: selectedTopics, level: value })
   }
 
   const clearFilters = () => {
     setSelectedTopics([])
     setSelectedLevel("all")
+    onFilter({ topics: [], level: "all" })
   }
 
   const applyFilters = () => {
-    // Here you would typically fetch data or filter existing data
-    console.log("Applied filters:", { topics: selectedTopics, level: selectedLevel })
+    onFilter({ topics: selectedTopics, level: selectedLevel })
     setIsOpen(false)
   }
 
