@@ -19,17 +19,17 @@ interface QuestionData {
 
 async function questionSeed() {
     try {
-        const jsonPath = path.join(__dirname, '../../public/data/questions.json');
+        const jsonPath = path.join(__dirname, '../../public/data/cloud-practitioner/cp-6.json');
         const rawData = fs.readFileSync(jsonPath, 'utf-8');
         const questionsData: QuestionData[] = JSON.parse(rawData);
 
         // Create quiz in db
         const quiz = await prisma.quiz.create({
             data: {
-                title: "☄️ Quick Test",
-                description: "Get warmed up with this quick test, designed to prepare you for the AWS Solutions Architect Associate certification. It includes a variety of challenging questions to boost your skills and confidence.",
+                title: " 🧭 Practitioner Pathway Test",
+                description: " Navigate the most commonly tested AWS services and best practices — ideal for mid-prep check-ins.",
                 isPublic: true,
-                duration: 80,
+                duration: 50,
                 free: true, 
             }
         });
