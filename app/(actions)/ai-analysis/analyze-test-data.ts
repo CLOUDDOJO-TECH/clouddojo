@@ -173,7 +173,7 @@ export async function analyzeTestData() {
       // Initialize the Gemini client with reduced tokens and temperature
     const genAI = new GoogleGenerativeAI(apiKey)
     const model = genAI.getGenerativeModel({
-        model: "gemini-2.5-flash-preview-04-17", 
+        model: "gemini-2.0-flash-lite", 
       generationConfig: {
           temperature: 0.1, 
           topP: 0.7,
