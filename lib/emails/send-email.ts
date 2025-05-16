@@ -5,6 +5,7 @@ import CloudDojoWelcomeEmail from './welcome-email'
 import FeedbackThankYouEmail from './feedback-thank-you'
 import FeedbackNotificationEmail from './feedback-notification'
 import CloudDojoAiReportEmail from './drafts/new-report'
+import WelcomeEmail from './drafts/welcome-mail'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 const ADMIN_EMAIL = 'bonyuglen@gmail.com'
@@ -74,7 +75,7 @@ export async function sendWelcomeEmail({
       from: 'CloudDojo <welcome@clouddojo.tech>',
       to: email,
       subject: 'Welcome to CloudDojo - Your AWS Certification Journey Begins!',
-      react: CloudDojoWelcomeEmail({ username }),
+      react: WelcomeEmail({ username }),
     })
 
     return { success: true, data }
