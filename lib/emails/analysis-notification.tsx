@@ -44,7 +44,7 @@ export const AnalysisNotificationEmail = ({
           <Container className="mx-auto my-[40px] max-w-[465px] rounded border border-emerald-200 border-solid p-[20px]">
             <Section className="mt-[32px]">
               <Img
-                src={`${baseUrl}/main-logo.png`}
+                src={`https://www.clouddojo.tech/images/dojo-logo.png`}
                 width="40"
                 height="40"
                 alt="CloudDojo Logo"

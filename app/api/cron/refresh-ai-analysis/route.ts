@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
 import { analyzeTestData } from "@/app/(actions)/ai-analysis/analyze-test-data"
-import { addDays } from "date-fns"
+import { addDays, addHours } from "date-fns"
 import { sendAnalysisNotification } from "@/lib/emails/send-email"
 
 export const runtime = "edge"
@@ -34,7 +34,7 @@ async function refreshUserAnalysis(userId: string) {
     }
 
     // Calculate next expiration (7 days from now)
-    const expiresAt = addDays(new Date(), 7)
+    const expiresAt = addHours(new Date(), 24)
 
     // Update or create the analysis report
     await prisma.aIAnalysisReport.upsert({
@@ -53,6 +53,7 @@ async function refreshUserAnalysis(userId: string) {
         userId: userId,
         reportData: analysisResult.data,
         expiresAt: expiresAt,
+        latest: true,
       }
     })
 
@@ -77,6 +78,7 @@ async function refreshUserAnalysis(userId: string) {
 
 export async function GET(request: Request) {
   try {
+
     // Verify the request is from Vercel Cron
     const authHeader = request.headers.get("authorization")
     if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
@@ -96,7 +98,7 @@ export async function GET(request: Request) {
             aiAnalysisReports: {
               some: {
                 expiresAt: {
-                  lte: addDays(new Date(), 1) // Reports expiring within 24 hours
+                  lte: new Date()
                 }
               }
             }

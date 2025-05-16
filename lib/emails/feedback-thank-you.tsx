@@ -48,7 +48,7 @@ export const FeedbackThankYouEmail = ({
         <Preview>Thank you for your feedback!</Preview>
         <Body className="bg-offwhite font-sans text-base">
           <Img
-            src={`${baseUrl}/main-logo.png`}
+            src={`https://www.clouddojo.tech/images/dojo-logo.png`}
             width="184"
             height="75"
             alt="CloudDojo"
