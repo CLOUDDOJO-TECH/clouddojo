@@ -4,6 +4,7 @@ import AnalysisNotificationEmail from './analysis-notification'
 import CloudDojoWelcomeEmail from './welcome-email'
 import FeedbackThankYouEmail from './feedback-thank-you'
 import FeedbackNotificationEmail from './feedback-notification'
+import CloudDojoAiReportEmail from './drafts/new-report'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 const ADMIN_EMAIL = 'bonyuglen@gmail.com'
@@ -45,7 +46,7 @@ export async function sendAnalysisNotification({
       from: 'CloudDojo <welcome@clouddojo.tech>',
       to: email,
       subject: 'Your AWS Certification AI Analysis is Ready!',
-      react: AnalysisNotificationEmail({ 
+      react: CloudDojoAiReportEmail({ 
         username,
         userImage,
         certificationName,

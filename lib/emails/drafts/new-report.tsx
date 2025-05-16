@@ -16,249 +16,205 @@ import {
   Preview,
   Font,
 } from '@react-email/components';
-import { FaBrain, FaBullseye, FaChartLine } from 'react-icons/fa6'; // Removed FaRegLightbulb as it wasn't used
+import { FaBrain, FaBullseye, FaChartLine } from 'react-icons/fa6';
 
 // --- Color Palette ---
-const pageBackgroundColor = '#202832'; // Dark background for the page
-const containerBackgroundColor = '#14181e'; // Slightly different dark for the main content container
-const accentColor = '#66ffcc'; // Bright green accent
-const textColor = '#d0e0f0'; // Light text for readability on dark background
-const lightTextColor = '#a0b0c0'; // Slightly dimmer text for secondary info
-const buttonTextColor = '#14181e'; // Dark text for contrast on green button
-const borderColor = 'rgba(102, 255, 204, 0.2)'; // Subtle border using accent color
-const dividerColor = 'rgba(102, 255, 204, 0.1)'; // Very subtle divider
-const footerLinkColor = '#66ffcc'; // Accent color for footer links
+const colors = {
+  pageBackground: '#202832',
+  containerBackground: '#14181e',
+  accent: '#66ffcc',
+  text: '#d0e0f0',
+  lightText: '#a0b0c0',
+  buttonText: '#14181e',
+  border: 'rgba(102, 255, 204, 0.2)',
+  divider: 'rgba(102, 255, 204, 0.1)',
+  footerLink: '#66ffcc'
+};
 
 // --- Fonts ---
-const headingFont = 'Inter, sans-serif';
-const bodyFont = 'Inter, sans-serif';
+const fonts = {
+  heading: 'Inter, sans-serif',
+  body: 'Inter, sans-serif'
+};
 
-// --- URLs & Content ---
-const logoUrl = 'https://cdn.migma.ai/projects/6821f96bc8d7bc6ae950fb77/logos/dojo-logo_logo_s2vj82.png'; // Primary logo
-const websiteUrl = 'https://www.clouddojo.tech/';
-const reportUrl = '|_REPORT_URL_|'; // Placeholder for dynamic report URL
-const dashboardUrl = '|_DASHBOARD_URL_|'; // Placeholder for dashboard URL
-const supportUrl = 'https://www.clouddojo.tech/support'; // Updated with full URL based on sitemap pattern
-const blogUrl = 'https://www.clouddojo.tech/#'; // From sitemap (points to homepage section)
-const contactUrl = 'https://calendar.notion.so/meet/glenmiracle/7fnt4l09'; // From research context
+// --- URLs ---
+const urls = {
+  logo: 'https://www.clouddojo.tech/images/dojo-logo.png',
+  website: 'https://www.clouddojo.tech/',
+  report: '|_REPORT_URL_|',
+  dashboard: 'https://www.clouddojo.tech/dashboard',
+  terms: 'https://www.clouddojo.tech/terms',
+  support: 'https://www.clouddojo.tech/support',
+  blog: 'https://www.clouddojo.tech/blog',
+  contact: 'https://calendar.notion.so/meet/glenmiracle/7fnt4l09',
+  unsubscribe: '|_UNSUBSCRIBE_URL_|',
+  whatsapp: "https://chat.whatsapp.com/Eta3HH4UbtV3CEAp4eOY0a",
+};
 
 const companyName = 'CloudDojo';
-const copyrightYear = new Date().getFullYear();
-const unsubscribeUrl = '|_UNSUBSCRIBE_URL_|';
+const currentYear = new Date().getFullYear();
 
 // --- Content ---
 const content = {
   en: {
-    title: "Your New CloudDojo AI Performance Report is Ready!",
-    previewText: "Unlock personalized insights! Your latest AI-powered performance report is here, highlighting strengths, weaknesses, and focus areas for your AWS cert prep. Study smarter, pass faster!",
-    greeting: "Hi |_FIRST_NAME_|,",
-    reportReady: "Great news! Your latest AI-powered performance report from CloudDojo is generated and ready for you to review.",
-    reportExplanation: "Our custom AI model has analyzed your recent practice sessions to provide personalized feedback. This report pinpoints exactly where you're excelling and which areas need a bit more focus to help you study smarter, not harder.",
-    insightsHeading: "Inside Your Report:",
-    viewReportButton: "View My AI Report",
-    ctaHeading: "Ready to Optimize Your Study Plan?",
-    ctaText: "Dive into your detailed analysis and discover the key areas to concentrate on for maximum impact on your AWS certification journey.",
-    ctaButton: "Access My Dashboard",
-    footerSupport: "Support",
-    footerBlog: "Blog",
-    footerContact: "Contact",
-    footerCopyright: `© ${copyrightYear} ${companyName}. All rights reserved.`,
-    footerDisclaimer: `This email was sent because you're a registered user of ${companyName}.`,
-    footerUnsubscribe: "Unsubscribe",
-  },
-  // Add other languages if needed
+    title: "Your Personalized AWS Certification Report is Ready!",
+    previewText: "Your AI-powered AWS certification analysis is now available - discover your strengths and focus areas",
+    greeting: "Hi {firstName},",
+    intro: "Your latest AWS certification readiness report has been generated with new insights to guide your study plan.",
+    reportExplanation: "Our AI analyzed your recent practice tests to identify:",
+    insightsHeading: "Key Findings From Your Analysis",
+    viewReportButton: "View Full Report",
+    ctaHeading: "Optimize Your Study Strategy",
+    ctaText: "Access your personalized dashboard to track progress and focus on the most impactful areas",
+    ctaButton: "Go to Dashboard",
+    footer: {
+      support: "Support",
+      blog: "Blog",
+      contact: "Schedule Call",
+      copyright: `© ${currentYear} ${companyName}. All rights reserved.`,
+      disclaimer: `You're receiving this email because you're a registered ${companyName} user.`,
+      unsubscribe: "Unsubscribe"
+    }
+  }
 };
-
-// Function to get content based on language
-const getContent = (lang) => {
-  return content[lang] || content.en; // Default to English if language not found
-};
-
 
 const reportInsights = [
   {
-    icon: <FaBrain size={24} color={accentColor} />,
-    title: 'AI-Driven Analysis',
-    description: 'Deep insights generated by our custom AI, learning from your performance.',
+    icon: <FaBrain size={24} color={colors.accent} />,
+    title: 'AI-Powered Insights',
+    description: 'Personalized analysis of your performance patterns and knowledge gaps',
   },
   {
-    icon: <FaChartLine size={24} color={accentColor} />,
-    title: 'Strengths & Weaknesses',
-    description: 'Clear identification of topics you\'ve mastered and areas needing improvement.',
+    icon: <FaChartLine size={24} color={colors.accent} />,
+    title: 'Progress Tracking',
+    description: 'See how your scores improve across different AWS service categories',
   },
   {
-    icon: <FaBullseye size={24} color={accentColor} />,
-    title: 'Targeted Focus Areas',
-    description: 'Specific recommendations on where to direct your study efforts next.',
+    icon: <FaBullseye size={24} color={colors.accent} />,
+    title: 'Targeted Recommendations',
+    description: 'Specific study focus areas to maximize your certification chances',
   },
 ];
 
-// --- Reusable Components ---
-const PaddedSection = ({ children, style, ...props }) => (
-  <Section
-    style={{
-      ...style,
-      paddingLeft: '30px',
-      paddingRight: '30px',
-    }}
-    className="content-padding"
-    {...props}
-  >
-    {children}
-  </Section>
-);
-
 // --- Styles ---
-const main = {
-  backgroundColor: pageBackgroundColor,
-  fontFamily: bodyFont,
-  margin: '0 auto',
-  padding: '0',
+const styles = {
+  main: {
+    backgroundColor: colors.pageBackground,
+    fontFamily: fonts.body,
+  },
+  container: {
+    backgroundColor: colors.containerBackground,
+    maxWidth: '600px',
+    margin: '40px auto',
+    border: `1px solid ${colors.border}`,
+    borderRadius: '8px',
+  },
+  section: {
+    padding: '30px',
+  },
+  header: {
+    padding: '24px 30px 16px',
+  },
+  logo: {
+    display: 'block',
+    margin: '0 auto',
+    width: '120px'
+  },
+  heading1: {
+    color: colors.text,
+    fontSize: '26px',
+    fontWeight: 'bold',
+    lineHeight: '34px',
+    margin: '0 0 20px 0',
+    fontFamily: fonts.heading,
+  },
+  heading2: {
+    color: colors.text,
+    fontSize: '22px',
+    fontWeight: 'bold',
+    lineHeight: '30px',
+    margin: '0 0 16px 0',
+    fontFamily: fonts.heading,
+  },
+  heading3: {
+    color: colors.text,
+    fontSize: '18px',
+    fontWeight: '600',
+    lineHeight: '24px',
+    margin: '0 0 8px 0',
+    fontFamily: fonts.heading,
+  },
+  paragraph: {
+    color: colors.text,
+    fontSize: '16px',
+    lineHeight: '24px',
+    margin: '0 0 20px 0',
+  },
+  lightText: {
+    color: colors.lightText,
+    fontSize: '14px',
+    lineHeight: '20px',
+    margin: '0 0 12px 0',
+  },
+  button: {
+    backgroundColor: colors.accent,
+    color: colors.buttonText,
+    fontSize: '16px',
+    fontWeight: 'bold',
+    padding: '12px 24px',
+    borderRadius: '8px',
+    display: 'inline-block',
+    textDecoration: 'none'
+  },
+  insightCard: {
+    border: `1px solid ${colors.border}`,
+    borderRadius: '8px',
+    padding: '20px',
+    marginBottom: '16px',
+  },
+  ctaSection: {
+    backgroundColor: colors.pageBackground,
+    padding: '40px 30px',
+    textAlign: 'center' as const,
+  },
+  divider: {
+    borderColor: colors.divider,
+    margin: '32px 0',
+  },
+  footer: {
+    padding: '24px 30px',
+    backgroundColor: colors.containerBackground,
+  },
+  footerLink: {
+    color: colors.footerLink,
+    fontSize: '12px',
+    textDecoration: 'underline',
+    margin: '0 5px',
+  },
+  footerText: {
+    color: colors.lightText,
+    fontSize: '12px',
+    lineHeight: '18px',
+    textAlign: 'center' as const,
+    margin: '0 0 8px 0',
+  }
 };
-
-const container = {
-  backgroundColor: containerBackgroundColor,
-  maxWidth: '600px',
-  margin: '40px auto',
-  border: `1px solid ${borderColor}`,
-  borderRadius: '8px',
-  overflow: 'hidden',
-};
-
-const header = {
-  paddingTop: '24px',
-  paddingBottom: '16px',
-};
-
-const logoStyle = {
-  display: 'block',
-  margin: '0 auto',
-};
-
-const sectionSpacing = {
-  paddingTop: '32px',
-  paddingBottom: '32px',
-};
-
-const h1 = {
-  color: textColor,
-  fontSize: '26px',
-  fontWeight: 'bold',
-  lineHeight: '34px',
-  margin: '0 0 20px 0',
-  textAlign: 'center' as const,
-  fontFamily: headingFont,
-};
-
-const h2 = {
-  color: textColor,
-  fontSize: '22px',
-  fontWeight: 'bold',
-  lineHeight: '30px',
-  margin: '0 0 16px 0',
-  textAlign: 'center' as const,
-  fontFamily: headingFont,
-};
-
-const h3 = {
-  color: textColor,
-  fontSize: '18px',
-  fontWeight: '600',
-  lineHeight: '24px',
-  margin: '0 0 8px 0',
-  fontFamily: headingFont,
-};
-
-const paragraph = {
-  color: textColor,
-  fontSize: '16px',
-  lineHeight: '24px',
-  margin: '0 0 20px 0',
-  textAlign: 'left' as const,
-};
-
-const paragraphCentered = {
-  ...paragraph,
-  textAlign: 'center' as const,
-};
-
-const lightParagraph = {
-  ...paragraph,
-  color: lightTextColor,
-  fontSize: '14px',
-  lineHeight: '20px',
-  margin: '0 0 12px 0',
-};
-
-const buttonPrimary = {
-  backgroundColor: accentColor,
-  color: buttonTextColor,
-  fontSize: '16px',
-  fontWeight: 'bold',
-  textDecoration: 'none',
-  padding: '12px 24px',
-  borderRadius: '8px', // Rounded corners
-  display: 'inline-block',
-  textAlign: 'center' as const,
-  border: 'none',
-  cursor: 'pointer',
-  msoLineHeightRule: 'exactly',
-};
-
-const insightCard = {
-  border: `1px solid ${borderColor}`,
-  borderRadius: '8px',
-  padding: '20px',
-  marginBottom: '16px',
-};
-
-const ctaSectionStyle = {
-  backgroundColor: pageBackgroundColor, // Use page background for contrast
-  paddingTop: '40px',
-  paddingBottom: '40px',
-  textAlign: 'center' as const,
-};
-
-const hr = {
-  borderColor: dividerColor,
-  margin: '32px 0',
-};
-
-const footer = {
-  paddingTop: '24px',
-  paddingBottom: '24px',
-  backgroundColor: containerBackgroundColor, // Match container background
-};
-
-const footerLinkStyle = {
-  color: footerLinkColor,
-  fontSize: '12px',
-  textDecoration: 'underline',
-  margin: '0 5px',
-};
-
-const footerSeparator = {
-  color: lightTextColor,
-  fontSize: '12px',
-  margin: '0 5px',
-};
-
-const footerText = {
-  color: lightTextColor,
-  fontSize: '12px',
-  lineHeight: '18px',
-  textAlign: 'center' as const,
-  margin: '0 0 8px 0',
-};
+interface AnalysisNotificationEmailProps {
+  username: string;
+  userImage?: string;
+  certificationName?: string;
+  readinessScore?: number;
+  language?: string | 'en';
+}
 
 // --- Email Component ---
-export default function CloudDojoAiReportEmail({ firstName = 'Cloud Explorer', language = 'en' }) {
-  const currentContent = getContent(language);
-
+export default function CloudDojoAiReportEmail({ username, language, certificationName, readinessScore,}: AnalysisNotificationEmailProps) {
+  const langContent = content[language as keyof typeof content];
+  
   return (
     <Html lang={language}>
       <Head>
-        <title>{currentContent.title}</title>
+        <title>{langContent.title}</title>
         <Font
           fontFamily="Inter"
           fallbackFontFamily="sans-serif"
@@ -266,185 +222,140 @@ export default function CloudDojoAiReportEmail({ firstName = 'Cloud Explorer', l
             url: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap',
             format: 'woff2',
           }}
-          fontWeight={400}
-          fontStyle="normal"
         />
         <style>{`
-          body { background-color: ${pageBackgroundColor}; margin: 0; padding: 0; }
-          .content-padding { padding-left: 30px; padding-right: 30px; }
-
           @media only screen and (max-width: 600px) {
-            .content-padding { padding-left: 20px !important; padding-right: 20px !important; }
-            .mobile-stack { display: block !important; width: 100% !important; }
-            .mobile-center { text-align: center !important; }
-            .mobile-button { display: block !important; width: 100% !important; max-width: 300px !important; margin: 10px auto !important; }
-            .mobile-column {
+            .section-padding {
+              padding-left: 20px !important;
+              padding-right: 20px !important;
+            }
+            .mobile-stack {
               display: block !important;
               width: 100% !important;
-              max-width: 100% !important;
-              padding-right: 0 !important;
-              padding-left: 0 !important;
-              box-sizing: border-box !important;
-              margin-bottom: 16px !important;
             }
-             .mobile-column > table { width: 100% !important; }
-             /* Target only the text column in insight cards */
-             .insight-text-column td { width: 100% !important; }
-             .mobile-image { width: 100% !important; height: auto !important; max-width: 100% !important; margin: 0 auto 20px auto !important; }
-             .insight-icon-column { width: 40px !important; padding-right: 16px !important; } /* Maintain icon column width */
+            .mobile-center {
+              text-align: center !important;
+            }
+            .mobile-button {
+              display: block !important;
+              width: 100% !important;
+              max-width: 300px !important;
+              margin: 10px auto !important;
+            }
           }
         `}</style>
       </Head>
-      <Preview>{currentContent.previewText}</Preview>
-      <Body style={main}>
-        <Container style={container}>
-          {/* START HEADER COMPONENT */}
-          <PaddedSection style={header}>
+      <Preview>{langContent.previewText}</Preview>
+      <Body style={styles.main}>
+        <Container style={styles.container}>
+          {/* Header */}
+          <Section style={styles.header}>
             <Row>
               <Column align="center">
-                <Link href={websiteUrl}>
+                <Link href={urls.website}>
                   <Img
-                    src={logoUrl}
+                    src={urls.logo}
                     alt={`${companyName} Logo`}
-                    width="120" // Adjusted size
-                    height="auto"
-                    style={logoStyle}
+                    style={styles.logo}
                   />
                 </Link>
               </Column>
             </Row>
-          </PaddedSection>
-          {/* END HEADER COMPONENT */}
+          </Section>
 
-          {/* START MAIN CONTENT SECTION */}
-          <PaddedSection style={sectionSpacing}>
-            <Row>
-              <Column>
-                <Heading as="h1" style={h1}>{currentContent.title}</Heading>
-                <Text style={paragraph}>
-                  {currentContent.greeting.replace('|_FIRST_NAME_|', firstName)}
-                </Text>
-                <Text style={paragraph}>
-                  {currentContent.reportReady}
-                </Text>
-                <Text style={lightParagraph}>
-                  {currentContent.reportExplanation}
-                </Text>
-              </Column>
-            </Row>
+          {/* Main Content */}
+          <Section style={styles.section} className="section-padding">
+            <Heading as="h1" style={styles.heading1}>{langContent.title}</Heading>
+            
+            <Text style={styles.paragraph}>
+              {langContent.greeting.replace('{firstName}', username)}
+            </Text>
+            
+            <Text style={styles.paragraph}>
+              {langContent.intro}
+            </Text>
+            
+            <Text style={styles.lightText}>
+              {langContent.reportExplanation}
+            </Text>
 
-            {/* Insights Section */}
-            <Row style={{ marginTop: '24px' }}>
-              <Column>
-                <Heading as="h2" style={{ ...h2, textAlign: 'left' }}>{currentContent.insightsHeading}</Heading>
-                {reportInsights.map((insight, index) => (
-                  <Section key={index} style={insightCard}>
-                    <Row>
-                      <Column style={{ width: '40px', verticalAlign: 'top', paddingRight: '16px' }} className="insight-icon-column">
-                        {insight.icon}
-                      </Column>
-                      <Column style={{ verticalAlign: 'top' }} className="insight-text-column">
-                         <table width="100%" cellPadding="0" cellSpacing="0" role="presentation">
-                           <tbody>
-                             <tr>
-                               <td>
-                                 <Heading as="h3" style={h3}>{insight.title}</Heading>
-                                 <Text style={lightParagraph}>{insight.description}</Text>
-                               </td>
-                             </tr>
-                           </tbody>
-                         </table>
-                      </Column>
-                    </Row>
-                  </Section>
-                ))}
-              </Column>
-            </Row>
+            {/* Insights */}
+            <Heading as="h2" style={{ ...styles.heading2, textAlign: 'left' }}>
+              {langContent.insightsHeading}
+            </Heading>
+            
+            {reportInsights.map((insight, index) => (
+              <Section key={index} style={styles.insightCard}>
+                <Row>
+                  <Column style={{ width: '40px', verticalAlign: 'top', paddingRight: '16px' }}>
+                    {insight.icon}
+                  </Column>
+                  <Column>
+                    <Heading as="h3" style={styles.heading3}>{insight.title}</Heading>
+                    <Text style={styles.lightText}>{insight.description}</Text>
+                  </Column>
+                </Row>
+              </Section>
+            ))}
 
-            {/* Primary CTA Button */}
+            {/* Primary CTA */}
             <Row style={{ marginTop: '32px' }}>
               <Column align="center">
-                <Button href={reportUrl} style={buttonPrimary} className="mobile-button">
-                  {currentContent.viewReportButton}
+                <Button href={urls.report} style={styles.button} className="mobile-button">
+                  {langContent.viewReportButton}
                 </Button>
               </Column>
             </Row>
-          </PaddedSection>
-          {/* END MAIN CONTENT SECTION */}
-
-          {/* START CTA SECTION */}
-          <Section style={ctaSectionStyle}>
-             <Row>
-               <Column align="center">
-                 <Img
-                    src="https://placehold.co/600x200/14181e/66ffcc?text=Analyze+%26+Improve"
-                    alt="Stylized graphic representing data analysis and progress charts in CloudDojo's brand colors (dark background, green accents)"
-                    width="600"
-                    height="auto"
-                    style={{ maxWidth: '100%', marginBottom: '24px' }}
-                    className="mobile-image"
-                 />
-                 <PaddedSection> {/* Add padding for text and button */}
-                   <Heading as="h2" style={h2}>{currentContent.ctaHeading}</Heading>
-                   <Text style={paragraphCentered}>
-                     {currentContent.ctaText}
-                   </Text>
-                   <Button href={dashboardUrl} style={buttonPrimary} className="mobile-button">
-                     {currentContent.ctaButton}
-                   </Button>
-                 </PaddedSection>
-               </Column>
-             </Row>
           </Section>
-          {/* END CTA SECTION */}
 
-          <Hr style={hr} />
+          {/* CTA Section */}
+          <Section style={styles.ctaSection}>
+            <Heading as="h2" style={styles.heading2}>{langContent.ctaHeading}</Heading>
+            <Text style={{ ...styles.paragraph, textAlign: 'center' }}>
+              {langContent.ctaText}
+            </Text>
+            <Button href={urls.dashboard} style={styles.button} className="mobile-button">
+              {langContent.ctaButton}
+            </Button>
+            <Button href={urls.whatsapp} style={styles.button} className="mobile-button">
+              {langContent.ctaButton}
+            </Button>
+          </Section>
 
-          {/* START FOOTER COMPONENT */}
-          <PaddedSection style={footer}>
-            {/* Footer Links */}
-            <Row style={{ marginBottom: '16px' }}>
-              <Column align="center">
-                <table cellPadding="0" cellSpacing="0" border="0" align="center">
-                  <tbody>
-                    <tr>
-                      <td style={{ paddingRight: '8px', paddingLeft: '8px' }}>
-                        <Link href={supportUrl} style={footerLinkStyle}>{currentContent.footerSupport}</Link>
-                      </td>
-                      <td style={{ paddingRight: '8px', paddingLeft: '8px' }}>
-                        <span style={footerSeparator}>|</span>
-                      </td>
-                      <td style={{ paddingRight: '8px', paddingLeft: '8px' }}>
-                        <Link href={blogUrl} style={footerLinkStyle}>{currentContent.footerBlog}</Link>
-                      </td>
-                      <td style={{ paddingRight: '8px', paddingLeft: '8px' }}>
-                        <span style={footerSeparator}>|</span>
-                      </td>
-                      <td style={{ paddingRight: '8px', paddingLeft: '8px' }}>
-                        <Link href={contactUrl} style={footerLinkStyle}>{currentContent.footerContact}</Link>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </Column>
-            </Row>
+          <Hr style={styles.divider} />
 
-            {/* Disclaimer & Copyright */}
+          {/* Footer */}
+          <Section style={styles.footer} className="section-padding">
             <Row>
               <Column align="center">
-                 <Text style={footerText}>
-                  {currentContent.footerCopyright}
-                </Text>
-                <Text style={footerText}>
-                  {currentContent.footerDisclaimer}
-                </Text>
-                <Text style={footerText}>
-                  <Link href={unsubscribeUrl} style={footerLinkStyle}>{currentContent.footerUnsubscribe}</Link>
-                </Text>
+                <Link href={urls.support} style={styles.footerLink}>
+                  {langContent.footer.support}
+                </Link>
+                <span style={{ ...styles.footerText, display: 'inline-block', margin: '0 8px' }}>|</span>
+                <Link href={urls.blog} style={styles.footerLink}>
+                  {langContent.footer.blog}
+                </Link>
+                <span style={{ ...styles.footerText, display: 'inline-block', margin: '0 8px' }}>|</span>
+                <Link href={urls.contact} style={styles.footerLink}>
+                  {langContent.footer.contact}
+                </Link>
               </Column>
             </Row>
-          </PaddedSection>
-          {/* END FOOTER COMPONENT */}
+            
+            <Row style={{ marginTop: '16px' }}>
+              <Column align="center">
+                <Text style={styles.footerText}>
+                  {langContent.footer.copyright}
+                </Text>
+                <Text style={styles.footerText}>
+                  {langContent.footer.disclaimer}
+                </Text>
+                <Link href={urls.unsubscribe} style={styles.footerLink}>
+                  {langContent.footer.unsubscribe}
+                </Link>
+              </Column>
+            </Row>
+          </Section>
         </Container>
       </Body>
     </Html>
