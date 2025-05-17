@@ -20,6 +20,7 @@ async function refreshUserAnalysis(userId: string) {
     const user = await prisma.user.findUnique({
       where: { userId },
       select: {
+        userId: true,
         email: true,
         firstName: true,
         lastName: true
@@ -31,8 +32,8 @@ async function refreshUserAnalysis(userId: string) {
       return false
     }
 
-    // Generate new analysis
-    const analysisResult = await analyzeTestData()
+    // Generate new analysis report for the user
+    const analysisResult = await analyzeTestData(user.userId)
     
     if (!analysisResult.success || !analysisResult.data) {
       console.error(`Failed to generate analysis for user ${userId}:`, analysisResult.error)

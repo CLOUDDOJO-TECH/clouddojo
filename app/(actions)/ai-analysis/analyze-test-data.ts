@@ -156,7 +156,11 @@ const formatTestDataForAI = (data: TestData): FormattedTestData => {
   }
 }
 
-export async function analyzeTestData() {
+export async function analyzeTestData(userId: string) {
+  if (!userId) {
+    return { success: false, error: "User not authenticated" }
+  }
+
   try {
     // Add timeout for the entire operation
     const TIMEOUT = 25000; // 25 seconds
@@ -183,7 +187,7 @@ export async function analyzeTestData() {
     })
 
     // Get and format test data
-    const testDataResult = await getUserTestData()
+    const testDataResult = await getUserTestData(userId)
     if (!testDataResult.success || !testDataResult.data) {
       throw new Error(testDataResult.error || "Failed to fetch test data")
     }

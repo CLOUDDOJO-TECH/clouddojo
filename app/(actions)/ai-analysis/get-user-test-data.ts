@@ -4,9 +4,8 @@ import { auth } from "@clerk/nextjs/server"
 import prisma from "@/lib/prisma"
 import { Prisma } from "@prisma/client"
 
-export async function getUserTestData() {
+export async function getUserTestData({userId}: { userId: string }) {
   try {
-    const { userId } = await auth()
 
     if (!userId) {
       return { success: false, error: "User not authenticated" }
