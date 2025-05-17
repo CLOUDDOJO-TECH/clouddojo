@@ -1,17 +1,16 @@
 "use server"
 
-import { auth } from "@clerk/nextjs/server"
 import prisma from "@/lib/prisma"
 import { Prisma } from "@prisma/client"
 
-export async function getUserTestData({userId}: { userId: string }) {
+export async function getUserTestData(userId: string) {
   try {
 
     if (!userId) {
       return { success: false, error: "User not authenticated" }
     }
 
-    // Get user's latest 5 quiz attempts with comprehensive data
+  // Get user's latest 5 quiz attempts with comprehensive data
     const quizAttempts = await prisma.quizAttempt.findMany({
       where: {
         userId,
