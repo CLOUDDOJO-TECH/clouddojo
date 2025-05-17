@@ -4,9 +4,12 @@ import { analyzeTestData } from "@/app/(actions)/ai-analysis/analyze-test-data"
 import { addDays, addHours } from "date-fns"
 import { sendAnalysisNotification } from "@/lib/emails/send-email"
 
-export const runtime = "edge"
+export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
 export const maxDuration = 300
+// export const revalidate = 0
+
+console.log(`Starting cron job at ${new Date().toISOString()}`)
 
 async function refreshUserAnalysis(userId: string) {
   try {
@@ -107,7 +110,7 @@ export async function GET(request: Request) {
       },
       select: {
         userId: true
-      }
+      },
     })
 
     // Process each user
@@ -119,6 +122,8 @@ export async function GET(request: Request) {
     const successful = results.filter(r => r.status === "fulfilled" && r.value).length
     const failed = results.filter(r => r.status === "rejected" || (r.status === "fulfilled" && !r.value)).length
 
+    console.log(`Success: ${successful}, Failed: ${failed}`)
+    
     return NextResponse.json({
       success: true,
       message: `Processed ${usersToUpdate.length} users. Success: ${successful}, Failed: ${failed}`,

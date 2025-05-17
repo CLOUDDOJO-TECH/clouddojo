@@ -22,6 +22,16 @@ const config = {
   theme: {
   	extend: {
   		colors: {
+			// Custom colors for Reveni site
+			mint: 'hsl(144, 65%, 95%)',       // #e8f9f0
+			cstm_teal: 'hsl(198, 45%, 20%)',       // #1d3b4a
+			cardPink: 'hsl(350, 100%, 92%)',  // #ffd6dc
+			cardPurple: 'hsl(252, 100%, 94%)', // #e5deff
+			cardGreen: 'hsl(84, 85%, 90%)',   // #e5f9cd
+			cardYellow: 'hsl(52, 100%, 90%)',  // #fef7cd
+			lightPurple: 'hsl(255, 100%, 97%)', // #f4f0ff
+			footerPink: 'hsl(350, 100%, 94%)',  // #ffe5e9
+			
                 ...colors,
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
