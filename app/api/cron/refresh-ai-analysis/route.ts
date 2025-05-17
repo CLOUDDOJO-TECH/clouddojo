@@ -113,6 +113,10 @@ export async function GET(request: Request) {
     while (hasMore && (Date.now() - startTime) < (maxDuration * 1000 - TIME_BUFFER_MS)) {
       const usersBatch = await prisma.user.findMany({
         where: {
+          // Only find users that have at least one quiz attempt
+          quizAttempts: {
+            some: {}
+          },
           OR: [
             { aiAnalysisReports: { none: {} } },
             { aiAnalysisReports: { some: { expiresAt: { lte: new Date() } } } }
