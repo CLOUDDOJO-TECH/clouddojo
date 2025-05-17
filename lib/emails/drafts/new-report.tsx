@@ -208,11 +208,18 @@ interface AnalysisNotificationEmailProps {
 }
 
 // --- Email Component ---
-export default function CloudDojoAiReportEmail({ username, language, certificationName, readinessScore,}: AnalysisNotificationEmailProps) {
-  const langContent = content[language as keyof typeof content];
+export default function CloudDojoAiReportEmail({ 
+  username = 'there', 
+  language = 'en', 
+  certificationName, 
+  readinessScore
+}: AnalysisNotificationEmailProps) {
+  // Ensure we always have a valid language, defaulting to 'en'
+  const lang = language && content[language as keyof typeof content] ? language : 'en';
+  const langContent = content[lang as keyof typeof content];
   
   return (
-    <Html lang={language}>
+    <Html lang={lang}>
       <Head>
         <title>{langContent.title}</title>
         <Font

@@ -14,7 +14,7 @@ interface SendAnalysisNotificationProps {
   email: string
   username: string
   userImage?: string
-  certificationName?: string
+  certificationName?: string | "AWS Certified Solutions Architect – Associate"
   readinessScore?: number
 }
 
@@ -51,7 +51,8 @@ export async function sendAnalysisNotification({
         username,
         userImage,
         certificationName,
-        readinessScore
+        readinessScore,
+        language: 'en' // Explicitly set language to avoid undefined issues
       }),
     })
 
@@ -130,4 +131,4 @@ export async function sendFeedbackEmails({
     console.error('Failed to send feedback emails:', error)
     return { success: false, error }
   }
-} 
+}

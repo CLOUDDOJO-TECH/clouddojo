@@ -69,7 +69,8 @@ async function refreshUserAnalysis(userId: string) {
       await sendAnalysisNotification({
         email: user.email,
         username: user.firstName || 'there',
-        readinessScore: analysisResult.data.certificationReadiness
+        readinessScore: analysisResult.data.certificationReadiness,
+        certificationName: analysisResult.data.certificationName,
       })
     } catch (emailError) {
       console.error(`Failed to send email notification to user ${userId}:`, emailError)
