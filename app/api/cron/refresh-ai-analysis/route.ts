@@ -1,15 +1,18 @@
 import { NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
 import { analyzeTestData } from "@/app/(actions)/ai-analysis/analyze-test-data"
-import { addDays, addHours } from "date-fns"
+import { addHours } from "date-fns"
 import { sendAnalysisNotification } from "@/lib/emails/send-email"
+import { getProcessedUserIds, markUsersAsProcessed } from "@/lib/cron-helpers"
 
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
-export const maxDuration = 60
-// export const revalidate = 0
+export const maxDuration = 59
 
-console.log(`Starting cron job at ${new Date().toISOString()}`)
+// Configuration
+const BATCH_SIZE = 5 // Adjust based on your processing time per user
+const TIME_BUFFER_MS = 5000 // 5-second buffer before timeout
+const jobId = new Date().toISOString().split('T')[0] // Daily job ID
 
 async function refreshUserAnalysis(userId: string) {
   try {
@@ -36,7 +39,7 @@ async function refreshUserAnalysis(userId: string) {
       return false
     }
 
-    // Calculate next expiration (7 days from now)
+    // Calculate next expiration (24 hours from now)
     const expiresAt = addHours(new Date(), 24)
 
     // Update or create the analysis report
@@ -69,7 +72,6 @@ async function refreshUserAnalysis(userId: string) {
       })
     } catch (emailError) {
       console.error(`Failed to send email notification to user ${userId}:`, emailError)
-      // Don't fail the whole process if email fails
     }
 
     return true
@@ -81,53 +83,82 @@ async function refreshUserAnalysis(userId: string) {
 
 export async function GET(request: Request) {
   try {
-
     // Verify the request is from Vercel Cron
     const authHeader = request.headers.get("authorization")
     if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
       return new Response("Unauthorized", { status: 401 })
     }
-    
 
-    // Get all users with expired or soon-to-expire analysis
-    const usersToUpdate = await prisma.user.findMany({
+    const startTime = Date.now()
+    console.log(`Starting cron job at ${new Date(startTime).toISOString()}`)
+
+    // Get total count of users needing updates
+    const totalUsers = await prisma.user.count({
       where: {
         OR: [
-          {
-            aiAnalysisReports: {
-              none: {} // Users with no reports
-            }
-          },
-          {
-            aiAnalysisReports: {
-              some: {
-                expiresAt: {
-                  lte: new Date()
-                }
-              }
-            }
-          }
+          { aiAnalysisReports: { none: {} } },
+          { aiAnalysisReports: { some: { expiresAt: { lte: new Date() } } } }
         ]
-      },
-      select: {
-        userId: true
-      },
+      }
     })
 
-    // Process each user
-    const results = await Promise.allSettled(
-      usersToUpdate.map(user => refreshUserAnalysis(user.userId))
-    )
+    let processedCount = 0
+    let successCount = 0
+    let failCount = 0
+    let hasMore = true
+    const processedIds = await getProcessedUserIds(jobId)
 
-    // Count successes and failures
-    const successful = results.filter(r => r.status === "fulfilled" && r.value).length
-    const failed = results.filter(r => r.status === "rejected" || (r.status === "fulfilled" && !r.value)).length
+    // Process in batches until time runs out or all users are processed
+    while (hasMore && (Date.now() - startTime) < (maxDuration * 1000 - TIME_BUFFER_MS)) {
+      const usersBatch = await prisma.user.findMany({
+        where: {
+          OR: [
+            { aiAnalysisReports: { none: {} } },
+            { aiAnalysisReports: { some: { expiresAt: { lte: new Date() } } } }
+          ],
+          NOT: {
+            userId: {
+              in: processedIds
+            }
+          }
+        },
+        take: BATCH_SIZE,
+        select: { userId: true }
+      })
 
-    console.log(`Success: ${successful}, Failed: ${failed}`)
+      if (usersBatch.length === 0) {
+        hasMore = false
+        break
+      }
+
+      // Process current batch
+      const results = await Promise.allSettled(
+        usersBatch.map(user => refreshUserAnalysis(user.userId))
+      )
+
+      // Update counts
+      successCount += results.filter(r => r.status === "fulfilled" && r.value).length
+      failCount += results.filter(r => r.status === "rejected" || (r.status === "fulfilled" && !r.value)).length
+      processedCount += usersBatch.length
+
+      await markUsersAsProcessed(jobId, usersBatch.map(u => u.userId))
+
+      console.log(`Processed batch: ${processedCount}/${totalUsers} (${Math.round(processedCount/totalUsers*100)}%)`)
+
+      // Check if we're approaching time limit
+      if ((Date.now() - startTime) > (maxDuration * 1000 - TIME_BUFFER_MS)) {
+        console.log(`Approaching time limit, stopping after current batch`)
+        break
+      }
+    }
+
+    const completionTime = Date.now()
+    const durationSeconds = (completionTime - startTime) / 1000
 
     return NextResponse.json({
       success: true,
-      message: `Processed ${usersToUpdate.length} users. Success: ${successful}, Failed: ${failed}`,
+      message: `Processed ${processedCount}/${totalUsers} users in ${durationSeconds.toFixed(1)}s. Success: ${successCount}, Failed: ${failCount}`,
+      completed: processedCount === totalUsers,
       timestamp: new Date().toISOString()
     })
 
@@ -142,4 +173,5 @@ export async function GET(request: Request) {
       { status: 500 }
     )
   }
-} 
+}
+

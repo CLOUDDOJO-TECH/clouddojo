@@ -239,6 +239,14 @@ model AIAnalysisReport {
   @@unique([userId, latest], name: "userId_latest")
 }
 
+model ProcessedCronJobUser {
+  jobId       String   @id
+  userId      String
+  processedAt DateTime @default(now())
+  @@unique([jobId, userId])
+  @@index([processedAt])
+}
+
 enum DifficultyLevel {
   BEGINER
   INTERMEDIATE
