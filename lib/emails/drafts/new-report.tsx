@@ -22,7 +22,7 @@ import { FaBrain, FaBullseye, FaChartLine } from 'react-icons/fa6';
 const colors = {
   pageBackground: '#202832',
   containerBackground: '#14181e',
-  accent: '#66ffcc',
+  accent: '#6FC',
   text: '#d0e0f0',
   lightText: '#a0b0c0',
   buttonText: '#14181e',
@@ -41,7 +41,7 @@ const fonts = {
 const urls = {
   logo: 'https://www.clouddojo.tech/images/dojo-logo.png',
   website: 'https://www.clouddojo.tech/',
-  report: '|_REPORT_URL_|',
+  report: 'https://www.clouddojo.tech/dashboard',
   dashboard: 'https://www.clouddojo.tech/dashboard',
   terms: 'https://www.clouddojo.tech/terms',
   support: 'https://www.clouddojo.tech/support',
@@ -67,6 +67,7 @@ const content = {
     ctaHeading: "Optimize Your Study Strategy",
     ctaText: "Access your personalized dashboard to track progress and focus on the most impactful areas",
     ctaButton: "Go to Dashboard",
+    waButton: "Join WhatsApp Group",
     footer: {
       support: "Support",
       blog: "Blog",
@@ -99,7 +100,6 @@ const reportInsights = [
 // --- Styles ---
 const styles = {
   main: {
-    backgroundColor: colors.pageBackground,
     fontFamily: fonts.body,
   },
   container: {
@@ -325,7 +325,7 @@ export default function CloudDojoAiReportEmail({
               {langContent.ctaButton}
             </Button>
             <Button href={urls.whatsapp} style={styles.button} className="mobile-button">
-              {langContent.ctaButton}
+              {langContent.waButton}
             </Button>
           </Section>
 
