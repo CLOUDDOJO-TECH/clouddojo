@@ -97,6 +97,9 @@ export async function GET(request: Request) {
     // Get total count of users needing updates
     const totalUsers = await prisma.user.count({
       where: {
+        quizAttempts: {
+          some: {}
+        },
         OR: [
           { aiAnalysisReports: { none: {} } },
           { aiAnalysisReports: { some: { expiresAt: { lte: new Date() } } } }

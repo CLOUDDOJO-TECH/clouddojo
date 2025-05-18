@@ -41,7 +41,7 @@ export async function getCachedAIAnalysis(forceRefresh = false) {
 
     // Define when the report should expire - 7 days after generation
     const today = new Date()
-    const nextFriday = getNextFriday()
+    const nextThreeDays = getNextThreeDays()
 
     // Check for an existing, non-expired report if not forcing refresh
     if (!forceRefresh) {
@@ -79,7 +79,7 @@ export async function getCachedAIAnalysis(forceRefresh = false) {
     }
 
     // No valid cached report or force refresh, generate a new one
-    const analysisResult = await analyzeTestData()
+    const analysisResult = await analyzeTestData(userId)
 
     if (!analysisResult.success || !analysisResult.data) {
       return {
@@ -93,7 +93,7 @@ export async function getCachedAIAnalysis(forceRefresh = false) {
       data: {
         userId: user.userId,
         reportData: analysisResult.data,
-        expiresAt: nextFriday,
+        expiresAt: nextThreeDays,
       },
     })
 
@@ -114,20 +114,17 @@ export async function getCachedAIAnalysis(forceRefresh = false) {
 }
 
 /**
- * Gets the next Friday at 8 AM
+ * Gets the date three days from now at 8 AM
  */
-function getNextFriday() {
+function getNextThreeDays() {
   const today = new Date()
-  const day = today.getDay() // 0 is Sunday, 5 is Friday
-  const daysUntilFriday = (5 - day + 7) % 7 || 7 // if today is Friday, get next Friday
   
-  // Set to next Friday at 8 AM
-  const nextFriday = addDays(today, daysUntilFriday)
-  nextFriday.setHours(8, 0, 0, 0)
+  // Set to 3 days from now at 8 AM
+  const threeDaysFromNow = addDays(today, 3)
+  threeDaysFromNow.setHours(8, 0, 0, 0)
   
-  return nextFriday
+  return threeDaysFromNow
 }
-
 /**
  * For AWS Lambda: Refresh all expired reports
  * Can be triggered by a scheduled Lambda function
@@ -154,19 +151,19 @@ export async function refreshAllExpiredReports() {
       expiredReports.map(async ({ userId }) => {
         try {
           // Generate a new analysis for this user
-          const analysisResult = await analyzeTestData()
+          const analysisResult = await analyzeTestData(userId)
           
           if (!analysisResult.success || !analysisResult.data) {
             throw new Error(`Failed to analyze test data for user ${userId}: ${analysisResult.error}`)
           }
           
           // Store the new report
-          const nextFriday = getNextFriday()
+          const nextThreeDays = getNextThreeDays()
           await prisma.aIAnalysisReport.create({
             data: {
               userId,
               reportData: analysisResult.data,
-              expiresAt: nextFriday,
+              expiresAt: nextThreeDays,
             },
           })
           
