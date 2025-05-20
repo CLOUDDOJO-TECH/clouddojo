@@ -83,13 +83,18 @@ export default function Tabnavbar() {
                   </NavigationMenuLink>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()} href="https://calendar.notion.so/meet/glenmiracle/7fnt4l09" target="_blank" rel="noopener noreferrer">
-                    Contact
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()} href="/pricing">
+                    Pricing
                   </NavigationMenuLink>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()} href="#">
+                <NavigationMenuLink className={navigationMenuTriggerStyle()} href="#">
                     Blog
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()} href="https://calendar.notion.so/meet/glenmiracle/7fnt4l09" target="_blank" rel="noopener noreferrer">
+                    Contact
                   </NavigationMenuLink>
                 </NavigationMenuItem>
               </NavigationMenuList>
@@ -144,11 +149,14 @@ export default function Tabnavbar() {
             <Link href="#" className="block py-2 px-4 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md hover:text-black">
               About
             </Link>
-            <Link href="https://calendar.notion.so/meet/glenmiracle/7fnt4l09" className="block py-2 px-4 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md hover:text-black" target="_blank" rel="noopener noreferrer">
-              Contact
+            <Link href="/pricing" className="block py-2 px-4 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md hover:text-black">
+              Pricing
             </Link>
             <Link href="#" className="block py-2 px-4 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md hover:text-black">
               Blog
+            </Link>
+            <Link href="https://calendar.notion.so/meet/glenmiracle/7fnt4l09" className="block py-2 px-4 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md hover:text-black" target="_blank" rel="noopener noreferrer">
+              Contact
             </Link>
             <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
               {isSignedIn ? (
