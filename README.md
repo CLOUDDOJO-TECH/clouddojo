@@ -3,6 +3,8 @@
 **CloudDojo** is an innovative, AI-powered platform designed to help you master cloud certifications, particularly AWS, with confidence and ease. Whether you're preparing for your first certification or aiming to advance your cloud expertise, CloudDojo provides the tools, insights, and guidance you need to succeed. With simulated exams, progress tracking, and personalized AI-driven recommendations, CloudDojo ensures you're fully prepared to ace your certification exams.
 ✅
 
+![1](https://github.com/user-attachments/assets/b2b34ed7-45e1-44b9-a5ec-13590fd0e16f)
+
 ---
 
 ## 🚀 **Core Features**
@@ -11,24 +13,33 @@
    - Practice with **realistic AWS certification exams** that mimic the actual test environment.
    - Questions are designed to cover all key topics and difficulty levels, ensuring comprehensive preparation.
    - Timed exams to help you manage your time effectively during the real test.
+     ![6](https://github.com/user-attachments/assets/f6d3204e-154d-4535-909e-56b72716211c)
+
 
 ### 2. **AI-Powered Progress Tracking**
    - Track your progress with detailed analytics and insights.
    - Identify your strengths and weaknesses across different topics and AWS services.
    - Receive **personalized recommendations** on areas to focus on for improvement.
+   ![WhatsApp Image 2025-05-09 at 5 26 15 PM](https://github.com/user-attachments/assets/062dafbd-8217-4619-83b8-a62ceb26639f)
 
 ### 3. **AI-Driven Study Assistance**
    - Get **AI-generated explanations** for questions you find challenging.
    - Receive tailored study plans based on your performance and learning pace.
    - AI identifies gaps in your knowledge and suggests resources to help you improve.
+   ![7](https://github.com/user-attachments/assets/484e03fd-1380-44a4-ba61-58f5b3f5e07b)
 
+   
 ### 4. **Readiness Assessment**
    - CloudDojo evaluates your performance and tells you if you're **ready to take the certification exam**.
    - If you need more practice, the AI provides targeted exercises and resources to help you improve.
+     ![8](https://github.com/user-attachments/assets/e0209a92-f9ea-4133-921f-621a1cc1d1e6)
+
 
 ### 5. **Comprehensive Question Bank**
    - Access a vast library of questions covering all AWS certification domains.
    - Questions are regularly updated to align with the latest AWS exam blueprints.
+     ![5](https://github.com/user-attachments/assets/1617cc05-b9b5-454f-9d0a-3b72a258a026)
+
 
 ### 6. **Flashcards for Quick Revision**
    - Use **AI-generated flashcards** to quickly review key concepts and terms.
@@ -40,6 +51,8 @@
      - Time spent per question
      - Progress over time
    - Compare your performance with industry benchmarks.
+     ![4](https://github.com/user-attachments/assets/881fb29d-2ad7-443e-8068-87761e6c9f38)
+
 
 ### 8. **Community and Support**
    - Join a community of cloud learners and professionals.
@@ -90,7 +103,7 @@
 
 Ready to take your cloud career to the next level? Join CloudDojo today and experience the future of cloud certification preparation.
 
-👉 **[Sign Up Now](#)**
+👉 **[Sign Up Now](https://www.clouddojo.tech/)**
 
 ---
 
@@ -98,7 +111,7 @@ Ready to take your cloud career to the next level? Join CloudDojo today and expe
 
 Have questions or need support? We're here to help!
 
-- **Email**: support@clouddojo.tech
+- **Email**: bonyuglen@gmail.com
 - **Phone**: +(250) 791957574
 - **Website**: [www.clouddojo.tech](#)
 
