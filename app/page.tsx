@@ -10,6 +10,9 @@ import FaqSection from "@/components/faq-section"
 import Footer from "@/components/footer"
 import { FeaturesBento } from "@/components/landing/wobble-section"
 import { StickyBanner } from "@/components/ui/sticky-banner"
+import { ThreeStepFramework } from "@/components/landing/three-steps-section"
+import { VendorCompanies } from "@/components/landing/vendor-section"
+import { FounderTestimonial } from "@/components/landing/founder-testimonial"
 
 export default function Home() {
   return (
@@ -27,6 +30,9 @@ export default function Home() {
         <HeroSection />
         <FeatureCards />
         <FeaturesBento />
+        <ThreeStepFramework ctaLink="/dashboard" showCta={false} />
+        {/* <VendorCompanies /> */}
+        <FounderTestimonial />
         <FaqSection />
       </main>
       <Footer />
