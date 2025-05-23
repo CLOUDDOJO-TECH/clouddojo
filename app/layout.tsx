@@ -7,6 +7,7 @@ import { Spotlight } from "@/components/spotlight";
 import Script from 'next/script';
 import * as seline from '@seline-analytics/web';
 import { Analytics } from "@vercel/analytics/react"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const selineToken = process.env.ELINE_TOKEN;
 seline.init({
@@ -24,11 +25,71 @@ seline.init({
 });
 
 const inter = Inter({ subsets: ["latin"] });
+
 export const metadata = {
-  title: "AWS Certification Prep",
-  description:
-    "Prepare for your AWS certification exams with interactive practice questions",
+  title: "CloudDojo | Master Cloud Certifications with AI",
+  description: "CloudDojo helps you prepare for AWS, Azure, and GCP cloud certification exams with AI-powered practice tests, personalized readiness reports, and intelligent study plans.",
+  keywords: [
+    "cloud certification",
+    "AWS certification",
+    "Azure certification",
+    "GCP certification",
+    "cloud exams",
+    "practice tests",
+    "AI exam preparation",
+    "certification readiness",
+    "CloudDojo",
+    "IT certifications",
+    "cloud computing",
+    "cloud training",
+    "cloud learning",
+    "cloud skills",
+    "cloud knowledge",
+    "cloud education",
+    "cloud career",
+    "aws training",
+    "azure training",
+    "gcp training",
+    "aws practice tests",
+    "azure practice tests",
+    "gcp practice tests",
+    "aws exam prep",
+    "azure exam prep",
+    "gcp exam prep",
+    "cloud certification prep",
+    "aws practice exams",
+    "azure practice exams",
+    "gcp practice exams",
+    "cloud certification practice",
+    "cloud certification study",
+  ],
+  openGraph: {
+    title: "CloudDojo | Master Cloud Certifications with AI",
+    description:
+      "Prepare for AWS, Azure, and Google Cloud exams with AI-driven practice tests and personalized study plans.",
+    url: "https://clouddojo.tech",
+    siteName: "CloudDojo",
+    images: [
+      {
+        url: "/images/open-graph-image.png",
+        width: 1200,
+        height: 630,
+        alt: "CloudDojo Open Graph Image",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "CloudDojo | AI-Powered Cloud Certification Prep",
+    description:
+      "Get cloud certified faster with CloudDojo. AI insights, personalized feedback, and smart study tools.",
+    images: ["/images/open-graph-image.png"],
+    creator: "@glen_miracle4",
+  },
+  metadataBase: new URL("https://clouddojo.tech"),
 };
+
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const queryClient = new QueryClient();
@@ -44,6 +105,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             className="-top-40 left-0 md:-top-20 md:left-60"
             fill="white"
           />
+          <SpeedInsights />
           <Analytics />
           {children}
         </Providers>

@@ -57,11 +57,11 @@ const currentYear = new Date().getFullYear();
 // --- Content ---
 const content = {
   en: {
-    title: "Your Personalized AWS Certification Report is Ready!",
-    previewText: "Your AI-powered AWS certification analysis is now available - discover your strengths and focus areas",
+    title: "✅ Your Personalized AWS Readiness Report is Here!",
+    previewText: "We’ve just analyzed your recent CloudDojo practice sessions, and your personalized readiness report is live!",
     greeting: "Hi {firstName},",
-    intro: "Your latest AWS certification readiness report has been generated with new insights to guide your study plan.",
-    reportExplanation: "Our AI analyzed your recent practice tests to identify:",
+    intro: "Whether you're chasing the AWS Cloud Practitioner or another cloud cert, this report shows exactly where you stand — and what to tackle next to get certified faster.",
+    reportExplanation: "We analyzed your recent practice tests to identify:",
     insightsHeading: "Key Findings From Your Analysis",
     viewReportButton: "View Full Report",
     ctaHeading: "Optimize Your Study Strategy",

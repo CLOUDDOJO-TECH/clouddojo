@@ -1,4 +1,5 @@
-import { ArrowRight, CheckIcon, SparkleIcon } from "lucide-react";
+import { ArrowRight, CheckIcon, SparkleIcon, XIcon } from "lucide-react";
+import { CardSpotlight } from "@/components/ui/card-spotlight";
 
 export default function FeatureCards() {
   return (
@@ -21,47 +22,47 @@ export default function FeatureCards() {
           <div className="lg:col-span-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Card 1 */}
-              <div className="bg-midnighttwo rounded-2xl p-6 border border-gray-800 flex flex-col h-full">
-                <span className="flex items-center justify-start gap-4">
-                  <div className="bg-[#111133] w-10 h-10 rounded-full flex items-center justify-center mb-4">
-                    <ArrowRight className="h-5 w-5 text-[#4ecca3]" />
-                  </div>
-                  <h3 className="text-xl font-semibold mb-3">
-                    Real Exams simulation
-                  </h3>
-                </span>
-                <ul className="list-disc pl-5 space-y-2">
-                  <li className="text-gray-400 text-sm flex items-center gap-2">
-                      <CheckIcon className="h-5 w-5 mr-2 text-emerald-500 mr-2" />
-                    Targeted practice tests tailored to your cert
-                  </li>
-                  <li className="text-gray-400 text-sm flex items-center gap-2">
-                      <CheckIcon className="h-5 w-5 mr-2 text-emerald-500 mr-2" />
-                    Smart analystics that show where you're week
-                  </li>
-                  <li className="text-gray-400 text-sm flex items-center gap-2">
-                      <CheckIcon className="h-5 w-5 mr-2 text-emerald-500 mr-2" />
-                    performance dashboard that tracks your growth
-                  </li>
-                </ul>
-              </div>
+              
+              <CardSpotlight className="md:h-96 md:w-96 h-auto w-full" color="#34d399">
+                <p className="text-xl font-bold relative font-serif z-20 mt-2 text-emerald-500">
+                  With Clouddojo
+                </p>
+                <div className="text-neutral-200 mt-4 relative z-20">
+                  You now have a clear path to success:
+                  <ul className="list-none flex flex-col space-y-3  mt-3">
+                    <Step reason="good" title="Real Exam Simulation" />
+                    <Step reason="good" title="AI-Powered feedback report" />
+                    <Step reason="good" title="Smart focus analystics" />
+                    <Step reason="good" title="Modern performance dashboard" />
+                  </ul>
+                </div>
+                <p className="text-neutral-300 mt-4 relative z-20 font-light">
+                  Focus on what actually matters, save time, and build real
+                  confidence for AWS, Azure, GCP, and more.
+                </p>
+              </CardSpotlight>
 
               {/* Card 2 */}
-              <div className="bg-midnighttwo rounded-2xl p-6 border border-gray-800 flex flex-col h-full">
-                <span className="flex items-center justify-start gap-4">
-                  <div className="bg-[#111133] w-10 h-10 rounded-full flex items-center justify-center mb-4">
-                    <SparkleIcon className="h-5 w-5 text-[#4ecca3]" />
-                  </div>
-                  <h3 className="text-xl font-semibold mb-3">
-                    AI Powered Analysis
-                  </h3>
-                </span>
-                <p className="text-gray-400 text-sm">
-                  We've trained a custom AI Model to analyze your performance
-                  and give you personalized feedback. It learns from your
-                  mistakes and helps you focus on what matters most.
+              
+               <CardSpotlight className="md:h-96 md:w-96 h-auto w-full" color="#f87171">
+                <p className="text-xl font-bold relative z-20 mt-2 font-serif text-red-500">
+                  Without Clouddojo
                 </p>
-              </div>
+                <div className="text-neutral-200 mt-4 relative z-20">
+                  You are left in the dark:
+                  <ul className="list-none space-y-3 mt-3 flex flex-col">
+                    <Step reason="bad" title="Keep scrolling endless pdf docs" />
+                    <Step reason="bad" title="No clear path for success" />
+                    <Step reason="bad" title="Studying the wrong topics" />
+                    <Step reason="bad" title="Potentially re-taking the test" />
+                  </ul>
+                </div>
+                <p className="text-neutral-300 mt-4 relative z-20 text-sm font-light">
+                  Most cloud cert preps give you random questions and no real
+                  strategy. You keep grinding... but don't know if you're really
+                  ready.
+                </p>
+              </CardSpotlight>
             </div>
           </div>
         </div>
@@ -69,3 +70,16 @@ export default function FeatureCards() {
     </section>
   );
 }
+
+const Step = ({ title, reason }: { title: string, reason: "good" | "bad" }) => {
+  return (
+    <li className="flex gap-2 items-start">
+      {reason == "good" ? (
+        <CheckIcon className="text-emerald-500" />
+      ): (
+        <XIcon className="text-red-500" />
+      )}
+      <p className="text-white">{title}</p>
+    </li>
+  );
+};

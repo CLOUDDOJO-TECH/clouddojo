@@ -3,6 +3,7 @@
 import { buttonVariants } from "@/components/ui/button";
 import { changePlan, getCheckoutURL } from "@/config/actions";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@clerk/nextjs";
 import { Button, Loading } from "@lemonsqueezy/wedges";
 import { LsSubscriptionPlan } from "@prisma/client";
 import { CheckIcon, PlusIcon } from "lucide-react";
@@ -26,6 +27,8 @@ type ButtonProps = ComponentProps<typeof Button> & {
 };
 
 export const SignupButton = forwardRef<ButtonElement, ButtonProps>(
+  
+  
   (props, ref) => {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
@@ -56,6 +59,13 @@ export const SignupButton = forwardRef<ButtonElement, ButtonProps>(
       <PlusIcon className="size-4" />
     );
 
+    const { isLoaded, isSignedIn } = useAuth();
+
+    // If the user is not signed in, show a toast and return null
+    // if (!isLoaded || !isSignedIn) {
+    //   toast("Please sign in to subscribe.");
+    // }
+
     return (
       <Button
         // class="lemonsqueezy-button"
@@ -85,6 +95,9 @@ export const SignupButton = forwardRef<ButtonElement, ButtonProps>(
           let checkoutUrl: string | undefined = "";
           try {
             setLoading(true);
+            if (!isLoaded || !isSignedIn) {
+              toast("Please sign in to subscribe.");
+            }
             checkoutUrl = await getCheckoutURL(plan.variantId, embed);
           } catch (error) {
             setLoading(false);
