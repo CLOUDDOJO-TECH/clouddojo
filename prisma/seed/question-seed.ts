@@ -19,7 +19,7 @@ interface QuestionData {
 
 async function questionSeed() {
     try {
-        const jsonPath = path.join(__dirname, '../../public/data/cloud-practitioner/cp-6.json');
+        const jsonPath = path.join(__dirname, '../../public/data/✅seeded/cp-2.json');
         const rawData = fs.readFileSync(jsonPath, 'utf-8');
         const questionsData: QuestionData[] = JSON.parse(rawData);
 
