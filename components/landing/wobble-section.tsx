@@ -6,12 +6,9 @@ import { WobbleCard } from "../ui/wobble-card";
 export function FeaturesBento() {
   return (
     <div className="w-full p-2 md:p-4 lg:p-8 mt-16">
-        <h2 className="text-3xl relative z-20 md:text-4xl lg:text-4xl font-bold text-center text-white font-sans tracking-tight">
-        There&apos;s more than just{" "}    <br></br>
-        <div className="relative mx-auto inline-block w-max [filter:drop-shadow(0px_1px_3px_rgba(27,_37,_80,_0.14))]">
-            <span className="font-serif italic underline font-semibold underline-offset-2">Certification Exams.</span>
-        </div>
-      </h2>
+        <h2 className="text-white text-3xl md:text-5xl lg:text-6xl text-center font-bold leading-tight mb-4">
+        There&apos;s more than just certification prep.
+        </h2>
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 max-w-7xl mx-auto w-full my-8">
       <WobbleCard
         containerClassName="col-span-1 lg:col-span-2 h-full bg-pink-800 min-h-[500px] lg:min-h-[300px]"

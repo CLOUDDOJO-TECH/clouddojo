@@ -1,6 +1,6 @@
 export default function TrustBadge() {
     return (
-      <div className="bg-teal-50 flex items-center rounded-full border-teal-950/50 border p-1 shadow-sm w-fit max-w-[300px] mx-auto">
+      <div className="bg-slate-950 flex items-center rounded-full border-slate-800 border p-1 shadow-sm w-fit max-w-[300px] mx-auto">
         <div className="flex -space-x-1.5">
           <img
             className="ring-background rounded-full ring-1 h-6 w-6 object-cover"
@@ -32,7 +32,7 @@ export default function TrustBadge() {
           />
         </div>
         <p className="text-muted-foreground px-2 text-xs">
-          Trusted by <strong className="text-cstm_teal font-medium">12K+</strong>{" "}
+          Trusted by <strong className="text-emerald-700 font-medium">12K+</strong>{" "}
           developers.
         </p>
       </div>

@@ -8,6 +8,7 @@ import Script from 'next/script';
 import * as seline from '@seline-analytics/web';
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { ThemeProvider } from "@/components/theme-provider";
 
 const selineToken = process.env.ELINE_TOKEN;
 seline.init({
@@ -107,7 +108,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           />
           <SpeedInsights />
           <Analytics />
-          {children}
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
         </Providers>
       </body>
     </html>

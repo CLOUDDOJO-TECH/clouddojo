@@ -18,6 +18,7 @@ import { ArrowRight, Search, Menu, X } from "lucide-react"
 import Link from "next/link"
 import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs"
 import { useIsMobile } from "@/hooks/use-mobile"
+import { ModeToggle } from "./mode-toggle"
 
 export default function Tabnavbar() {
   const { isSignedIn } = useUser();
@@ -32,7 +33,7 @@ export default function Tabnavbar() {
     <nav className="">
       <div className="container mx-auto flex items-center justify-between px-4 py-2 sm:px-6 lg:px-8">
         <div className="flex items-center space-x-4">
-          <Link href="#" className="text-2xl font-bold">
+          <Link href="/" className="text-2xl font-bold">
             <img
               draggable="false"
               src="/images/dojo-logo.png"
@@ -78,7 +79,7 @@ export default function Tabnavbar() {
                   </NavigationMenuContent>
                 </NavigationMenuItem> */}
                 <NavigationMenuItem>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()} href="#">
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()} href="/about">
                     About
                   </NavigationMenuLink>
                 </NavigationMenuItem>
@@ -88,7 +89,7 @@ export default function Tabnavbar() {
                   </NavigationMenuLink>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()} href="#">
+                <NavigationMenuLink className={navigationMenuTriggerStyle()} href="/blog">
                     Blog
                   </NavigationMenuLink>
                 </NavigationMenuItem>
@@ -138,6 +139,7 @@ export default function Tabnavbar() {
                 </Button>
               </div>
             )}
+            <ModeToggle />
           </div>
         )}
       </div>
@@ -177,6 +179,7 @@ export default function Tabnavbar() {
                   </Button>
                 </div>
               )}
+              <ModeToggle />
             </div>
           </div>
         </div>

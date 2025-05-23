@@ -8,10 +8,10 @@ export default function FeatureCards() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           {/* Left column with headline */}
           <div className="lg:col-span-4">
-            <h2 className="text-4xl font-bold leading-tight mb-4">
+            <h2 className="text-white text-3xl md:text-5xl lg:text-6xl font-bold leading-tight mb-4">
               Tired of wasting time studying the wrong topics?
             </h2>
-            <p className="text-gray-400 mb-6">
+            <p className="text-zinc-400 text-lg md:text-xl leading-relaxed">
               Most cloud cert preps give you random questions and no real
               strategy. You keep grinding... but don't know if you're reall
               ready.

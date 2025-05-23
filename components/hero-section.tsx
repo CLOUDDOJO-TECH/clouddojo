@@ -7,6 +7,7 @@ import RotatingText from "./rotating-text";
 import { SignInButton, useUser } from "@clerk/nextjs";
 import { GlowingEffect } from "./ui/glowing-effect";
 import { Safari } from "./magicui/safari";
+import TrustBadge from "./landing/trust-badge";
 
 export default function HeroSection() {
   const { isSignedIn } = useUser();
@@ -14,6 +15,9 @@ export default function HeroSection() {
   return (
     <div className="relative mx-auto md:my-16 my-8 flex max-w-7xl flex-col items-center justify-center w-full overflow-hidden">
       <div className="px-4 py-10 md:py-20">
+        <span className="flex items-start mb-2 w-full justify-center sm:justify-start">
+          <TrustBadge />
+        </span>
         <h1 className="relative z-10 mx-auto max-w-4xl text-center text-3xl font-bold text-white md:text-4xl lg:text-7xl dark:text-slate-300">
           {"Study Smarter. Pass".split(" ").map((word, index) => (
             <motion.span
@@ -162,7 +166,7 @@ export default function HeroSection() {
               proximity={64}
               inactiveZone={0.01}
             />
-            
+
           </div>
         </motion.div>
       </div>
