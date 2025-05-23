@@ -27,7 +27,6 @@ export default function Home() {
         <HeroSection />
         <FeatureCards />
         <FeaturesBento />
-        <PartnersSection />
         <FaqSection />
       </main>
       <Footer />
