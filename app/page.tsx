@@ -1,11 +1,7 @@
 import Navbar from "@/components/navbar"
 import HeroSection from "@/components/hero-section"
-import PartnersSection from "@/components/partners-section"
 import FeatureCards from "@/components/feature-cards"
-import JourneySection from "@/components/journey-section"
-import HowItWorks from "@/components/how-it-works"
-import Integration from "@/components/integration"
-import Testimonials from "@/components/testimonials"
+
 import FaqSection from "@/components/faq-section"
 import Footer from "@/components/footer"
 import { FeaturesBento } from "@/components/landing/wobble-section"
