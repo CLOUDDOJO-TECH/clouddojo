@@ -2,7 +2,6 @@
 
 import { motion } from "motion/react";
 import Link from "next/link";
-import { Spotlight } from "./spotlight";
 import RotatingText from "./rotating-text";
 import { SignInButton, useUser } from "@clerk/nextjs";
 import { GlowingEffect } from "./ui/glowing-effect";
