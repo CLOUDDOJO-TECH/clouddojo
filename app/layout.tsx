@@ -10,6 +10,8 @@ import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { ThemeProvider } from "@/components/theme-provider";
 
+export const dynamic = 'force-dynamic';
+
 const selineToken = process.env.ELINE_TOKEN;
 seline.init({
   // Token is *required* when tracking subdomains or multiple domains.
