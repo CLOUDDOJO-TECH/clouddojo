@@ -21,7 +21,7 @@ export default function UpgradeButton({
   return (
     <Button
       className={cn(
-        "bg-gradient-to-r from-emerald-500 to-emerald-500/40 text-white hover:from-emerald-600 hover:to-emerald-600/40",
+        "bg-gradient-to-r from-purple-500 to-purple-500/40 text-white hover:from-purple-600 hover:to-purple-600/40 rounded-full",
         className
       )}
       onClick={openPricingModal}

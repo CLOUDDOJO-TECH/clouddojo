@@ -64,17 +64,17 @@ export default function OnboardingStepper() {
             >
               <div 
                 className={cn(
-                  "flex items-center justify-center w-8 h-8 rounded-full border-2 bg-gray-50 z-10 transition-colors",
+                  "flex items-center justify-center w-8 h-8 rounded-full border-2 dark:bg-emerald-600 bg-gray-50 z-10 transition-colors",
                   isCompleted ? "bg-emerald-500 border-emerald-500" : 
                   isActive ? "border-emerald-500 text-emerald-500" : 
                   "border-gray-300 text-gray-500 dark:border-gray-600 dark:text-gray-400",
-                  canNavigate && "group-hover:border-emerald-600 group-hover:bg-emerald-50 dark:group-hover:bg-emerald-950/20"
+                  canNavigate && "group-hover:border-emerald-600 group-hover:bg-emerald-50 dark:group-hover:bg-slate-900"
                 )}
               >
                 {isCompleted ? (
                   <Check className="h-4 w-4 text-white" />
                 ) : (
-                  <span className="text-sm font-medium bg-white">{step.id}</span>
+                  <span className="text-sm font-medium dark:bg-emerald-600 bg-white">{step.id}</span>
                 )}
               </div>
               
@@ -83,7 +83,7 @@ export default function OnboardingStepper() {
                 <p 
                   className={cn(
                     "text-sm font-medium",
-                    isCompleted || isActive ? "text-emerald-700" : "text-muted-foreground",
+                    isCompleted || isActive ? "text-white" : "text-emerald-700",
                     canNavigate && "group-hover:text-emerald-600 dark:group-hover:text-emerald-400"
                   )}
                 >

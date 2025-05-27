@@ -425,3 +425,7 @@
 2025-05-23 17:24:08.110 CAT [34269] ERROR:  duplicate key value violates unique constraint "Category_name_key"
 2025-05-23 17:24:08.110 CAT [34269] DETAIL:  Key (name)=(AWS Cloud Practioner) already exists.
 2025-05-23 17:24:08.110 CAT [34269] STATEMENT:  INSERT INTO "public"."Category" ("id","name","description") VALUES ($1,$2,$3) RETURNING "public"."Category"."id", "public"."Category"."name", "public"."Category"."description"
+2025-05-27 08:03:34.675 CAT [26552] LOG:  received smart shutdown request
+2025-05-27 08:03:34.689 CAT [26552] LOG:  background worker "logical replication launcher" (PID 26559) exited with exit code 1
+2025-05-27 08:03:34.689 CAT [26554] LOG:  shutting down
+2025-05-27 08:03:34.711 CAT [26552] LOG:  database system is shut down

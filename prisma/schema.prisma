@@ -58,6 +58,7 @@ model Quiz {
   description  String?
   thumbnail    String?         // URL or path to the thumbnail image
   isPublic     Boolean         @default(false)
+  isNew        Boolean         @default(true)
   createdAt    DateTime        @default(now())
   updatedAt    DateTime        @updatedAt
   categoryId   String?

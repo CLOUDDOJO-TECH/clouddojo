@@ -19,6 +19,7 @@ export function Plans({
       return fetchPlans();
     },
   });
+  console.log("Plans data:", allPlans);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading plans</div>;

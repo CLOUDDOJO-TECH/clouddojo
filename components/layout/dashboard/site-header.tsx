@@ -82,7 +82,7 @@ export function SiteHeader() {
 
 
   return (
-    <header className="flex sticky top-0 z-50 w-full items-center border-b bg-white/30 bg-opacity-50 backdrop-blur-sm">
+    <header className="flex sticky top-0 z-50 w-full items-center border-b dark:bg-sidebar-accent bg-white/30 bg-opacity-50 backdrop-blur-sm">
       <div className="flex h-[--header-height] w-full items-center justify-between">
         <div className="gap-2 px-4 flex items-center">
           <Button

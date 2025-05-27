@@ -22,6 +22,8 @@ export async function GetPracticeTests(){
                 free: true,
                 level: true,
                 category: true,
+                createdAt: true,
+                updatedAt: true,
                 _count: {
                     select: {
                         questions: true

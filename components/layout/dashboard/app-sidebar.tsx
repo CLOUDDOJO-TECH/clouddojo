@@ -2,10 +2,20 @@
 
 import * as React from "react";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import {
   BookOpen,
   Bot,
   Settings2,
   SquareTerminal,
+  Sun,
+  Moon,
+  TestTube,
+  CableCar,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -30,6 +40,10 @@ import { cn } from "@/lib/utils";
 import UpgradeCard from "@/components/upgrade-card";
 import { useSubscription } from "@/hooks/use-subscription";
 import SubscriptionCard from "@/app/dashboard/subscibed-card";
+import { Button } from "@/components/ui/button";
+import { useTheme } from "next-themes";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 // Define types for the navigation items
 type NavItem = {
@@ -79,6 +93,18 @@ const NAVIGATION_DATA: NavSection[] = [
         icon: Settings2,
         comingSoon: true,
       },
+      {
+        title: "Hands-On Labs",
+        url: "#",
+        icon: TestTube,
+        comingSoon: true,
+      },
+      {
+        title: "Peer-to-Peer Connect",
+        url: "#",
+        icon: CableCar,
+        comingSoon: true,
+      },
     ],
   },
 ];
@@ -88,7 +114,8 @@ const NAVIGATION_DATA: NavSection[] = [
  */
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
-  
+  const { setTheme } = useTheme()
+
   // Use our custom subscription hook
   const { isPro, isPremium, planName, isLoading, isError } = useSubscription();
   console.log(planName)
@@ -117,7 +144,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenuButton>
         <hr className="border-t border-border mx-2 -mt-px" />
       </SidebarHeader>
-      
+
       <SidebarContent>
         {NAVIGATION_DATA.map((section) => (
           <SidebarGroup key={section.title}>
@@ -127,10 +154,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarGroupContent className="px-2">
               <SidebarMenu>
                 {section.items.map((item) => (
-                  <NavItem 
-                    key={item.title} 
-                    item={item} 
-                    isActive={isActive(item.url)} 
+                  <NavItem
+                    key={item.title}
+                    item={item}
+                    isActive={isActive(item.url)}
                   />
                 ))}
               </SidebarMenu>
@@ -138,10 +165,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarGroup>
         ))}
       </SidebarContent>
-      
+
       <SidebarFooter>
+      <div className="flex items-center mx-6 space-x-8 justify-center bg-slate-300/50 rounded-full dark:bg-gray-900/50 p-2 mb-4">
+        <Switch
+          className=" data-[state=unchecked]:bg-blue-300"
+          onCheckedChange={(value) => setTheme(value ? "dark" : "light")}
+         id="airplane-mode" />
+        <Label htmlFor="airplane-mode">Dark Mode</Label>
+    </div>
         {planName && (
-            <SubscriptionCard plan={planName} variant="glass" />
+          <SubscriptionCard plan={planName} variant="glass" />
 
         )}
         {!isLoading && !isError && !isPro && !isPremium && (
@@ -150,6 +184,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </div>
         )}
         <hr className="border-t border-border mx-2 -mt-px" />
+        
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

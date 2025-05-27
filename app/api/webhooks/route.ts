@@ -53,6 +53,7 @@ export async function POST(req: Request) {
     const { id: userId, email_addresses, first_name, last_name } = evt.data;
 
     if (!userId || !email_addresses || !email_addresses[0]?.email_address) {
+      console.log("Missing user data in webhook payload!");
       return new Response("Error: Missing user data", { status: 400 });
     }
 
@@ -99,17 +100,15 @@ export async function POST(req: Request) {
           // Don't fail the whole process if email fails
         }
 
-      
-        console.log(`Created free subscription for new user: ${newUser.userId}`);
-
+    
         // seline tracking
-        seline.track("user: signed up", {
-          userId: newUser.userId,
-          event: "user: signed up",
-          userEmail: newUser.email,
-          userName: `${newUser.firstName} ${newUser.lastName}`,
-          userPlan: "free",
-        });
+        // seline.track("user: signed up", {
+        //   userId: newUser.userId,
+        //   event: "user: signed up",
+        //   userEmail: newUser.email,
+        //   userName: `${newUser.firstName} ${newUser.lastName}`,
+        //   userPlan: "free",
+        // });
 
          // create seline user
          seline.setUser({

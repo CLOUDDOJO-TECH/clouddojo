@@ -78,7 +78,7 @@ export default function DashboardPage() {
 
   if (isLoadingPerformance || isLoadingActivity || isLoadingCategories) {
     return (
-      <div className="fixed inset-0 min-h-screen w-full bg-white flex flex-col items-center justify-center">
+      <div className="fixed inset-0 min-h-screen w-full dark:bg-background bg-white flex flex-col items-center justify-center">
         <div className="w-96 mb-8 animate-pulse flex items-center justify-center">
           <Image src="/images/main-logo.png" alt="dojo-logo" className="w-32 h-32" width={160} height={160} />
         </div>

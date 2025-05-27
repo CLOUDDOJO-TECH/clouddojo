@@ -7,6 +7,8 @@ import {
   Check,
   LayoutGrid,
   List,
+  BookmarkCheck,
+  Zap,
 } from "lucide-react"
 
 import { Button, buttonVariants } from "@/components/ui/button"
@@ -42,7 +44,7 @@ export default function PracticeTestsPage() {
     return "grid"
   })
 
-  
+
 
   // Check for ongoing test
   const hasOngoingTest = useMemo(() => {
@@ -77,7 +79,7 @@ export default function PracticeTestsPage() {
   // Update view based on screen size
   useEffect(() => {
     const mediaQuery = window.matchMedia("(min-width: 768px)")
-    
+
     const handleResize = (e: MediaQueryListEvent | MediaQueryList) => {
       setView(e.matches ? "grid" : "list")
     }
@@ -95,7 +97,7 @@ export default function PracticeTestsPage() {
   // Filter and sort tests
   const processedTests = useMemo(() => {
     if (!data?.data) return []
-    
+
     // First filter
     let results = data.data.filter((test) => {
       const searchLower = searchQuery.toLowerCase()
@@ -122,6 +124,7 @@ export default function PracticeTestsPage() {
           // You might want to add a completions/attempts count to your test model
           return ((b._count?.questions || 0) - (a._count?.questions || 0))
         case "newest":
+          return (new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
         default:
           // Assuming you'll add a createdAt field to your test model
           return -1 // For now, maintain original order
@@ -152,7 +155,7 @@ export default function PracticeTestsPage() {
 
   return (
     <div className="flex min-h-screen bg-background">
-      <ExitTestAlert 
+      <ExitTestAlert
         isOpen={showExitAlert}
         onClose={() => setShowExitAlert(false)}
         onContinue={handleExitConfirm}
@@ -220,8 +223,8 @@ export default function PracticeTestsPage() {
                       <p className="text-muted-foreground mt-2">
                         No tests match your current filters. Try adjusting your search terms or clearing some filters.
                       </p>
-                      <Button 
-                        variant="outline" 
+                      <Button
+                        variant="outline"
                         className="mt-4"
                         onClick={() => {
                           setSearchQuery("")
@@ -241,10 +244,10 @@ export default function PracticeTestsPage() {
                 view === "grid" ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {processedTests.map((test) => (
-                      <TestCard 
-                        key={test.id} 
-                        test={test} 
-                        view="grid" 
+                      <TestCard
+                        key={test.id}
+                        test={test}
+                        view="grid"
                         onStartTest={() => handleNavigation(test.id)}
                       />
                     ))}
@@ -252,10 +255,10 @@ export default function PracticeTestsPage() {
                 ) : (
                   <div className="flex flex-col gap-4">
                     {processedTests.map((test) => (
-                      <TestCard 
-                        key={test.id} 
-                        test={test} 
-                        view="list" 
+                      <TestCard
+                        key={test.id}
+                        test={test}
+                        view="list"
                         onStartTest={() => handleNavigation(test.id)}
                       />
                     ))}
@@ -279,6 +282,7 @@ interface TestCardProps {
     level?: DifficultyLevel | null;
     duration?: number | null;
     free?: boolean | null;
+    isNew?: boolean | null;
     _count?: {
       questions: number;
     }
@@ -294,8 +298,8 @@ interface TestCardProps {
 function TestCard({ test, view, onStartTest }: TestCardProps) {
   const { isPro, isPremium, planName, isLoading: planLoading, isError: planError } = useSubscription();
 
-// check if the user has a Pro or Premium plan or even if the test if free in the firs place
-  const hasAccess  = test.free || isPro || isPremium
+  // check if the user has a Pro or Premium plan or even if the test if free in the firs place
+  const hasAccess = test.free || isPro || isPremium
 
   const getLevelColor = (level: string) => {
     switch (level) {
@@ -312,29 +316,42 @@ function TestCard({ test, view, onStartTest }: TestCardProps) {
     }
   }
 
+
   if (view === "grid") {
     return (
       <Card className="overflow-hidden transition-all hover:shadow-md group">
         <div className="aspect-video relative overflow-hidden">
+          {
+            test.free && (
+              <span className="inline-flex absolute top-2 left-2 items-center rounded-md bg-yellow-400 px-2 py-1 text-xs font-medium text-yellow-700 ring-1 ring-yellow-600/40 ring-inset">
+                <BookmarkCheck className="mr-1 h-4 w-4" />
+                New
+              </span>
+            )
+          }
           <img
-              src={ test.thumbnail ? test.thumbnail : "/aws-bg-image.jpg" }
-              alt={test.title}
+            src={test.thumbnail ? test.thumbnail : "/aws-bg-image.jpg"}
+            alt={test.title}
             className="object-cover w-full h-full transition-transform group-hover:scale-105"
           />
           {hasAccess ? (
             <Badge className="absolute top-2 right-2 bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-300">Free</Badge>
-          ): (
-            <Badge className="absolute top-2 right-2 bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-300">Upgrade</Badge>
-
+          ) : (
+            <div>
+            <Badge className="absolute top-2 right-2 bg-gradient-to-b from-purple-500 to-purple-600 text-white dark:bg-purple-900 dark:text-purple-300 focus:ring-2 focus:ring-purple-400 hover:shadow-xl transition duration-200">
+            <Zap className="w-3 h-3 mr-1" />
+              Upgrade
+              </Badge>
+              </div>
           )}
         </div>
         <CardHeader className="p-4 pb-0">
           <div className="flex justify-between items-start">
-            <div>
+            <div className="flex items-center justify-between gap-2 w-full">
+              <h3 className="font-semibold text-lg line-clamp-1">{test.title}</h3>
               <Badge variant="outline" className={`mb-2 ${getLevelColor(test.level!)}`}>
                 {test.level!.charAt(0).toUpperCase() + test.level!.slice(1).toLowerCase()}
               </Badge>
-              <h3 className="font-semibold text-lg line-clamp-1">{test.title}</h3>
             </div>
           </div>
         </CardHeader>
@@ -353,15 +370,16 @@ function TestCard({ test, view, onStartTest }: TestCardProps) {
         </CardContent>
         {hasAccess ? (
           <CardFooter className="p-4 pt-0 w-full flex items-end justify-end">
-            <Button 
-              onClick={onStartTest}
-              className={buttonVariants({ 
-                variant: "default", 
-                className: "bg-emerald-500 hover:bg-emerald-600 transition-colors"
-              })}
-            >
-              Start Test
-            </Button>
+            <Button
+                  onClick={onStartTest}
+                  className={buttonVariants({
+                    variant: "outline",
+                    size: "lg",
+                    className: "bg-emerald-50 text-emerald-900 border-emerald-900 rounded-full hover:text-emerald-50 hover:bg-emerald-700 hover:border-emerald-900 transition-colors shrink-0 shadow-none hover:shadow-md"
+                  })}
+                >
+                  Start Test
+                </Button>
           </CardFooter>
         ) : (
           <CardFooter className="p-4 pt-0 flex w-full justify-end items-end">
@@ -375,14 +393,24 @@ function TestCard({ test, view, onStartTest }: TestCardProps) {
       <Card className="overflow-hidden transition-all hover:shadow-md group">
         <div className="flex flex-col md:flex-row">
           <div className="md:w-1/4 lg:w-1/5 aspect-video md:aspect-square relative overflow-hidden">
-            <img 
-              src={ test.thumbnail ? test.thumbnail : "/aws-bg-image.jpg" }
+          {
+            test.free && (
+              <span className="inline-flex absolute top-2 left-2 items-center rounded-md bg-yellow-400 px-2 py-1 text-xs font-medium text-yellow-700 ring-1 ring-yellow-600/40 ring-inset">
+                <BookmarkCheck className="mr-1 h-4 w-4" />
+                New
+              </span>
+            )
+          }
+            <img
+              src={test.thumbnail ? test.thumbnail : "/aws-bg-image.jpg"}
               className="object-cover w-full h-full transition-transform group-hover:scale-105"
               alt={test.title}
             />
-            {hasAccess && (
-              <Badge className="absolute top-2 right-2 bg-emerald-500 hover:bg-emerald-600">Free</Badge>
-            )}
+            {hasAccess ? (
+            <Badge className="absolute top-2 right-2 bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-300">Free</Badge>
+          ) : (
+            <Badge className="absolute top-2 right-2 bg-gradient-to-b from-emerald-500 to-emerald-600 text-white dark:bg-emerald-900 dark:text-emerald-300 focus:ring-2 focus:ring-emerald-400 hover:shadow-xl transition duration-200">Upgrade</Badge>
+          )}
           </div>
           <div className="flex-1 p-4">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-2">
@@ -394,17 +422,17 @@ function TestCard({ test, view, onStartTest }: TestCardProps) {
                 )}
                 <h3 className="font-semibold text-lg">{test.title}</h3>
               </div>
-                {hasAccess ? (
-                <Button 
-                  onClick={onStartTest}
-                  className={buttonVariants({ 
-                    variant: "default", 
-                    size: "sm",
-                    className: "bg-emerald-600 hover:bg-emerald-700 transition-colors"
-                  })}
-                >
-                  Start Test
-                </Button>
+              {hasAccess ? (
+                <Button
+                onClick={onStartTest}
+                className={buttonVariants({
+                  variant: "outline",
+                  size: "lg",
+                  className: "bg-emerald-50 text-emerald-900 border-emerald-900 rounded-full hover:text-emerald-50 hover:bg-emerald-700 hover:border-emerald-900 transition-colors shrink-0 shadow-none hover:shadow-md"
+                })}
+              >
+                Start Test
+              </Button>
               ) : (
                 <UpgradeButton />
               )}

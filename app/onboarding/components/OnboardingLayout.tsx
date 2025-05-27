@@ -15,25 +15,25 @@ export default function OnboardingLayout({
   totalSteps,
 }: OnboardingLayoutProps) {
   return (
-    <div className="flex min-h-screen bg-background w-full bg-white">
+    <div className="flex min-h-screen bg-background w-full bg-white dark:bg-slate-950">
       {/* Left sidebar with stepper */}
 
-      <div className="hidden w-80 flex-col border-r border-gray-100 bg-gray-50 p-6 lg:flex">
+      <div className="hidden w-80 flex-col border-r shadow-md dark:border-none border-gray-100 bg-gray-50 dark:bg-transparent p-6 lg:flex">
 
         <div className="mb-12 flex justify-center items-center space-x-2">
           <Image src="/images/dojo-logo.png" alt="Cloud Dojo" width={130} height={130} className="" />
         </div>
 
         <div className="mb-8">
-          <h2 className="text-lg font-semibold text-emerald-900">Set up your account</h2>
-          <p className="text-sm text-gray-500">Complete these steps to get started</p>
+          <h2 className="text-lg font-semibold dark:text-emerald-700 text-emerald-900">Set up your account</h2>
+          <p className="text-sm dark:text-white text-gray-500">Complete these steps to get started</p>
         </div>
 
         <OnboardingStepper />
       </div>
 
       {/* Content area */}
-      <div className="flex-1 flex flex-col md:w-3/4">
+      <div className="flex-1 flex flex-col md:w-3/4 dark:bg-slate-950 bg-white">
         <main className="flex-1 flex items-center justify-center p-4 md:p-8">
           <div className="w-full max-w-3xl mx-auto">
             {/* Mobile stepper - only show progress bar */}
@@ -62,7 +62,7 @@ export default function OnboardingLayout({
             </div>
 
             {/* Current step content */}
-            <div className="bg-card px-8 rounded-lg shadow-sm p-6">
+            <div className="px-8 rounded-lg shadow-sm p-6">
               {children}
             </div>
           </div>

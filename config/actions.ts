@@ -536,5 +536,6 @@ export async function fetchPlans() {
     if (!allPlans.length) {
       allPlans = await syncPlans();
     }
+    console.log("Fetched plans:", allPlans);
     return allPlans;
   }
