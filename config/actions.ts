@@ -532,6 +532,7 @@ export async function getSubscriptionURLs(id: string) {
 
 
 export async function fetchPlans() {
+    await syncPlans();
     let allPlans = await prisma.lsSubscriptionPlan.findMany({});
     if (!allPlans.length) {
       allPlans = await syncPlans();
