@@ -1,49 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
-// Define a type for the leaderboard data
-interface LeaderboardEntry {
-  userId: string;
-  firstName: string;
-  lastName: string;
-  percentageScore: number;
-  timeSpentSecs: number;
-}
-
-export default function LeaderboardPage() {
-  const [leaderboardData, setLeaderboardData] = useState<LeaderboardEntry[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchLeaderboardData = async () => {
-      try {
-        const response = await fetch("/api/leaderboard");
-        if (!response.ok) {
-          throw new Error("Failed to fetch leaderboard data");
-        }
-        const data = await response.json();
-        setLeaderboardData(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchLeaderboardData();
-  }, []);
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
-import { useEffect, useState } from "react";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -53,9 +10,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"; // Import Card components
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"; // Import Avatar components
+
+import { useEffect, useState } from "react";
+
 
 // Define a type for the leaderboard data
 interface LeaderboardEntry {

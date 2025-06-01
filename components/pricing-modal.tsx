@@ -36,7 +36,7 @@ export default function PricingModal({ trigger, isOpen, onOpenChange }: PricingM
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
       <DialogContent
         className="
-          md:max-w-5xl w-full max-w-lg md:w-[95vw] p-0
+          md:max-w-5xl w-full max-w-sm m-2 md:w-[95vw] p-0
           max-h-[95vh] md:max-h-[90vh] overflow-auto rounded-2xl shadow-2xl border
           bg-white dark:bg-zinc-900
         "

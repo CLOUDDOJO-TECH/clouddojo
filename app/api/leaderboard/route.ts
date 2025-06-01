@@ -1,5 +1,5 @@
+import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
 
 export async function GET() {
   try {
@@ -8,6 +8,15 @@ export async function GET() {
         quizAttempts: true,
       },
     });
+
+    // Define the type for leaderboard entries
+    type LeaderboardEntry = {
+      userId: string;
+      firstName: string;
+      lastName: string;
+      percentageScore: number;
+      timeSpentSecs: number;
+    };
 
     const leaderboard = users
       .map((user) => {
@@ -27,14 +36,14 @@ export async function GET() {
         });
 
         return {
-          userId: user.id,
+          userId: user.userId,
           firstName: user.firstName,
           lastName: user.lastName,
           percentageScore: bestAttempt.percentageScore,
           timeSpentSecs: bestAttempt.timeSpentSecs,
         };
       })
-      .filter(Boolean); // Remove users with no attempts for now
+      .filter(Boolean) as LeaderboardEntry[]; // Remove users with no attempts and assert the type
 
     // Sort the leaderboard: highest score first, then by less time spent
     leaderboard.sort((a, b) => {
