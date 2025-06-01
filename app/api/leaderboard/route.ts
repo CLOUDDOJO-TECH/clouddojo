@@ -48,7 +48,7 @@ export async function GET(request: Request) {
     const users = await prisma.user.findMany({
       include: {
         quizAttempts: {
-          where: dateFilter, // Apply the date filter to quiz attempts
+          where: dateFilter,
         },
       },
     });
@@ -59,7 +59,6 @@ export async function GET(request: Request) {
     const clerkUserMap = new Map();
     
     // Create a map of Clerk user data by user ID for easy lookup
-    // Access the data property which contains the array of users
     clerkUsers.data.forEach(user => {
       clerkUserMap.set(user.id, {
         profileImageUrl: user.imageUrl,
@@ -97,15 +96,15 @@ export async function GET(request: Request) {
         
         // Calculate average score across all attempts
         const totalScore = sortedAttempts.reduce(
-          (sum, attempt) => sum + attempt.percentageScore, 
+          (sum, attempt) => sum + attempt.percentageScore,
           0
-        );
+        )
         const averageScore = totalScore / sortedAttempts.length;
         
         // Find the best score
         const bestScore = Math.max(
           ...sortedAttempts.map(attempt => attempt.percentageScore)
-        );
+        )
         
         // Calculate improvement factor (compare last 3 vs first 3 attempts)
         let improvementFactor = 0;

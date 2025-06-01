@@ -52,6 +52,7 @@ type NavItem = {
   url: string;
   icon: React.ComponentType<any>;
   comingSoon?: boolean;
+  isNew?: boolean; // Add property to mark new features
 };
 
 type NavSection = {
@@ -80,6 +81,7 @@ const NAVIGATION_DATA: NavSection[] = [
         title: "Leaderboard",
         url: "/dashboard/leaderboard", // Updated URL
         icon: Trophy, // Changed icon to Trophy
+        isNew: true, // Mark as new
       },
     ],
   },
@@ -249,6 +251,13 @@ function NavItem({ item, isActive }: { item: NavItem; isActive: boolean }) {
           >
             {item.title}
           </span>
+          {item.isNew && (
+            <div className="relative">
+              <Badge variant="new" className="ml-2 transform -rotate-12">
+                NEW
+              </Badge>
+            </div>
+          )}
         </Link>
       </SidebarMenuButton>
     </SidebarMenuItem>
