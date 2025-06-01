@@ -16,6 +16,7 @@ import {
   Moon,
   TestTube,
   CableCar,
+  Trophy, // Added Trophy icon
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -75,6 +76,11 @@ const NAVIGATION_DATA: NavSection[] = [
         url: "/dashboard/practice",
         icon: Bot,
       },
+      {
+        title: "Leaderboard",
+        url: "/dashboard/leaderboard", // Updated URL
+        icon: Trophy, // Changed icon to Trophy
+      },
     ],
   },
   {
@@ -87,12 +93,12 @@ const NAVIGATION_DATA: NavSection[] = [
         icon: BookOpen,
         comingSoon: true,
       },
-      {
-        title: "Leaderboard",
-        url: "#",
-        icon: Settings2,
-        comingSoon: true,
-      },
+      // { // Leaderboard item removed from here
+      //   title: "Leaderboard",
+      //   url: "#",
+      //   icon: Settings2,
+      //   comingSoon: true,
+      // },
       {
         title: "Hands-On Labs",
         url: "#",
