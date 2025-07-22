@@ -1,26 +1,45 @@
-import { Badge } from "@/components/ui/badge"
-import { Sparkles } from "lucide-react"
+import { cn } from "@/lib/utils"
+import { CrownIcon } from "lucide-react"
+import { forwardRef } from "react"
 
 interface UpgradeBadgeProps {
+  size?: "sm" | "md"
+  variant?: "primary" | "secondary" | "premium"
+  children: React.ReactNode
   className?: string
-  size?: "sm" | "md" | "lg"
 }
 
-export function UpgradeBadge({ className, size = "md" }: UpgradeBadgeProps) {
-  const sizeClasses = {
-    sm: "text-xs px-2 py-0.5",
-    md: "text-sm px-2.5 py-0.5",
-    lg: "text-base px-3 py-1",
-  }
+const UpgradeBadge = forwardRef<HTMLSpanElement, UpgradeBadgeProps>(
+  ({ className, size = "sm", variant = "primary", children, ...props }, ref) => {
+    const sizeClasses = {
+      sm: "px-2 py-1 text-xs",
+      md: "px-3 py-1.5 text-sm",
+    }
 
-  return (
-    <Badge
-      className={`font-medium bg-gradient-to-r from-emerald-500 to-emerald-500/40 hover:from-emerald-600 hover:to-emerald-600/40 
-      border-none text-white shadow-sm transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 
-      flex items-center gap-1 cursor-pointer ${sizeClasses[size]} ${className}`}
-    >
-      <Sparkles className={`${size === "sm" ? "h-3 w-3" : size === "md" ? "h-3.5 w-3.5" : "h-4 w-4"}`} />
-      Upgrade
-    </Badge>
-  )
-}
+    const gradientVariants = {
+      primary: "bg-gradient-to-r from-[#B2D0F9] via-[#FFDB9A] via-[#F08878] to-[#FDC3B6]",
+      secondary: "bg-gradient-to-r from-purple-400 via-pink-400 to-red-400",
+      premium: "bg-gradient-to-r from-yellow-400 via-orange-400 to-red-500",
+    }
+
+    return (
+      <span
+        ref={ref}
+        className={cn(
+          "inline-flex items-center gap-1.5 justify-center rounded-full font-medium text-black",
+          "shadow-[0_4px_20px_rgba(251,191,36,0.3)] hover:shadow-[0_8px_30px_rgba(251,191,36,0.4)]",
+          sizeClasses[size],
+          gradientVariants[variant],
+          className,
+        )}
+        {...props}
+      >
+        <CrownIcon className='w-3 h-4' />
+        {children}
+      </span>
+    )
+  },
+)
+
+UpgradeBadge.displayName = "UpgradeBadge"
+export default UpgradeBadge

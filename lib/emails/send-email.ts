@@ -100,7 +100,7 @@ export async function sendFeedbackEmails({
   try {
     // Send thank you email to user
     const userEmailResult = await resend.emails.send({
-      from: 'CloudDojo <feedback@clouddojo.tech>',
+      from: 'CloudDojo <support@clouddojo.tech>',
       to: userEmail,
       subject: 'Thank You for Your Feedback!',
       react: FeedbackThankYouEmail({ username: userName }),
@@ -109,7 +109,7 @@ export async function sendFeedbackEmails({
     // Send notification email to admin
     const adminEmailResult = await resend.emails.send({
       from: 'CloudDojo <feedback@clouddojo.tech>',
-      to: ADMIN_EMAIL,
+      to: [ADMIN_EMAIL, 'support@clouddojo.tech'], 
       subject: `New Feedback Received from ${userName}`,
       react: FeedbackNotificationEmail({
         userName,

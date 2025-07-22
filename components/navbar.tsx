@@ -18,7 +18,8 @@ import { ArrowRight, Search, Menu, X } from "lucide-react"
 import Link from "next/link"
 import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs"
 import { useIsMobile } from "@/hooks/use-mobile"
-import { ModeToggle } from "./mode-toggle"
+import * as  FancyButton from "@/components/ui/fancy-button"
+import ModeToggle from "./mode-toggle"
 
 export default function Tabnavbar() {
   const { isSignedIn } = useUser();
@@ -123,20 +124,24 @@ export default function Tabnavbar() {
           <div className="flex items-center space-x-4">
             {isSignedIn ? (
               <div>
-                <SignOutButton />
+                <SignOutButton> <Button className="text-black dark:text-white">Sign Out</Button></SignOutButton>
                 <Link href="/dashboard">
-                  <Button variant="outline" className="ml-4 text-black">
+                  <FancyButton.Root className="ml-4 dark:text-white text-black" variant="primary" size="small">
                     Dashboard
-                  </Button>
+                  </FancyButton.Root>
                 </Link>
               </div>
             ) : (
               <div className="flex items-center space-x-4">
-                <SignInButton mode="modal" />
-                <Button className="bg-white hover:bg-gray-200">
-                  <Link href="https://calendar.notion.so/meet/glenmiracle/7fnt4l09" className="text-black" target="_blank" rel="noopener noreferrer">Contact Sales</Link>
-                  <ArrowRight className="ml-2 h-4 w-4 text-black" />
-                </Button>
+
+                <SignInButton mode="modal" appearance={{ elements: { formButtonPrimary: "bg-emerald-600", }}} >
+                  <Button variant='ghost' className="text-slate-800 hover:bg-primary/30 dark:text-gray-100 hover:text-gray-500">Sign In</Button>
+                </SignInButton>
+
+                <FancyButton.Root mode="ghost" variant="primary" size="small" className="text-slate-800 hover:bg-primary/30 dark:text-gray-100 hover:text-gray-500" >
+                  <Link href="https://calendar.notion.so/meet/glenmiracle/7fnt4l09" className="dark:text-white text-slate-800" target="_blank" rel="noopener noreferrer">Contact Sales</Link>
+                  <ArrowRight className="ml-2 h-4 w-4 dark:text-white text-black" />
+                </FancyButton.Root>
               </div>
             )}
             <ModeToggle />

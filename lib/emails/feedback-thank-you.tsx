@@ -101,10 +101,10 @@ export const FeedbackThankYouEmail = ({
               <Text className="text-sm text-gray-600">
                 For additional support, contact{' '}
                 <Link
-                  href="mailto:bonyuglen@gmail.com"
+                  href="mailto:support@clouddojo.tech"
                   className="text-brand hover:text-emerald-700"
                 >
-                  bonyuglen@gmail.com
+                  support@clouddojo.tech
                 </Link>
               </Text>
             </Section>

@@ -1,65 +1,41 @@
-"use client"
+"use client";
 
-import { Sparkles, ArrowRight, Zap, Check } from "lucide-react"
-import UpgradeButton from "@/components/upgrade-button"
-import { cn } from "@/lib/utils"
+
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import Image from "next/image";
+import UpgradeButton from "./ui/upgrade-button";
 
 export default function UpgradeCard() {
   return (
-    <div className="relative rounded-xl overflow-hidden hover:shadow-sm">
-      {/* Background with subtle pattern */}
-      <div className="absolute inset-0 bg-gradient-to-br from-emerald-600 to-emerald-800 opacity-90"></div>
-      <div className="absolute inset-0 bg-[url('/noise.png')] opacity-5 mix-blend-overlay"></div>
-      
-      {/* Decorative elements */}
-      <div className="absolute -right-6 -top-6 text-emerald-300/20">
-        <Sparkles size={100} strokeWidth={0.5} />
-      </div>
-      <div className="absolute -left-6 -bottom-6 text-emerald-300/20">
-        <Zap size={100} strokeWidth={0.5} />
-      </div>
-      
-      {/* Content */}
-      <div className="relative p-5 text-white z-10">
-        <div className="flex items-start space-x-2 mb-3">
-          <div className="rounded-full bg-white/20 p-1.5">
-            <Sparkles size={16} className="text-white" />
-          </div>
-          <div>
-            <h3 className="font-bold text-base">Go Premium</h3>
-            <p className="text-xs text-emerald-50/80 mt-0.5 leading-tight">
-              Access all tests and advanced features
-            </p>
-          </div>
-        </div>
-        
-        {/* Features list */}
-        <ul className="space-y-1.5 mb-4 text-xs">
-          <li className="flex items-center">
-            <Check size={14} className="mr-1.5 text-emerald-300" />
-            <span>Unlimited practice exams</span>
-          </li>
-          <li className="flex items-center">
-            <Check size={14} className="mr-1.5 text-emerald-300" />
-            <span>AI-powered explanations</span>
-          </li>
-          <li className="flex items-center">
-            <Check size={14} className="mr-1.5 text-emerald-300" />
-            <span>Performance analytics</span>
-          </li>
-        </ul>
-        
-        <UpgradeButton 
-          className={cn(
-            "w-full bg-gradient-to-l rounded-full from-emerald-500 to-emerald-800 hover:from-emerald-600 hover:to-emerald-800",
-            "text-white font-medium",
-            "transition-all duration-200 hover:shadow-md"
-          )}
-          label="Upgrade Now"
-          size="sm"
-          showIcon={true}
+    <Card className="relative h-[254px] border-none overflow-hidden rounded-3xl hover:shadow-md transition-shadow duration-300 after:z-10 after:content-[''] after:absolute after:inset-0 after:outline-2 after:outline after:-outline-offset-2 after:rounded-3xl after:outline-white/20 after:pointer-events-none">
+      <div className="absolute inset-0">
+        <Image
+          src="/images/upgrade-bg.png" // You might want to update this image to a darker underwater one
+          alt="underwater-background"
+          className="object-cover brightness-75"
+          fill
+          sizes="(max-width: 460px) 100vw, 460px"
+          priority
         />
       </div>
-    </div>
-  )
-} 
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/80 to-background p-6 flex flex-col justify-between w-full gap-2">
+      <div className="flex flex-col h-full justify-end">
+        <span className="flex flex-col gap-1 justify-center items-center wfull">
+        <div className="flex flex-col gap-1">
+          <h1 className="text-md font-light text-neutral-200 text-center pb-2">Upgrade to <span className="italic font-kaushan text-primary">Pro.</span></h1>
+            <p className="text-[12px] text-neutral-400 text-center tracking-wide">Get access to the advanced AI features and weekly mails.</p>
+        </div>
+        {/* <button
+          className="rounded-full bg-gradient-to-b from-primary/80 to-primary text-white font-medium w-fit px-[13px] py-[4px] text-[11px] font-serif mt-2"
+        >
+          Upgrade plan
+        </button> */}
+        <UpgradeButton className="mt-2" size="sm" variant="primary">Upgrade plan</UpgradeButton>
+        </span>
+      </div>
+      </div>
+    </Card>
+  );
+}
+

@@ -14,36 +14,42 @@ import { toast } from "sonner";
 export default function PricingPage() {
   const router = useRouter();
   const [plans, setPlans] = useState<LsSubscriptionPlan[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
- 
- 
+
+
   // Get plans data
   useEffect(() => {
+
     const fetchData = async () => {
       const data = await getData();
       setPlans(data);
+      setIsLoading(false);
+      if (!data || data.length === 0) {
+        toast.error("No subscription plans available at the moment. Please check back later.");
+      }
     };
-    fetchData(); 
+    fetchData();
   }, []);
 
-  
+
   // Server-side data fetch - this will run after the client-side check above
   const getData = async () => {
     // Fetch all subscription plans from the database
     const allPlans = await fetchPlans();
-    
+
     // Sort plans by price
     let sortedPlans = allPlans.sort((a, b) => (a.sort ?? 0) - (b.sort ?? 0));
-    
+
     // Reorder plans to put the most popular (premium) plan second
-    const regularPlans = sortedPlans.filter((plan) => 
+    const regularPlans = sortedPlans.filter((plan) =>
       !plan.name?.toLowerCase().includes("premium")
     );
-    
-    const premiumPlans = sortedPlans.filter((plan) => 
+
+    const premiumPlans = sortedPlans.filter((plan) =>
       plan.name?.toLowerCase().includes("premium")
     );
-    
+
     // Combine plans with regular plans first, then premium plans
     return [...regularPlans, ...premiumPlans];
   };
@@ -61,28 +67,46 @@ export default function PricingPage() {
             Choose the plan that's right for your AWS certification journey
           </p>
         </div>
-
-        {/* Plans Grid */}
-        {!plans || plans.length === 0 ? (
-          <NoPlans />
+        {/* Pricing Plans */}
+        {isLoading ? (
+          <div className="flex flex-col justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-500"></div>
+            <p className="mt-4 text-slate-300">Loading subscription plans...</p>
+          </div>
+        ) : plans.length === 0 ? (
+          <div className="text-center py-12 px-4">
+            <div className="bg-slate-900/50 rounded-lg p-8 max-w-2xl mx-auto border border-slate-800">
+              <h3 className="text-xl font-medium text-slate-200 mb-3">No plans available</h3>
+              <p className="text-slate-400 mb-6">
+                We couldn't find any subscription plans at the moment. Please check back later.
+              </p>
+              <button
+                onClick={() => window.location.reload()}
+                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 rounded-md text-white transition-colors"
+              >
+                Refresh
+              </button>
+            </div>
+          </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto items-center justify-center">
-            {plans.map((plan, idx) => (
-              <Plan 
-                key={plan.id} 
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 max-w-5xl mx-auto">
+            {plans.map((plan) => (
+              <Plan
+                key={plan.id}
                 plan={plan}
-                isPopular={plan.name?.toLowerCase().includes("premium")}
+                isPopular={plan.name?.toLowerCase().includes("pro")}
               />
             ))}
           </div>
         )}
+
 
         {/* Feature Comparison */}
         <div className="mt-24 bg-slate-900/50 rounded-2xl p-8 backdrop-blur-sm border border-slate-800">
           <h2 className="text-3xl font-bold text-center mb-10 bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-teal-600">
             Compare Plans
           </h2>
-          
+
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead>
@@ -125,7 +149,7 @@ export default function PricingPage() {
           <h2 className="text-3xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-teal-600">
             Frequently Asked Questions
           </h2>
-          
+
           <div className="max-w-3xl mx-auto grid gap-6 mt-10">
             {[
               {

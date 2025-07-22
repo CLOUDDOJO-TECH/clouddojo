@@ -20,6 +20,8 @@ import { TopMissedTopics } from "./components/TopMissedTopics"
 import { AIInsightsTabs } from "./components/AIInsightsTabs"
 import { DetailedAnalysis } from "./components/DetailedAnalysis"
 import { PersonalizedStudyPlan } from "./components/PersonalizedStudyPlan"
+import { useSubscription } from "@/hooks/use-subscription"
+import PaywallCard from "./paywall-card"
 
 // --- Interface Definitions ---
 interface ReportData {
@@ -75,6 +77,18 @@ export default function PremiumAnalysisDashboard() {
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false)
   const reportRef = useRef<HTMLDivElement>(null)
   const [nextUpdate, setNextUpdate] = useState<string>("")
+
+  const { isSubscribed, planName, isLoading: PlanLoading, isError } = useSubscription();
+  
+
+  if(!isSubscribed){
+    return (
+      <div className="flex items-center justify-center min-h-[70vh]">
+        <PaywallCard />
+
+      </div>
+    )
+  }
 
   // Calculate time until next update (runs at midnight UTC)
   useEffect(() => {
@@ -151,8 +165,8 @@ export default function PremiumAnalysisDashboard() {
 
   if (error) {
     return (
-      <div className="p-6 text-center">
-        <div className="text-red-500 mb-4 flex items-center justify-center">
+      <div className="p-6 text-center h-[50vh] flex flex-col items-center justify-center">
+        <div className="text-brand-beige-950 mb-4 flex items-center justify-center">
           <AlertCircle className="h-5 w-5 mr-2" /> Error: {error}
         </div>
         <Button onClick={() => window.location.reload()}>Try Again</Button>

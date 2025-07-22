@@ -2,7 +2,6 @@
 
 import React, { createContext, useContext, useState, ReactNode } from "react"
 
-// Define the shape of your onboarding data
 interface OnboardingData {
   companyType: string
   companySize: string
@@ -30,7 +29,7 @@ const OnboardingContext = createContext<OnboardingContextType | undefined>(undef
 export function OnboardingProvider({ children }: { children: ReactNode }) {
   // Track the current step
   const [currentStep, setCurrentStep] = useState(1)
-  const totalSteps = 4 // Total number of steps in your flow
+  const totalSteps = 4 
   
   // Store all onboarding data
   const [onboardingData, setOnboardingData] = useState<OnboardingData>({

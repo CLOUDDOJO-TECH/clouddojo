@@ -18,7 +18,7 @@ export default function OnboardingLayout({
     <div className="flex min-h-screen bg-background w-full bg-white dark:bg-slate-950">
       {/* Left sidebar with stepper */}
 
-      <div className="hidden w-80 flex-col border-r shadow-md dark:border-none border-gray-100 bg-gray-50 dark:bg-transparent p-6 lg:flex">
+      <div className="hidden w-90 flex-col border-r shadow-md dark:border-none border-gray-100 bg-gray-50 dark:bg-transparent p-6 ml-4 lg:flex">
 
         <div className="mb-12 flex justify-center items-center space-x-2">
           <Image src="/images/dojo-logo.png" alt="Cloud Dojo" width={130} height={130} className="" />

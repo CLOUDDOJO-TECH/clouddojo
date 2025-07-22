@@ -19,19 +19,19 @@ interface QuestionData {
 
 async function questionSeed() {
     try {
-        const jsonPath = path.join(__dirname, '../../public/data/solutions_architect/new-sa2.json');
+        const jsonPath = path.join(__dirname, '../../public/data/cloud-practitioner/cp-4.json');
         const rawData = fs.readFileSync(jsonPath, 'utf-8');
         const questionsData: QuestionData[] = JSON.parse(rawData);
 
         // Create quiz in db
         const quiz = await prisma.quiz.create({
             data: {
-                title: "⏳ AWS SAA (C003) - 2024",
-                description: "Every Solutons Architect should practice with real exam questions. This quiz is designed to simulate the AWS Solutions Architect Associate exam experience.",
+                title: "AWS Machine Learning Engeer",
+                description: "This is a practice test for the AWS Certified Cloud Practioner exam. It contains 50 questions covering various topics related to AWS services, cloud concepts, security, and architecture best practices.",
                 isPublic: true,
-                duration: 40,
-                free: true,
-                thumbnail: "https://tcjrhk37ew.ufs.sh/f/CrHVRHXsIQGlgCcZiY4uAgwoybNJF21PKmaTUs5vS7fLRiIq",
+                duration: 65,
+                free: false,
+                thumbnail: "https://tcjrhk37ew.ufs.sh/f/CrHVRHXsIQGl6PKUryRSaoTYCmIz90XiLxjfhsBWuy4OKURF",
                 isNew: true,
             }
         });
