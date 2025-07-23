@@ -13,7 +13,7 @@ export default function ModeToggle() {
     <div>
       <Toggle
         variant="outline"
-        className="group data-[state=on]:hover:bg-muted size-9 data-[state=on]:bg-transparent rounded-xl border-gray-900 dark:border-zinc-50"
+        className="group data-[state=on]:hover:bg-muted size-9 data-[state=on]:bg-transparent rounded-xl border-foreground/50 dark:border-none"
         pressed={theme === "dark"}
         onPressedChange={() =>
           setTheme((prev) => (prev === "dark" ? "light" : "dark"))

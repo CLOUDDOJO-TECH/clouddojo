@@ -7,6 +7,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Clock,
+  SendHorizontal,
+  SendIcon,
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -209,7 +211,7 @@ export default function QuizComponent({ quiz, quizId }: QuizComponentProps) {
   // Show loading state while checking profile
   if (!isLoaded || isCheckingProfile) {
     return (
-      <div className="container max-w-6xl mx-auto p-4 md:p-6 pt-16 md:pt-6">
+      <div className="container max-h-[50%] flex items-center justify-center lg:max-w-7xl max-w-6xl mx-auto p-4 md:p-6 pt-16 md:pt-6">
         <Card>
           <CardContent className="pt-6">
             <div className="flex justify-center">
@@ -235,7 +237,7 @@ export default function QuizComponent({ quiz, quizId }: QuizComponentProps) {
   }
 
   return (
-    <div className="container max-w-6xl mx-auto p-4 md:p-6 pt-16 md:pt-6">
+    <div className="container  lg:max-w-7xl flex items-center   max-w-6xl mx-auto p-4 md:p-6 pt-16 md:pt-6">
       <Card>
         <CardHeader className="pb-2">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -248,7 +250,7 @@ export default function QuizComponent({ quiz, quizId }: QuizComponentProps) {
               <div
                 className={cn(
                   "flex items-center gap-1 px-3 py-1 rounded-full font-medium",
-                  timeLeft <= 60 ? "bg-red-100 text-red-700" : "bg-blue-100 text-blue-700",
+                  timeLeft <= 60 ? "bg-red-100 text-red-700" : "bg-blue-100 text-brand-beige-700",
                 )}
               >
                 <Clock className="h-4 w-4" />
@@ -258,8 +260,9 @@ export default function QuizComponent({ quiz, quizId }: QuizComponentProps) {
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="outline" size="sm" onClick={() => setShowSubmitDialog(true)} className="w-full p-2 bg-emerald-600 border-none text-white rounded-full">
+                    <Button size="sm" onClick={() => setShowSubmitDialog(true)} className="rounded-full">
                       Submit Test
+                      <SendHorizontal className="h-4 w-4 ml-1" />
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>

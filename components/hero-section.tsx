@@ -24,13 +24,13 @@ export default function HeroSection() {
   const mascotSrc = theme === "light" ? "/images/extras/sensie-black.png" : "/images/extras/sensie-brown.png";
 
   return (
-    <div className="relative mx-auto md:my-16 my-8 flex flex-col items-center justify-center w-full overflow-hidden">
+    <div className="relative mx-auto md:my-16 my-2 flex flex-col items-center justify-center w-full overflow-hidden">
       <div className="px-4 pt-10 md:pt-12 w-full flex flex-col items-center justify-center">
         <div className="max-w-7xl w-full">
           <span className="flex items-start mb-2 w-full justify-center sm:justify-start">
             <TrustBadge />
           </span>
-          <h1 className="relative z-10 mx-auto max-w-5xl text-center text-3xl font-bold text-black md:text-4xl lg:text-6xl dark:text-slate-200">
+          <h1 className="relative z-10 mx-auto max-w-3xl md:max-w-5xl text-center text-4xl font-bold text-black md:text-4xl lg:text-6xl dark:text-slate-200">
             {"Level Up. Get Certified. Become".split(" ").map((word, index) => (
               <motion.span
                 key={index}
@@ -70,7 +70,7 @@ export default function HeroSection() {
               duration: 0.3,
               delay: 0.8,
             }}
-            className="relative z-10 mx-auto max-w-xl py-4 text-center text-lg font-normal text-gray-500 dark:text-neutral-400"
+            className="relative z-10 mx-auto max-w-md md:max-w-xl py-4  text-center text-md md:text-lg font-normal text-gray-500 dark:text-neutral-400"
           >
             CloudDojo helps you crush your cloud certification exams with
             smarter practice tests, perfromance analystics,and real-time ai
@@ -150,9 +150,10 @@ export default function HeroSection() {
           </motion.div>
 
           <div className="preview-container relative">
-            <div className="absolute z-50 -top-[210px] -right-10 ">
+            <div className="absolute z-50 h-28 w-28 md:[h-450px] md:w-[250px] md:-top-[210px] md:-right-10  -top-[110px] -right-0">
               <Image
                 src={mascotSrc}
+                layout="intrinsic"
                 width={250}
                 height={150}
                 alt="mascot"
@@ -165,7 +166,7 @@ export default function HeroSection() {
       </div>
 
       {/* Full-width section with divider line that positions tabs in the middle */}
-      <div className="w-full border-t border-gray-200 dark:border-gray-800 mt-16 z-10 relative bg-[#FAFAF9] dark:bg-background pb-16">
+      <div className="w-full border-t border-gray-200 dark:border-gray-800 mt-16 z-10 relative bg-[#FAFAF9] dark:bg-background pb-2">
         <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
           <TabsNav onTabChange={handleTabChange} activeTab={activeTab} />
         </div>

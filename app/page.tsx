@@ -10,6 +10,8 @@ import { ThreeStepFramework } from "@/components/landing/three-steps-section";
 import { VendorCompanies } from "@/components/landing/vendor-section";
 import { FounderTestimonial } from "@/components/landing/founder-testimonial";
 import { Spotlight } from "@/components/spotlight";
+import FeaturesSection from "@/components/landing/features-section";
+import TestimonialsSection from "@/components/landing/testimonials";
 
 export default function Home() {
   return (
@@ -36,9 +38,11 @@ export default function Home() {
       <Navbar />
       <main>
         <HeroSection />
+        <FeaturesSection />
         <FeatureCards />
         <FeaturesBento />
-        <ThreeStepFramework ctaLink="/dashboard" showCta={false} />
+        <TestimonialsSection />
+        {/* <ThreeStepFramework ctaLink="/dashboard" showCta={false} /> */}
         {/* <VendorCompanies /> */}
         <FounderTestimonial />
         <FaqSection />

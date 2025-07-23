@@ -15,6 +15,7 @@ export function FounderTestimonial({ className = "" }: FounderTestimonialProps) 
   const [isHovering, setIsHovering] = useState(false)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [blobPosition, setBlobPosition] = useState({ x: 0, y: 0 })
+  
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect()
@@ -30,10 +31,10 @@ export function FounderTestimonial({ className = "" }: FounderTestimonialProps) 
   }
 
   return (
-    <section className={`py-16 md:py-24 ${className}`}>
+    <section className={`py-16 md:py-24 ${className} px-4`}>
       {/* Main Heading */}
       <div className="text-center mb-16">
-        <h2 className="text-white text-4xl md:text-5xl lg:text-6xl font-bold leading-tight max-w-5xl mx-auto">
+        <h2 className="text-foreground/80 text-4xl md:text-5xl lg:text-6xl font-bold leading-tight max-w-5xl mx-auto">
         We're building CloudDojo with clarity, intelligence, and purpose.
         </h2>
       </div>
@@ -41,7 +42,7 @@ export function FounderTestimonial({ className = "" }: FounderTestimonialProps) 
       {/* Testimonial Card */}
       <div className="max-w-4xl mx-auto">
         <div
-          className="relative group overflow-hidden rounded-2xl bg-zinc-900/30 border border-zinc-800 p-8 md:p-12 transition-all duration-300 hover:border-zinc-700"
+          className="relative group overflow-hidden rounded-2xl bg-black/70 dark:bg-zinc-900/30 border border-zinc-800 p-8 md:p-12 transition-all duration-300 hover:border-zinc-700"
           onMouseMove={handleMouseMove}
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
@@ -63,7 +64,7 @@ export function FounderTestimonial({ className = "" }: FounderTestimonialProps) 
 
           <div className="relative z-10">
             {/* Quote */}
-            <blockquote className="text-white text-lg md:text-xl leading-relaxed mb-8">
+            <blockquote className="text-white font-serif font-extralight text-lg md:text-xl leading-relaxed mb-8">
               "Throughout my journey studying and working in the cloud industry, I noticed how overwhelming it can be to prepare for certifications like AWS, Azure, or GCP — especially without tailored guidance. Many learners waste time jumping between outdated resources, generic courses, and practice tests that don’t adapt to their needs.
               <br />
               <br />
@@ -77,8 +78,8 @@ export function FounderTestimonial({ className = "" }: FounderTestimonialProps) 
                   <h3 className="text-white text-xl font-semibold">Bonyu Glen M.</h3>
                   <FaLinkedin className="w-5 h-5 text-blue-400" />
                 </div>
-                <p className="text-zinc-400 text-base mb-1">Founder, CEO of Clouddojo</p>
-                <p className="text-zinc-500 text-sm">Ex-Staff Engineer, LADX</p>
+                <p className="text-zinc-400 text-base font-mono mb-1">Founder, CEO of Clouddojo</p>
+                <p className="text-brand-beige-700 font-mono text-sm">Ex-Staff Engineer, LADX</p>
               </div>
 
               {/* Profile Image */}

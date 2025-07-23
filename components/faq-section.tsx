@@ -34,18 +34,18 @@ export default function FaqSection() {
 
   return (
     <section className="py-16">
-      <h2 className="text-3xl font-bold mb-12 text-center flex items-center justify-center">Frequently Asked Questions</h2>
+      <h2 className="text-3xl md:text-5xl font-bold mb-12 text-foreground/60 text-center flex items-center justify-center">Frequently Asked Questions?</h2>
 
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-3xl px-3 mx-auto">
         <Accordion type="single" collapsible className="space-y-4">
           {faqs.map((faq, index) => (
             <AccordionItem
               key={index}
               value={`item-${index}`}
-              className="border border-midnight-light/20 rounded-lg bg-midnight-light/5 px-6"
+              className="border border-midnight-light/20 rounded-lg dark:bg-black/70 bg-foreground/70 px-6"
             >
               <AccordionTrigger className="text-left py-4 text-base font-medium">{faq.question}</AccordionTrigger>
-              <AccordionContent className="text-gray-400 pb-4">{faq.answer}</AccordionContent>
+              <AccordionContent className="text-gray-200 font-mono font-light pb-4">{faq.answer}</AccordionContent>
             </AccordionItem>
           ))}
         </Accordion>
