@@ -1,0 +1,152 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+
+# Description: UI and Styling Rules for CloudDojo
+# Glob Patterns: **/*.jsx, **/*.tsx, **/*.css
+# Always Apply: true
+# Version: 1.0
+# Encoding: UTF-8
+
+# Rules
+
+## General Setup
+### Frameworks and Libraries
+- Use Tailwind CSS as the primary styling framework.
+- Use Shadcn UI for component library and theming.
+- Use Framer Motion for micro interactions and animations.
+
+### Global CSS
+- Import global CSS file in the main application file.
+- Use custom properties defined in `globals.css` for colors, fonts, spacing, etc.
+
+## Component Usage
+### Shadcn UI Components
+- Always use Shadcn UI components for consistency.
+- Override default styles using Tailwind CSS classes when necessary.
+- Example: Use `@shadcn/ui/button` for buttons, `@shadcn/ui/card` for cards, etc.
+
+### Framer Motion
+- Use Framer Motion for all animations and micro interactions.
+- Ensure animations are smooth and do not negatively impact performance.
+- Example: Use `motion.div`, `motion.button`, etc., for animated elements.
+
+## Styling Guidelines
+### Tailwind CSS
+- Use Tailwind CSS utility classes for styling components.
+- Create custom utility classes in `globals.css` if needed.
+- Follow the Tailwind CSS documentation for best practices.
+
+### Custom Properties
+- Use the custom properties defined in `globals.css` for colors, fonts, spacing, etc.
+- Do not hardcode values; instead, use the defined custom properties.
+- Example: Use `bg-background`, `text-foreground`, `border-border`, etc.
+
+### Typography
+- Use the defined fonts: `Poppins`, `Lora`, `JetBrains Mono`, `Kaushan Script`, and `Playwrite AU VIC`.
+- Ensure consistent font sizes, weights, and line heights.
+
+### Layout
+- Use Tailwind CSS grid and flex utilities for layout.
+- Ensure responsive design by using Tailwind's responsive prefixes.
+
+## Animations and Micro Interactions
+### Framer Motion
+- Use Framer Motion for creating animations and micro interactions.
+- Ensure all interactive elements have appropriate animations.
+- Example: Use `whileHover`, `whileTap`, `animate`, etc., for interactive states.
+
+### Glow Effect
+- Use the defined glow effect animation for interactive elements.
+- Ensure the glow effect is used consistently across the application.
+- Example: Apply `glow-container` class for elements that should have a glow effect.
+
+## Dark Mode
+### Dark Mode Setup
+- Ensure the project supports dark mode using the defined custom properties.
+- Use the `dark` class to style components for dark mode.
+
+### Dark Mode Styling
+- Use the custom properties defined in `globals.css` for dark mode.
+- Ensure all components are styled for both light and dark modes.
+
+## Best Practices
+### Code Consistency
+- Follow the established coding style and formatting.
+- Use descriptive class names and comments where necessary.
+
+### Performance
+- Optimize CSS and animations for performance.
+- Minimize the use of heavy animations and transitions.
+
+### Accessibility
+- Ensure all components are accessible.
+- Use proper ARIA labels and roles where necessary.
+
+## Examples
+
+### Button Component
+```jsx
+import { buttonVariants } from '@shadcn/ui/button';
+import { motion } from 'framer-motion';
+
+const Button = ({ className, ...props }) => {
+  return (
+    <motion.button
+      className={buttonVariants({ className })}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      {...props}
+    />
+  );
+};
+
+Card Component
+jsx
+Copy
+
+import { Card, CardContent } from '@shadcn/ui/card';
+import { motion } from 'framer-motion';
+
+const CustomCard = ({ className, ...props }) => {
+  return (
+    <motion.div
+      className="glow-container"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+    >
+      <Card className={className} {...props}>
+        <CardContent>{props.children}</CardContent>
+      </Card>
+    </motion.div>
+  );
+};
+
+Testing
+Visual Testing
+
+    Ensure all components render correctly in different browsers and devices.
+    Test dark mode functionality.
+
+Performance Testing
+
+    Measure the impact of animations and interactions on performance.
+    Optimize as needed.
+
+Documentation
+Component Documentation
+
+    Document all custom components and their props.
+    Provide examples of usage.
+
+Styling Documentation
+
+    Document all custom styles and utility classes.
+    Provide guidelines for using the defined custom properties.
+
+Framer Motion Documentation
+
+    Document all animations and micro interactions.
+    Provide examples of usage.

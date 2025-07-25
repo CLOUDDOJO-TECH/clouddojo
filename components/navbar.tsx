@@ -144,7 +144,6 @@ export default function Tabnavbar() {
             {isSignedIn ? (
               <div>
                 <SignOutButton>
-                  {" "}
                   <Button className="text-black dark:text-white">
                     Sign Out
                   </Button>

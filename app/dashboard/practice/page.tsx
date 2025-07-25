@@ -119,36 +119,29 @@ export default function PracticeTestsPage() {
         filters.topics.some(topic => {
           const topicLower = topic.toLowerCase();
           return (
-            // Check category ID (original check)
             (test.category && test.category.id.toLowerCase() === topicLower) ||
-            // Check title
             (test.title && test.title.toLowerCase().includes(topicLower)) ||
-            // Check description
             (test.description && test.description.toLowerCase().includes(topicLower)) ||
-            // Check category name
             (test.category && test.category.name && 
              test.category.name.toLowerCase().includes(topicLower))
           );
         });
       
-      // If search query is empty, just check level and topics
       if (searchQuery === "") {
         return matchesLevel && matchesTopics;
       }
 
-      // Search query handling with null checks
       const searchLower = searchQuery.toLowerCase().trim();
       const titleMatch = test.title?.toLowerCase().includes(searchLower) ?? false;
       const descriptionMatch = test.description?.toLowerCase().includes(searchLower) ?? false;
       const categoryMatch = test.category?.name?.toLowerCase().includes(searchLower) ?? false;
       
-      // Combine all conditions
       return matchesLevel && 
              matchesTopics && 
              (titleMatch || descriptionMatch || categoryMatch);
     });
 
-    // Then sort
+    // final sorting
     return results.sort((a, b) => {
       switch (sortBy) {
         case "duration":
@@ -161,7 +154,6 @@ export default function PracticeTestsPage() {
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
           );
         default:
-          // Assuming you'll add a createdAt field to your test model
           return -1; // For now, maintain original order
       }
     });
@@ -215,13 +207,13 @@ export default function PracticeTestsPage() {
               {/* Controls Section */}
               <div className="flex flex-col gap-4">
                 
-                <div className="flex flex-col md:flex-row gap-4 justify-between w-full">
+                <div className="flex flex-col md:flex-row gap-4 justify-between items-center w-full">
                   <span className="flex space-x-3">
                     <SearchBar onSearch={(query) => setSearchQuery(query)} />
                     <MainFilters onFilter={handleFilter} />
                     <FilterComponent onFilter={handleFilter} />
                   </span>
-                  <div className="flex gap-3">
+                  <div className="flex gap-3 items-center">
                     <select
                       className="h-9 rounded-md border border-input bg-background px-3 text-sm"
                       value={sortBy}
@@ -237,15 +229,16 @@ export default function PracticeTestsPage() {
                       <ToggleGroup
                         type="single"
                         value={view}
+                        className="p-1"
                         onValueChange={(value) =>
                           value && setView(value as "grid" | "list")
                         }
                       >
                         <ToggleGroupItem value="grid" aria-label="Grid view">
-                          <LayoutGrid className="h-4 w-4" />
+                          <LayoutGrid className="h-3 w-3" />
                         </ToggleGroupItem>
                         <ToggleGroupItem value="list" aria-label="List view">
-                          <List className="h-4 w-4" />
+                          <List className="h-3 w-3" />
                         </ToggleGroupItem>
                       </ToggleGroup>
                     </div>

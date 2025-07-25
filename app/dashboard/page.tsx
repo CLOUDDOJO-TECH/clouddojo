@@ -22,6 +22,7 @@ import { Badge } from "@/components/ui/badge";
 import UpgradeBadge from "@/components/ui/upgrade-badge";
 import { useSubscription } from "@/hooks/use-subscription";
 import { DashboardLoading } from "@/components/dashboard/dashboard-loading";
+import { AssistantModal } from "@/components/assistant-ui/assistant-modal";
 
 export default function DashboardPage() {
   const { user, isLoaded } = useUser();
@@ -111,6 +112,8 @@ export default function DashboardPage() {
         fill="#ecfdf5"
       /> */}
       <div className="px-2">
+              {/* <AssistantModal /> */}
+        
         <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
         <p className="text-muted-foreground mt-2">
           Welcome back, {isLoaded ? user?.firstName || "there" : "there"}!
