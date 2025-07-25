@@ -64,7 +64,7 @@ export default function PaywallCard() {
           "dark:[background-image:linear-gradient(to_right,#262626_1px,transparent_1px),linear-gradient(to_bottom,#262626_1px,transparent_1px)]",
         )}
       />
-            <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-background"></div>
+            <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-background [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-background"></div>
         {/* 3D Contract Icon */}
         <div className="flex justify-center mb-8 relative">
           <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/20 to-blue-500/20 blur-2xl rounded-full"></div>
@@ -80,10 +80,10 @@ export default function PaywallCard() {
 
         {/* Main Content */}
         <div className="text-center mb-8 relative">
-          <h1 className="text-2xl font-bold text-white mb-3">
+          <h1 className="text-2xl font-bold text-foreground mb-3">
             Premium AI Analysis
           </h1>
-          <p className="text-gray-400 text-sm leading-relaxed">
+          <p className="text-foreground/60 text-sm leading-relaxed">
             Unlock advanced insights and personalized learning recommendations to
             accelerate your certification journey
           </p>
@@ -94,17 +94,17 @@ export default function PaywallCard() {
           {premiumFeatures.map((feature) => (
             <div
               key={feature.id}
-              className="w-full flex items-center p-4 rounded-2xl transition-all duration-300 bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 hover:border-white/20"
+              className="w-full flex items-center  p-4 rounded-2xl transition-all duration-300 bg-foreground/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 hover:border-white/20"
             >
               <div className="flex items-center gap-4">
                 <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-emerald-500/30 to-blue-500/30 backdrop-blur-sm rounded-xl flex items-center justify-center text-emerald-400">
                   {feature.icon}
                 </div>
                 <div className="text-left">
-                  <h3 className="text-white font-semibold text-base">
+                  <h3 className="text-foreground font-semibold text-base">
                     {feature.title}
                   </h3>
-                  <p className="text-gray-400 text-sm">
+                  <p className="text-foreground/50 text-sm">
                     {feature.description}
                   </p>
                 </div>

@@ -13,13 +13,22 @@ export default function TestimonialsSection() {
 
   const testimonials = [
     {
+      name: "Eugene Wurah",
+      role: "Network Engineer",
+      company: "Growth Labs",
+      content:
+        "For someone who is a visual learner, reading those pdf dumps was boring. I needed something visually engaging and interactive. Enter Cloud Dojo. I owe passing my CCP to this platform.",
+      rating: 5,
+      avatar: "/testimonial/eugene.jpg",
+    },
+    {
       name: "Nicholas Ishimwe",
       role: "IT Specialist",
       company: "TechStart Inc.",
       content:
         "Clouddojo was very precise, it helped me understand the tweak around AWS, and also gave me insights towards the exam, the exam practices was so useful.. I think I got to be fully aware about the clouddojo through LinkedIn, and I am so grateful for that. I passed the exam with 90% and I am so happy about it.",
       rating: 5,
-      avatar: "/testimonial/eugene.jpg",
+      avatar: "/testimonial/80.jpg",
     },
     {
         name: "Tracy Tenkorang",
@@ -30,15 +39,7 @@ export default function TestimonialsSection() {
         rating: 5,
         avatar: "/testimonial/tracy.jpg",
       },
-    {
-      name: "Paul Njomo",
-      role: "Marketing Director",
-      company: "Growth Labs",
-      content:
-        "The social media content generation is incredible. We've seen a 300% increase in engagement since we started using this tool. It's like having a creative team at your fingertips.",
-      rating: 5,
-      avatar: "/testimonial/80.jpg",
-    },
+    
     {
       name: "Emile Rodriguez",
       role: "Freelance Designer",

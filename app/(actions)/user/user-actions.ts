@@ -51,7 +51,6 @@ export const getCurrentUserProfile = async () => {
       }
     })
 
-    console.log('current userSubs', userPlan)
 
 
 

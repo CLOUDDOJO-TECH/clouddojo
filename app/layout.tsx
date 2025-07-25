@@ -2,7 +2,6 @@ import type React from "react";
 import "../styles/globals.css";
 import { Inter } from "next/font/google";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Providers from "@/components/providers";
 import { Spotlight } from "@/components/spotlight";
 import Script from 'next/script';
 import * as seline from '@seline-analytics/web';
@@ -11,6 +10,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 import { ThemeProvider } from "@/components/theme-provider";
 // fonts
 import { Poppins, Lora, JetBrains_Mono, Kaushan_Script, Playwrite_AU_VIC } from 'next/font/google';
+import Providers from "@/components/providers/providers";
 
 // Poppins (Sans-serif)
 export const poppins = Poppins({

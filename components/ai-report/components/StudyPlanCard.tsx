@@ -23,14 +23,14 @@ export function StudyPlanCard({ title, description, resources, priority }: Study
       <div className="p-4">
         <Badge className={`mb-3 ${priorityColor}`}>{priority} Priority</Badge>
         <h3 className="font-semibold text-gray-800 mb-2">{title}</h3>
-        <p className="text-gray-600 text-sm mb-4">{description}</p>
+        <p className="text-gray-600 font-serif text-sm mb-4">{description}</p>
         <Separator className="my-3" />
         <h4 className="text-sm font-medium text-gray-700 mb-2">Recommended Resources:</h4>
         <ul className="space-y-2">
           {resources.map((resource: string, index: number) => (
             <li key={index} className="flex items-start">
               <ArrowUpRight className="h-4 w-4 text-emerald-500 mr-2 mt-0.5" />
-              <a href={resource} target="_blank" rel="noopener noreferrer" className="text-sm text-gray-600 cursor-pointer hover:text-blue-400">
+              <a href={resource} target="_blank" rel="noopener noreferrer" className="text-sm font-mono tracking-tighter text-gray-600 cursor-pointer hover:text-blue-400">
                 {resource}
               </a>
             </li>

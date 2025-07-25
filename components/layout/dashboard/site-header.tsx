@@ -83,6 +83,7 @@ export function SiteHeader() {
 
 
   return (
+    <div className="sticky">
     <header className="dark w-full flex h-16 shrink-0 items-center gap-2 px-4 md:px-6   text-sidebar-foreground relative before:absolute before:inset-y-3 before:-left-px before:w-px before:z-50">
       <div className="flex h-[--header-height] w-full items-center justify-between">
         <div className="gap-2 px-4 flex items-center">
@@ -119,5 +120,6 @@ export function SiteHeader() {
         </div>
       </div>
     </header>
+    </div>
   );
 }

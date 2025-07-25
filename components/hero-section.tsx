@@ -48,7 +48,7 @@ export default function HeroSection() {
             ))}
             <RotatingText
               texts={["Hired", "Confident", "Professional", "Cloud"]}
-              mainClassName="px-2 sm:px-2 md:px-3 dark:text-white text-emerald-700 overflow-hidden py-0.5 sm:py-1 md:py-2 justify-center rounded-lg"
+              mainClassName="px-2 sm:px-2 md:px-3 dark:text-primary text-emerald-700 overflow-hidden py-0.5 sm:py-1 md:py-2 justify-center rounded-lg"
               staggerFrom={"last"}
               initial={{ y: "100%" }}
               animate={{ y: 0 }}

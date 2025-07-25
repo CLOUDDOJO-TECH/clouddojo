@@ -163,16 +163,48 @@ export interface AttemptHistory {
   startedAt: Date
 }
 
+// Updated TestData interfaces to match getUserTestData output
+export interface CategoryPerformanceRow {
+  categoryId?: string | null;
+  categoryName?: string | null;
+  _count__all: number;
+  _count_isCorrect: number;
+  accuracyPercentage: number;
+}
+
+export interface ServicePerformanceRow {
+  awsService?: string | null;
+  _count__all: number;
+  _count_isCorrect: number;
+  accuracyPercentage: number;
+}
+
+export interface DifficultyPerformanceRow {
+  difficultyLevel?: string | null;
+  _count__all: number;
+  _count_isCorrect: number;
+  accuracyPercentage: number;
+}
+
+export interface TimeByDifficultyRow {
+  level: string;
+  averageTime: number;
+}
+
 export interface TestData {
-  quizAttempts: QuizAttempt[]
-  categoryPerformance: CategoryPerformance[]
-  servicePerformance: ServicePerformance[]
-  difficultyPerformance: DifficultyPerformance[]
-  timeMetrics: TimeMetrics
+  quizAttempts: QuizAttempt[];
+  categoryPerformance: CategoryPerformanceRow[];
+  servicePerformance: ServicePerformanceRow[];
+  difficultyPerformance: DifficultyPerformanceRow[];
+  timeMetrics: {
+    totalTime: number;
+    averageTimePerQuestion: number;
+    timeByDifficulty: TimeByDifficultyRow[];
+  };
   performanceTrend: Array<{
-    testId: string
-    testName: string
-    score: number
-    date: string | Date
-  }>
+    testId: string;
+    testName: string;
+    score: number;
+    date: string | Date; // always string for consistency
+  }>;
 } 

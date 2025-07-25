@@ -32,7 +32,6 @@ export async function GetPracticeTests(){
             }
         });
 
-        console.log("Tests: ", tests);
         return {
             success: true,
             data: tests

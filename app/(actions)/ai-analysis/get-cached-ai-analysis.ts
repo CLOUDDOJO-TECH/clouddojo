@@ -1,11 +1,14 @@
 "use server"
 
 import { PrismaClient } from "@prisma/client"
-import { addDays, isAfter } from "date-fns"
+import { addDays } from "date-fns"
 import { auth } from "@clerk/nextjs/server"
-import { analyzeTestData } from "./analyze-test-data"
+// Import the new modular implementation with its type
+import { analyzeTestData } from "./analyze-test-data-v2"
+import type { AnalysisResult } from "./analyze-test-data-v2"
 
-const prisma = new PrismaClient()
+// Use singleton pattern for Prisma client to prevent too many connections
+import prisma from "@/lib/prisma"
 
 /**
  * Get or create an AI analysis report for the user.
@@ -39,7 +42,7 @@ export async function getCachedAIAnalysis(forceRefresh = false) {
       }
     }
 
-    // Define when the report should expire - 7 days after generation
+    // Define when the report should expire - 3 days after generation
     const today = new Date()
     const nextThreeDays = getNextThreeDays()
 
@@ -51,6 +54,7 @@ export async function getCachedAIAnalysis(forceRefresh = false) {
           expiresAt: {
             gt: today, // Not expired yet
           },
+          latest: true, // Get the latest report
         },
         orderBy: {
           generatedAt: 'desc', // Get the most recent report
@@ -78,8 +82,8 @@ export async function getCachedAIAnalysis(forceRefresh = false) {
       }
     }
 
-    // No valid cached report or force refresh, generate a new one
-    const analysisResult = await analyzeTestData(userId)
+    // No valid cached report or force refresh, generate a new one using the modular implementation
+    const analysisResult: AnalysisResult = await analyzeTestData(userId)
 
     if (!analysisResult.success || !analysisResult.data) {
       return {
@@ -88,21 +92,44 @@ export async function getCachedAIAnalysis(forceRefresh = false) {
       }
     }
 
-    // Store the new report
-    const newReport = await prisma.aIAnalysisReport.create({
-      data: {
-        userId: user.userId,
-        reportData: analysisResult.data,
-        expiresAt: nextThreeDays,
-      },
-    })
+    try {
+      // Mark all previous reports as not latest
+      await prisma.aIAnalysisReport.updateMany({
+        where: {
+          userId: user.userId,
+          latest: true,
+        },
+        data: {
+          latest: false,
+        },
+      })
 
-    return {
-      success: true,
-      data: newReport.reportData,
-      cached: false,
-      expiresAt: newReport.expiresAt,
-      generatedAt: newReport.generatedAt,
+      // Store the new report
+      const newReport = await prisma.aIAnalysisReport.create({
+        data: {
+          userId: user.userId,
+          reportData: analysisResult.data,
+          expiresAt: nextThreeDays,
+          latest: true,
+        },
+      })
+
+      return {
+        success: true,
+        data: newReport.reportData,
+        cached: false,
+        expiresAt: newReport.expiresAt,
+        generatedAt: newReport.generatedAt,
+      }
+    } catch (dbError) {
+      console.error("Database error when storing AI analysis:", dbError)
+      // Still return the analysis result even if storing fails
+      return {
+        success: true,
+        data: analysisResult.data,
+        cached: false,
+        temporary: true, // Flag indicating it wasn't stored
+      }
     }
   } catch (error) {
     console.error("Error in getCachedAIAnalysis:", error)
@@ -125,6 +152,7 @@ function getNextThreeDays() {
   
   return threeDaysFromNow
 }
+
 /**
  * For AWS Lambda: Refresh all expired reports
  * Can be triggered by a scheduled Lambda function
@@ -139,6 +167,7 @@ export async function refreshAllExpiredReports() {
         expiresAt: {
           lt: today,
         },
+        latest: true,
       },
       select: {
         userId: true,
@@ -146,16 +175,27 @@ export async function refreshAllExpiredReports() {
       distinct: ['userId'], // Only get one per user
     })
     
-    // Process each user's report
+    // Process each user's report using the modular implementation
     const results = await Promise.allSettled(
       expiredReports.map(async ({ userId }) => {
         try {
           // Generate a new analysis for this user
-          const analysisResult = await analyzeTestData(userId)
+          const analysisResult: AnalysisResult = await analyzeTestData(userId)
           
           if (!analysisResult.success || !analysisResult.data) {
             throw new Error(`Failed to analyze test data for user ${userId}: ${analysisResult.error}`)
           }
+          
+          // Mark all previous reports as not latest
+          await prisma.aIAnalysisReport.updateMany({
+            where: {
+              userId,
+              latest: true,
+            },
+            data: {
+              latest: false,
+            },
+          })
           
           // Store the new report
           const nextThreeDays = getNextThreeDays()
@@ -164,6 +204,7 @@ export async function refreshAllExpiredReports() {
               userId,
               reportData: analysisResult.data,
               expiresAt: nextThreeDays,
+              latest: true,
             },
           })
           

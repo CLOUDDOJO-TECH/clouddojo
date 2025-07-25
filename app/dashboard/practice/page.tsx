@@ -15,9 +15,6 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
 } from "@/components/ui/card";
 import { ExitTestAlert } from "@/components/dashboard/exit-test-alert";
 
@@ -35,6 +32,7 @@ import { useRouter } from "next/navigation";
 import { useSubscription } from "@/hooks/use-subscription";
 import PracticeTestCard from "@/components/dashboard/test-card";
 import UpgradeButton from "@/components/ui/upgrade-button";
+import MainFilters from "./main-filters";
 
 export default function PracticeTestsPage() {
   const router = useRouter();
@@ -111,20 +109,43 @@ export default function PracticeTestsPage() {
 
     // First filter
     let results = data.data.filter((test) => {
-      const searchLower = searchQuery.toLowerCase();
-      const matchesSearch =
-        searchQuery === "" ||
-        test.title.toLowerCase().includes(searchLower) ||
-        test.description?.toLowerCase().includes(searchLower) ||
-        test.category?.name.toLowerCase().includes(searchLower);
+      // Level filtering
+      const matchesLevel = filters.level === "all" || 
+        (test.level && test.level.toString() === filters.level);
+      
+      // Topic filtering with expanded search
+      // Check if any topic matches in category ID, title, description, or category name
+      const matchesTopics = filters.topics.length === 0 || 
+        filters.topics.some(topic => {
+          const topicLower = topic.toLowerCase();
+          return (
+            // Check category ID (original check)
+            (test.category && test.category.id.toLowerCase() === topicLower) ||
+            // Check title
+            (test.title && test.title.toLowerCase().includes(topicLower)) ||
+            // Check description
+            (test.description && test.description.toLowerCase().includes(topicLower)) ||
+            // Check category name
+            (test.category && test.category.name && 
+             test.category.name.toLowerCase().includes(topicLower))
+          );
+        });
+      
+      // If search query is empty, just check level and topics
+      if (searchQuery === "") {
+        return matchesLevel && matchesTopics;
+      }
 
-      const matchesLevel =
-        filters.level === "all" || test.level === filters.level;
-      const matchesTopics =
-        filters.topics.length === 0 ||
-        (test.category && filters.topics.includes(test.category.id));
-
-      return matchesSearch && matchesLevel && matchesTopics;
+      // Search query handling with null checks
+      const searchLower = searchQuery.toLowerCase().trim();
+      const titleMatch = test.title?.toLowerCase().includes(searchLower) ?? false;
+      const descriptionMatch = test.description?.toLowerCase().includes(searchLower) ?? false;
+      const categoryMatch = test.category?.name?.toLowerCase().includes(searchLower) ?? false;
+      
+      // Combine all conditions
+      return matchesLevel && 
+             matchesTopics && 
+             (titleMatch || descriptionMatch || categoryMatch);
     });
 
     // Then sort
@@ -182,20 +203,22 @@ export default function PracticeTestsPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <h1 className="text-3xl  font-semibold">Practice Tests</h1>
-                  {processedTests.length > 0 && (
+                  {/* {processedTests.length > 0 && ( */}
                     <p className="text-muted-foreground font-mono mt-1">
                       {processedTests.length}{" "}
                       {processedTests.length === 1 ? "test" : "tests"} available
                     </p>
-                  )}
+                  {/* )} */}
                 </div>
               </div>
 
               {/* Controls Section */}
               <div className="flex flex-col gap-4">
+                
                 <div className="flex flex-col md:flex-row gap-4 justify-between w-full">
                   <span className="flex space-x-3">
                     <SearchBar onSearch={(query) => setSearchQuery(query)} />
+                    <MainFilters onFilter={handleFilter} />
                     <FilterComponent onFilter={handleFilter} />
                   </span>
                   <div className="flex gap-3">

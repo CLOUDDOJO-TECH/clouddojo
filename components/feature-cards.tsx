@@ -25,7 +25,7 @@ export default function FeatureCards() {
               
 
               {/* Card 2 */}
-              <Card className="md:h-96 h-auto w-full border-red-500/20 hover:shadow-md hover:shadow-red-100 bg-white dark:bg-black/40 backdrop-blur-sm">
+              <Card className="h-auto w-full border-red-500/20 hover:shadow-md hover:shadow-red-100 bg-white dark:bg-black/40 backdrop-blur-sm">
                 <CardHeader>
                   <p className="text-xl font-bold font-mono text-red-500">
                     Without Clouddojo
@@ -39,6 +39,7 @@ export default function FeatureCards() {
                       <Step reason="bad" title="I don't know if I'm ready for the exams" />
                       <Step reason="bad" title="I don't have much time to study all the topics" />
                       <Step reason="bad" title="I don't know what I don't know" />
+                      <Step reason="bad" title="I don't have a technical background" />
                     </ul>
                   </div>
                   <p className="text-neutral-300 mt-4 text-sm font-light">
@@ -49,7 +50,7 @@ export default function FeatureCards() {
                 </CardContent>
               </Card>
 
-              <Card className="md:h-96 h-auto w-full border-emerald-500/20 bg-white hover:shadow-md hover:shadow-emerald-100 dark:bg-black/40 backdrop-blur-sm">
+              <Card className="h-auto w-full border-emerald-500/20 bg-white hover:shadow-md hover:shadow-emerald-100 dark:bg-black/40 backdrop-blur-sm">
                 <CardHeader>
                   <p className="text-xl font-bold font-mono text-emerald-500">
                     With Clouddojo

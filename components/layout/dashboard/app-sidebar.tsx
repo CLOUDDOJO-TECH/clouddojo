@@ -168,7 +168,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarFooter>
      
         {planName && (
-          <SubscriptionCard plan={planName} variant="glass" />
+          <span className="px-4 mb-4">
+            <SubscriptionCard plan={planName} variant="outlined" />
+          </span>
 
         )}
         {!isLoading && !isError && !isPro && !isPremium && (
