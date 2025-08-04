@@ -1,19 +1,11 @@
-"use server"
+"use server";
 
-import { auth, currentUser } from "@clerk/nextjs/server"
-import prisma from "@/lib/prisma"
-import { z } from "zod"
-
-// Validation schemas
-const onboardingDataSchema = z.object({
-  companyType: z.string(),
-  companySize: z.string(),
-  goals: z.array(z.string()),
-  preferredCertifications: z.array(z.string()).optional().default([]),
-  experience: z.string().optional(),
-})
-
-type OnboardingData = z.infer<typeof onboardingDataSchema>
+import { auth, currentUser } from "@clerk/nextjs/server";
+import prisma from "@/lib/prisma";
+import {
+  OnboardingData,
+  onboardingDataSchema,
+} from "@/app/onboarding/types/onboarding";
 
 /**
  * Save onboarding data to the database
@@ -21,66 +13,48 @@ type OnboardingData = z.infer<typeof onboardingDataSchema>
 export async function saveOnboardingData(data: OnboardingData) {
   try {
     // Verify authentication
-    const session = await auth()
-    const userId = session.userId
-    if (!userId) {
-      return { error: "Unauthorized", success: false }
+    const session = await auth();
+    const userId = session.userId;
+    const user = await currentUser();
+
+    if (!userId || !user) {
+      return { error: "Unauthorized", success: false };
     }
 
     // Validate input data
-    const validatedData = onboardingDataSchema.parse(data)
+    const validatedData = onboardingDataSchema.parse(data);
 
     // Check if the user exists in our database
     const dbUser = await prisma.user.findUnique({
       where: { userId },
-    })
+    });
 
     if (!dbUser) {
-      return { error: "User not found", success: false }
+      return { error: "User not found", success: false };
     }
 
     // Check if onboarding record exists
     const existingOnboarding = await prisma.userOnboarding.findUnique({
-      where: { userId }
-    })
+      where: { userId },
+    });
 
     // Update or create onboarding data
-    if (existingOnboarding) {
-      await prisma.userOnboarding.update({
-        where: { userId },
-        data: {
-          companyType: validatedData.companyType,
-          companySize: validatedData.companySize,
-          goals: validatedData.goals,
-          preferredCertifications: validatedData.preferredCertifications,
-          experience: validatedData.experience,
-          completedAt: new Date()
-        }
-      })
-    } else {
-      await prisma.userOnboarding.create({
-        data: {
-          userId,
-          companyType: validatedData.companyType,
-          companySize: validatedData.companySize,
-          goals: validatedData.goals,
-          preferredCertifications: validatedData.preferredCertifications,
-          experience: validatedData.experience,
-          completedAt: new Date()
-        }
-      })
-    }
+    await prisma.userOnboarding.upsert({
+      where: { userId },
+      update: { ...validatedData, completedAt: new Date() },
+      create: { userId, ...validatedData, completedAt: new Date() },
+    });
 
     // Update the user's hasCompletedOnboarding flag
     await prisma.user.update({
       where: { userId },
-      data: { hasCompletedOnboarding: true }
-    })
+      data: { hasCompletedOnboarding: true },
+    });
 
-    return { success: true }
+    return { success: true };
   } catch (error) {
-    console.error("Error processing onboarding data:", error)
-    return { error: "Failed to save onboarding data", success: false }
+    console.error("Error processing onboarding data:", error);
+    return { error: "Failed to save onboarding data", success: false };
   }
 }
 
@@ -90,34 +64,34 @@ export async function saveOnboardingData(data: OnboardingData) {
 export async function getOnboardingData() {
   try {
     // Verify authentication
-    const session = await auth()
-    const userId = session.userId
+    const session = await auth();
+    const userId = session.userId;
     if (!userId) {
-      return { error: "Unauthorized", success: false }
+      return { error: "Unauthorized", success: false };
     }
 
     // Get user from database
     const dbUser = await prisma.user.findUnique({
       where: { userId },
-    })
+    });
 
     if (!dbUser) {
-      return { error: "User not found", success: false }
+      return { error: "User not found", success: false };
     }
 
     // Get onboarding data
     const onboarding = await prisma.userOnboarding.findUnique({
-      where: { userId }
-    })
+      where: { userId },
+    });
 
     return {
       success: true,
       hasCompletedOnboarding: dbUser.hasCompletedOnboarding,
-      onboardingData: onboarding
-    }
+      onboardingData: onboarding,
+    };
   } catch (error) {
-    console.error("Error fetching onboarding data:", error)
-    return { error: "Failed to fetch onboarding data", success: false }
+    console.error("Error fetching onboarding data:", error);
+    return { error: "Failed to fetch onboarding data", success: false };
   }
 }
 
@@ -127,36 +101,41 @@ export async function getOnboardingData() {
 export async function checkOnboardingStatus() {
   try {
     // Verify authentication
-    const session = await auth()
-    const userId = session.userId
+    const session = await auth();
+    const userId = session.userId;
     if (!userId) {
-      return { error: "Unauthorized", success: false, exists: false, hasCompletedOnboarding: false }
+      return {
+        error: "Unauthorized",
+        success: false,
+        exists: false,
+        hasCompletedOnboarding: false,
+      };
     }
 
     // Check if user exists in our database
     const user = await prisma.user.findUnique({
       where: { userId },
-    })
+    });
 
     // Check if onboarding has been completed
-    let hasCompletedOnboarding = false
-    
+    let hasCompletedOnboarding = false;
+
     if (user) {
-      hasCompletedOnboarding = user.hasCompletedOnboarding || false
+      hasCompletedOnboarding = user.hasCompletedOnboarding || false;
     }
 
-    return { 
+    return {
       success: true,
       exists: !!user,
-      hasCompletedOnboarding
-    }
+      hasCompletedOnboarding,
+    };
   } catch (error) {
-    console.error("Error checking onboarding status:", error)
-    return { 
-      error: "Failed to check onboarding status", 
+    console.error("Error checking onboarding status:", error);
+    return {
+      error: "Failed to check onboarding status",
       success: false,
       exists: false,
-      hasCompletedOnboarding: false
-    }
+      hasCompletedOnboarding: false,
+    };
   }
-} 
+}

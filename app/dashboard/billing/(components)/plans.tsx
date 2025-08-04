@@ -31,8 +31,7 @@ export function Plans({
     <div className={`flex w-full mx-auto flex-col gap-4 justify-center items-center ${className}`}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 ">
         {sortedPlans.map((plan, index) => {
-          const isPremium = plan.productName?.toLowerCase().includes("pro") && 
-                           plan.name?.toLowerCase().includes("premium");
+          const isPremium = plan.name?.toLowerCase().includes("gold") 
           return (
             <div
               key={`plan-${index}`}
@@ -50,3 +49,4 @@ export function Plans({
     </div>
   );
 }
+

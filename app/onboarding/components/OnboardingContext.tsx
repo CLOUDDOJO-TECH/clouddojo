@@ -1,85 +1,88 @@
-"use client"
+"use client";
 
-import React, { createContext, useContext, useState, ReactNode } from "react"
+import React, { createContext, useContext, useState, ReactNode } from "react";
+import { OnboardingData } from "../types/onboarding";
 
 interface OnboardingData {
-  companyType: string
-  companySize: string
-  goals: string[]
-  preferredCertifications: string[]
-  experience: string
+  companyType: string;
+  companySize: string;
+  goals: string[];
+  preferredCertifications: string[];
+  experience: string;
 }
 
 // Define what the context will provide
 interface OnboardingContextType {
-  currentStep: number
-  totalSteps: number
-  onboardingData: OnboardingData
-  updateOnboardingData: (data: Partial<OnboardingData>) => void
-  goToNextStep: () => void
-  goToPreviousStep: () => void
-  goToStep: (step: number) => void
-  isStepComplete: (step: number) => boolean
+  currentStep: number;
+  totalSteps: number;
+  onboardingData: OnboardingData;
+  updateOnboardingData: (data: Partial<OnboardingData>) => void;
+  goToNextStep: () => void;
+  goToPreviousStep: () => void;
+  goToStep: (step: number) => void;
+  isStepComplete: (step: number) => boolean;
 }
 
 // Create the context with a default value
-const OnboardingContext = createContext<OnboardingContextType | undefined>(undefined)
+const OnboardingContext = createContext<OnboardingContextType | undefined>(
+  undefined,
+);
 
 // Provider component that wraps your onboarding flow
 export function OnboardingProvider({ children }: { children: ReactNode }) {
   // Track the current step
-  const [currentStep, setCurrentStep] = useState(1)
-  const totalSteps = 4 
-  
+  const [currentStep, setCurrentStep] = useState(1);
+  const totalSteps = 4;
+
   // Store all onboarding data
   const [onboardingData, setOnboardingData] = useState<OnboardingData>({
-    companyType: "",
-    companySize: "",
-    goals: [],
-    preferredCertifications: [],
-    experience: ""
-  })
-  
+    experience: "",
+    platforms: [],
+    certifications: [],
+    role: "",
+    focusArea: [],
+  });
+
   // Navigation functions
   const goToNextStep = () => {
     if (currentStep < totalSteps) {
-      setCurrentStep(prev => prev + 1)
+      setCurrentStep((prev) => prev + 1);
     }
-  }
-  
+  };
+
   const goToPreviousStep = () => {
     if (currentStep > 1) {
-      setCurrentStep(prev => prev - 1)
+      setCurrentStep((prev) => prev - 1);
     }
-  }
-  
+  };
+
   const goToStep = (step: number) => {
     if (step >= 1 && step <= totalSteps) {
-      setCurrentStep(step)
+      setCurrentStep(step);
     }
-  }
-  
+  };
+
   // Update onboarding data
   const updateOnboardingData = (data: Partial<OnboardingData>) => {
-    setOnboardingData(prev => ({ ...prev, ...data }))
-  }
-  
+    setOnboardingData((prev) => ({ ...prev, ...data }));
+  };
+
   // Check if a step is complete based on data
   const isStepComplete = (step: number): boolean => {
     switch (step) {
       case 1:
-        return !!onboardingData.companyType
+        return !!onboardingData.companyType;
       case 2:
-        return !!onboardingData.companySize
+        return !!onboardingData.companySize;
       case 3:
-        return onboardingData.goals.length > 0
+        return onboardingData.goals.length > 0;
       case 4:
-        return !!onboardingData.experience
+        return !!onboardingData.experience;
       default:
-        return false
+        return false;
     }
-  }
-  
+  };
+
   // Provide the context values to all children components
   return (
     <OnboardingContext.Provider
@@ -91,19 +94,19 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
         goToNextStep,
         goToPreviousStep,
         goToStep,
-        isStepComplete
+        isStepComplete,
       }}
     >
       {children}
     </OnboardingContext.Provider>
-  )
+  );
 }
 
 // Custom hook for using the context
 export function useOnboarding() {
-  const context = useContext(OnboardingContext)
+  const context = useContext(OnboardingContext);
   if (context === undefined) {
-    throw new Error("useOnboarding must be used within an OnboardingProvider")
+    throw new Error("useOnboarding must be used within an OnboardingProvider");
   }
-  return context
-} 
+  return context;
+}

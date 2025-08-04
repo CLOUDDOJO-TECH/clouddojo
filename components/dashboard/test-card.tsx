@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card"
 import { DifficultyLevel, Quiz } from "@prisma/client"
 import { BookmarkCheck, Clock, FileQuestion, ShieldBan, Zap } from "lucide-react"
 import UpgradeButton from "../ui/upgrade-button"
+import { useSubscription } from "@/hooks/use-subscription"
 
 interface QuizWithCategory {
     id: string;
@@ -49,6 +50,7 @@ const getLevelColor = (level: string) => {
 
 
 export default function PracticeTestCard({questionsCount, test, onStartTest, }: PracticeTestCardProps) {
+  const { isSubscribed } = useSubscription()
   return (
     <Card className="overflow-hidden transition-all hover:shadow-xl group rounded-3xl relative h-[460px] border">
       {/* Background Image */}
@@ -63,7 +65,7 @@ export default function PracticeTestCard({questionsCount, test, onStartTest, }: 
       </div>
 
       {/* Top Badges */}
-      <div className="absolute top-3 left-3 right-3 flex justify-between items-start z-10">
+      <div className="absolute top-3 left-3 right-3 flex justify-between items-start ">
         {test.free && (
           <Badge className="bg-yellow-400/90 text-yellow-900 border-0 backdrop-blur-sm">
             <BookmarkCheck className="mr-1 h-3 w-3" />
@@ -83,7 +85,7 @@ export default function PracticeTestCard({questionsCount, test, onStartTest, }: 
       </div>
 
       {/* Content Overlay */}
-      <div className="absolute inset-0 flex flex-col justify-end p-5 z-10">
+      <div className="absolute inset-0 flex flex-col justify-end p-5 ">
         {/* Level Badge */}
         <div className="mb-3">
           <Badge
@@ -114,7 +116,7 @@ export default function PracticeTestCard({questionsCount, test, onStartTest, }: 
 
         {/* Action Button */}
         <div className="flex justify-end">
-          {test.free ? (
+          {test.free || isSubscribed ?  (
             <Button
               onClick={onStartTest}
               className="bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-sm transition-all duration-200 hover:scale-105"

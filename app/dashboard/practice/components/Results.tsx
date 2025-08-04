@@ -107,7 +107,7 @@ export default function Results({
   }
 
   return (
-    <div className="relative">
+    <div className="relative mt-4 w-full">
       {/* Confetti canvas */}
       {showConfetti && (
         <Confetti
@@ -119,13 +119,13 @@ export default function Results({
         />
       )}
 
-      <Card className="mb-8 mt-2 max-w-7xl mx-auto">
+      <Card className="mb-8 mt-2 max-w-7xl mx-auto ">
         <CardHeader className="pb-2">
           <div className="flex justify-between items-center">
             <CardTitle className="text-2xl">Test Results</CardTitle>
             <div className="text-2xl font-bold">
               Score:{" "}
-              <span className={cn(results.score >= 70 ? "text-green-600" : "text-red-600")}>{results.score}%</span>
+              <span className={cn(results.score >= 70 ? "text-green-600 font-mono" : "text-red-600 font-mono")}>{results.score}%</span>
             </div>
           </div>
         </CardHeader>

@@ -109,7 +109,7 @@ export default function FeedbackDialog({ open, onOpenChange }: FeedbackDialogPro
           <MessagesSquare className="h-5 w-5 left-3 text-foreground-primary mr-1.5 absolute -translate-y-10 group-hover:translate-y-0 transition-all duration-300" />
           <span className="ml-6">Feedback</span>
         </Button>
-        <Button variant="outline" size="sm" className="text-sm md:hidden block rounded-sm border-emerald-500 text-primary">
+        <Button variant="outline" size="sm" className="text-sm md:hidden shadow-none hover:bg-gray-300 dark:hover:bg-gray-100/20 block rounded-sm md:border-emerald-500/30 border-none text-primary">
           <MessagesSquare className="h-5 w-5 text-primary"/>
         </Button>
         </div>

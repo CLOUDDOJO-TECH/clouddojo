@@ -79,7 +79,7 @@ export default function PerformanceSection({
   const CustomTooltip = ({ active, payload, label }: TooltipProps<any, any>) => {
     if (active && payload && payload.length) {
       return (
-        <div className="border border-1 italic font-serif bg-white rounded shadow-sm p-2 text-xs">
+        <div className="border border-1 italic font-serif bg-card  shadow-sm p-2 text-xs rounded-2xl border-foreground/20">
           <span className="flex items-center gap-2">
             <span className = {`h-3 w-3 rounded-sm ${
                   payload[0].value >= 80

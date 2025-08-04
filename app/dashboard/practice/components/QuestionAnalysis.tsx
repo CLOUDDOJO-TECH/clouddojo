@@ -32,7 +32,7 @@ export default function QuestionAnalysis({ quiz, answers }: QuestionAnalysisProp
         return (
           <Fragment key={question.id}>
             {index > 0 && <Separator className="bg-orange-200" />}
-            <div className="border rounded-lg p-4 shadow-sm">
+            <div className="rounded-lg p-4 shadow-sm">
               <div className="flex items-start gap-3">
                 <div
                   className={cn(
@@ -77,12 +77,12 @@ export default function QuestionAnalysis({ quiz, answers }: QuestionAnalysisProp
                         <div
                           key={option.id}
                           className={cn(
-                            "flex items-center p-2 rounded-md text-sm font-normal",
+                            "flex items-center p-2 rounded-md text-sm text-foreground font-normal",
                             isCorrectOption
-                              ? "bg-green-50 border border-green-200"
+                              ? "border border-green-200/50"
                               : isSelected && !isCorrectOption
-                                ? "bg-red-50 border border-red-200"
-                                : "bg-gray-50 border border-gray-200",
+                                ? " border border-red-200/50"
+                                : "  border-gray-200",
                           )}
                         >
                           <div className="mr-2 ">
@@ -117,13 +117,16 @@ export default function QuestionAnalysis({ quiz, answers }: QuestionAnalysisProp
                           </div>
                           <span className={cn(isCorrectOption ? "font-medium" : "")}>{option.content}</span>
                           {isCorrectOption && <CheckCircle2 className="ml-auto h-4 w-4 text-green-600" />}
+                          {!isCorrectOption && isSelected && (
+                            <XCircle className="ml-auto h-4 w-4 text-red-600" />
+                          )}
                         </div>
                       )
                     })}
                   </div>
 
                   {question.explanation && (
-                    <div className="mt-3 text-sm bg-blue-50 border border-blue-200 p-3 rounded-md">
+                    <div className="mt-3 text-sm bg-blue-50 font-mono border border-blue-200 p-3 rounded-md">
                       <div className="font-medium text-blue-800">Explanation:</div>
                       <div className="text-blue-700 mt-1">{question.explanation}</div>
                     </div>

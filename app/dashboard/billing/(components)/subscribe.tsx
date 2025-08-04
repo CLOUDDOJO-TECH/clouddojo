@@ -6,9 +6,8 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@clerk/nextjs";
 import { Button, Loading } from "@lemonsqueezy/wedges";
 import { LsSubscriptionPlan } from "@prisma/client";
-import { CheckIcon, PlusIcon } from "lucide-react";
+import { ArrowLeft, ArrowRight, CheckIcon, PlusIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-
 import {
   forwardRef,
   useState,
@@ -117,6 +116,7 @@ export const SignupButton = forwardRef<ButtonElement, ButtonProps>(
         }}
         {...otherProps}
       >
+
         {loading ? "loading" : label}
       </Button>
     );

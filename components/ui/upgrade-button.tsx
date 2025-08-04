@@ -6,6 +6,7 @@ import { Crown, Sparkles, Zap, Star } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { type ButtonHTMLAttributes, forwardRef } from "react"
 import { usePricingModal } from "../providers/pricing-modal-provider"
+import { useRouter } from "next/navigation"
 
 interface UpgradeButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: "sm" | "md" | "lg" | "xl"
@@ -32,6 +33,7 @@ const UpgradeButton = forwardRef<HTMLButtonElement, UpgradeButtonProps>(
       xl: "w-7 h-7",
     }
 
+    const router = useRouter()
     const gradientVariants = {
       primary: "bg-gradient-to-r from-[#B2D0F9] via-[#FFDB9A] via-[#F08878] to-[#FDC3B6]",
       secondary: "bg-gradient-to-r from-purple-400 via-pink-400 to-red-400",
@@ -56,7 +58,7 @@ const UpgradeButton = forwardRef<HTMLButtonElement, UpgradeButtonProps>(
 
     return (
       <button
-        onClick={openPricingModal} // Assuming openPricingModal is defined elsewhere
+        onClick={() => router.push('/dashboard/billing')} // Assuming openPricingModal is defined elsewhere
         ref={ref}
         className={cn(
           "relative inline-flex items-center justify-center rounded-full font-semibold text-black transition-all duration-300 ease-out",

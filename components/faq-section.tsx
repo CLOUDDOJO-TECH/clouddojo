@@ -1,55 +1,65 @@
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { PlusIcon } from "lucide-react";
 
 export default function FaqSection() {
-
   const faqs = [
     {
+      id: "1",
       question: "Can CloudDojo help me pass my AWS certification exam?",
       answer:
         "Absolutely! CloudDojo is built to guide you step-by-step through your AWS exam prep using AI-driven quizzes, smart study tools, and up-to-date content tailored to exam objectives.",
     },
     {
+      id: "2",
       question: "Is CloudDojo really free?",
       answer:
         "Yes! CloudDojo is 100% free to use. You get access to high-quality cloud certification prep tools. There are some features that are behind a paywall, but you can totally get started for free., No extra subscriptions or hidden fees.",
     },
     {
-      question: "What makes CloudDojo different from other cloud certification platforms?",
+      id: "3",
+      question:
+        "What makes CloudDojo different from other cloud certification platforms?",
       answer:
         "Unlike other platforms, CloudDojo uses AI to personalize your learning experience, highlight your weak areas, and help you focus on what actually matters to pass your exam faster.",
     },
     {
+      id: "4",
       question: "Do I need any experience to get started with CloudDojo?",
       answer:
         "Nope! Whether you're a beginner or already have some cloud knowledge, CloudDojo adapts to your level and helps you build the skills you need at your own pace.",
     },
     {
+      id: "5",
       question: "What certifications can I prepare for with CloudDojo?",
       answer:
         "Right now, CloudDojo focuses on helping you prepare for AWS certifications like the Cloud Practitioner and Solutions Architect Associate, with more coming soon!",
-    }
-  ]
-
-
+    },
+  ];
 
   return (
-    <section className="py-16">
-      <h2 className="text-3xl md:text-5xl font-bold mb-12 text-foreground/60 text-center flex items-center justify-center">Frequently Asked Questions?</h2>
-
-      <div className="max-w-3xl px-3 mx-auto">
-        <Accordion type="single" collapsible className="space-y-4">
-          {faqs.map((faq, index) => (
-            <AccordionItem
-              key={index}
-              value={`item-${index}`}
-              className="border border-midnight-light/20 rounded-lg dark:bg-black/70 bg-foreground/70 px-6"
-            >
-              <AccordionTrigger className="text-left py-4 text-base font-medium">{faq.question}</AccordionTrigger>
-              <AccordionContent className="text-gray-200 font-mono font-light pb-4">{faq.answer}</AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
+    <div className="space-y-4 w-full max-w-4xl mx-auto md:pb-20 pt-10 pb-10">
+      <div className="text-center mb-16">
+        <h2 className="text-foreground/80 text-4xl md:text-5xl lg:text-6xl font-bold leading-tight max-w-5xl mx-auto">
+          Frequently Asked Questions
+        </h2>
       </div>
-    </section>
-  )
+      <Accordion type="single" collapsible className="w-full" defaultValue="3">
+        {faqs.map((item) => (
+          <AccordionItem value={item.id} key={item.id} className="py-2">
+            <AccordionTrigger className="py-2 text-[15px] leading-6 hover:no-underline">
+              {item.question}
+            </AccordionTrigger>
+            <AccordionContent className="text-muted-foreground pb-2">
+              {item.answer}
+            </AccordionContent>
+          </AccordionItem>
+        ))}
+      </Accordion>
+    </div>
+  );
 }

@@ -118,7 +118,7 @@ export default function RecentActivitySection({
                     {item.category.name}
                   </Badge> */}
                 </div>
-                <p className="text-xs text-emerald-700 mt-1">
+                <p className="text-xs text-emerald-700 mt-1 font-mono">
                   {format(new Date(item.completedAt), "MMM d, yyyy • h:mm a")}
                 </p>
               </div>

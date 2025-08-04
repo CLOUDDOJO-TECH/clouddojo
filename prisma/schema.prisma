@@ -3,24 +3,24 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_DATABASE_URL")
 }
 
 model User {
-  userId                 String             @id @default(uuid())
-  email                  String             @unique
-  firstName              String             @unique
+  userId                 String               @id @default(uuid())
+  email                  String               @unique
+  firstName              String               @unique
   lastName               String
-  createdAt              DateTime           @default(now())
-  updatedAt              DateTime           @updatedAt
-  hasCompletedOnboarding Boolean            @default(false)
+  createdAt              DateTime             @default(now())
+  updatedAt              DateTime             @updatedAt
+  hasCompletedOnboarding Boolean              @default(false)
   aiAnalysisReports      AIAnalysisReport[]
   quizAttempts           QuizAttempt[]
   onboarding             UserOnboarding?
   progress               UserProgress[]
-  Subscriptions   LsUserSubscription[]
+  Subscriptions          LsUserSubscription[]
 }
 
 // New enums for subscription tiers and status
@@ -39,28 +39,28 @@ enum SubscriptionStatus {
 }
 
 model UserOnboarding {
-  id                      String    @id @default(uuid())
-  userId                  String    @unique
-  companyType             String?
-  companySize             String?
-  goals                   String[]
-  preferredCertifications String[]
-  experience              String?
-  completedAt             DateTime?
-  createdAt               DateTime  @default(now())
-  updatedAt               DateTime  @updatedAt
-  user                    User      @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  id             String    @id @default(uuid())
+  userId         String    @unique
+  experience     String
+  platforms      String[]
+  certifications String[]
+  role           String    @default("OTHER")
+  focusArea      String[]
+  completedAt    DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  user           User      @relation(fields: [userId], references: [userId], onDelete: Cascade)
 }
 
 model Quiz {
   id           String           @id @default(uuid())
   title        String
   description  String?
-  thumbnail    String?         // URL or path to the thumbnail image
-  isPublic     Boolean         @default(false)
-  isNew        Boolean         @default(true)
-  createdAt    DateTime        @default(now())
-  updatedAt    DateTime        @updatedAt
+  thumbnail    String? // URL or path to the thumbnail image
+  isPublic     Boolean          @default(false)
+  isNew        Boolean          @default(true)
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
   categoryId   String?
   duration     Int?
   free         Boolean?
@@ -119,17 +119,44 @@ model LsSubscriptionPlan {
   updatedAt          DateTime             @updatedAt
   productId          Int
   productName        String
-  variantId          Int                  @unique
   name               String
   description        String?
+  features           String[]
+  individual         Boolean              @default(false)
+  team               Boolean              @default(false)
+  variantId          Int                  @unique // keep it as Int
+  variantType        VariantType?         @default(MONTHS)
   price              String
   isUsageBased       Boolean              @default(false)
   interval           String?
   intervalCount      Int?
   trialInterval      String?
   trialIntervalCount Int?
-  sort               Int?
   Subscriptions      LsUserSubscription[]
+}
+
+// Lemon Squeezy Subscription
+model LsUserSubscription {
+  id                 String             @id @default(cuid())
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  lemonSqueezyId     String             @unique
+  userId             String
+  planId             String
+  name               String?
+  email              String?
+  orderId            Int
+  subscriptionItemId String
+  status             String
+  statusFormatted    String
+  renewsAt           String
+  endsAt             String?
+  trialEndsAt        String?
+  price              String
+  isPaused           Boolean            @default(false)
+  isUsageBased       Boolean
+  user               User               @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  subscriptionPlan   LsSubscriptionPlan @relation(fields: [planId], references: [id])
 }
 
 model LsWebhookEvent {
@@ -140,33 +167,6 @@ model LsWebhookEvent {
   body            Json
   processingError String?
 }
-
-// Lemon Squeezy Subscription 
-model LsUserSubscription {
-  id                 String             @id @default(cuid())
-  createdAt          DateTime           @default(now())
-  updatedAt          DateTime           @updatedAt
-  lemonSqueezyId     String             @unique
-  orderId            Int
-  name               String
-  email              String
-  status             String
-  statusFormatted    String
-  renewsAt           String?
-  endsAt             String?
-  trialEndsAt        String?
-  price              String
-  isUsageBased       Boolean            @default(false)
-  isPaused           Boolean            @default(false)
-  subscriptionItemId String?
-  userId             String
-  User               User               @relation(fields: [userId], references: [userId])
-  planId             String
-  SubscriptionPlan   LsSubscriptionPlan @relation(fields: [planId], references: [id])
-}
-
-
-
 
 model Category {
   id          String        @id @default(uuid())
@@ -236,14 +236,15 @@ model AIAnalysisReport {
   latest          Boolean  @default(true)
   user            User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
 
-  @@index([userId])
   @@unique([userId, latest], name: "userId_latest")
+  @@index([userId])
 }
 
 model ProcessedCronJobUser {
   jobId       String   @id
   userId      String
   processedAt DateTime @default(now())
+
   @@unique([jobId, userId])
   @@index([processedAt])
 }
@@ -253,4 +254,17 @@ enum DifficultyLevel {
   INTERMEDIATE
   ADVANCED
   EXPERT
+}
+
+enum VariantType {
+  DAYS
+  MONTHS
+  YEARS
+}
+
+enum PlanType {
+  PRO_MONTHLY
+  PRO_YEARLY
+  PREMIUM_MONTHLY
+  PREMIUM_YEARLY
 }

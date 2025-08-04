@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { TooltipProvider, Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { getCachedAIAnalysis } from "@/app/(actions)/ai-analysis/get-cached-ai-analysis"
 import { AIAnalysisLoading } from "@/app/components/ai-report/loading"
-import { Download, Share2, RefreshCw, AlertCircle } from "lucide-react"
+import { Download, Share2, RefreshCw, AlertCircle, RefreshCcw } from "lucide-react"
 import jsPDF from "jspdf"
 import { formatDistanceToNow } from "date-fns"
 import { generateAnalysisPDF } from "./utils/pdf-generator"
@@ -114,7 +114,7 @@ useEffect(() => {
         <div className="text-brand-beige-950 mb-4 flex items-center justify-center">
           <AlertCircle className="h-5 w-5 mr-2" /> An Error Occurred. Please try again later.
         </div>
-        <Button onClick={() => window.location.reload()}>Try Again</Button>
+        <Button Icon={RefreshCcw} onClick={() => window.location.reload()}>Try Again</Button>
       </div>
     )
   }
@@ -133,7 +133,7 @@ useEffect(() => {
           <div>
             <h1 className="text-2xl font-bold text-foreground">AWS Certification AI Coach</h1>
             <div className="flex flex-wrap items-center gap-2">
-              <p className="text-foreground/60 font-mono text-sm">{report.summary.testName || "Overall Performance Analysis"}</p>
+              {/* <p className="text-foreground/60 font-mono text-sm">{report.summary.testName || "Overall Performance Analysis"}</p> */}
               {/* <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 text-center">
                 Premium Analysis
               </Badge> */}
@@ -160,14 +160,13 @@ useEffect(() => {
         <div className="flex space-x-3  mt-2 items-center justify-between md:justify-center w-full md:w-auto">
           <Button 
             className=""
+            Icon={Download}
             onClick={generatePDF}
             disabled={isGeneratingPDF}
           >
-            <Download className="h-4 w-4 mr-2" />
             {isGeneratingPDF ? "Generating..." : "Export PDF"}
           </Button>
-          <Button className="bg-emerald-600 hover:bg-emerald-700 text-white">
-            <Share2 className="h-4 w-4 mr-2" />
+          <Button className="bg-emerald-600 hover:bg-emerald-700 text-white" Icon={Share2}>
             Share Results
           </Button>
         </div>

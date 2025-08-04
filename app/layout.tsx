@@ -11,6 +11,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 // fonts
 import { Poppins, Lora, JetBrains_Mono, Kaushan_Script, Playwrite_AU_VIC } from 'next/font/google';
 import Providers from "@/components/providers/providers";
+import localFont from "next/font/local";
 
 // Poppins (Sans-serif)
 export const poppins = Poppins({
@@ -46,6 +47,16 @@ export const jetbrains_mono = JetBrains_Mono({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-jetbrains-mono',
+});
+
+const satoshi = localFont({
+  src: [
+    { path: "/fonts/Satoshi-Black.ttf", weight: "800" },
+    { path: "/fonts/Satoshi-Bold.ttf", weight: "700" },
+    { path: "/fonts/Satoshi-Medium.ttf", weight: "500" },
+    { path: "/fonts/Satoshi-Regular.ttf", weight: "400" },
+  ],
+  variable: "--font-satoshi",
 });
 
 export const dynamic = 'force-dynamic';
@@ -135,7 +146,7 @@ export const metadata = {
 export default function Layout({ children }: { children: React.ReactNode }) {
   const queryClient = new QueryClient();
   return (
-    <html lang="en" suppressHydrationWarning className={`dark:dark ${poppins.variable} ${playwrite_au_vic} ${kaushan_script} ${lora.variable} ${jetbrains_mono.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`dark:dark ${poppins.variable} ${playwrite_au_vic} ${kaushan_script} ${lora.variable} ${jetbrains_mono.variable} ${satoshi.variable}`}>
       <head>
       </head>
       <body className={`${inter.className}`}>

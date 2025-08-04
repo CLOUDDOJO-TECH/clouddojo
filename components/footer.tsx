@@ -28,12 +28,12 @@ export default function Footer() {
             <ul className="flex flex-wrap gap-6 items-center font-light text-sm">
               <li>
                 <Link href="#" className="flex items-center gap-1 hover:text-emerald-500 transition-colors">
-                  All Pages <ChevronDown className="h-4 w-4" />
+                  Blog 
                 </Link>
               </li>
               <li>
                 <Link href="#" className="hover:text-emerald-500 transition-colors">
-                  Integration
+                  Changelog
                 </Link>
               </li>
               <li>

@@ -16,6 +16,7 @@ import {
     LsSubscriptionPlan,
     LsUserSubscription,
     LsWebhookEvent,
+    VariantType,
 } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 
@@ -98,6 +99,9 @@ export async function syncPlans() {
         include: ['variants'],
     });
 
+    // log
+    console.log(`Found ${products.data?.data.length} products in the Lemon Squeezy store.`);
+
     // Loop through all the variants.
     const allVariants = products.data?.included as
         | Variant['data'][]
@@ -156,24 +160,72 @@ export async function syncPlans() {
                 continue;
             }
 
+            function mapLicenseUnitToVariantType(unit: string): VariantType {
+                switch (unit) {
+                  case 'days':
+                    return 'DAYS';
+                  case 'months':
+                    return 'MONTHS';
+                  case 'years':
+                    return 'YEARS';
+                  default:
+                    throw new Error(`Unknown license_length_unit: ${unit}`);
+                }
+              }
+
             await _addVariant({
                 name: variant.name,
-                description: variant.description,
+                description: variant.description ?? null,
                 price: priceString,
                 interval,
                 intervalCount,
                 isUsageBased,
                 productId: variant.product_id,
                 productName,
-                variantId: parseInt(v.id) as unknown as number,
+                variantId: parseInt(v.id, 10),
                 trialInterval,
                 trialIntervalCount,
-                sort: variant.sort,
-            });
+                features: [],  
+                individual: false,
+                variantType: mapLicenseUnitToVariantType(variant.license_length_unit),
+                team: false,
+              });
+              
         }
     }
 
     return productVariants;
+}
+
+/**
+ * Fetches all subscription plans from the database.
+ */
+export async function fetchPlans() {
+    try {
+        await syncPlans();
+        const plans = await prisma.lsSubscriptionPlan.findMany({
+            orderBy: {
+                price: 'asc'
+            }
+        });
+
+        if (!plans.length) {
+            await syncPlans();
+            return await prisma.lsSubscriptionPlan.findMany({
+                orderBy: {
+                    price: 'asc'
+                }
+            });
+        }
+
+        return plans.map(plan => ({
+            ...plan,
+            features: plan.features || [],
+            sort: parseFloat(plan.price || '0')
+        }));
+    } catch(error) {
+        throw new Error(`Failed to fetch plans: ${error}`);
+    }
 }
 
 /**
@@ -529,14 +581,3 @@ export async function getSubscriptionURLs(id: string) {
 
     return subscription.data?.data.attributes.urls;
 }
-
-
-export async function fetchPlans() {
-    await syncPlans();
-    let allPlans = await prisma.lsSubscriptionPlan.findMany({});
-    if (!allPlans.length) {
-      allPlans = await syncPlans();
-    }
-    console.log("Fetched plans:", allPlans);
-    return allPlans;
-  }

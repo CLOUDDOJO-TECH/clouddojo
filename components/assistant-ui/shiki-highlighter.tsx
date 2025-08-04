@@ -29,7 +29,7 @@ export type HighlighterProps = Omit<
 export const SyntaxHighlighter: FC<HighlighterProps> = ({
   code,
   language,
-  theme = "github-dark",
+  theme = "catppuccin-macchiato",
   className,
   addDefaultStyles = false, // assistant-ui requires custom base styles
   showLanguage = false, // assistant-ui/react-markdown handles language labels
@@ -37,16 +37,13 @@ export const SyntaxHighlighter: FC<HighlighterProps> = ({
   components: _components,
   ...props
 }) => {
-  const BASE_STYLES = "[&_pre]:overflow-x-auto [&_pre]:rounded-b-lg [&_pre]:bg-black [&_pre]:p-4 [&_pre]:text-white";
+  const BASE_STYLES = "[&_pre]:overflow-x-auto [&_pre]:rounded-b-lg [&_pre]:bg-black [&_pre]:p-4 [&_pre]:text-white [&_pre]:text-xs [&_pre]:text-wrap";
 
   return (
     <ShikiHighlighter
       {...props}
       language={language}
-      theme={{
-        light: "min-light",
-        dark: "catppuccin-macchiato",
-      }}
+      theme={theme}
       addDefaultStyles={addDefaultStyles}
       showLanguage={showLanguage}
       className={cn(BASE_STYLES, className)}
