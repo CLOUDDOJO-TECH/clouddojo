@@ -1,11 +1,10 @@
 "use client";
 import Image from "next/image";
-import { Cloud, Rocket } from "lucide-react";
+import { Loader, Rocket } from "lucide-react";
 import type { OnboardingData } from "../types/onboarding";
 import { GlassCard } from "./blocks/glass-card";
 import { cn } from "@/lib/utils";
 import { useOnboardingQueries } from "../hooks/useOnboardingQueries";
-import { useEffect } from "react";
 
 interface CompletionScreenProps {
   selectedData: OnboardingData;
@@ -97,8 +96,12 @@ export function CompletionScreen({ selectedData }: CompletionScreenProps) {
             onClick={() => handleSubmit()}
             className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 rounded-2xl text-white font-semibold transition-all duration-300 shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/50 hover:scale-105"
           >
-            <Rocket className="w-5 h-5" />
-            <span>Start Learning</span>
+            {isSubmitting ? (
+              <Loader className="w-5 h-5 animate-spin" />
+            ) : (
+              <Rocket className="w-5 h-5" />
+            )}
+            <span>{isSubmitting ? "Filling you in..." : "Submit"}</span>
           </button>
         </div>
       </GlassCard>

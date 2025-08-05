@@ -33,11 +33,6 @@ export async function saveOnboardingData(data: OnboardingData) {
       return { error: "User not found", success: false };
     }
 
-    // Check if onboarding record exists
-    const existingOnboarding = await prisma.userOnboarding.findUnique({
-      where: { userId },
-    });
-
     // Update or create onboarding data
     await prisma.userOnboarding.upsert({
       where: { userId },

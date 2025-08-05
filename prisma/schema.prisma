@@ -17,25 +17,10 @@ model User {
   updatedAt              DateTime             @updatedAt
   hasCompletedOnboarding Boolean              @default(false)
   aiAnalysisReports      AIAnalysisReport[]
+  Subscriptions          LsUserSubscription[]
   quizAttempts           QuizAttempt[]
   onboarding             UserOnboarding?
   progress               UserProgress[]
-  Subscriptions          LsUserSubscription[]
-}
-
-// New enums for subscription tiers and status
-enum SubscriptionTier {
-  FREE
-  PRO
-  PREMIUM
-}
-
-enum SubscriptionStatus {
-  ACTIVE
-  CANCELED
-  EXPIRED
-  PAST_DUE
-  PENDING
 }
 
 model UserOnboarding {
@@ -56,15 +41,15 @@ model Quiz {
   id           String           @id @default(uuid())
   title        String
   description  String?
-  thumbnail    String? // URL or path to the thumbnail image
   isPublic     Boolean          @default(false)
-  isNew        Boolean          @default(true)
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
   categoryId   String?
   duration     Int?
   free         Boolean?
   level        DifficultyLevel? @default(BEGINER)
+  thumbnail    String?
+  isNew        Boolean          @default(true)
   questions    Question[]
   category     Category?        @relation(fields: [categoryId], references: [id])
   attempts     QuizAttempt[]
@@ -124,7 +109,7 @@ model LsSubscriptionPlan {
   features           String[]
   individual         Boolean              @default(false)
   team               Boolean              @default(false)
-  variantId          Int                  @unique // keep it as Int
+  variantId          Int                  @unique
   variantType        VariantType?         @default(MONTHS)
   price              String
   isUsageBased       Boolean              @default(false)
@@ -135,7 +120,6 @@ model LsSubscriptionPlan {
   Subscriptions      LsUserSubscription[]
 }
 
-// Lemon Squeezy Subscription
 model LsUserSubscription {
   id                 String             @id @default(cuid())
   createdAt          DateTime           @default(now())
@@ -155,8 +139,8 @@ model LsUserSubscription {
   price              String
   isPaused           Boolean            @default(false)
   isUsageBased       Boolean
-  user               User               @relation(fields: [userId], references: [userId], onDelete: Cascade)
   subscriptionPlan   LsSubscriptionPlan @relation(fields: [planId], references: [id])
+  user               User               @relation(fields: [userId], references: [userId], onDelete: Cascade)
 }
 
 model LsWebhookEvent {
@@ -247,6 +231,20 @@ model ProcessedCronJobUser {
 
   @@unique([jobId, userId])
   @@index([processedAt])
+}
+
+enum SubscriptionTier {
+  FREE
+  PRO
+  PREMIUM
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELED
+  EXPIRED
+  PAST_DUE
+  PENDING
 }
 
 enum DifficultyLevel {
