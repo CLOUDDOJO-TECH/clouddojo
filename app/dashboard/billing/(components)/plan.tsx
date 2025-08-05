@@ -3,6 +3,7 @@ import { cn, formatPrice } from "@/lib/utils";
 import { LsSubscriptionPlan } from "@prisma/client";
 import { Section } from "./section";
 import { SignupButton } from "./subscribe";
+import { Badge } from "@/components/ui/badge";
 
 export function Plan({
   plan,
@@ -19,10 +20,13 @@ export function Plan({
 }) {
   const { id, productName, interval, name, price } = plan;
   const isCurrent = id && currentPlan?.id === id;
-  
+
   // Predefined features based on plan type
   const getFeatures = () => {
-    if (productName?.toLowerCase().includes('pro') && name?.toLowerCase().includes('premium')) {
+    if (
+      productName?.toLowerCase().includes("pro") &&
+      name?.toLowerCase().includes("premium")
+    ) {
       return [
         "Everything included in the Pro Plan",
         "Advanced analytics",
@@ -31,7 +35,7 @@ export function Plan({
         "Personalized study roadmap",
         "Access to discord/whatsapp community",
       ];
-    } else if (productName?.toLowerCase().includes('pro')) {
+    } else if (productName?.toLowerCase().includes("pro")) {
       return [
         "Unlimited access to all practice tests",
         "Track your progress and identify weak areas",
@@ -46,21 +50,32 @@ export function Plan({
   const features = getFeatures();
 
   return (
-    <Section className={cn(
-      "not-prose font-main p-6 rounded-2xl max-w-sm shadow-md border border-surface-100 bg-white dark:bg-zinc-900 relative overflow-hidden",
-      // isCurrent && "border-emerald-400",
-      isPopular && "outline outline-[rgba(120,119,198)]"
-    )}>
-      {isPopular && <PopularBackground />}
-      
-      <Section.Item className="flex-col items-start gap-4">
+    <Section
+      className={cn(
+        "not-prose font-main p-6 rounded-2xl max-w-sm shadow-md border border-surface-100 bg-white dark:bg-zinc-900 relative overflow-hidden",
+        // isCurrent && "border-emerald-400",
+        isPopular && "outline outline-[rgba(120,119,198)]",
+      )}
+    >
+      {/* Background Decoration */}
+      <div className="absolute inset-0 z-0">
+        {/*{isHighlighted && <HighlightedBackground />}**/}
+        {isPopular && <PopularBackground />}
+      </div>
+
+      <Section.Item className="flex-col items-start gap-4 z-10">
         <header className="flex w-full flex-col items-start mb-4">
           {name ? (
-            <h2 className="text-2xl font-bold text-surface-900 dark:text-zinc-100">
-              {name} 
+            <h2 className="flex items-center gap-3 text-xl font-medium capitalize">
+              {name}
+              {isPopular && (
+                <Badge className="mt-1 bg-orange-900 px-1 py-0 text-white hover:bg-orange-900">
+                  🔥 Most Popular
+                </Badge>
+              )}
             </h2>
           ) : null}
-          
+
           <div className="mt-6 mb-2 text-3xl font-bold text-brand-beige-900 dark:text-brand-beige-100">
             {formatPrice(price)}
             <span className="text-base font-normal text-zinc-500 ml-1">
@@ -69,17 +84,20 @@ export function Plan({
             </span>
           </div>
         </header>
-        
+
         {/* {features.length > 0 && (
           <div className="flex items-center gap-2 mb-1">
             <span className="text-sm font-medium text-emerald-600">🔥 Everything you need to pass your AWS exam</span>
           </div>
         )} */}
-        
+
         {features.length > 0 ? (
           <ul className="mb-6 space-y-3 w-full">
             {features.map((feature, i) => (
-              <li key={i} className="flex  text-start items-start gap-2 text-zinc-700 dark:text-zinc-200">
+              <li
+                key={i}
+                className="flex  text-start items-start gap-2 text-zinc-700 dark:text-zinc-200"
+              >
                 <CheckCircle2 className="w-5 h-5 text-emerald-500 mt-0.5 flex-shrink-0" />
                 <span className="text-sm">{feature}</span>
               </li>
@@ -89,8 +107,10 @@ export function Plan({
       </Section.Item>
 
       <SignupButton
-        className={cn("w-full mt-4", 
-          isPopular ? "bg-emerald-600 hover:bg-emerald-700" : "")}
+        className={cn(
+          "w-full mt-4 z-10",
+          isPopular ? "bg-emerald-600 hover:bg-emerald-700" : "",
+        )}
         plan={plan}
         isChangingPlans={isChangingPlans}
         currentPlan={currentPlan}
@@ -127,4 +147,3 @@ const HighlightedBackground = () => (
 const PopularBackground = () => (
   <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.1),rgba(255,255,255,0))] dark:bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]" />
 );
-
