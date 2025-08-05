@@ -2,13 +2,62 @@ import type React from "react";
 import "../styles/globals.css";
 import { Inter } from "next/font/google";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Providers from "@/components/providers";
 import { Spotlight } from "@/components/spotlight";
 import Script from 'next/script';
 import * as seline from '@seline-analytics/web';
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { ThemeProvider } from "@/components/theme-provider";
+// fonts
+import { Poppins, Lora, JetBrains_Mono, Kaushan_Script, Playwrite_AU_VIC } from 'next/font/google';
+import Providers from "@/components/providers/providers";
+import localFont from "next/font/local";
+
+// Poppins (Sans-serif)
+export const poppins = Poppins({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-poppins',
+  weight: ['400', '500', '600', '700'], // Specify weights you want to use
+});
+
+export const playwrite_au_vic = Playwrite_AU_VIC({
+  display: 'swap',
+  variable: '--font-playwrite-au-vic',
+  weight: ['400', '100', '200', '300'], // Specify weights you want to use
+});
+
+export const kaushan_script = Kaushan_Script({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-kaushan-script',
+  weight: ['400'], // Specify weights you want to use
+});
+
+// Lora (Serif)
+export const lora = Lora({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-lora',
+  weight: ['400', '700'], // Specify weights you want to use
+});
+
+// JetBrains Mono (Monospace)
+export const jetbrains_mono = JetBrains_Mono({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-jetbrains-mono',
+});
+
+const satoshi = localFont({
+  src: [
+    { path: "/fonts/Satoshi-Black.ttf", weight: "800" },
+    { path: "/fonts/Satoshi-Bold.ttf", weight: "700" },
+    { path: "/fonts/Satoshi-Medium.ttf", weight: "500" },
+    { path: "/fonts/Satoshi-Regular.ttf", weight: "400" },
+  ],
+  variable: "--font-satoshi",
+});
 
 export const dynamic = 'force-dynamic';
 
@@ -97,17 +146,17 @@ export const metadata = {
 export default function Layout({ children }: { children: React.ReactNode }) {
   const queryClient = new QueryClient();
   return (
-    <html lang="en" className="dark:dark">
+    <html lang="en" suppressHydrationWarning className={`dark:dark ${poppins.variable} ${playwrite_au_vic} ${kaushan_script} ${lora.variable} ${jetbrains_mono.variable} ${satoshi.variable}`}>
       <head>
       </head>
-      <body className={`${inter.className} dark:bg-gray-900`}>
+      <body className={`${inter.className}`}>
         <Script src="https://app.lemonsqueezy.com/js/lemon.js" strategy="beforeInteractive" defer />
         <Script async src="https://cdn.seline.com/seline.js" data-token="9b13f9d446740a0"></Script>
         <Providers>
-          <Spotlight
+          {/* <Spotlight
             className="-top-40 left-0 md:-top-20 md:left-60"
             fill="white"
-          />
+          /> */}
           <SpeedInsights />
           <Analytics />
           <ThemeProvider

@@ -19,6 +19,7 @@ import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { sendFeedbackEmails } from "@/lib/emails/send-email";
 import { useUser } from "@clerk/nextjs";
+import { MessagesSquare } from "lucide-react";
 
 interface FeedbackDialogProps {
   open?: boolean;
@@ -102,9 +103,16 @@ export default function FeedbackDialog({ open, onOpenChange }: FeedbackDialogPro
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="text-sm rounded-lg border-emerald-500 text-primary">
-          Feedback
+        <div>
+        <Button size="sm" className="group md:flex hidden text-sm rounded-lg text-foreground-primary overflow-hidden relative">
+          <MessagesSquare className="h-5 left-3 w-5 text-foreground-primary mr-1.5 absolute group-hover:translate-y-10 transition-all duration-300" />
+          <MessagesSquare className="h-5 w-5 left-3 text-foreground-primary mr-1.5 absolute -translate-y-10 group-hover:translate-y-0 transition-all duration-300" />
+          <span className="ml-6">Feedback</span>
         </Button>
+        <Button variant="outline" size="sm" className="text-sm md:hidden shadow-none hover:bg-gray-300 dark:hover:bg-gray-100/20 block rounded-sm md:border-emerald-500/30 border-none text-primary">
+          <MessagesSquare className="h-5 w-5 text-primary"/>
+        </Button>
+        </div>
       </DialogTrigger>
       <DialogContent className="md:max-w-2xl w-[90vw] rounded-lg">
         <DialogHeader>

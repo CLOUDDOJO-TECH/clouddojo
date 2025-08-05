@@ -6,12 +6,12 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
   // Process the content to handle markdown elements
   const processedContent = content
     // Handle bold text with blue color
-    .replace(/\*\*(.*?)\*\*/g, '<span class="text-blue-700 font-bold">$1</span>')
+    .replace(/\*\*(.*?)\*\*/g, '<span class="text-foreground font-bold">$1</span>')
     // Handle headers with blue color
-    .replace(/## (.*)/g, '<h2 class="text-xl font-bold mt-3 mb-2 text-blue-700">$1</h2>')
+    .replace(/## (.*)/g, '<h2 class="text-xl font-bold mt-3 mb-2 text-foreground">$1</h2>')
     .replace(
       /> "(.*?)"/g,
-      '<blockquote class="border-l-4 border-emerald-500 pl-4 italic my-2 py-2 text-gray-700 bg-emerald-50 rounded-r-md">$1</blockquote>',
+      '<blockquote class="border-l-4 border-emerald-500 pl-4 italic my-2 py-2 text-foreground bg-emerald-50 rounded-r-md">$1</blockquote>',
     )
     .replace(
       /```([\s\S]*?)```/g,
@@ -21,7 +21,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
     .replace(/\n\n/g, "<br/>")
     .replace(
       /\n([0-9]+)\. (.*)/g,
-      '<div class="ml-6 my-2 flex"><span class="flex-shrink-0 flex items-center justify-center h-6 w-6 rounded-full bg-blue-100 text-blue-600 text-sm font-medium mr-3">$1</span> <span>$2</span></div>',
+      '<div class="ml-6 my-2 flex"><span class="flex-shrink-0 flex items-center justify-center h-6 w-6 rounded-full bg-blue-100 text-foreground/60 text-sm font-medium mr-3">$1</span> <span>$2</span></div>',
     );
 
   return <div className="space-y-2" dangerouslySetInnerHTML={{ __html: processedContent }} />;

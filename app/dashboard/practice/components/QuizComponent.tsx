@@ -7,6 +7,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Clock,
+  SendHorizontal,
+  SendIcon,
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -45,6 +47,7 @@ export default function QuizComponent({ quiz, quizId }: QuizComponentProps) {
   const [showSubmitDialog, setShowSubmitDialog] = useState(false)
   const [showTimeWarning, setShowTimeWarning] = useState(false)
   const [userProfileExists, setUserProfileExists] = useState(false)
+  const [toggleQuestionTraverser, setToggleQuestionTraverser] = useState(false)
 
   // Query to check user profile
   const { data: checkUserProfile, isLoading: isCheckingProfile } = useQuery({
@@ -209,7 +212,7 @@ export default function QuizComponent({ quiz, quizId }: QuizComponentProps) {
   // Show loading state while checking profile
   if (!isLoaded || isCheckingProfile) {
     return (
-      <div className="container max-w-6xl mx-auto p-4 md:p-6 pt-16 md:pt-6">
+      <div className="container max-h-[50%] flex items-center justify-center lg:max-w-7xl max-w-6xl mx-auto p-4 md:p-6 pt-16 md:pt-6">
         <Card>
           <CardContent className="pt-6">
             <div className="flex justify-center">
@@ -235,7 +238,7 @@ export default function QuizComponent({ quiz, quizId }: QuizComponentProps) {
   }
 
   return (
-    <div className="container max-w-6xl mx-auto p-4 md:p-6 pt-16 md:pt-6">
+    <div className="container  lg:max-w-7xl items-center   max-w-6xl mx-auto p-4 md:p-6 pt-16 md:pt-6">
       <Card>
         <CardHeader className="pb-2">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -244,11 +247,11 @@ export default function QuizComponent({ quiz, quizId }: QuizComponentProps) {
              
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center justify-between gap-2">
               <div
                 className={cn(
                   "flex items-center gap-1 px-3 py-1 rounded-full font-medium",
-                  timeLeft <= 60 ? "bg-red-100 text-red-700" : "bg-blue-100 text-blue-700",
+                  timeLeft <= 60 ? "bg-red-100 text-red-700" : "bg-brand-beige-400/20 text-brand-beige-700",
                 )}
               >
                 <Clock className="h-4 w-4" />
@@ -258,8 +261,9 @@ export default function QuizComponent({ quiz, quizId }: QuizComponentProps) {
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="outline" size="sm" onClick={() => setShowSubmitDialog(true)} className="w-full p-2 bg-emerald-600 border-none text-white rounded-full">
+                    <Button size="sm" onClick={() => setShowSubmitDialog(true)} className="rounded-full">
                       Submit Test
+                      <SendHorizontal className="h-4 w-4 ml-1" />
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
@@ -273,19 +277,18 @@ export default function QuizComponent({ quiz, quizId }: QuizComponentProps) {
 
         <CardContent className="pb-0">
           <div className="flex items-center justify-between mb-2">
-            <div className="text-sm">
+            <div className="md:text-sm text-xs font-mono">
               Progress: <span className="font-medium">{answeredCount}</span> of{" "}
               <span className="font-medium">{quiz.questions.length}</span> questions answered
             </div>
-            <div className="text-sm">
-              Question <span className="font-medium">{currentQuestionIndex + 1}</span> of{" "}
-              <span className="font-medium">{quiz.questions.length}</span>
+            <div className="md:text-sm text-xs font-mono">
+              Question <span className="font-medium text-brand-beige-700">{currentQuestionIndex + 1}</span> of{" "}
+              <span className="font-medium text-primary">{quiz.questions.length}</span>
             </div>
           </div>
 
           <Progress value={progress} className="h-2" />
 
-              
            <div className="md:hidden flex flex-wrap gap-2 mt-4 mb-2">
           
             {markedQuestions.map((questionId, index) => (
@@ -293,7 +296,7 @@ export default function QuizComponent({ quiz, quizId }: QuizComponentProps) {
                 key={questionId}
                 variant="outline"
                 size="sm"
-                className="mb-2 md:hidden mt-2 border-orange-600 text-orange-500"
+                className="mb-2 md:hidden mt-2 border-brand-beige-80/20 text-brand-beige-900 dark:hover:bg-gray-100/10 dark:hover:text-gray-100 hover:accent hover:text-accent-foreground"
                 onClick={() => goToQuestion(quiz.questions.findIndex(question => question.id === questionId))}
               >
                 {index + 1}
@@ -301,36 +304,37 @@ export default function QuizComponent({ quiz, quizId }: QuizComponentProps) {
             ))}
           </div>
           
-          
-          <div className="md:flex hidden flex-wrap gap-2 mt-4 mb-2">
-            {quiz.questions.map((question, index) => (
-              <TooltipProvider key={question.id}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className={cn(
-                        "w-10 h-10 p-0",
-                        currentQuestionIndex === index ? "border-primary border-2" : "",
-                        isQuestionAnswered(question.id) ? "bg-primary text-primary-foreground hover:bg-primary/90" : "",
-                        markedQuestions.includes(question.id) ? "ring-2 ring-amber-500" : "",
-                      )}
-                      onClick={() => goToQuestion(index)}
-                    >
-                      {index + 1}
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <div>
-                      {isQuestionAnswered(question.id) ? "Answered" : "Not answered"}
-                      {markedQuestions.includes(question.id) && " • Marked for review"}
-                    </div>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            ))}
-          </div>
+          {toggleQuestionTraverser && (
+            <div className="md:flex hidden flex-wrap gap-2 mt-4 mb-2">
+              {quiz.questions.map((question, index) => (
+                <TooltipProvider key={question.id}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className={cn(
+                          "w-10 h-10 p-0 dark:hover:bg-gray-100/10 dark:hover:text-gray-100 hover:accent hover:text-accent-foreground",
+                          currentQuestionIndex === index ? "border-primary border-2" : "",
+                          isQuestionAnswered(question.id) ? "bg-primary text-primary-foreground hover:bg-primary/90 border-none" : "",
+                          markedQuestions.includes(question.id) ? "ring-2 ring-amber-500" : "",
+                        )}
+                        onClick={() => goToQuestion(index)}
+                      >
+                        {index + 1}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <div>
+                        {isQuestionAnswered(question.id) ? "Answered" : "Not answered"}
+                        {markedQuestions.includes(question.id) && " • Marked for review"}
+                      </div>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              ))}
+            </div>
+          )}
         </CardContent>
 
         <CardContent className="pt-6">
@@ -353,14 +357,14 @@ export default function QuizComponent({ quiz, quizId }: QuizComponentProps) {
             variant="outline"
             onClick={goToPreviousQuestion}
             disabled={currentQuestionIndex === 0}
-            className="flex items-center gap-1"
+            className="flex items-center gap-1 hover:bg-gray-100/10 hover:text-gray-100"
           >
             <ChevronLeft className="h-4 w-4" />
             Previous
           </Button>
 
           <Button
-            variant={currentQuestionIndex === quiz.questions.length - 1 ? "default" : "outline"}
+            variant={currentQuestionIndex === quiz.questions.length - 1 ? "default" : "default"}
             onClick={
               currentQuestionIndex === quiz.questions.length - 1
                 ? () => setShowSubmitDialog(true)
@@ -381,13 +385,13 @@ export default function QuizComponent({ quiz, quizId }: QuizComponentProps) {
 
       {/* Submit Confirmation Dialog */}
       <AlertDialog open={showSubmitDialog} onOpenChange={setShowSubmitDialog}>
-        <AlertDialogContent>
+        <AlertDialogContent className="max-w-lg rounded-lg md:w-full w-[90%] ">
           <AlertDialogHeader>
             <AlertDialogTitle>Submit Test?</AlertDialogTitle>
-            <AlertDialogDescription>
+            <AlertDialogDescription className="w-full flex items-center justify-center flex-col">
               You have answered {answeredCount} out of {quiz.questions.length} questions.
               {answeredCount < quiz.questions.length && (
-                <span className="block mt-2 font-medium text-amber-600">
+                <span className="block mt-2 font-medium font-mono text-xs text-center w-[70%] text-amber-600">
                   Warning: You have {quiz.questions.length - answeredCount} unanswered questions.
                 </span>
               )}
@@ -399,7 +403,7 @@ export default function QuizComponent({ quiz, quizId }: QuizComponentProps) {
               onClick={handleSubmitTest} 
               disabled={isSaving}
             >
-              {isSaving ? "Saving..." : "Submit Test"}
+              {isSaving ? "Submiting..." : "Submit Test"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

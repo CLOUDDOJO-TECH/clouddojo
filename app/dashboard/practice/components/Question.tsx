@@ -27,7 +27,7 @@ export default function Question({
           size="sm"
           className={cn(
             "flex items-center gap-1",
-            isMarked ? "text-amber-600" : ""
+            isMarked ? "text-brand-beige-800" : ""
           )}
           onClick={onToggleMark}
         >
@@ -36,7 +36,7 @@ export default function Question({
         </Button>
       </div>
 
-      <div className="md:text-lg text-md">{question.content}</div>
+      <div className="md:text-lg text-md ">{question.content}</div>
 
       <div className="mt-4 text-lg">
         {type === "single" ? (
@@ -49,20 +49,20 @@ export default function Question({
               <div 
                 key={option.id} 
                 className={cn(
-                  "flex items-center space-x-2 rounded-md border p-3 hover:bg-accent",
-                  userAnswer?.[0] === option.id ? "border-2 border-blue-300" : ""
+                  "flex items-center space-x-2 rounded-md border p-3 hover:bg-accent dark:hover:bg-brand-beige-100/10",
+                  userAnswer?.[0] === option.id ? "border-2 border-primary" : ""
                 )}
               >
                 <RadioGroupItem 
                   value={option.id} 
                   id={option.id} 
-                  className="text-blue-500 border-blue-300 focus:ring-blue-300"
+                  className="text-emerald-600 border-emerald-400 focus:ring-emerald-300 "
                   style={{ 
                     '--tw-ring-color': 'rgb(147 197 253)', 
                     '--tw-ring-offset-color': 'rgb(147 197 253)' 
                   } as React.CSSProperties}
                 />
-                <Label htmlFor={option.id} className="flex-1 cursor-pointer py-2 text-sm md:text-lg font-light">
+                <Label htmlFor={option.id} className="flex-1 cursor-pointer py-2 text-sm  md:text-md font-light">
                   {option.content}
                 </Label>
               </div>
@@ -74,21 +74,21 @@ export default function Question({
               <div 
                 key={option.id} 
                 className={cn(
-                  "flex items-center space-x-2 rounded-md border p-3 hover:bg-accent",
-                  userAnswer?.includes(option.id) ? "border-2 border-blue-300" : ""
+                  "flex items-center space-x-2 rounded-md border p-3 hover:bg-accent dark:hover:bg-brand-beige-100/10",
+                  userAnswer?.includes(option.id) ? "border-2 border-emerald-500" : ""
                 )}
               >
                 <Checkbox
                   id={option.id}
                   checked={userAnswer?.includes(option.id)}
                   onCheckedChange={() => onAnswerSelect(question.id, option.id)}
-                  className="text-blue-500 border-blue-300 focus:ring-blue-300 data-[state=checked]:bg-blue-500 data-[state=checked]:border-blue-500"
+                  className="text-emerald-500 border-emerald-300 focus:ring-emerald-300  data-[state=checked]:border-emerald-500"
                   style={{ 
                     '--tw-ring-color': 'rgb(147 197 253)', 
                     '--tw-ring-offset-color': 'rgb(147 197 253)' 
                   } as React.CSSProperties}
                 />
-                <Label htmlFor={option.id} className="flex-1 cursor-pointer py-2 text-sm md:text-lg font-light">
+                <Label htmlFor={option.id} className="flex-1 cursor-pointer py-2 text-sm md:text-md font-light">
                   {option.content}
                 </Label>
               </div>

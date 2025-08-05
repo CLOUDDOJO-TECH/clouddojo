@@ -98,16 +98,16 @@ export function AttemptsDialog({ attemptId }: { attemptId: string }) {
         <Tooltip>
           <TooltipTrigger asChild>
             <DialogTrigger asChild>
-                <SquareArrowOutUpRight className="h-6 w-6 text-gray-700 cursor-pointer" />
+                <SquareArrowOutUpRight className="h-6 w-6 text-foreground hover:text-foreground/50 cursor-pointer" />
             </DialogTrigger>
           </TooltipTrigger>
           <TooltipContent>
-            <p>View Result</p>
+            <p>View Peformance</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
       
-      <DialogContent className="md:max-w-7xl max-h-[90vh] w-[98vw] overflow-y-auto md:px-6 rounded-lg">
+      <DialogContent  className="md:max-w-7xl max-h-[90vh] w-[98vw] overflow-y-auto md:px-6 rounded-3xl">
         {transformedQuiz && (
           <AttemptResults 
             quiz={transformedQuiz as QuizWithRelations}

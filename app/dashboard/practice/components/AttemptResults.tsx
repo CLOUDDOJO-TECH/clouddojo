@@ -193,7 +193,7 @@ export default function AttemptResults({
           </div>
         </CardContent>
         <CardFooter className="flex justify-between">
-        <div className="text-sm text-gray-600  font-bold">
+        <div className="text-sm text-foreground/50 font-mono font-bold">
           Date Taken: {quiz.createdAt.toLocaleDateString()}
         </div>
           <PDFGenerator 

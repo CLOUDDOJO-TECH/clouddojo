@@ -26,13 +26,13 @@ export function CertificationReadiness({
     <Card className="col-span-1 lg:col-span-2 border-none shadow-lg">
       <CardHeader className="pb-2">
         <CardTitle>Certification Readiness</CardTitle>
-        <CardDescription>Based on your performance across recent practice tests</CardDescription>
+        <CardDescription className="text-foreground/60 text-sm font-mono">Based on your performance across recent practice tests</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="relative pt-4">
-          <div className="flex justify-between mb-1">
-            <span className="text-sm font-medium text-gray-700">Overall Readiness</span>
-            <span className="text-sm font-medium text-gray-700">{certificationReadiness}%</span>
+          <div className="flex justify-between mb-1.5">
+            <span className="text-sm font-medium text-foreground">Overall Readiness</span>
+            <span className="text-sm font-medium text-primary font-mono">{certificationReadiness}%</span>
           </div>
           <div className="h-3 relative max-w-xl rounded-full overflow-hidden">
             <div className="w-full h-full bg-gray-200 absolute"></div>
@@ -41,7 +41,7 @@ export function CertificationReadiness({
               style={{ width: `${certificationReadiness}%` }}
             ></div>
           </div>
-          <div className="flex justify-between text-xs text-gray-500 mt-1">
+          <div className="flex justify-between text-xs font-mono leading-none tracking-tight text-gray-500 mt-1.5">
             <span>Not Ready</span>
             <span>Needs Practice</span>
             <span>Almost Ready</span>

@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label"
 
 // Define our filter options
 const topicOptions = [
-  { id: "aws-rds", label: "AWS RDS" },
+  { id: "aws", label: "AWS" },
   { id: "ec2", label: "EC2" },
   { id: "google-cloud", label: "Google Cloud" },
   { id: "azure", label: "Azure" },

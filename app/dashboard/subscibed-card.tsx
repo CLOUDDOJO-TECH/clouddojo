@@ -22,23 +22,23 @@ export default function SubscriptionCard({ plan, variant = "minimal", className 
           "overflow-hidden",
           variant === "minimal" && "border border-emerald-200 bg-white shadow-sm",
           variant === "gradient" && "border-0 bg-gradient-to-br from-emerald-50 to-emerald-100 shadow-md",
-          variant === "outlined" && "border-2 border-emerald-500 bg-white shadow-sm",
+          variant === "outlined" && "border-2 border-emerald-500 bg-sidebar shadow-sm",
           variant === "glass" && "border border-white/20 bg-emerald-100/20 backdrop-blur-md shadow-lg",
-          variant === "accent" && "border-0 bg-emerald-500 text-white shadow-md",
+          variant === "accent" && "border-0 bg-emerald-500 text-foreground shadow-md",
           className,
         )}
       >
-        <CardContent className="p-4">
-          <div className="flex items-start justify-between">
+        <CardContent className="px-3 py-2">
+          <div className="">
             <div className="flex flex-col">
-              <div className="flex items-center gap-1.5">
-                <h3 className={cn("font-medium", variant === "accent" ? "text-white" : "text-gray-900")}>{plan}</h3>
+              <div className="flex justify-between w-full items-center gap-1.5">
+                <h3 className={cn("font-medium", variant === "accent" ? "text-white" : "text-foreground font-mono")}>{plan}</h3>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Info
                       className={cn(
-                        "h-3.5 w-3.5 cursor-pointer",
-                        variant === "accent" ? "text-white/70" : "text-gray-400",
+                        "h-5 w-5 cursor-pointer",
+                        variant === "accent" ? "text-white/70" : "text-primary",
                       )}
                     />
                   </TooltipTrigger>
@@ -47,11 +47,11 @@ export default function SubscriptionCard({ plan, variant = "minimal", className 
                   </TooltipContent>
                 </Tooltip>
               </div>
-              <p className={cn("text-xs mt-0.5", variant === "accent" ? "text-white/80" : "text-emerald-900/70")}>
+              <p className={cn("text-xs mt-0.5", variant === "accent" ? "text-white/80" : "text-foreground/70")}>
                 You have access to all features
               </p>
             </div>
-            <div
+            {/* <div
               className={cn(
                 "flex h-8 w-8 items-center justify-center rounded-full",
                 variant === "minimal" && "bg-emerald-100 text-emerald-600",
@@ -62,14 +62,14 @@ export default function SubscriptionCard({ plan, variant = "minimal", className 
               )}
             >
               <Sparkles className="h-4 w-4" />
-            </div>
+            </div> */}
           </div>
 
           {variant !== "minimal" && (
             <div className="mt-3 flex items-center">
               <Badge
                 variant={variant === "accent" ? "outline" : "default"}
-                className={cn("text-xs font-normal", variant === "accent" && "border-white/30 text-white")}
+                className={cn("text-xs font-normal bg-gradient-to-b from-emerald-500 to-primary shadow-md", variant === "accent" && "border-white/30 text-white")}
               >
                 <Check className="mr-1 h-3 w-3" /> Active
               </Badge>

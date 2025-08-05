@@ -6,7 +6,7 @@ import { WobbleCard } from "../ui/wobble-card";
 export function FeaturesBento() {
   return (
     <div className="w-full p-2 md:p-4 lg:p-8 mt-16">
-        <h2 className="text-white text-3xl md:text-5xl lg:text-6xl text-center font-bold leading-tight mb-4">
+        <h2 className="text-foreground/50 text-3xl md:text-5xl lg:text-6xl text-center font-bold leading-tight mb-4">
         There&apos;s more than just certification prep.
         </h2>
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 max-w-7xl mx-auto w-full my-8">

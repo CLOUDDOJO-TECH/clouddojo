@@ -1,7 +1,8 @@
 export default function TrustBadge() {
     return (
-      <div className="bg-slate-950 flex items-center rounded-full border-slate-800 border p-1 shadow-sm w-fit max-w-[300px] mx-auto">
-        <div className="flex -space-x-1.5">
+      <div className="bg-slate-950 flex items-center rounded-full border-slate-800 border p-1 shadow-sm w-fit max-w-[300px] mx-auto relative overflow-hidden glow-container">
+        <div className="absolute inset-0 bg-emerald-500/10 blur-xl rounded-full"></div>
+        <div className="flex -space-x-1.5 relative z-10">
           <img
             className="ring-background rounded-full ring-1 h-6 w-6 object-cover"
             src="/images/avatars/avatar1.png"
@@ -31,11 +32,10 @@ export default function TrustBadge() {
             alt="Avatar 04"
           />
         </div>
-        <p className="text-muted-foreground px-2 text-xs">
-          Trusted by <strong className="text-emerald-700 font-medium">12K+</strong>{" "}
+        <p className="text-muted-foreground px-2 text-xs relative z-10">
+          Trusted by <strong className="text-emerald-500 font-medium">12K+</strong>{" "}
           developers.
         </p>
       </div>
     )
   }
-  

@@ -9,7 +9,7 @@ interface PracticeTestsSkeletonProps {
 
 export default function PracticeTestsSkeleton({ view }: PracticeTestsSkeletonProps) {
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex min-h-screen w-full bg-background">
       <div className="flex-1 container w-full">
         <div className="p-4 md:p-6 pt-16 md:pt-6">
           <div className="flex flex-col gap-6">

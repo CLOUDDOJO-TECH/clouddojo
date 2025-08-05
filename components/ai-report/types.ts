@@ -7,7 +7,6 @@ export interface ReportSummary {
   totalQuestions: number
   correctAnswers: number
   incorrectAnswers: number
-  skippedQuestions: number
   timeSpent: string
   testDate: string
   improvement: number

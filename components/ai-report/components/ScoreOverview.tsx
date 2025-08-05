@@ -12,7 +12,6 @@ interface ScoreOverviewProps {
     totalQuestions: number;
     correctAnswers: number;
     incorrectAnswers: number;
-    skippedQuestions: number;
     timeSpent: string;
     testDate: string;
     improvement: number;
@@ -22,10 +21,10 @@ interface ScoreOverviewProps {
 export function ScoreOverview({ summary }: ScoreOverviewProps) {
   return (
     <Card className="col-span-1 border-none shadow-lg overflow-hidden">
-      <CardHeader className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white pb-0">
+      <CardHeader className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white pb-2">
         <CardTitle className="flex justify-between items-center">
           <span>Overall Score</span>
-          <span className="text-3xl">{summary.overallScore}%</span>
+          <span className="text-3xl font-bold font-mono">{summary.overallScore}%</span>
         </CardTitle>
         <CardDescription className="text-emerald-100">
           {summary.correctAnswers} of {summary.totalQuestions} questions correct
@@ -37,7 +36,7 @@ export function ScoreOverview({ summary }: ScoreOverviewProps) {
             <TrendingUp className="h-4 w-4 text-emerald-500" />
             <span className="text-sm font-medium">Performance Trend</span>
           </div>
-          <div className="text-sm text-gray-500">
+          <div className="text-xs text-primary font-mono">
             Last updated: {format(new Date(summary.testDate), "MMM d, yyyy")}
           </div>
         </div>
@@ -45,14 +44,14 @@ export function ScoreOverview({ summary }: ScoreOverviewProps) {
         <div className="space-y-4">
           <div>
             <div className="flex justify-between mb-1">
-              <span className="text-sm font-medium text-gray-700">Time Efficiency</span>
-              <span className="text-sm text-gray-500">{summary.timeSpent}</span>
+              <span className="text-sm font-medium text-foreground">Time Efficiency</span>
+              <span className="text-sm text-primary font-mono">{summary.timeSpent}</span>
             </div>
           </div>
           <div>
             <div className="flex justify-between mb-1">
-              <span className="text-sm font-medium text-gray-700">Accuracy</span>
-              <span className="text-sm text-gray-500">
+              <span className="text-sm font-medium text-foreground">Accuracy</span>
+              <span className="text-sm text-primary font-mono">
                 {Math.round((summary.correctAnswers / summary.totalQuestions) * 100)}%
               </span>
             </div>

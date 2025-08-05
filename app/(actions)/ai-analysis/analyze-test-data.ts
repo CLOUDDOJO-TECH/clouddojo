@@ -192,10 +192,9 @@ export async function analyzeTestData(userId: string) {
       throw new Error(testDataResult.error || "Failed to fetch test data")
     }
 
-    // Convert the data to match the TestData interface
-    const testData: TestData = testDataResult.data as TestData
-    const formattedData = formatTestDataForAI(testData)
 
+    // Convert the data to match the TestData interface
+    const formattedData = formatTestDataForAI(testDataResult.data as unknown as TestData);
     // Create the prompt for Gemini
     const prompt = `
 You are an expert AWS certification analyst with deep knowledge of AWS services, best practices, and certification exams. 

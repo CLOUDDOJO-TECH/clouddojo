@@ -47,11 +47,10 @@ export const getCurrentUserProfile = async () => {
         userId: clerkUserId
       },
       include: {
-        SubscriptionPlan: true
+        subscriptionPlan: true
       }
     })
 
-    console.log('current userSubs', userPlan)
 
 
 

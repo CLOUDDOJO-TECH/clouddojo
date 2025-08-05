@@ -111,7 +111,7 @@ Ready to take your cloud career to the next level? Join CloudDojo today and expe
 
 Have questions or need support? We're here to help!
 
-- **Email**: bonyuglen@gmail.com
+- **Email**: support@clouddojo.tech
 - **Phone**: +(250) 791957574
 - **Website**: [www.clouddojo.tech](#)
 

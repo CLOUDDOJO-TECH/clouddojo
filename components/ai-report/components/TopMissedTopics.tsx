@@ -24,15 +24,15 @@ export function TopMissedTopics({ topMissedTopics }: TopMissedTopicsProps) {
       <CardContent>
         <div className="space-y-3">
           {topMissedTopics.map((topic, index) => (
-            <div key={index} className="flex items-center p-3 rounded-lg bg-gray-50 border border-gray-100">
+            <div key={index} className="flex items-center p-3 rounded-lg border">
               <div
                 className={`w-2 h-10 rounded-full mr-3 ${
                   topic.importance === "High" ? "bg-red-500" : "bg-yellow-500"
                 }`}
               ></div>
               <div className="flex-1">
-                <div className="font-medium text-gray-800">{topic.topic}</div>
-                <div className="text-sm text-gray-500">Missed {topic.count} questions</div>
+                <div className="font-medium text-foreground">{topic.topic}</div>
+                <div className="text-sm text-foreground/50 font-mono">Missed {topic.count} questions</div>
               </div>
               <Badge
                 className={

@@ -1,22 +1,16 @@
 "use client";
 
 import * as React from "react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+
 import {
   BookOpen,
   Bot,
-  Settings2,
   SquareTerminal,
-  Sun,
-  Moon,
+  Map,
   TestTube,
   CableCar,
-  Trophy, // Added Trophy icon
+  Trophy,
+  CogIcon, // Added Trophy icon
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -41,8 +35,6 @@ import { cn } from "@/lib/utils";
 import UpgradeCard from "@/components/upgrade-card";
 import { useSubscription } from "@/hooks/use-subscription";
 import SubscriptionCard from "@/app/dashboard/subscibed-card";
-import { Button } from "@/components/ui/button";
-import { useTheme } from "next-themes";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 
@@ -95,12 +87,12 @@ const NAVIGATION_DATA: NavSection[] = [
         icon: BookOpen,
         comingSoon: true,
       },
-      // { // Leaderboard item removed from here
-      //   title: "Leaderboard",
-      //   url: "#",
-      //   icon: Settings2,
-      //   comingSoon: true,
-      // },
+      { // Leaderboard item removed from here
+        title: "My Cloud Roadmap",
+        url: "#",
+        icon: Map,
+        comingSoon: true,
+      },
       {
         title: "Hands-On Labs",
         url: "#",
@@ -122,35 +114,34 @@ const NAVIGATION_DATA: NavSection[] = [
  */
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
-  const { setTheme } = useTheme()
 
   // Use our custom subscription hook
   const { isPro, isPremium, planName, isLoading, isError } = useSubscription();
-  console.log(planName)
+  // console.log(planName)
 
   // Helper function to check if a URL is active
   const isActive = (url: string): boolean => url === pathname;
 
   return (
-    <Sidebar {...props}>
+    <Sidebar className="bg-sidebar !border-none " {...props}>
       <SidebarHeader>
         <SidebarMenuButton
           size="lg"
           className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground gap-3 [&>svg]:size-auto"
         >
-          <div className="flex aspect-square size-8 items-center justify-center rounded-md overflow-hidden bg-sidebar-primary text-sidebar-primary-foreground">
+          <div className="flex aspect-square  items-center justify-center rounded-md overflow-hidden  text-sidebar-primary-foreground">
             <img
               src="/images/main-logo.png"
-              width={56}
-              height={56}
+              width={86}
+              height={86}
               alt="clouddojo logo"
             />
           </div>
           <div className="grid flex-1 text-left text-2xl font-semibold leading-tight">
-            <span className="truncate font-medium">CloudDojo</span>
+            <span className="truncate font-kaushan ">Clouddojo</span>
           </div>
         </SidebarMenuButton>
-        <hr className="border-t border-border mx-2 -mt-px" />
+        {/* <hr className="border-t border-border mx-2 -mt-px" /> */}
       </SidebarHeader>
 
       <SidebarContent>
@@ -175,15 +166,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
 
       <SidebarFooter>
-      <div className="flex items-center mx-6 space-x-8 justify-center bg-slate-300/50 rounded-full dark:bg-gray-900/50 p-2 mb-4">
-        <Switch
-          className=" data-[state=unchecked]:bg-blue-300"
-          onCheckedChange={(value) => setTheme(value ? "dark" : "light")}
-         id="airplane-mode" />
-        <Label htmlFor="airplane-mode">Dark Mode</Label>
-    </div>
+     
         {planName && (
-          <SubscriptionCard plan={planName} variant="glass" />
+          <span className="px-4 mb-4">
+            <SubscriptionCard plan={planName} variant="outlined" />
+          </span>
 
         )}
         {!isLoading && !isError && !isPro && !isPremium && (
@@ -192,7 +179,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </div>
         )}
         <hr className="border-t border-border mx-2 -mt-px" />
-        
+        <NavItem item={{title: "Settings", url: "#", icon: CogIcon}} isActive={false} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
@@ -208,18 +195,18 @@ function NavItem({ item, isActive }: { item: NavItem; isActive: boolean }) {
       <SidebarMenuItem>
         <SidebarMenuButton
           asChild
-          className="group/menu-button font-medium gap-3 h-9 rounded-md flex flex-row"
+          className="group/menu-soon font-medium gap-3 h-9 rounded-md flex flex-row"
           disabled
         >
-          <span className="flex items-center gap-3">
+          <span className="flex items-center gap-3 ">
             {item.icon && (
               <item.icon
-                className="text-muted-foreground/60"
+                className="text-muted-foreground/60 group-hover/menu-soon:text-white"
                 size={22}
                 aria-hidden="true"
               />
             )}
-            <span className="text-muted-foreground/60">
+            <span className="text-muted-foreground/60 group-hover/menu-soon:text-white">
               {item.title}
             </span>
           </span>
@@ -238,16 +225,13 @@ function NavItem({ item, isActive }: { item: NavItem; isActive: boolean }) {
         <Link href={item.url}>
           {item.icon && (
             <item.icon
-              className={cn(
-                "text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary",
-                isActive && "text-emerald-500"
-              )}
+              className={isActive ? "text-white" : "group-hover/menu-button:text-white text-muted-foreground group-hover/menu-button-data-[active=true]/menu-button:text-primary"}
               size={22}
               aria-hidden="true"
             />
           )}
           <span
-            className={isActive ? "text-emerald-800" : ""}
+            className={isActive ? "text-white" : ""}
           >
             {item.title}
           </span>

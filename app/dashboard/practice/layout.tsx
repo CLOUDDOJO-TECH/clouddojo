@@ -17,7 +17,7 @@ export default function Layout({
   children: React.ReactNode
 }) {
   return (
-    <div className="w-full h-full bg-black">
+    <div className="[--header-height:calc(theme(spacing.14))] flex w-full h-full">
         {children}
     </div>
   )

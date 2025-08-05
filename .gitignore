@@ -12,6 +12,10 @@
 # production
 /build
 
+# backup
+#/backup/backup_script.sh
+/backup/bucket.conf
+
 # debug
 npm-debug.log*
 yarn-debug.log*

@@ -47,26 +47,21 @@ export function Plan({
 
   return (
     <Section className={cn(
-      "not-prose p-6 rounded-2xl max-w-sm shadow-md border border-surface-100 bg-white dark:bg-zinc-900 relative overflow-hidden",
-      isCurrent && "border-emerald-400",
-      isPopular && "border-emerald-400 shadow-lg"
+      "not-prose font-main p-6 rounded-2xl max-w-sm shadow-md border border-surface-100 bg-white dark:bg-zinc-900 relative overflow-hidden",
+      // isCurrent && "border-emerald-400",
+      isPopular && "outline outline-[rgba(120,119,198)]"
     )}>
-      {isPopular && (
-        <div className="absolute top-4 right-4 bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200 text-xs font-medium px-2.5 py-1 rounded-md flex items-center gap-1">
-          <Star className="w-3 h-3" />
-          Most Popular
-        </div>
-      )}
+      {isPopular && <PopularBackground />}
       
       <Section.Item className="flex-col items-start gap-4">
         <header className="flex w-full flex-col items-start mb-4">
           {name ? (
             <h2 className="text-2xl font-bold text-surface-900 dark:text-zinc-100">
-              {productName} <span className="font-normal text-zinc-500">({name})</span>
+              {name} 
             </h2>
           ) : null}
           
-          <div className="mt-6 mb-2 text-3xl font-bold text-amber-900 dark:text-zinc-100">
+          <div className="mt-6 mb-2 text-3xl font-bold text-brand-beige-900 dark:text-brand-beige-100">
             {formatPrice(price)}
             <span className="text-base font-normal text-zinc-500 ml-1">
               {!plan.isUsageBased && interval ? `per ${interval}` : null}
@@ -75,16 +70,16 @@ export function Plan({
           </div>
         </header>
         
-        {features.length > 0 && (
+        {/* {features.length > 0 && (
           <div className="flex items-center gap-2 mb-1">
             <span className="text-sm font-medium text-emerald-600">🔥 Everything you need to pass your AWS exam</span>
           </div>
-        )}
+        )} */}
         
         {features.length > 0 ? (
           <ul className="mb-6 space-y-3 w-full">
             {features.map((feature, i) => (
-              <li key={i} className="flex items-start gap-2 text-zinc-700 dark:text-zinc-200">
+              <li key={i} className="flex  text-start items-start gap-2 text-zinc-700 dark:text-zinc-200">
                 <CheckCircle2 className="w-5 h-5 text-emerald-500 mt-0.5 flex-shrink-0" />
                 <span className="text-sm">{feature}</span>
               </li>
@@ -123,4 +118,13 @@ export function NoPlans() {
     </section>
   );
 }
+
+const HighlightedBackground = () => (
+  <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:45px_45px] opacity-100 [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)] dark:opacity-30" />
+);
+
+// Popular Background Component
+const PopularBackground = () => (
+  <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.1),rgba(255,255,255,0))] dark:bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]" />
+);
 

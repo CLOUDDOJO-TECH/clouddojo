@@ -12,8 +12,6 @@ import {
 import { useState } from "react"
 import { Plans } from "@/app/dashboard/billing/(components)/plans"
 import { Suspense } from "react"
-import { AlertCircle, X } from "lucide-react"
-import { Alert } from "@lemonsqueezy/wedges"
 
 interface PricingModalProps {
   trigger?: React.ReactNode
@@ -76,7 +74,7 @@ export default function PricingModal({ trigger, isOpen, onOpenChange }: PricingM
               <p className="font-medium text-sm text-zinc-700 dark:text-zinc-200">
                 All plans come with a <span className="font-bold text-primary">14-day money-back guarantee</span>. No questions asked.
               </p>
-              <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
+              <div className="flex items-center font-play justify-center gap-2 text-xs text-muted-foreground">
                 🍋 Secure payment powered by Lemon Squeezy
               </div>
             </div>

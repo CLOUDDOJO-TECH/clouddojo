@@ -1,48 +1,93 @@
+import { Play } from "next/font/google";
 import type { Config } from "tailwindcss";
 const colors = require("tailwindcss/colors");
 
 const config = {
-    darkMode: ["class"],
-    content: [
+  darkMode: ["class"],
+  content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/(auth)/*.{js,ts,jsx,tsx,mdx}",
-	"./src/app/(dashboard)/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/(dashboard)/*.{js,ts,jsx,tsx,mdx}",
   ],
   safelist: [
     // Add dynamic color classes that need to be preserved
-    'bg-emerald-100', 'text-emerald-800', 'dark:bg-emerald-900', 'dark:text-emerald-300',
-    'bg-orange-100', 'text-orange-800', 'dark:bg-orange-900', 'dark:text-orange-300',
-    'bg-red-100', 'text-red-800', 'dark:bg-red-900', 'dark:text-red-300',
-    'text-emerald-500', 'text-emerald-600',
-    'text-orange-300'
+    "bg-emerald-100",
+    "text-emerald-800",
+    "dark:bg-emerald-900",
+    "dark:text-emerald-300",
+    "bg-orange-100",
+    "text-orange-800",
+    "dark:bg-orange-900",
+    "dark:text-orange-300",
+    "bg-red-100",
+    "text-red-800",
+    "dark:bg-red-900",
+    "dark:text-red-300",
+    "text-emerald-500",
+    "text-emerald-600",
+    "text-orange-300",
   ],
   theme: {
   	extend: {
+  		fontFamily: {
+  			sans: [
+  				'var(--font-poppins)',
+  				'sans-serif'
+  			],
+  			serif: [
+  				'var(--font-lora)',
+  				'serif'
+  			],
+  			mono: [
+  				'var(--font-jetbrains-mono)',
+  				'monospace'
+  			],
+  			kaushan: [
+  				'var(--font-kaushan-script)',
+  				'cursive'
+  			],
+  			play: [
+  				'var(--font-play)',
+  				'sans-serif'
+  			],
+			  main: ["var(--font-satoshi)"],
+  		},
   		colors: {
-			// Custom colors for Reveni site
-			mint: 'hsl(144, 65%, 95%)',       // #e8f9f0
-			cstm_teal: 'hsl(198, 45%, 20%)',       // #1d3b4a
-			cardPink: 'hsl(350, 100%, 92%)',  // #ffd6dc
-			cardPurple: 'hsl(252, 100%, 94%)', // #e5deff
-			cardGreen: 'hsl(84, 85%, 90%)',   // #e5f9cd
-			cardYellow: 'hsl(52, 100%, 90%)',  // #fef7cd
-			lightPurple: 'hsl(255, 100%, 97%)', // #f4f0ff
-			footerPink: 'hsl(350, 100%, 94%)',  // #ffe5e9
-			
+  			'brand-beige': {
+  				'50': '#ffffee',
+  				'100': '#f1eeea',
+  				'200': '#e3dcd5',
+  				'300': '#d5cbc0',
+  				'400': '#c7b9ab',
+  				'500': '#baa986',
+  				'600': '#ac9781',
+  				'700': '#9e856c',
+  				'800': '#907457',
+  				'900': '#826242',
+  				'950': '#74512d'
+  			},
+  			mint: 'hsl(144, 65%, 95%)',
+  			cstm_teal: 'hsl(198, 45%, 20%)',
+  			cardPink: 'hsl(350, 100%, 92%)',
+  			cardPurple: 'hsl(252, 100%, 94%)',
+  			cardGreen: 'hsl(84, 85%, 90%)',
+  			cardYellow: 'hsl(52, 100%, 90%)',
                 ...colors,
+  			lightPurple: 'hsl(255, 100%, 97%)',
+  			footerPink: 'hsl(350, 100%, 94%)',
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
-			midnight: {
-				DEFAULT: "hsl(222, 47%, 4%)",
-				light: "hsl(222, 47%, 10%)",
-			  },
-			midnighttwo: {
-				DEFAULT: "hsl(231, 54, 14%)",
-				light: "hsl(231, 54%, 20%)",
-			},
+  			midnight: {
+  				DEFAULT: 'hsl(222, 47%, 4%)',
+  				light: 'hsl(222, 47%, 10%)'
+  			},
+  			midnighttwo: {
+  				DEFAULT: 'hsl(231, 54, 14%)',
+  				light: 'hsl(231, 54%, 20%)'
+  			},
   			card: {
   				DEFAULT: 'hsl(var(--card))',
   				foreground: 'hsl(var(--card-foreground))'
@@ -82,7 +127,7 @@ const config = {
   				'5': 'hsl(var(--chart-5))'
   			},
   			sidebar: {
-  				DEFAULT: 'hsl(var(--sidebar-background))',
+  				DEFAULT: 'hsl(var(--sidebar))',
   				foreground: 'hsl(var(--sidebar-foreground))',
   				primary: 'hsl(var(--sidebar-primary))',
   				'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
@@ -94,24 +139,28 @@ const config = {
   		},
   		borderRadius: {
   			lg: 'var(--radius)',
-  			md: 'calc(var(--radius) - 2px)',
-  			sm: 'calc(var(--radius) - 4px)'
+  			md: 'calc(var(--radius) - 4px)',
+  			sm: 'calc(var(--radius) - 2px)'
   		},
   		keyframes: {
-			'spotlight': {
-				"0%": {
-				  opacity: "0",
-				  transform: "translate(-72%, -62%) scale(0.5)",
-				},
-				"100%": {
-				  opacity: "1",
-				  transform: "translate(-50%,-40%) scale(1)",
-				},
-			  },
-              'pulse-slow': {
-                '0%, 100%': { opacity: '1' },
-                '50%': { opacity: '0.75' },
-              },
+  			spotlight: {
+  				'0%': {
+  					opacity: '0',
+  					transform: 'translate(-72%, -62%) scale(0.5)'
+  				},
+  				'100%': {
+  					opacity: '1',
+  					transform: 'translate(-50%,-40%) scale(1)'
+  				}
+  			},
+  			'pulse-slow': {
+  				'0%, 100%': {
+  					opacity: '1'
+  				},
+  				'50%': {
+  					opacity: '0.75'
+  				}
+  			},
   			shimmer: {
   				from: {
   					backgroundPosition: '0 0'
@@ -135,17 +184,35 @@ const config = {
   				to: {
   					height: '0'
   				}
+  			},
+  			'accordion-down': {
+  				from: {
+  					height: '0'
+  				},
+  				to: {
+  					height: 'var(--radix-accordion-content-height)'
+  				}
+  			},
+  			'accordion-up': {
+  				from: {
+  					height: 'var(--radix-accordion-content-height)'
+  				},
+  				to: {
+  					height: '0'
+  				}
   			}
   		},
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out',
-			'spotlight': "spotlight 2s ease .75s 1 forwards",
-            'pulse-slow': 'pulse-slow 3s ease-in-out infinite',
+  			spotlight: 'spotlight 2s ease .75s 1 forwards',
+  			'pulse-slow': 'pulse-slow 3s ease-in-out infinite',
+  			'accordion-down': 'accordion-down 0.2s ease-out',
+  			'accordion-up': 'accordion-up 0.2s ease-out'
   		}
   	}
   },
-  plugins: [require("tailwindcss-animate"), require('@tailwindcss/typography'),],
+  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
 } satisfies Config;
 
 export default config;

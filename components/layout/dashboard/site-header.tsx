@@ -16,12 +16,13 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { useSidebar } from "@/components/ui/sidebar";
+import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { DarkModeToggle } from "@/components/dark-mode-toggle";
 import { UserButton, useUser } from "@clerk/nextjs";
 import FeedbackDialog from "./feedback-dialog";
 import { useFeedbackStore } from "@/store/use-feedback-store";
 import { useCommandMenuStore } from "@/store/use-command-menu-store";
+import ThemeSwitcher from "@/components/theme-switcher";
 
 export function SiteHeader() {
   const { toggleSidebar } = useSidebar();
@@ -82,17 +83,11 @@ export function SiteHeader() {
 
 
   return (
-    <header className="flex sticky top-0 z-50 w-full items-center border-b dark:bg-sidebar-accent bg-white/30 bg-opacity-50 backdrop-blur-sm">
+    <div className="">
+    <header className="dark w-full flex h-16 shrink-0 items-center gap-2 px-4 md:px-6   text-sidebar-foreground  before:absolute before:inset-y-3 before:-left-px before:w-px before:z-50">
       <div className="flex h-[--header-height] w-full items-center justify-between">
         <div className="gap-2 px-4 flex items-center">
-          <Button
-            className="h-8 w-8"
-            variant="ghost"
-            size="icon"
-            onClick={toggleSidebar}
-          >
-            <SidebarIcon className="h-24 w-24" />
-          </Button>
+           <SidebarTrigger className="-ms-2" />
           <Separator
             orientation="vertical"
             className="mr-2 h-4 data-[orientation=verticall]:h-4"
@@ -101,21 +96,22 @@ export function SiteHeader() {
             {generateBreadcrumbs()}
           </Breadcrumb>
         </div>
-        <div className="gap-4 px-4 flex items-center mr-6">
+        <div className="gap-4 flex items-center mr-6">
           <Button 
             variant="outline" 
             size="sm"
-            className="relative h-9 w-full justify-start text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64"
+            className="md:flex items-center hidden relative h-9 w-full justify-start text-sm text-brand-beige-500 sm:pr-12 md:w-40 border-brand-beige-800 lg:w-64"
             onClick={() => setCommandMenuOpen(true)}
           >
             <Search className="mr-2 h-4 w-4" />
-            <span className="hidden sm:inline-flex">Quick traverse...</span>
-            <kbd className="pointer-events-none absolute right-[0.3rem] top-[0.3rem] hidden h-6 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
+            <span className="hidden sm:inline-flex font-mono">Quick traverse...</span>
+            <kbd className="pointer-events-none absolute right-[0.3rem] top-[0.3rem] hidden h-6 select-none items-center gap-1 border-brand-beige-800 text-brand-beige-800 rounded border px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
               <span className="text-xs">⌘</span>J
             </kbd>
           </Button>
           <CommandMenu />
           <FeedbackDialog open={feedbackOpen} onOpenChange={setFeedbackOpen} />
+          <ThemeSwitcher />
           {user.isLoaded && (
             <div suppressHydrationWarning>
               <UserButton afterSignOutUrl="/" />
@@ -124,5 +120,6 @@ export function SiteHeader() {
         </div>
       </div>
     </header>
+    </div>
   );
 }
