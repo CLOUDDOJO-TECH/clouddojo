@@ -59,7 +59,7 @@ export function useSubscription(): SubscriptionStatus {
     }
 
     // Get the plan name from the userPlan object
-    const planName = userData.userPlan?.SubscriptionPlan?.name || null;
+    const planName = userData.userPlan?.subscriptionPlan?.name || null;
 
     
     if (!planName) {

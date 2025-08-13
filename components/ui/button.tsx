@@ -1,9 +1,8 @@
-import * as React from "react"
-import { cva, type VariantProps } from "class-variance-authority"
+import * as React from "react";
+import { cva, type VariantProps } from "class-variance-authority";
 import { Slot, Slottable } from "@radix-ui/react-slot";
 
-
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
@@ -18,6 +17,8 @@ const buttonVariants = cva(
           "border border-input  shadow-sm hover:bg-accent dark:hover:bg-gray-100/20 hover:text-accent-foreground",
         secondary:
           "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
+        glass:
+          "bg-slate-950/30 backdrop-blur-md backdrop-saturate-150 flex items-center  justify-center rounded-full border-slate-200/50 border p-1 shadow-sm w-fit max-w-[500px] mx-auto relative overflow-hidden",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         expandIcon:
@@ -47,8 +48,7 @@ const buttonVariants = cva(
       size: "default",
     },
   }
-)
-
+);
 
 interface IconProps {
   Icon?: React.ElementType;
@@ -63,13 +63,27 @@ interface IconRefProps {
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
-  asChild?: boolean
+  asChild?: boolean;
 }
 
 export type ButtonIconProps = IconProps | IconRefProps;
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps & ButtonIconProps>(
-  ({ className, variant, size, asChild = false, Icon, iconPlacement = 'right', ...props }, ref) => {
+const Button = React.forwardRef<
+  HTMLButtonElement,
+  ButtonProps & ButtonIconProps
+>(
+  (
+    {
+      className,
+      variant,
+      size,
+      asChild = false,
+      Icon,
+      iconPlacement = "right",
+      ...props
+    },
+    ref
+  ) => {
     const Comp = asChild ? Slot : "button";
     return (
       <Comp
@@ -90,8 +104,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps & ButtonIconProps
         )}
       </Comp>
     );
-  },
+  }
 );
-Button.displayName = "Button"
+Button.displayName = "Button";
 
-export { Button, buttonVariants }
+export { Button, buttonVariants };
