@@ -12,10 +12,18 @@ import { FounderTestimonial } from "@/components/landing/founder-testimonial";
 import { Spotlight } from "@/components/spotlight";
 import FeaturesSection from "@/components/landing/features-section";
 import TestimonialsSection from "@/components/landing/testimonials";
+import Silk from "@/components/backgrounds/Silk";
+import ThemedBackground from "@/components/backgrounds/ThemedBackground";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-[#FAFAF9] dark:bg-background text-white mx-auto">
+    <div className="min-h-screen w-screen bg-[#FAFAF9] dark:bg-background text-white mx-auto">
+      {/* Silk background with your specified configuration */}
+      <div className="pointer-events-none absolute z-[1] h-[169%] w-full lg:w-[100%]">
+        <ThemedBackground />
+      </div>
+
+      {/* Uncomment the StickyBanner if you want to show it */}
       {/* <StickyBanner
         hideOnScroll={true}
         className="bg-gradient-to-b from-blue-500 to-blue-600"
@@ -31,23 +39,26 @@ export default function Home() {
           </a>
         </p>
       </StickyBanner> */}
-      <Spotlight
+
+      {/* <Spotlight
         className="-top-40 left-0 md:-top-20 md:left-60"
         fill="white"
-      />
-      <Navbar />
-      <main>
-        <HeroSection />
-        <FeaturesSection />
-        <FeatureCards />
-        <FeaturesBento />
-        <TestimonialsSection />
-        {/* <ThreeStepFramework ctaLink="/dashboard" showCta={false} /> */}
-        {/* <VendorCompanies /> */}
-        <FounderTestimonial />
-        <FaqSection />
-      </main>
-      <Footer />
+      /> */}
+      <div className="absolute z-20">
+        <Navbar />
+        <main>
+          <HeroSection />
+          <FeaturesSection />
+          <FeatureCards />
+          <FeaturesBento />
+          <TestimonialsSection />
+          {/* <ThreeStepFramework ctaLink="/dashboard" showCta={false} /> */}
+          {/* <VendorCompanies /> */}
+          <FounderTestimonial />
+          <FaqSection />
+        </main>
+        <Footer />
+      </div>
     </div>
   );
 }
