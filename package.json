@@ -8,10 +8,10 @@
     "type": "module",
     "scripts": {
         "dev": "next dev --turbopack",
-        "build": "prisma generate && next build",
+        "build": "prisma generate && npm build",
         "start": "next start",
         "lint": "next lint",
-        "vercel-build": "npm install && prisma generate && next build"
+        "vercel-build": "npm install && prisma generate && npm build"
     },
     "dependencies": {
         "@ai-sdk/deepseek": "^0.2.16",
