@@ -69,13 +69,13 @@ export default function MainFilters({ onFilter }: MainFiltersProps) {
                 layout 
                 initial={false} 
                 animate={{ 
-                  backgroundColor: isSelected ? "#2a1711" : "rgba(39, 39, 42, 0.5)", 
+                  backgroundColor: isSelected ? "#d1fae5" : "var(--background)", 
                 }} 
                 whileHover={{ 
-                  backgroundColor: isSelected ? "#2a1711" : "rgba(39, 39, 42, 0.8)", 
+                  backgroundColor: isSelected ? "#ecfdf5" : "#ecfdf5", 
                 }} 
                 whileTap={{ 
-                  backgroundColor: isSelected ? "#1f1209" : "rgba(39, 39, 42, 0.9)", 
+                  backgroundColor: isSelected ? "#f8fafc" : "rgba(39, 39, 42, 0.9)", 
                 }} 
                 transition={{ 
                   type: "spring", 
@@ -85,11 +85,11 @@ export default function MainFilters({ onFilter }: MainFiltersProps) {
                   backgroundColor: { duration: 0.1 }, 
                 }} 
                 className={` 
-                  inline-flex items-center px-4 py-2 rounded-full text-base font-medium 
-                  whitespace-nowrap overflow-hidden ring-1 ring-inset 
+                  inline-flex font-main items-center px-4 py-2 rounded-full text-sm font-medium 
+                  whitespace-nowrap overflow-hidden ring-1 ring-slate-700/50 dark:ring-slate-100/50 ring-inset  
                   ${isSelected 
-                    ? "text-[#ff9066] ring-[hsla(0,0%,100%,0.12)]" 
-                    : "text-zinc-400 ring-[hsla(0,0%,100%,0.06)]"} 
+                    ? "text-primary ring-primary hover:text-primary hover:ring-primary" 
+                    : "dark:text-white/70 text-gray-900 hover:text-primary hover:ring-primary "} 
                 `} 
               > 
                 <motion.div 
@@ -118,8 +118,8 @@ export default function MainFilters({ onFilter }: MainFiltersProps) {
                         }} 
                         className="absolute right-0" 
                       > 
-                        <div className="w-4 h-4 rounded-full bg-[#ff9066] flex items-center justify-center"> 
-                          <Check className="w-3 h-3 text-[#2a1711]" strokeWidth={1.5} /> 
+                        <div className="w-4 h-4 rounded-full bg-primary flex items-center justify-center"> 
+                          <Check className="w-3 h-3 text-white" strokeWidth={1.5} /> 
                         </div> 
                       </motion.span> 
                     )} 

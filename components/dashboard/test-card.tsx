@@ -61,7 +61,7 @@ export default function PracticeTestCard({questionsCount, test, onStartTest, }: 
           className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
         />
         {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t dark:from-background from-gray-900  dark:via-background/80 via-gray-700 to-transparent" />
       </div>
 
       {/* Top Badges */}

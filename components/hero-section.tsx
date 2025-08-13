@@ -11,6 +11,7 @@ import PreviewTabs from "./preview-tabs";
 import TabsNav from "./tabs-nav";
 import Image from "next/image";
 import { useTheme } from "next-themes";
+import { Button } from "./ui/button";
 
 export default function HeroSection() {
   const { isSignedIn } = useUser();
@@ -27,7 +28,7 @@ export default function HeroSection() {
     <div className="relative mx-auto md:my-16 my-2 flex flex-col items-center justify-center w-full overflow-hidden">
       <div className="px-4 pt-10 md:pt-12 w-full flex flex-col items-center justify-center">
         <div className="max-w-7xl w-full">
-          <span className="flex items-start mb-2 w-full justify-center sm:justify-start">
+          <span className="">
             <TrustBadge />
           </span>
           <h1 className="relative z-10 mx-auto max-w-3xl md:max-w-5xl text-center text-4xl font-bold text-black md:text-4xl lg:text-6xl dark:text-slate-200">
@@ -70,7 +71,7 @@ export default function HeroSection() {
               duration: 0.3,
               delay: 0.8,
             }}
-            className="relative z-10 mx-auto max-w-md md:max-w-xl py-4  text-center text-md md:text-lg font-normal text-gray-500 dark:text-neutral-400"
+            className="relative z-10 mx-auto max-w-md md:max-w-xl py-4  text-center text-md md:text-lg font-normal text-gray-500 dark:text-neutral-100"
           >
             CloudDojo helps you crush your cloud certification exams with
             smarter practice tests, perfromance analystics,and real-time ai
@@ -140,12 +141,12 @@ export default function HeroSection() {
               href="https://calendar.notion.so/meet/glenmiracle/7fnt4l09"
               target="_blank"
               rel="noopener noreferrer"
-              className="shadow-lg"
+              className=""
             >
-              <button className="w-auto transform rounded-lg border-2 border-emerald-700 px-6 py-2 font-medium text-black transition-all duration-300 hover:-translate-y-0.5 hover:bg-gray-100 dark:border-emerald-700  dark:text-white dark:hover:bg-background">
+              <Button variant="glass" size='lg' className="rounded-full py-5 hover:text-primary hover:border-primary">
                 Support
                 <Headset className="ml-2 inline-block h-4 w-4" />
-              </button>
+              </Button>
             </Link>
           </motion.div>
 
