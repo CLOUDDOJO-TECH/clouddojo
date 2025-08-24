@@ -3,6 +3,8 @@
 **CloudDojo** is an innovative, AI-powered platform designed to help you master cloud certifications, particularly AWS, with confidence and ease. Whether you're preparing for your first certification or aiming to advance your cloud expertise, CloudDojo provides the tools, insights, and guidance you need to succeed. With simulated exams, progress tracking, and personalized AI-driven recommendations, CloudDojo ensures you're fully prepared to ace your certification exams and more.
 ✅
 
+![WhatsApp Image 2025-08-05 at 12 47 51 PM](https://github.com/user-attachments/assets/8cbc7e43-6927-491a-91d7-051be0ea2a24)
+
 ![1](https://github.com/user-attachments/assets/b2b34ed7-45e1-44b9-a5ec-13590fd0e16f)
 
 ---
@@ -130,3 +132,5 @@ Special thanks to the AWS community, open-source contributors, and our dedicated
 ---
 
 **CloudDojo** – Your AI-powered partner in cloud certification success. 🚀
+
+**Built and Boostrapped by:** - Bonyu Miracle Glen
