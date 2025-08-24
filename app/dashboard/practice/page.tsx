@@ -13,9 +13,7 @@ import {
 
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-} from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { ExitTestAlert } from "@/components/dashboard/exit-test-alert";
 
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
@@ -42,19 +40,21 @@ export default function PracticeTestsPage() {
     level: "all",
   });
   const [sortBy, setSortBy] = useState<"newest" | "popular" | "duration">(
-    "newest"
+    "newest",
   );
   const [showExitAlert, setShowExitAlert] = useState(false);
   const [pendingNavigation, setPendingNavigation] = useState<string | null>(
-    null
+    null,
   );
   const [view, setView] = useState<"grid" | "list">(() => {
     if (typeof window !== "undefined") {
       return window.innerWidth < 768 ? "list" : "grid";
     }
+
     return "grid";
   });
 
+  console.log(view);
   // Check for ongoing test
   const hasOngoingTest = useMemo(() => {
     // You should implement this based on your actual test state management
@@ -110,35 +110,44 @@ export default function PracticeTestsPage() {
     // First filter
     let results = data.data.filter((test) => {
       // Level filtering
-      const matchesLevel = filters.level === "all" || 
+      const matchesLevel =
+        filters.level === "all" ||
         (test.level && test.level.toString() === filters.level);
-      
+
       // Topic filtering with expanded search
       // Check if any topic matches in category ID, title, description, or category name
-      const matchesTopics = filters.topics.length === 0 || 
-        filters.topics.some(topic => {
+      const matchesTopics =
+        filters.topics.length === 0 ||
+        filters.topics.some((topic) => {
           const topicLower = topic.toLowerCase();
           return (
             (test.category && test.category.id.toLowerCase() === topicLower) ||
             (test.title && test.title.toLowerCase().includes(topicLower)) ||
-            (test.description && test.description.toLowerCase().includes(topicLower)) ||
-            (test.category && test.category.name && 
-             test.category.name.toLowerCase().includes(topicLower))
+            (test.description &&
+              test.description.toLowerCase().includes(topicLower)) ||
+            (test.category &&
+              test.category.name &&
+              test.category.name.toLowerCase().includes(topicLower))
           );
         });
-      
+
       if (searchQuery === "") {
         return matchesLevel && matchesTopics;
       }
 
       const searchLower = searchQuery.toLowerCase().trim();
-      const titleMatch = test.title?.toLowerCase().includes(searchLower) ?? false;
-      const descriptionMatch = test.description?.toLowerCase().includes(searchLower) ?? false;
-      const categoryMatch = test.category?.name?.toLowerCase().includes(searchLower) ?? false;
-      
-      return matchesLevel && 
-             matchesTopics && 
-             (titleMatch || descriptionMatch || categoryMatch);
+      const titleMatch =
+        test.title?.toLowerCase().includes(searchLower) ?? false;
+      const descriptionMatch =
+        test.description?.toLowerCase().includes(searchLower) ?? false;
+      const categoryMatch =
+        test.category?.name?.toLowerCase().includes(searchLower) ?? false;
+
+      return (
+        matchesLevel &&
+        matchesTopics &&
+        (titleMatch || descriptionMatch || categoryMatch)
+      );
     });
 
     // final sorting
@@ -188,7 +197,7 @@ export default function PracticeTestsPage() {
         onContinue={handleExitConfirm}
       />
       <div className="flex-1">
-        <div className="px-8 md:px-12  pt-10 md:pt-12">
+        <div className="px-4 md:px-12  pt-10 md:pt-12 w-full">
           <div className="flex flex-col gap-6">
             {/* Header Section */}
             <div className="flex flex-col gap-4">
@@ -196,35 +205,38 @@ export default function PracticeTestsPage() {
                 <div>
                   <h1 className="text-3xl  font-semibold">Practice Tests</h1>
                   {/* {processedTests.length > 0 && ( */}
-                    <p className="text-muted-foreground font-mono mt-1">
-                      {processedTests.length}{" "}
-                      {processedTests.length === 1 ? "test" : "tests"} available
-                    </p>
+                  <p className="text-muted-foreground font-mono mt-1">
+                    {processedTests.length}{" "}
+                    {processedTests.length === 1 ? "test" : "tests"} available
+                  </p>
                   {/* )} */}
                 </div>
               </div>
 
               {/* Controls Section */}
-              <div className="flex flex-col gap-4">
-                
+              <div className="flex flex-col w-full overflow-hidden gap-4">
                 <div className="flex flex-col md:flex-row gap-4 justify-between items-center w-full">
-                  <span className="flex space-x-3">
+                  <span className="md:flex w-full flex-col space-y-2">
                     <SearchBar onSearch={(query) => setSearchQuery(query)} />
-                    <MainFilters onFilter={handleFilter} />
-                    <FilterComponent onFilter={handleFilter} />
+                    <div className="flex md:flex-row justify-between items-center w-full">
+                      <MainFilters onFilter={handleFilter} />
+                      <div className="flex gap-3 items-center">
+                        <FilterComponent onFilter={handleFilter} />
+                        <select
+                          className="h-9 hidden md:block rounded-md border border-input bg-background px-3 text-sm"
+                          value={sortBy}
+                          onChange={(e) =>
+                            setSortBy(e.target.value as typeof sortBy)
+                          }
+                        >
+                          <option value="newest">Newest</option>
+                          <option value="popular">Most Popular</option>
+                          <option value="duration">Duration</option>
+                        </select>
+                      </div>
+                    </div>
                   </span>
                   <div className="flex gap-3 items-center">
-                    <select
-                      className="h-9 rounded-md border border-input bg-background px-3 text-sm"
-                      value={sortBy}
-                      onChange={(e) =>
-                        setSortBy(e.target.value as typeof sortBy)
-                      }
-                    >
-                      <option value="newest">Newest</option>
-                      <option value="popular">Most Popular</option>
-                      <option value="duration">Duration</option>
-                    </select>
                     <div className="hidden md:block">
                       <ToggleGroup
                         type="single"
@@ -368,7 +380,7 @@ function TestCard({ test, view, onStartTest }: TestCardProps) {
     );
   } else {
     return (
-      <Card className="overflow-hidden transition-all hover:shadow-md group">
+      <Card className="overflow-hidden transition-all font-main hover:shadow-md group">
         <div className="flex flex-col md:flex-row">
           <div className="md:w-1/4 lg:w-1/5 aspect-video md:aspect-square relative overflow-hidden">
             {test.free && (
@@ -409,13 +421,11 @@ function TestCard({ test, view, onStartTest }: TestCardProps) {
               {hasAccess ? (
                 <Button
                   onClick={onStartTest}
-                  className={buttonVariants({
-                    variant: "outline",
-                    size: "lg",
-                    className: "border-none rounded-lg",
-                  })}
+                  variant="shine"
+                  size="lg"
+                  className="border-none rounded-lg"
                 >
-                  Start Test
+                  Begin Test
                 </Button>
               ) : (
                 <UpgradeButton className="mt-2" size="sm" variant="primary">
@@ -423,7 +433,7 @@ function TestCard({ test, view, onStartTest }: TestCardProps) {
                 </UpgradeButton>
               )}
             </div>
-            <p className="text-muted-foreground font-mono text-sm mb-3">
+            <p className="text-muted-foreground font-main text-sm mb-3">
               {test.description}
             </p>
             <div className="flex items-center gap-4 text-sm">

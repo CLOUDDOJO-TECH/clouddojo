@@ -29,10 +29,10 @@ const ThemedBackground: React.FC = () => {
       {/* Show Silk in dark mode with the specified configuration */}
       {resolvedTheme === "dark" && (
         <Silk
-          speed={3.3}
-          scale={0.4}
-          noiseIntensity={4}
-          rotation={0}
+          speed={3}
+          scale={0.5}
+          noiseIntensity={2.5}
+          rotation={1.97}
           color="#6ee7b7"
         />
       )}

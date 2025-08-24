@@ -16,19 +16,22 @@ import { LeaderboardEntry, TimeRangeOption } from "./types";
  * Main leaderboard page component
  */
 export default function LeaderboardPage() {
-  const [leaderboardData, setLeaderboardData] = useState<LeaderboardEntry[]>([]);
+  const [leaderboardData, setLeaderboardData] = useState<LeaderboardEntry[]>(
+    [],
+  );
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [timeRange, setTimeRange] = useState<TimeRangeOption>("daily");
+  const [timeRange, setTimeRange] = useState<TimeRangeOption>("weekly");
 
   // Helper function for generating avatar fallback text
   const getAvatarFallback = useCallback(
     (firstName?: string, lastName?: string) => {
-      return `${firstName?.[0] ?? ""}${lastName?.[0] ?? ""}`
-        .toUpperCase() || "U";
+      return (
+        `${firstName?.[0] ?? ""}${lastName?.[0] ?? ""}`.toUpperCase() || "U"
+      );
     },
-    []
+    [],
   );
 
   // Fetch data when time range changes
@@ -71,15 +74,27 @@ export default function LeaderboardPage() {
 
   // Show appropriate state based on data loading status
   if (isLoading) {
-    return <LoadingState />;
+    return (
+      <div className="flex justify-center items-center h-screen w-full">
+        <LoadingState />
+      </div>
+    );
   }
 
   if (error) {
-    return <ErrorState error={error} onRetry={handleRetry} />;
+    return (
+      <div className="flex justify-center items-center h-screen w-full">
+        <ErrorState error={error} onRetry={handleRetry} />
+      </div>
+    );
   }
 
   if (leaderboardData.length === 0) {
-    return <EmptyState />;
+    return (
+      <div className="flex justify-center items-center h-screen w-full">
+        <EmptyState />
+      </div>
+    );
   }
 
   // Extract top three performers

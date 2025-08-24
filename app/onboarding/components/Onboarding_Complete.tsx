@@ -52,7 +52,6 @@ export function CompletionScreen({ selectedData }: CompletionScreenProps) {
                   height={80}
                 />
               </div>
-              <div className="absolute inset-0 h-20 bg-emerald-400/20 rounded-full animate-ping" />
             </div>
           </div>
 
@@ -67,7 +66,7 @@ export function CompletionScreen({ selectedData }: CompletionScreenProps) {
           </div>
 
           {/* Personalized Stats */}
-          <div className="grid grid-cols-2 gap-4 py-6">
+          <div className="hidden grid grid-cols-2 gap-4 py-6">
             <div className="text-center p-3 bg-white/5 rounded-xl border border-white/10">
               <div className="text-xl font-bold text-emerald-400">
                 {selectedData.platforms.length}
@@ -101,7 +100,7 @@ export function CompletionScreen({ selectedData }: CompletionScreenProps) {
             ) : (
               <Rocket className="w-5 h-5" />
             )}
-            <span>{isSubmitting ? "Filling you in..." : "Submit"}</span>
+            <span>{isSubmitting ? "Filling you in..." : "Join the club"}</span>
           </button>
         </div>
       </GlassCard>

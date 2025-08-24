@@ -47,7 +47,7 @@ const buttonVariants = cva(
       variant: "default",
       size: "default",
     },
-  }
+  },
 );
 
 interface IconProps {
@@ -64,14 +64,11 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
+  Icon?: React.ElementType<any>;
+  iconPlacement?: "left" | "right";
 }
 
-export type ButtonIconProps = IconProps | IconRefProps;
-
-const Button = React.forwardRef<
-  HTMLButtonElement,
-  ButtonProps & ButtonIconProps
->(
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
       className,
@@ -82,7 +79,7 @@ const Button = React.forwardRef<
       iconPlacement = "right",
       ...props
     },
-    ref
+    ref,
   ) => {
     const Comp = asChild ? Slot : "button";
     return (
@@ -93,18 +90,18 @@ const Button = React.forwardRef<
       >
         {Icon && iconPlacement === "left" && (
           <div className="group-hover:translate-x-100 w-0 translate-x-[0%] pr-0 opacity-0 transition-all duration-200 *:size-4 group-hover:w-5 group-hover:pr-2 group-hover:opacity-100">
-            <Icon />
+            {React.createElement(Icon)}
           </div>
         )}
         <Slottable>{props.children}</Slottable>
         {Icon && iconPlacement === "right" && (
           <div className="w-0 translate-x-[100%] pl-0 opacity-0 transition-all duration-200 *:size-4 group-hover:w-5 group-hover:translate-x-0 group-hover:pl-2 group-hover:opacity-100">
-            <Icon />
+            {React.createElement(Icon)}
           </div>
         )}
       </Comp>
     );
-  }
+  },
 );
 Button.displayName = "Button";
 

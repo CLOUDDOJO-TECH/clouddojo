@@ -23,7 +23,6 @@ export default function Home() {
         <ThemedBackground />
       </div>
 
-      {/* Uncomment the StickyBanner if you want to show it */}
       {/* <StickyBanner
         hideOnScroll={true}
         className="bg-gradient-to-b from-blue-500 to-blue-600"
@@ -40,11 +39,8 @@ export default function Home() {
         </p>
       </StickyBanner> */}
 
-      {/* <Spotlight
-        className="-top-40 left-0 md:-top-20 md:left-60"
-        fill="white"
-      /> */}
-      <div className="absolute z-20">
+     
+      <div className="absolute font-main z-20">
         <Navbar />
         <main>
           <HeroSection />

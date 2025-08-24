@@ -13,7 +13,7 @@ interface ErrorStateProps {
  */
 export function ErrorState({ error, onRetry }: ErrorStateProps) {
   return (
-    <div className="flex flex-col justify-center items-center h-[70vh] max-w-md mx-auto text-center">
+    <div className="flex flex-col justify-start items-center h-[70vh] max-w-md mx-auto text-center">
       <AlertCircle className="h-12 w-12 text-destructive mb-4" />
       <h2 className="text-xl font-semibold mb-2">Unable to load leaderboard</h2>
       <p className="text-muted-foreground mb-6">{error}</p>

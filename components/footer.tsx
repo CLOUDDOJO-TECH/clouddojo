@@ -4,28 +4,28 @@ import { NavbarLogo } from "@/components/resizable-nav";
 
 export default function Footer() {
   return (
-    <footer className="text-foreground relative overflow-hidden py-2">
-      {/* Blue glow effect */}
-      <div className="absolute top-0 right-0 w-1/3 h-full bg-foreground/10 dark:bg-blue-500/20 blur-[100px] rounded-full"></div>
-      <div className="absolute top-0 left-0 w-1/3 h-full bg-foreground/10 dark:bg-blue-500/10 blur-[100px] rounded-full"></div>
+    <footer className="text-foreground font-main relative overflow-hidden py-2">
+      {/* Emerald glow effect */}
+      <div className="absolute top-0 right-0 w-1/3 h-full bg-foreground/10 dark:bg-emerald-500/20 blur-[100px] rounded-full"></div>
+      <div className="absolute top-0 left-0 w-1/3 h-full bg-foreground/10 dark:bg-orange-500/10 blur-[100px] rounded-full"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Top section */}
-        <div className="py-8 border-b border-gray-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div className="py-8 border-b border-foreground/60 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           {/* Logo and tagline */}
           <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
             <div className="flex items-center gap-2">
               <NavbarLogo  />
             </div>
-            <div className="hidden md:block h-6 w-px bg-gray-700 mx-2"></div>
-            <p className="text-sm max-w-xs">
+            <div className="hidden md:block h-6 w-px bg-foreground/20 mx-2"></div>
+            <p className="text-xs max-w-xs">
               Training the next generation of cloud engineers!
             </p>
           </div>
 
           {/* Navigation */}
           <nav>
-            <ul className="flex flex-wrap gap-6 items-center font-light text-sm">
+            <ul className="flex flex-wrap gap-6 text-xs items-center font-light">
               <li>
                 <Link href="#" className="flex items-center gap-1 hover:text-emerald-500 transition-colors">
                   Blog 
@@ -64,15 +64,15 @@ export default function Footer() {
           </div>
 
           <div className="flex items-center gap-4">
-            <Link href="#" className="text-emerald-600 hover:text-blue-400 transition-colors">
+            <Link href="#" className="text-emerald-600 hover:text-orange-400 transition-colors">
               <Instagram className="h-5 w-5" />
               <span className="sr-only">Instagram</span>
             </Link>
-            <Link href="https://x.com/glen_miracle4?t=deOVIP9ZnYQg_znWKKqWFg&s=09" target="_blank" rel="noopener noreferrer" className="text-emerald-600 hover:text-blue-400 transition-colors">
+            <Link href="https://x.com/glen_miracle4?t=deOVIP9ZnYQg_znWKKqWFg&s=09" target="_blank" rel="noopener noreferrer" className="text-emerald-600 hover:text-orange-400 transition-colors">
               <Twitter className="h-5 w-5" />
               <span className="sr-only">Twitter</span>
             </Link>
-            <Link href="https://www.linkedin.com/in/glen-miracle-6968a9216/" target="_blank" rel="noopener noreferrer" className="text-emerald-600 hover:text-blue-400 transition-colors">
+            <Link href="https://www.linkedin.com/in/glen-miracle-6968a9216/" target="_blank" rel="noopener noreferrer" className="text-emerald-600 hover:text-orange-400 transition-colors">
               <Linkedin className="h-5 w-5" />
               <span className="sr-only">LinkedIn</span>
             </Link>
