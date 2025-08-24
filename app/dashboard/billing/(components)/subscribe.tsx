@@ -1,12 +1,11 @@
 "use client";
 
-import { buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
+import { Loading } from "@/components/ui/loading";
 import { changePlan, getCheckoutURL } from "@/config/actions";
-import { cn } from "@/lib/utils";
 import { useAuth } from "@clerk/nextjs";
-import { Button, Loading } from "@lemonsqueezy/wedges";
 import { LsSubscriptionPlan } from "@prisma/client";
-import { ArrowLeft, ArrowRight, CheckIcon, PlusIcon } from "lucide-react";
+import { CheckIcon, PlusIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import {
   forwardRef,
@@ -49,14 +48,6 @@ export const SignupButton = forwardRef<ButtonElement, ButtonProps>(
         ? "Switch to this plan"
         : "Subscribe";
 
-    // eslint-disable-next-line no-nested-ternary -- disabled
-    const before = loading ? (
-      <Loading size="sm" className="size-4 dark" color="secondary" />
-    ) : (props.before ?? isCurrent) ? (
-      <CheckIcon className="size-4" />
-    ) : (
-      <PlusIcon className="size-4" />
-    );
 
     const { isLoaded, isSignedIn } = useAuth();
 
@@ -67,10 +58,8 @@ export const SignupButton = forwardRef<ButtonElement, ButtonProps>(
 
     return (
       <Button
-        // class="lemonsqueezy-button"
         ref={ref}
-        className="flex bg-orange-500"
-        // before={before}
+        className="flex bg-orange-500 gap-2"
         disabled={(loading || isCurrent) ?? props.disabled}
         onClick={async () => {
           // If changing plans, call server action.
@@ -116,8 +105,21 @@ export const SignupButton = forwardRef<ButtonElement, ButtonProps>(
         }}
         {...otherProps}
       >
-
-        {loading ? "loading" : label}
+        {loading ? (
+          <>
+            <Loading size="sm" color="secondary" />
+            Loading...
+          </>
+        ) : (
+          <>
+            {isCurrent ? (
+              <CheckIcon className="size-4" />
+            ) : (
+              <PlusIcon className="size-4" />
+            )}
+            {label}
+          </>
+        )}
       </Button>
     );
   },
