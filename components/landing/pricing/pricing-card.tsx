@@ -5,29 +5,29 @@ import { cn } from "@/lib/utils";
 
 import NumberFlow from "@number-flow/react";
 import { ArrowRight, BadgeCheck } from "lucide-react";
-
-import { PricingTier } from "../../../lib/payments/config";
-import { SignInButton, useAuth } from "@clerk/nextjs";
-import { SignupButton } from "@/app/dashboard/billing/(components)/subscribe";
-import Link from "next/link";
+import { PricingTier } from "./config";
+import { useAuth } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 export const PricingCard = ({
   tier,
-  // paymentFrequency,
+  paymentFrequency,
 }: {
   tier: PricingTier;
-  // paymentFrequency: string;
+  paymentFrequency: string;
 }) => {
   // const price = tier.price[paymentFrequency as keyof typeof tier.price];
   const isHighlighted = tier.highlighted;
   const isPopular = tier.popular;
-  const price = parseFloat((tier.price / 100).toFixed(2)); // Assuming price is in cents, convert to dollars
+  const price = tier.price[paymentFrequency];
 
-  const { isSignedIn } = useAuth();
+  const isSignedIn = useAuth().isSignedIn;
+  const router = useRouter();
+
   return (
     <div
       className={cn(
-        "relative flex flex-col gap-8 overflow-hidden rounded-2xl border p-6 shadow ",
+        "relative flex  flex-col gap-8 overflow-hidden rounded-2xl border p-6 shadow",
         isHighlighted
           ? "bg-foreground text-background"
           : "bg-background text-foreground",
@@ -35,25 +35,22 @@ export const PricingCard = ({
       )}
     >
       {/* Background Decoration */}
-      <div className="absolute inset-0 z-0">
-        {isHighlighted && <HighlightedBackground />}*
-        {isPopular && <PopularBackground />}
-      </div>
+      {isHighlighted && <HighlightedBackground />}
+      {isPopular && <PopularBackground />}
 
-      {/* Card Content Container - all content positioned above backgrounds */}
-      <div className="relative z-10 flex flex-col gap-8">
-        {/* Card Header */}
-        <h2 className="flex items-center gap-3 text-xl font-medium capitalize">
-          {tier.name}
-          {isPopular && (
-            <Badge className="mt-1 bg-orange-900 px-1 py-0 text-white hover:bg-orange-900">
-              🔥 Most Popular
-            </Badge>
-          )}
-        </h2>
+      {/* Card Header */}
+      <h2 className="flex items-center gap-3 text-xl font-medium capitalize">
+        {tier.name}
+        {isPopular && (
+          <Badge className="mt-1 bg-orange-900 px-1 py-0 text-white hover:bg-orange-900">
+            🔥 Most Popular
+          </Badge>
+        )}
+      </h2>
 
-        {/* Price Section */}
-        <div className="relative h-12">
+      {/* Price Section */}
+      <div className="relative h-12">
+        {typeof price === "number" ? (
           <>
             <NumberFlow
               format={{
@@ -66,57 +63,57 @@ export const PricingCard = ({
             />
             <p className="-mt-2 text-xs font-medium">Per month/user</p>
           </>
-        </div>
-
-        {/* Features */}
-        <div className="flex-1 space-y-2">
-          <h3 className="text-sm font-medium">{tier.description}</h3>
-          <ul className="space-y-2">
-            {tier.features.map((feature, index) => (
-              <li
-                key={index}
-                className={cn(
-                  "flex items-center gap-2 text-sm font-medium",
-                  isHighlighted ? "text-background" : "text-foreground/60",
-                )}
-              >
-                <BadgeCheck strokeWidth={1} size={16} />
-                {feature}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Call to Action Button */}
-        {isSignedIn ? (
-          <SignInButton forceRedirectUrl="/dashboard/billing">
-            <Button
-              variant="expandIcon"
-              Icon={ArrowRight}
-              iconPlacement="right"
-              className={cn(
-                "h-fit w-full rounded-lg",
-                isHighlighted && "bg-accent text-foreground hover:bg-accent/95",
-              )}
-            >
-              {tier.cta}
-            </Button>
-          </SignInButton>
         ) : (
-          <Link href={"/dashboard/billing"}>
-            <Button
-              variant="expandIcon"
-              Icon={ArrowRight}
-              className={cn(
-                "h-fit w-full rounded-lg",
-                isHighlighted && "bg-accent text-foreground hover:bg-accent/95",
-              )}
-            >
-              {tier.cta}
-            </Button>
-          </Link>
+          <h1 className="text-4xl font-medium">{price}</h1>
         )}
       </div>
+
+      {/* Features */}
+      <div className="flex-1 space-y-2">
+        <h3 className="text-sm font-">{tier.description}</h3>
+        <ul className="space-y-2">
+          {tier.features.map((feature, index) => (
+            <li
+              key={index}
+              className={cn(
+                "flex items-center gap-2 text-sm ",
+                isHighlighted ? "text-background" : "text-foreground/60",
+              )}
+            >
+              <BadgeCheck
+                strokeWidth={1}
+                size={18}
+                className={cn(
+                  "text-foreground",
+                  isPopular && "text-[#7877C5]",
+                  isHighlighted && "text-foreground",
+                )}
+              />
+              {feature}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Call to Action Button */}
+      <Button
+        variant="expandIcon"
+        onClick={() => {
+          if (isSignedIn) {
+            router.push("/dashboard/billing");
+          } else {
+            router.push("/billing/learnmore");
+          }
+        }}
+        Icon={ArrowRight}
+        iconPlacement="right"
+        className={cn(
+          "h-fit w-full rounded-lg",
+          isHighlighted && "bg-accent text-foreground hover:bg-accent/95",
+        )}
+      >
+        {isSignedIn ? tier.cta : "Learn More"}
+      </Button>
     </div>
   );
 };

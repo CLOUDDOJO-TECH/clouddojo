@@ -1,12 +1,9 @@
-
-
 import Header from "@/components/header";
 import Navbar from "@/components/navbar";
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import Script from "next/script";
-
 
 export const metadata: Metadata = {
   title: "Shadcn Pricing Page",
@@ -21,9 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`overflow-x-hidden font-main antialiased`}
-      >
+      <body className={`overflow-x-hidden  antialiased`}>
         <div className="relative">
           <ThemeProvider
             attribute="class"
@@ -37,7 +32,6 @@ export default function RootLayout({
               <div className="container mx-auto h-[100dvh] px-4">
                 <Navbar />
                 {children}
-                
               </div>
             </div>
           </ThemeProvider>

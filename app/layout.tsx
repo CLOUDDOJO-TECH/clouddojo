@@ -149,25 +149,28 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <html lang="en" suppressHydrationWarning className={`dark:dark ${poppins.variable} ${playwrite_au_vic} ${kaushan_script} ${lora.variable} ${jetbrains_mono.variable} ${satoshi.variable}`}>
       <head>
       </head>
-      <body className={`${inter.className}`}>
+      <body className={`${inter.className} overflow-x-hidden antialiased`}>
         <Script src="https://app.lemonsqueezy.com/js/lemon.js" strategy="beforeInteractive" defer />
         <Script async src="https://cdn.seline.com/seline.js" data-token="9b13f9d446740a0"></Script>
-        <Providers>
-          {/* <Spotlight
-            className="-top-40 left-0 md:-top-20 md:left-60"
-            fill="white"
-          /> */}
-          <SpeedInsights />
-          <Analytics />
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
-        </Providers>
+        <div className="relative">
+          <Providers>
+            <SpeedInsights />
+            <Analytics />
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <div className="fixed inset-0 z-0 bg-background">
+                <div className="h-full w-full bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:35px_35px] opacity-30 [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
+              </div>
+              <div className="relative z-10">
+                {children}
+              </div>
+            </ThemeProvider>
+          </Providers>
+        </div>
       </body>
     </html>
   );

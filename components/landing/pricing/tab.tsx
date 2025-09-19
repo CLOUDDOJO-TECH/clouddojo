@@ -19,7 +19,7 @@ export const Tab = ({
     <button
       onClick={() => setSelected(text)}
       className={cn(
-        "relative w-fit px-4 py-2 text-sm font-semibold capitalize text-foreground transition-colors",
+        "relative w-fit  px-4 py-2 text-sm font-medium capitalize text-foreground transition-colors",
         discount && "flex items-center justify-center gap-2.5",
       )}
     >
@@ -40,7 +40,7 @@ export const Tab = ({
               : "bg-gray-300 hover:bg-gray-300",
           )}
         >
-          Save 35%
+          Save 15%
         </Badge>
       )}
     </button>

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   Dialog,
@@ -8,21 +8,25 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogClose,
-} from "@/components/ui/dialog"
-import { useState } from "react"
-import { Plans } from "@/app/dashboard/billing/(components)/plans"
-import { Suspense } from "react"
+} from "@/components/ui/dialog";
+import { useState } from "react";
+import { Plans } from "@/app/dashboard/billing/(components)/plans";
+import { Suspense } from "react";
 
 interface PricingModalProps {
-  trigger?: React.ReactNode
-  isOpen?: boolean
-  onOpenChange?: (open: boolean) => void
+  trigger?: React.ReactNode;
+  isOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
-export default function PricingModal({ trigger, isOpen, onOpenChange }: PricingModalProps) {
-  const [internalOpen, setInternalOpen] = useState(false)
-  const open = isOpen !== undefined ? isOpen : internalOpen
-  const setOpen = onOpenChange || setInternalOpen
+export default function PricingModal({
+  trigger,
+  isOpen,
+  onOpenChange,
+}: PricingModalProps) {
+  const [internalOpen, setInternalOpen] = useState(false);
+  const open = isOpen !== undefined ? isOpen : internalOpen;
+  const setOpen = onOpenChange || setInternalOpen;
 
   const handleSubscribeComplete = () => {
     // Close the modal when subscription is complete
@@ -39,7 +43,6 @@ export default function PricingModal({ trigger, isOpen, onOpenChange }: PricingM
           bg-white dark:bg-zinc-900
         "
       >
-       
         <DialogHeader
           className="
             px-4 md:px-8 pt-4 pb-6
@@ -51,12 +54,13 @@ export default function PricingModal({ trigger, isOpen, onOpenChange }: PricingM
             Choose Your Plan
           </DialogTitle>
           <DialogDescription className="text-center text-base mt-2 text-zinc-600 dark:text-zinc-300">
-            Level up your AWS certification prep with premium features and resources.
+            Level up your AWS certification prep with premium features and
+            resources.
           </DialogDescription>
         </DialogHeader>
-      
+
         <div className="p-4 md:p-8">
-          <Suspense 
+          <Suspense
             fallback={
               <div className="min-h-[50vh] w-full flex items-center justify-center">
                 <div className="flex flex-col items-center gap-2">
@@ -68,11 +72,15 @@ export default function PricingModal({ trigger, isOpen, onOpenChange }: PricingM
           >
             <Plans onSubscribeComplete={handleSubscribeComplete} />
           </Suspense>
-        
+
           <div className="mt-8">
             <div className=" text-center space-y-4 text-xs">
               <p className="font-medium text-sm text-zinc-700 dark:text-zinc-200">
-                All plans come with a <span className="font-bold text-primary">14-day money-back guarantee</span>. No questions asked.
+                All plans come with a{" "}
+                <span className="font-bold text-primary">
+                  14-day money-back guarantee
+                </span>
+                . No questions asked.
               </p>
               <div className="flex items-center font-play justify-center gap-2 text-xs text-muted-foreground">
                 🍋 Secure payment powered by Lemon Squeezy
@@ -82,7 +90,5 @@ export default function PricingModal({ trigger, isOpen, onOpenChange }: PricingM
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
-
-

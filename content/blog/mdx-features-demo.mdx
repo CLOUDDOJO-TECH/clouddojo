@@ -1,0 +1,607 @@
+---
+title: "MDX Features Demo: Interactive Content & Code Highlighting"
+excerpt: "A comprehensive demonstration of all MDX features including syntax highlighting, interactive components, and rich media support."
+author:
+  name: "CloudDojo Team"
+  avatar: "/images/authors/team.jpg"
+  role: "Content Team"
+publishedAt: "2025-01-20"
+category: "Tutorials"
+featured: false
+image: "/blog/Colorful Abstract Wallpaper 8k.jpg"
+tags: ["MDX", "Documentation", "Tutorial", "Development"]
+---
+
+# MDX Features Demo: Interactive Content & Code Highlighting
+
+This post demonstrates all the powerful features available in our MDX-powered blog system. From syntax highlighting to interactive components, see what's possible with modern content authoring.
+
+## Table of Contents
+
+- [Basic Formatting](#basic-formatting)
+- [Code Examples](#code-examples)
+- [Interactive Components](#interactive-components)
+- [Advanced Features](#advanced-features)
+
+## Basic Formatting
+
+### Text Styling
+
+You can use **bold text**, *italic text*, ~~strikethrough~~, and `inline code`. Here's a paragraph with a [link to our dashboard](/dashboard) and some mixed formatting.
+
+### Lists
+
+#### Unordered Lists
+- First item with **bold text**
+- Second item with *italic text*
+- Third item with `inline code`
+- Nested items:
+  - Sub-item 1
+  - Sub-item 2
+
+#### Ordered Lists
+1. Configure your environment
+2. Install dependencies
+3. Run the development server
+4. Deploy to production
+
+### Blockquotes
+
+> "The best way to learn is by doing. Practice with real-world scenarios and build projects that matter."
+>
+> — CloudDojo Philosophy
+
+## Code Examples
+
+### JavaScript/TypeScript
+
+```javascript
+// Example: React component with TypeScript
+import React, { useState, useEffect } from 'react';
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+const UserProfile: React.FC<{ userId: number }> = ({ userId }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await fetch(`/api/users/${userId}`);
+        const userData = await response.json();
+        setUser(userData);
+      } catch (error) {
+        console.error('Failed to fetch user:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, [userId]);
+
+  if (loading) return <div>Loading...</div>;
+  if (!user) return <div>User not found</div>;
+
+  return (
+    <div className="user-profile">
+      <h2>{user.name}</h2>
+      <p>{user.email}</p>
+    </div>
+  );
+};
+
+export default UserProfile;
+```
+
+### Python
+
+```python
+# Example: AWS Lambda function for S3 processing
+import json
+import boto3
+from typing import Dict, Any
+
+def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
+    """
+    Process S3 events and trigger downstream processing
+    """
+    s3_client = boto3.client('s3')
+
+    try:
+        # Parse S3 event
+        for record in event['Records']:
+            bucket = record['s3']['bucket']['name']
+            key = record['s3']['object']['key']
+
+            print(f"Processing file: {key} from bucket: {bucket}")
+
+            # Download and process file
+            response = s3_client.get_object(Bucket=bucket, Key=key)
+            content = response['Body'].read()
+
+            # Perform processing logic here
+            processed_data = process_content(content)
+
+            # Upload processed result
+            output_key = f"processed/{key}"
+            s3_client.put_object(
+                Bucket=bucket,
+                Key=output_key,
+                Body=processed_data
+            )
+
+        return {
+            'statusCode': 200,
+            'body': json.dumps('Processing completed successfully')
+        }
+
+    except Exception as e:
+        print(f"Error processing S3 event: {str(e)}")
+        return {
+            'statusCode': 500,
+            'body': json.dumps(f'Error: {str(e)}')
+        }
+
+def process_content(content: bytes) -> str:
+    """Process the file content"""
+    # Add your processing logic here
+    return content.decode('utf-8').upper()
+```
+
+### YAML Configuration
+
+```yaml
+# docker-compose.yml for development environment
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://user:password@db:5432/myapp
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: postgres:14-alpine
+    environment:
+      POSTGRES_DB: myapp
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgres_data:
+  redis_data:
+```
+
+### Terraform Infrastructure
+
+```hcl
+# AWS EKS cluster configuration
+resource "aws_eks_cluster" "main" {
+  name     = var.cluster_name
+  role_arn = aws_iam_role.eks_cluster.arn
+  version  = var.kubernetes_version
+
+  vpc_config {
+    subnet_ids              = var.subnet_ids
+    endpoint_private_access = true
+    endpoint_public_access  = true
+    public_access_cidrs     = var.public_access_cidrs
+  }
+
+  encryption_config {
+    provider {
+      key_arn = aws_kms_key.eks.arn
+    }
+    resources = ["secrets"]
+  }
+
+  depends_on = [
+    aws_iam_role_policy_attachment.eks_cluster_policy,
+    aws_iam_role_policy_attachment.eks_vpc_resource_controller,
+  ]
+
+  tags = merge(var.common_tags, {
+    Name = var.cluster_name
+  })
+}
+
+resource "aws_eks_node_group" "main" {
+  cluster_name    = aws_eks_cluster.main.name
+  node_group_name = "${var.cluster_name}-nodes"
+  node_role_arn   = aws_iam_role.eks_node_group.arn
+  subnet_ids      = var.private_subnet_ids
+
+  instance_types = var.node_instance_types
+  capacity_type  = var.capacity_type
+
+  scaling_config {
+    desired_size = var.desired_capacity
+    max_size     = var.max_capacity
+    min_size     = var.min_capacity
+  }
+
+  update_config {
+    max_unavailable_percentage = 25
+  }
+
+  depends_on = [
+    aws_iam_role_policy_attachment.eks_worker_node_policy,
+    aws_iam_role_policy_attachment.eks_cni_policy,
+    aws_iam_role_policy_attachment.eks_container_registry_policy,
+  ]
+}
+```
+
+### Bash Scripts
+
+```bash
+#!/bin/bash
+
+# Kubernetes deployment script with health checks
+set -euo pipefail
+
+NAMESPACE="${NAMESPACE:-default}"
+DEPLOYMENT_NAME="${DEPLOYMENT_NAME:-web-app}"
+IMAGE_TAG="${IMAGE_TAG:-latest}"
+TIMEOUT="${TIMEOUT:-300}"
+
+echo "🚀 Starting deployment of ${DEPLOYMENT_NAME} with tag ${IMAGE_TAG}"
+
+# Function to check if deployment is ready
+check_deployment_status() {
+    local deployment=$1
+    local namespace=$2
+
+    kubectl rollout status deployment/"${deployment}" \
+        --namespace="${namespace}" \
+        --timeout="${TIMEOUT}s"
+}
+
+# Function to perform health check
+health_check() {
+    local service_url=$1
+    local max_attempts=30
+    local attempt=1
+
+    echo "🔍 Performing health check on ${service_url}"
+
+    while [ $attempt -le $max_attempts ]; do
+        if curl -s -f "${service_url}/health" > /dev/null; then
+            echo "✅ Health check passed!"
+            return 0
+        fi
+
+        echo "⏳ Attempt ${attempt}/${max_attempts} failed, retrying in 10s..."
+        sleep 10
+        ((attempt++))
+    done
+
+    echo "❌ Health check failed after ${max_attempts} attempts"
+    return 1
+}
+
+# Update deployment with new image
+echo "📦 Updating deployment with image: ${IMAGE_TAG}"
+kubectl set image deployment/"${DEPLOYMENT_NAME}" \
+    app="myregistry.com/${DEPLOYMENT_NAME}:${IMAGE_TAG}" \
+    --namespace="${NAMESPACE}"
+
+# Wait for rollout to complete
+echo "⏳ Waiting for rollout to complete..."
+if check_deployment_status "${DEPLOYMENT_NAME}" "${NAMESPACE}"; then
+    echo "✅ Deployment successful!"
+
+    # Get service URL for health check
+    SERVICE_URL=$(kubectl get svc "${DEPLOYMENT_NAME}" \
+        --namespace="${NAMESPACE}" \
+        -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+
+    if [ -n "${SERVICE_URL}" ]; then
+        health_check "http://${SERVICE_URL}"
+    fi
+else
+    echo "❌ Deployment failed!"
+    kubectl rollout undo deployment/"${DEPLOYMENT_NAME}" --namespace="${NAMESPACE}"
+    exit 1
+fi
+
+echo "🎉 Deployment completed successfully!"
+```
+
+## Interactive Components
+
+### Alert Components
+
+<Alert type="info" title="Information">
+This is an informational alert. Use it to provide helpful context or additional information.
+</Alert>
+
+<Alert type="success" title="Success!">
+Great job! This indicates something completed successfully.
+</Alert>
+
+<Alert type="warning" title="Warning">
+Pay attention to this warning. Something might need your attention.
+</Alert>
+
+<Alert type="error" title="Error">
+This indicates an error or critical issue that needs immediate attention.
+</Alert>
+
+### Info Cards
+
+<InfoCard title="Pro Tip" description="Best practices for cloud development">
+Always use Infrastructure as Code (IaC) for reproducible deployments. Tools like Terraform, CloudFormation, or CDK help ensure consistency across environments.
+</InfoCard>
+
+<InfoCard title="Learning Path">
+1. Start with cloud fundamentals
+2. Practice with hands-on labs
+3. Build real projects
+4. Get certified
+5. Join the community
+</InfoCard>
+
+### Promotional Banners
+
+<PromoBanner 
+  title="🚀 Ready to Get Cloud Certified?" 
+  description="Join thousands of professionals who've advanced their careers with CloudDojo's AI-powered practice tests and study plans."
+  buttonText="Start Your Journey"
+  buttonLink="/dashboard/practice"
+  image="/images/dojo-logo.png"
+  imageAlt="CloudDojo Logo"
+  variant="primary"
+/>
+
+<PromoBanner 
+  title="🎯 Special Offer: Pro Plan" 
+  description="Get 50% off your first month of CloudDojo Pro. Includes unlimited practice tests, AI coach, and premium features."
+  buttonText="Claim Offer"
+  buttonLink="/pricing"
+  variant="success"
+/>
+
+<PromoBanner 
+  title="📚 New Course Available" 
+  description="Master Kubernetes from zero to production with our comprehensive hands-on course."
+  buttonText="Learn More"
+  buttonLink="/courses/kubernetes"
+  image="/blog/Colorful Abstract Wallpaper 8k.jpg"
+  imageAlt="Kubernetes Course"
+  variant="warning"
+/>
+
+### Code Blocks with Titles
+
+<CodeBlock language="tsx" title="components/Button.tsx">
+```tsx
+interface ButtonProps {
+  children: React.ReactNode;
+  variant?: 'primary' | 'secondary';
+  size?: 'sm' | 'md' | 'lg';
+  onClick?: () => void;
+}
+
+export const Button: React.FC<ButtonProps> = ({
+  children,
+  variant = 'primary',
+  size = 'md',
+  onClick
+}) => {
+  return (
+    <button
+      className={cn(
+        'rounded-lg font-medium transition-colors',
+        {
+          'bg-blue-600 text-white hover:bg-blue-700': variant === 'primary',
+          'bg-gray-200 text-gray-900 hover:bg-gray-300': variant === 'secondary',
+          'px-3 py-1.5 text-sm': size === 'sm',
+          'px-4 py-2 text-base': size === 'md',
+          'px-6 py-3 text-lg': size === 'lg',
+        }
+      )}
+      onClick={onClick}
+    >
+      {children}
+    </button>
+  );
+};
+```
+</CodeBlock>
+
+## Advanced Features
+
+### Tables
+
+| Feature | Basic Plan | Pro Plan | Enterprise |
+|---------|------------|----------|------------|
+| Practice Tests | 200+ | Unlimited | Unlimited |
+| AI Coach | ❌ | ✅ | ✅ |
+| Custom Reports | ❌ | ✅ | ✅ |
+| Team Management | ❌ | ❌ | ✅ |
+| Priority Support | ❌ | ✅ | ✅ |
+
+### Mathematical Expressions
+
+While we don't have LaTeX support yet, you can still express mathematical concepts:
+
+- **Time Complexity**: O(n log n) for merge sort
+- **Space Complexity**: O(n) auxiliary space
+- **Formula**: `cost = base_price * (1 + tax_rate) * quantity`
+
+### Horizontal Rules
+
+---
+
+### Nested Lists with Code
+
+1. **Setup Phase**
+   - Install dependencies: `npm install`
+   - Configure environment variables
+   - Set up database connections
+
+2. **Development Phase**
+   ```bash
+   # Start development server
+   npm run dev
+
+   # Run tests
+   npm test
+
+   # Check code quality
+   npm run lint
+   ```
+
+3. **Deployment Phase**
+   - Build production bundle
+   - Deploy to staging
+   - Run integration tests
+   - Deploy to production
+
+### Code with Different Languages
+
+#### Go
+```go
+package main
+
+import (
+    "fmt"
+    "net/http"
+    "log"
+)
+
+func healthHandler(w http.ResponseWriter, r *http.Request) {
+    w.WriteHeader(http.StatusOK)
+    fmt.Fprintf(w, `{"status": "healthy", "timestamp": "%s"}`, time.Now().UTC().Format(time.RFC3339))
+}
+
+func main() {
+    http.HandleFunc("/health", healthHandler)
+
+    fmt.Println("Server starting on :8080")
+    log.Fatal(http.ListenAndServe(":8080", nil))
+}
+```
+
+#### Rust
+```rust
+use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
+
+#[derive(Serialize, Deserialize, Debug)]
+struct Config {
+    server_port: u16,
+    database_url: String,
+    redis_url: String,
+    log_level: String,
+}
+
+impl Config {
+    fn from_env() -> Result<Self, Box<dyn std::error::Error>> {
+        Ok(Config {
+            server_port: std::env::var("PORT")?.parse()?,
+            database_url: std::env::var("DATABASE_URL")?,
+            redis_url: std::env::var("REDIS_URL")?,
+            log_level: std::env::var("LOG_LEVEL").unwrap_or_else(|_| "info".to_string()),
+        })
+    }
+}
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let config = Config::from_env()?;
+    println!("Starting server with config: {:?}", config);
+    Ok(())
+}
+```
+
+#### SQL
+```sql
+-- Complex query with CTEs and window functions
+WITH monthly_stats AS (
+  SELECT
+    user_id,
+    DATE_TRUNC('month', created_at) as month,
+    COUNT(*) as test_count,
+    AVG(score) as avg_score,
+    MAX(score) as max_score
+  FROM practice_tests
+  WHERE created_at >= CURRENT_DATE - INTERVAL '12 months'
+  GROUP BY user_id, DATE_TRUNC('month', created_at)
+),
+user_rankings AS (
+  SELECT
+    user_id,
+    month,
+    test_count,
+    avg_score,
+    max_score,
+    ROW_NUMBER() OVER (PARTITION BY month ORDER BY avg_score DESC) as rank,
+    LAG(avg_score) OVER (PARTITION BY user_id ORDER BY month) as prev_score
+  FROM monthly_stats
+)
+SELECT
+  u.username,
+  ur.month,
+  ur.test_count,
+  ROUND(ur.avg_score, 2) as avg_score,
+  ur.max_score,
+  ur.rank,
+  CASE
+    WHEN ur.prev_score IS NULL THEN 'New User'
+    WHEN ur.avg_score > ur.prev_score THEN 'Improved'
+    WHEN ur.avg_score < ur.prev_score THEN 'Declined'
+    ELSE 'Stable'
+  END as trend
+FROM user_rankings ur
+JOIN users u ON ur.user_id = u.id
+WHERE ur.rank <= 10
+ORDER BY ur.month DESC, ur.rank ASC;
+```
+
+## Conclusion
+
+This MDX system provides powerful authoring capabilities for technical content. With syntax highlighting, interactive components, and rich media support, you can create engaging and educational blog posts.
+
+### What's Next?
+
+- Explore more interactive components
+- Add video and embed support
+- Implement search functionality
+- Create content templates
+
+<Alert type="success" title="Ready to Start Writing?">
+Start creating your own MDX blog posts in the `/content/blog/` directory. Each post is a `.mdx` file with frontmatter for metadata and MDX content for rich, interactive experiences.
+</Alert>
+
+---
+
+*Want to learn more about our platform? Check out our [practice tests](/dashboard/practice) or get help from our [AI coach](/dashboard/ai-tab).*
