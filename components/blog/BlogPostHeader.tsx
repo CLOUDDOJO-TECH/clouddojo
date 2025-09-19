@@ -60,13 +60,13 @@ export const BlogPostHeader = ({ post }: BlogPostHeaderProps) => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-6 border-y">
           <div className="flex items-center gap-4">
             <Avatar className="h-12 w-12">
-              <AvatarImage src={post.author.avatar} />
-              <AvatarFallback>{post.author.name.charAt(0)}</AvatarFallback>
+              <AvatarImage src={post.author?.avatar || "/images/authors/default.jpg"} />
+              <AvatarFallback>{post.author?.name?.charAt(0) || "?"}</AvatarFallback>
             </Avatar>
             <div>
-              <p className="font-semibold">{post.author.name}</p>
+              <p className="font-semibold">{post.author?.name || "Unknown Author"}</p>
               <p className="text-sm text-muted-foreground">
-                {post.author.role}
+                {post.author?.role || "Author"}
               </p>
             </div>
           </div>
@@ -99,11 +99,13 @@ export const BlogPostHeader = ({ post }: BlogPostHeaderProps) => {
         </div>
 
         {/* Tags */}
-        <div className="flex flex-wrap gap-2">
-          {post.tags.map((tag, index) => (
-            <EyebrowComp key={`${tag}-${index}`} title={tag} />
-          ))}
-        </div>
+        {post.tags && Array.isArray(post.tags) && post.tags.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            {post.tags.map((tag, index) => (
+              <EyebrowComp key={`${tag}-${index}`} title={tag} />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

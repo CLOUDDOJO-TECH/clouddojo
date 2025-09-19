@@ -106,11 +106,11 @@ export const BlogCard = ({ post, featured = false }: BlogCardProps) => {
         <div className="flex items-center justify-between pt-2">
           <div className="flex items-center gap-2">
             <Avatar className="h-6 w-6">
-              <AvatarImage src={post.author.avatar} />
-              <AvatarFallback>{post.author.name.charAt(0)}</AvatarFallback>
+              <AvatarImage src={post.author?.avatar || "/images/authors/default.jpg"} />
+              <AvatarFallback>{post.author?.name?.charAt(0) || "?"}</AvatarFallback>
             </Avatar>
             <div className="text-sm">
-              <p className="font-medium">{post.author.name}</p>
+              <p className="font-medium">{post.author?.name || "Unknown Author"}</p>
             </div>
           </div>
           

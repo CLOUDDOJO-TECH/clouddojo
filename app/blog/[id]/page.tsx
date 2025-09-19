@@ -31,8 +31,8 @@ export async function generateMetadata({ params }: BlogPostPageProps) {
       description: post.excerpt,
       type: "article",
       publishedTime: post.publishedAt,
-      authors: [post.author.name],
-      tags: post.tags,
+      authors: post.author?.name ? [post.author.name] : ["CloudDojo Team"],
+      tags: Array.isArray(post.tags) ? post.tags : [],
     },
   };
 }
