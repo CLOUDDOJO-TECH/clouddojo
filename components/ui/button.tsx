@@ -18,7 +18,7 @@ const buttonVariants = cva(
         secondary:
           "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
         glass:
-          "bg-slate-950/30 backdrop-blur-md backdrop-saturate-150 flex items-center  justify-center rounded-full border-slate-200/50 border p-1 shadow-sm w-fit max-w-[500px] mx-auto relative overflow-hidden",
+          "dark:bg-emerald-950/30  dark:text-gray-100 text-gray-800 hover:bg-emerald-950/40 backdrop-blur-md backdrop-saturate-150 flex items-center justify-center rounded-full border-slate-200/50 border p-1 shadow-sm w-fit max-w-[500px] mx-auto relative overflow-hidden",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         expandIcon:
@@ -35,6 +35,10 @@ const buttonVariants = cva(
           "relative after:absolute after:bg-primary after:bottom-2 after:h-[1px] after:w-2/3 after:origin-bottom-left after:scale-x-100 hover:after:origin-bottom-right hover:after:scale-x-0 after:transition-transform after:ease-in-out after:duration-300",
         linkHover2:
           "relative after:absolute after:bg-primary after:bottom-2 after:h-[1px] after:w-2/3 after:origin-bottom-right after:scale-x-0 hover:after:origin-bottom-left hover:after:scale-x-100 after:transition-transform after:ease-in-out after:duration-300",
+        theme:
+          "flex-col h-auto w-auto p-0 gap-3 bg-transparent hover:bg-transparent border-0 shadow-none",
+        gradient:
+          "bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-[0_8px_16px_rgba(16,185,129,0.4)] hover:shadow-[0_12px_24px_rgba(16,185,129,0.5)] transition-all duration-300 border-0 font-medium",
       },
       size: {
         default: "h-9 px-4 py-2",

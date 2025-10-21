@@ -73,7 +73,13 @@ const NAVIGATION_DATA: NavSection[] = [
         title: "Leaderboard",
         url: "/dashboard/leaderboard", // Updated URL
         icon: Trophy, // Changed icon to Trophy
-        isNew: true, // Mark as new
+        // isNew: true, // Mark as new
+      },
+      {
+        title: "Hands-On Labs",
+        url: "/dashboard/labs",
+        icon: TestTube,
+        isNew: true,
       },
     ],
   },
@@ -91,12 +97,6 @@ const NAVIGATION_DATA: NavSection[] = [
         title: "My Cloud Roadmap",
         url: "#",
         icon: Map,
-        comingSoon: true,
-      },
-      {
-        title: "Hands-On Labs",
-        url: "#",
-        icon: TestTube,
         comingSoon: true,
       },
       {
@@ -166,7 +166,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
 
       <SidebarFooter>
-     
+
         {planName && (
           <span className="px-4 mb-4">
             <SubscriptionCard plan={planName} variant="outlined" />
@@ -179,7 +179,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </div>
         )}
         <hr className="border-t border-border mx-2 -mt-px" />
-        <NavItem item={{title: "Settings", url: "#", icon: CogIcon}} isActive={false} />
+        <NavItem item={{title: "Settings", url: "/dashboard/settings", icon: CogIcon}} isActive={isActive("/dashboard/settings")} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

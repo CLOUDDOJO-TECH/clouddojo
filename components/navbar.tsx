@@ -49,12 +49,20 @@ export default function Tabnavbar() {
           {!isMobile && (
             <NavigationMenu className="hidden md:flex">
               <NavigationMenuList>
-                <NavigationMenuItem>
+                {/*<NavigationMenuItem>
                   <NavigationMenuLink
                     className={navigationMenuTriggerStyle()}
                     href="/about"
                   >
                     About
+                  </NavigationMenuLink>
+                </NavigationMenuItem>*/}
+                <NavigationMenuItem>
+                  <NavigationMenuLink
+                    className={navigationMenuTriggerStyle()}
+                    href="/blog"
+                  >
+                    Blog
                   </NavigationMenuLink>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
@@ -63,14 +71,6 @@ export default function Tabnavbar() {
                     href="/pricing"
                   >
                     Pricing
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <NavigationMenuLink
-                    className={navigationMenuTriggerStyle()}
-                    href="/blog"
-                  >
-                    Blog
                   </NavigationMenuLink>
                 </NavigationMenuItem>
                 <NavigationMenuItem>

@@ -18,6 +18,7 @@ model User {
   hasCompletedOnboarding Boolean              @default(false)
   aiAnalysisReports      AIAnalysisReport[]
   Subscriptions          LsUserSubscription[]
+  projectProgresses      ProjectProgress[]
   quizAttempts           QuizAttempt[]
   onboarding             UserOnboarding?
   progress               UserProgress[]
@@ -121,26 +122,28 @@ model LsSubscriptionPlan {
 }
 
 model LsUserSubscription {
-  id                 String             @id @default(cuid())
-  createdAt          DateTime           @default(now())
-  updatedAt          DateTime           @updatedAt
-  lemonSqueezyId     String             @unique
-  userId             String
-  planId             String
-  name               String?
-  email              String?
-  orderId            Int
-  subscriptionItemId String
-  status             String
-  statusFormatted    String
-  renewsAt           String
-  endsAt             String?
-  trialEndsAt        String?
-  price              String
-  isPaused           Boolean            @default(false)
-  isUsageBased       Boolean
-  subscriptionPlan   LsSubscriptionPlan @relation(fields: [planId], references: [id])
-  user               User               @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  id                     String             @id @default(cuid())
+  createdAt              DateTime           @default(now())
+  updatedAt              DateTime           @updatedAt
+  lemonSqueezyId         String             @unique
+  userId                 String
+  planId                 String
+  name                   String?
+  email                  String?
+  orderId                Int
+  subscriptionItemId     String
+  status                 String
+  statusFormatted        String
+  renewsAt               String
+  endsAt                 String?
+  trialEndsAt            String?
+  price                  String
+  isPaused               Boolean            @default(false)
+  isUsageBased           Boolean
+  billingPortalUrl       String?
+  updatePaymentMethodUrl String?
+  subscriptionPlan       LsSubscriptionPlan @relation(fields: [planId], references: [id])
+  user                   User               @relation(fields: [userId], references: [userId], onDelete: Cascade)
 }
 
 model LsWebhookEvent {
@@ -157,6 +160,7 @@ model Category {
   name        String        @unique
   description String?
   flashcards  Flashcard[]
+  projects    Project[]
   questions   Question[]
   quizzes     Quiz[]
   quizAttempt QuizAttempt[]
@@ -233,6 +237,115 @@ model ProcessedCronJobUser {
   @@index([processedAt])
 }
 
+model Project {
+  id                 String            @id @default(uuid())
+  title              String
+  description        String
+  categoryId         String
+  difficulty         DifficultyLevel   @default(BEGINER)
+  estimatedTime      Int
+  estimatedCost      Int               @default(0)
+  thumbnailUrl       String?
+  videoUrl           String?
+  prerequisites      String[]
+  learningObjectives String[]
+  keyTechnologies    String[]
+  isPremium          Boolean           @default(false)
+  isPublished        Boolean           @default(false)
+  projectType        ProjectType       @default(TUTORIAL)
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  category           Category          @relation(fields: [categoryId], references: [id])
+  userProgresses     ProjectProgress[]
+  steps              ProjectStep[]
+
+  @@index([categoryId])
+  @@index([difficulty])
+  @@index([isPremium])
+  @@index([isPublished])
+}
+
+model ProjectStep {
+  id                 String                @id @default(uuid())
+  projectId          String
+  stepNumber         Int
+  title              String
+  description        String?
+  instructions       String
+  expectedOutput     String?
+  validationCriteria String[]
+  mediaUrls          String[]
+  estimatedTime      Int
+  stepType           ProjectStepType       @default(INSTRUCTION)
+  isOptional         Boolean               @default(false)
+  createdAt          DateTime              @default(now())
+  updatedAt          DateTime              @updatedAt
+  project            Project               @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  responses          ProjectStepResponse[]
+
+  @@unique([projectId, stepNumber])
+  @@index([projectId])
+}
+
+model ProjectProgress {
+  id                     String                @id @default(uuid())
+  userId                 String
+  projectId              String
+  currentStep            Int                   @default(1)
+  completedSteps         Int[]
+  startedAt              DateTime              @default(now())
+  completedAt            DateTime?
+  guidanceMode           GuidanceMode          @default(SOME_GUIDANCE)
+  generatedDocumentation String?
+  certificateUrl         String?
+  status                 ProjectStatus         @default(IN_PROGRESS)
+  timeSpent              Int                   @default(0)
+  createdAt              DateTime              @default(now())
+  updatedAt              DateTime              @updatedAt
+  achievements           ProjectAchievement[]
+  project                Project               @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user                   User                  @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  stepResponses          ProjectStepResponse[]
+
+  @@unique([userId, projectId])
+  @@index([userId])
+  @@index([projectId])
+  @@index([status])
+}
+
+model ProjectStepResponse {
+  id               String          @id @default(uuid())
+  progressId       String
+  stepId           String
+  response         String
+  completedAt      DateTime        @default(now())
+  timeSpent        Int             @default(0)
+  hintsUsed        Int             @default(0)
+  validationPassed Boolean         @default(false)
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  progress         ProjectProgress @relation(fields: [progressId], references: [id], onDelete: Cascade)
+  step             ProjectStep     @relation(fields: [stepId], references: [id], onDelete: Cascade)
+
+  @@unique([progressId, stepId])
+  @@index([progressId])
+  @@index([stepId])
+}
+
+model ProjectAchievement {
+  id          String          @id @default(uuid())
+  progressId  String
+  type        AchievementType
+  title       String
+  description String
+  iconUrl     String?
+  earnedAt    DateTime        @default(now())
+  progress    ProjectProgress @relation(fields: [progressId], references: [id], onDelete: Cascade)
+
+  @@index([progressId])
+  @@index([type])
+}
+
 enum SubscriptionTier {
   FREE
   PRO
@@ -265,4 +378,41 @@ enum PlanType {
   PRO_YEARLY
   PREMIUM_MONTHLY
   PREMIUM_YEARLY
+}
+
+enum ProjectType {
+  TUTORIAL
+  CHALLENGE
+  ASSESSMENT
+  CAPSTONE
+}
+
+enum ProjectStepType {
+  INSTRUCTION
+  QUIZ
+  VALIDATION
+  REFLECTION
+  CHECKPOINT
+}
+
+enum GuidanceMode {
+  INDEPENDENT
+  SOME_GUIDANCE
+  STEP_BY_STEP
+}
+
+enum ProjectStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+  ABANDONED
+}
+
+enum AchievementType {
+  FIRST_PROJECT
+  SPEED_COMPLETION
+  PERFECT_SCORE
+  DOCUMENTATION_MASTER
+  STREAK
+  CATEGORY_EXPERT
 }
