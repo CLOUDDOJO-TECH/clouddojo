@@ -2,7 +2,7 @@ import { Webhook } from "svix";
 import { headers } from "next/headers";
 import { WebhookEvent } from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
-import * as seline from '@seline-analytics/web';
+import * as seline from "@seline-analytics/web";
 import { sendWelcomeEmail } from "@/lib/emails/send-email";
 
 export async function POST(req: Request) {
@@ -21,6 +21,7 @@ export async function POST(req: Request) {
 
   // Get the body
   const payload = await req.json();
+  // console.log("Payload from clerk: ", payload);
   const body = JSON.stringify(payload);
 
   // Create a new Svix instance with your webhook secret
@@ -44,6 +45,7 @@ export async function POST(req: Request) {
 
   // Handle the webhook
   const { id } = evt.data;
+  // console.log("Payload from event:", evt.data);
   const eventType = evt.type;
 
   console.log(`Webhook with ID: ${id} and type: ${eventType}`);
@@ -63,8 +65,8 @@ export async function POST(req: Request) {
         where: {
           OR: [
             { userId: userId as string },
-            { email: email_addresses[0].email_address }
-          ]
+            { email: email_addresses[0].email_address },
+          ],
         },
       });
 
@@ -100,7 +102,6 @@ export async function POST(req: Request) {
           // Don't fail the whole process if email fails
         }
 
-    
         // seline tracking
         // seline.track("user: signed up", {
         //   userId: newUser.userId,
@@ -110,16 +111,17 @@ export async function POST(req: Request) {
         //   userPlan: "free",
         // });
 
-         // create seline user
-         seline.setUser({
+        // create seline user
+        seline.setUser({
           userId: newUser.userId, // userId is a required field
           plan: "free",
           credits: 140,
         });
-
       }
-      console.log(`Received webhook with ID ${id} and event type of ${eventType}`)
-      console.log('Webhook payload:', body)
+      console.log(
+        `Received webhook with ID ${id} and event type of ${eventType}`,
+      );
+      console.log("Webhook payload:", body);
 
       return new Response("User synced to database", { status: 200 });
     } catch (error) {

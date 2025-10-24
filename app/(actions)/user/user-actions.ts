@@ -1,9 +1,9 @@
-'use server';
+"use server";
 
-import prisma from '@/lib/prisma';
-import { getSignedInUserOrThrow } from '@/lib/utils/database_utils';
-import { auth } from '@clerk/nextjs/server';
-import { User } from '@prisma/client';
+import prisma from "@/lib/prisma";
+import { getSignedInUserOrThrow } from "@/lib/utils/database_utils";
+import { auth } from "@clerk/nextjs/server";
+import { User } from "@prisma/client";
 
 // Define return type for better type safety and documentation
 type UserWithSubscriptions = User & {
@@ -21,7 +21,7 @@ type UserWithSubscriptions = User & {
 
 /**
  * Retrieves the current user's profile with subscription information
- * 
+ *
  * @returns The user data with subscriptions or redirects to sign in
  * @throws Will redirect if user is not authenticated or not found in the database
  */
@@ -34,39 +34,41 @@ export const getCurrentUserProfile = async () => {
     }
 
     const user = await prisma.user.findUnique({
-        where: {
-            userId: clerkUserId,
-        },
-        include: {
-            Subscriptions: true
-        }
-    })
+      where: {
+        userId: clerkUserId,
+      },
+      include: {
+        Subscriptions: true,
+      },
+    });
 
     const userPlan = await prisma.lsUserSubscription.findFirst({
       where: {
-        userId: clerkUserId
+        userId: clerkUserId,
       },
       include: {
-        subscriptionPlan: true
-      }
-    })
+        subscriptionPlan: true,
+      },
+    });
 
-
-
-
-
-
-    
-    
     if (!user) {
       console.warn(`User with clerk ID ${clerkUserId} not found in database`);
       return redirectToSignIn();
     }
-    
 
-    return {user, userPlan}
+    return { user, userPlan };
   } catch (error) {
-    console.error('Error fetching user profile:', error);
+    console.error("Error fetching user profile:", error);
     throw error; // Re-throw to be handled by the caller
   }
-}
+};
+
+export const getPlanById = async (id: string) => {
+  const plan = await prisma.lsSubscriptionPlan.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  return plan;
+};

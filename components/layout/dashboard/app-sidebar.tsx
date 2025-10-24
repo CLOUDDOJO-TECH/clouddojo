@@ -73,8 +73,14 @@ const NAVIGATION_DATA: NavSection[] = [
         title: "Leaderboard",
         url: "/dashboard/leaderboard", // Updated URL
         icon: Trophy, // Changed icon to Trophy
-        isNew: true, // Mark as new
+        // isNew: true, // Mark as new
       },
+      // {
+      //   title: "Hands-On Labs",
+      //   url: "/dashboard/labs",
+      //   icon: TestTube,
+      //   isNew: true,
+      // },
     ],
   },
   {
@@ -87,16 +93,17 @@ const NAVIGATION_DATA: NavSection[] = [
         icon: BookOpen,
         comingSoon: true,
       },
-      { // Leaderboard item removed from here
-        title: "My Cloud Roadmap",
+      {
+        title: "Hands-On Projects",
         url: "#",
-        icon: Map,
+        icon: TestTube,
         comingSoon: true,
       },
       {
-        title: "Hands-On Labs",
+        // Leaderboard item removed from here
+        title: "My Cloud Roadmap",
         url: "#",
-        icon: TestTube,
+        icon: Map,
         comingSoon: true,
       },
       {
@@ -166,12 +173,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
 
       <SidebarFooter>
-     
         {planName && (
           <span className="px-4 mb-4">
             <SubscriptionCard plan={planName} variant="outlined" />
           </span>
-
         )}
         {!isLoading && !isError && !isSubscribed && (
           <div className="px-4 mb-4">
@@ -179,7 +184,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </div>
         )}
         <hr className="border-t border-border mx-2 -mt-px" />
-        <NavItem item={{title: "Settings", url: "#", icon: CogIcon}} isActive={false} />
+        <NavItem
+          item={{
+            title: "Settings",
+            url: "/dashboard/settings",
+            icon: CogIcon,
+          }}
+          isActive={isActive("/dashboard/settings")}
+        />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
@@ -225,16 +237,16 @@ function NavItem({ item, isActive }: { item: NavItem; isActive: boolean }) {
         <Link href={item.url}>
           {item.icon && (
             <item.icon
-              className={isActive ? "text-white" : "group-hover/menu-button:text-white text-muted-foreground group-hover/menu-button-data-[active=true]/menu-button:text-primary"}
+              className={
+                isActive
+                  ? "text-white"
+                  : "group-hover/menu-button:text-white text-muted-foreground group-hover/menu-button-data-[active=true]/menu-button:text-primary"
+              }
               size={22}
               aria-hidden="true"
             />
           )}
-          <span
-            className={isActive ? "text-white" : ""}
-          >
-            {item.title}
-          </span>
+          <span className={isActive ? "text-white" : ""}>{item.title}</span>
           {item.isNew && (
             <div className="relative">
               <Badge variant="new" className="ml-2 transform -rotate-12">

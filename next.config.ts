@@ -44,14 +44,13 @@ const nextConfig: NextConfig = {
 };
 
 const withMDX = createMDX({
-  options: {
-    remarkPlugins: [remarkGfm],
-    rehypePlugins: [
-      rehypeHighlight,
-      rehypeSlug,
-      [rehypeAutolinkHeadings, { behavior: 'wrap' }],
-    ],
-  },
+  // Remove the nested options object - pass options directly
+  remarkPlugins: [remarkGfm],
+  rehypePlugins: [
+    rehypeHighlight,
+    rehypeSlug,
+    [rehypeAutolinkHeadings, { behavior: 'wrap' }],
+  ],
 });
 
 export default withMDX(nextConfig);
