@@ -3,6 +3,7 @@
 import { Search, SidebarIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import * as React from "react";
+import * as Kbd from "@/components/ui/kbd";
 
 import { SearchForm } from "@/components/layout/dashboard/search-form";
 import { CommandMenu } from "@/components/layout/dashboard/command-menu";
@@ -100,21 +101,27 @@ export function SiteHeader() {
             <Button
               variant="outline"
               size="sm"
-              className="md:flex items-center hidden relative h-9 w-full justify-start text-sm text-brand-beige-500 sm:pr-12 md:w-40 border-brand-beige-800 lg:w-64"
+              className="md:flex items-center hidden relative h-9 justify-between text-sm text-brand-beige-500  md:w-40 border-brand-beige-800 lg:w-64"
               onClick={() => setCommandMenuOpen(true)}
             >
-              <Search className="mr-2 h-4 w-4" />
-              <span className="hidden sm:inline-flex font-mono">Search...</span>
-              <kbd className="pointer-events-none absolute right-[0.3rem] top-[0.3rem] hidden h-6 select-none items-center gap-1 border-brand-beige-800 text-brand-beige-800 rounded border px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
-                <span className="text-xs">⌘</span>J
-              </kbd>
+              <div className="flex items-center">
+                <Search className="mr-2 h-4 w-4" />
+                <span className="hidden sm:inline-flex font-mono">
+                  Search...
+                </span>
+              </div>
+              <Kbd.Root variant="outline" className="">
+                <Kbd.Key>⌘</Kbd.Key>
+                <Kbd.Separator />
+                <Kbd.Key title="Search">J</Kbd.Key>
+              </Kbd.Root>
             </Button>
             <CommandMenu />
             <FeedbackDialog
               open={feedbackOpen}
               onOpenChange={setFeedbackOpen}
             />
-            <ThemeSwitcher />
+            {/*<ThemeSwitcher />*/}
             {user.isLoaded && (
               <div suppressHydrationWarning>
                 <UserButton afterSignOutUrl="/" />

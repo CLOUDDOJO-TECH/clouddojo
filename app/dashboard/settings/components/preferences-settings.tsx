@@ -159,81 +159,11 @@ export function PreferencesSettings() {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Learning Preferences</CardTitle>
-          <CardDescription>
-            Customize your learning experience and study settings.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-3">
-              <Label className="text-base font-medium">
-                Default Quiz Length
-              </Label>
-              <Select defaultValue="20">
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="10">10 questions</SelectItem>
-                  <SelectItem value="20">20 questions</SelectItem>
-                  <SelectItem value="50">50 questions</SelectItem>
-                  <SelectItem value="100">100 questions</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-3">
-              <Label className="text-base font-medium">Difficulty Level</Label>
-              <Select defaultValue="mixed">
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="beginner">Beginner</SelectItem>
-                  <SelectItem value="intermediate">Intermediate</SelectItem>
-                  <SelectItem value="advanced">Advanced</SelectItem>
-                  <SelectItem value="mixed">Mixed</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="space-y-0.5">
-                <Label className="text-base font-medium">
-                  Show Explanations Immediately
-                </Label>
-                <p className="text-sm text-muted-foreground">
-                  Display answer explanations right after each question.
-                </p>
-              </div>
-              <Switch defaultChecked={false} />
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="space-y-0.5">
-                <Label className="text-base font-medium">
-                  Randomize Questions
-                </Label>
-                <p className="text-sm text-muted-foreground">
-                  Present questions in random order for each quiz session.
-                </p>
-              </div>
-              <Switch defaultChecked={true} />
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
       {/* Save Button */}
-      <div className="flex justify-end">
-        <Button variant="gradient" onClick={handleSavePreferences} size="lg">
+      <div className="flex justify-start">
+        <Button onClick={handleSavePreferences} size="lg">
           <Save className="h-4 w-4 mr-2" />
-          Save All Preferences
+          Save preferences
         </Button>
       </div>
     </div>
