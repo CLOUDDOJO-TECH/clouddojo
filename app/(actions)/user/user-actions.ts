@@ -72,3 +72,31 @@ export const getPlanById = async (id: string) => {
 
   return plan;
 };
+
+/**
+ * Gets the current user's role
+ * @returns User role or null if not found
+ */
+export const getCurrentUserRole = async () => {
+  try {
+    const { userId: clerkUserId } = await auth();
+
+    if (!clerkUserId) {
+      return null;
+    }
+
+    const user = await prisma.user.findUnique({
+      where: {
+        userId: clerkUserId,
+      },
+      select: {
+        role: true,
+      },
+    });
+
+    return user?.role || null;
+  } catch (error) {
+    console.error("Error fetching user role:", error);
+    return null;
+  }
+};

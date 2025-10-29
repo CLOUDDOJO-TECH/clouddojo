@@ -14,7 +14,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { SignOutButton } from "@clerk/nextjs";
 
 import { Badge } from "@/components/ui/badge";
 import {
@@ -35,8 +34,7 @@ import { cn } from "@/lib/utils";
 import UpgradeCard from "@/components/upgrade-card";
 import { useSubscription } from "@/hooks/use-subscription";
 import SubscriptionCard from "@/app/dashboard/subscibed-card";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
+import { useCurrentUserRole } from "@/lib/hooks/useCurrentUser";
 
 // Define types for the navigation items
 type NavItem = {
@@ -126,6 +124,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { isSubscribed, planName, isLoading, isError } = useSubscription();
   // console.log(planName)
 
+  const { role: userRole } = useCurrentUserRole();
+
   // Helper function to check if a URL is active
   const isActive = (url: string): boolean => url === pathname;
 
@@ -172,6 +172,18 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
 
       <SidebarFooter>
+        {(userRole === "ADMIN" || userRole === "SUPERADMIN") && (
+          <NavItem
+            item={{
+              title: "Admin",
+              url: "/dashboard/admin",
+              icon: CogIcon,
+            }}
+            isActive={isActive("/dashboard/admin")}
+          />
+        )}
+        <hr className="border-t border-border mx-2 -mt-px" />
+
         {planName && (
           <span className="px-4 mb-4">
             <SubscriptionCard plan={planName} variant="outlined" />
@@ -183,14 +195,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </div>
         )}
         <hr className="border-t border-border mx-2 -mt-px" />
-        <NavItem
-          item={{
-            title: "Settings",
-            url: "/dashboard/settings",
-            icon: CogIcon,
-          }}
-          isActive={isActive("/dashboard/settings")}
-        />
+        <SidebarMenu>
+          <NavItem
+            item={{
+              title: "Settings",
+              url: "/dashboard/settings",
+              icon: CogIcon,
+            }}
+            isActive={isActive("/dashboard/settings")}
+          />
+        </SidebarMenu>
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
