@@ -4,42 +4,27 @@ import { useUser } from "@clerk/nextjs";
 import { Suspense, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { Skeleton } from "@/components/ui/skeleton";
 import PerformanceSection from "@/components/dashboard/performance-section";
 import RecentActivitySection from "@/components/dashboard/recent-activity-section";
-import CategoriesSection from "@/components/dashboard/categories-section";
 import { useDashboardQueries } from "./hooks/useDashboardQueries";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import { ChartArea, ChartLineIcon, Zap } from "lucide-react";
 import PremiumAnalysisDashboard from "@/components/ai-report/premium-ai-analysis";
 import { CheckUser } from "@/app/(actions)/user/check-user";
 import React from "react";
-import Image from "next/image";
-import { Spotlight } from "@/components/spotlight";
-import { Badge } from "@/components/ui/badge";
 import UpgradeBadge from "@/components/ui/upgrade-badge";
 import { useSubscription } from "@/hooks/use-subscription";
-import { DashboardLoading } from "@/components/dashboard/dashboard-loading";
-import { AssistantModal } from "@/components/assistant-ui/assistant-modal";
+import {
+  QuizAttemptsSkeleton,
+  RecentActivitySkeleton,
+} from "@/components/dashboard/dashboard-loading";
 
 export default function DashboardPage() {
   const { user, isLoaded } = useUser();
   const router = useRouter();
-  const [progress, setProgress] = useState(0);
   const searchParams = useSearchParams();
 
   // inital tab from url
-  const initialTab = searchParams.get("tab") === 'ai-report' ? 'report' : 'analytics';  
-  // function to update the URL with the selected tab
-  const handleTabChange = (value: string) => {
-    const newParams = value === 'report' ? 'ai-report' : 'analytics';
-    const url = new URL(window.location.href);
-    url.searchParams.set('tab', newParams);
-    window.history.pushState({}, '', url);
-  }
-;
   // Check if user profile exists
   const {
     data: userProfile,
@@ -51,8 +36,18 @@ export default function DashboardPage() {
     enabled: isLoaded && !!user,
   });
 
-    const { isSubscribed, planName, isLoading, isError } = useSubscription();
-  
+  const initialTab =
+    searchParams.get("tab") === "ai-report" ? "report" : "analytics";
+  // function to update the URL with the selected tab
+  const handleTabChange = (value: string) => {
+    const newParams = value === "report" ? "ai-report" : "analytics";
+    const url = new URL(window.location.href);
+    url.searchParams.set("tab", newParams);
+    window.history.pushState({}, "", url);
+  };
+
+  const { isSubscribed, planName, isLoading, isError } = useSubscription();
+
   // Redirect to profile setup if needed
   useEffect(() => {
     if (!isLoaded || isCheckingProfile) return;
@@ -71,49 +66,14 @@ export default function DashboardPage() {
     isLoadingCategories,
   } = useDashboardQueries(isLoaded && !!user);
 
-  // Handle progress bar
-  useEffect(() => {
-    // Only start progress if we're loading data
-    if (isLoadingPerformance || isLoadingActivity || isLoadingCategories) {
-      const interval = setInterval(() => {
-        setProgress((prev) => {
-          if (prev >= 100) {
-            clearInterval(interval);
-            return 100;
-          }
-          return prev + 5;
-        });
-      }, 50);
-
-      // Cleanup interval on unmount or when loading completes
-      return () => clearInterval(interval);
-    } else {
-      // Reset progress when loading completes
-      setProgress(0);
-    }
-  }, [isLoadingPerformance, isLoadingActivity, isLoadingCategories]);
-
-  // Show loading state while checking profile
   if (isProfileError) {
     console.log("Unauthorized access");
     router.replace("/");
   }
 
-  if (isLoadingPerformance || isLoadingActivity || isLoadingCategories) {
-    return (
-      <DashboardLoading progress={progress} />
-    );
-  }
-
   return (
     <div className="space-y-8  px-4 pt-6 max-w-8xl xl:mt-8 md:px-12 mx-auto container">
-      {/* <Spotlight
-        className="-top-40 left-0 md:-top-20 md:left-[420px]"
-        fill="#ecfdf5"
-      /> */}
       <div className="px-2">
-              {/* <AssistantModal /> */}
-        
         <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
         <p className="text-muted-foreground mt-2">
           Welcome back, {isLoaded ? user?.firstName || "there" : "there"}!
@@ -121,21 +81,25 @@ export default function DashboardPage() {
         </p>
       </div>
 
-      <Tabs defaultValue={initialTab} className="w-full" onValueChange={handleTabChange}>
+      <Tabs
+        defaultValue={initialTab}
+        className="w-full"
+        onValueChange={handleTabChange}
+      >
         <TabsList className="grid w-full grid-cols-2 ">
           <TabsTrigger value="analytics" className="flex items-center gap-2">
             <ChartLineIcon className="h-4 w-4" />
             Analytics
-            </TabsTrigger>
+          </TabsTrigger>
           <TabsTrigger className="flex items-center gap-3" value="report">
-            AI Report 
-            {!isSubscribed && <UpgradeBadge>Premium</UpgradeBadge>} 
-            </TabsTrigger>
+            AI Report
+            {!isSubscribed && <UpgradeBadge>Premium</UpgradeBadge>}
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="analytics">
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-4 w-full">
             <div className="lg:col-span-4 space-y-6 w-full">
-              <Suspense fallback={<Skeleton className="h-[400px] w-full" />}>
+              <Suspense fallback={<QuizAttemptsSkeleton />}>
                 <PerformanceSection
                   hasAttempts={hasAttempts}
                   stats={performanceStats || {}}
@@ -143,7 +107,7 @@ export default function DashboardPage() {
                 />
               </Suspense>
 
-              <Suspense fallback={<Skeleton className="h-[300px] w-full" />}>
+              <Suspense fallback={<RecentActivitySkeleton />}>
                 <RecentActivitySection
                   activity={activityHistory || []}
                   isLoading={isLoadingActivity}

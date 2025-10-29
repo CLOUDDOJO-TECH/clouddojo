@@ -1,63 +1,33 @@
-import { PrismaClient, DifficultyLevel, ProjectType, ProjectStepType } from '@prisma/client'
+import {
+  PrismaClient,
+  DifficultyLevel,
+  ProjectType,
+  ProjectStepType,
+} from "@prisma/client";
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 async function seedProjects() {
-  console.log('🌱 Seeding hands-on labs projects...')
+  console.log("🌱 Seeding hands-on labs projects...");
 
-  // First, let's check if we have existing categories or create some
-  const categories = await prisma.category.findMany()
-  
-  let awsCategory = categories.find(c => c.name.toLowerCase().includes('aws'))
-  let kubernetesCategory = categories.find(c => c.name.toLowerCase().includes('kubernetes'))
-  let devopsCategory = categories.find(c => c.name.toLowerCase().includes('devops'))
-  
-  // Create categories if they don't exist
-  if (!awsCategory) {
-    awsCategory = await prisma.category.create({
-      data: {
-        name: 'AWS',
-        description: 'Amazon Web Services cloud platform projects'
-      }
-    })
-  }
-  
-  if (!kubernetesCategory) {
-    kubernetesCategory = await prisma.category.create({
-      data: {
-        name: 'Kubernetes',
-        description: 'Container orchestration and cloud-native projects'
-      }
-    })
-  }
-  
-  if (!devopsCategory) {
-    devopsCategory = await prisma.category.create({
-      data: {
-        name: 'DevOps',
-        description: 'Development and operations automation projects'
-      }
-    })
-  }
-
-  // Create sample projects
+  // Create sample projects (using only ProjectCategory now!)
   const project1 = await prisma.project.create({
     data: {
-      title: 'Set Up a Web App in the Cloud',
-      description: 'Learn the basics of building a web app using AWS and VS Code. This will lay the foundation for your DevOps work.',
-      categoryId: awsCategory.id,
+      title: "Set Up a Web App in the Cloud",
+      description:
+        "Learn the basics of building a web app using AWS and VS Code. This will lay the foundation for your DevOps work.",
       difficulty: DifficultyLevel.BEGINER,
       estimatedTime: 120, // 2 hours
       estimatedCost: 0, // Free tier
-      thumbnailUrl: '/images/projects/aws-web-app.jpg',
-      videoUrl: 'https://youtube.com/watch?v=example',
-      prerequisites: ['Set Up An AWS Account for Free'],
+      thumbnailUrl: "/images/projects/aws-web-app.jpg",
+      videoUrl: "https://youtube.com/watch?v=example",
+      prerequisites: ["Set Up An AWS Account for Free"],
       learningObjectives: [
-        'Launch an EC2 instance',
-        'Use VS Code to set up a remote SSH connection to your EC2 instance',
-        'Install Maven and Java and generate a basic web app'
+        "Launch an EC2 instance",
+        "Use VS Code to set up a remote SSH connection to your EC2 instance",
+        "Install Maven and Java and generate a basic web app",
       ],
-      keyTechnologies: ['Amazon EC2', 'VSCode'],
+      keyTechnologies: ["Amazon EC2", "VSCode"],
       isPremium: false,
       isPublished: true,
       projectType: ProjectType.TUTORIAL,
@@ -65,24 +35,26 @@ async function seedProjects() {
         create: [
           {
             stepNumber: 0,
-            title: 'Before we start Step #1...',
-            description: 'Set your learning objectives and understand what we\'re building today.',
+            title: "Before we start Step #1...",
+            description:
+              "Set your learning objectives and understand what we're building today.",
             instructions: `# What are we here to do today?
 
 In this project, I will demonstrate... I'm doing this project to learn...
 
 *This is your space to reflect on your learning goals and document your journey.*`,
-            expectedOutput: 'A clear statement of your learning objectives',
-            validationCriteria: ['Response should be at least 50 characters'],
+            expectedOutput: "A clear statement of your learning objectives",
+            validationCriteria: ["Response should be at least 50 characters"],
             mediaUrls: [],
             estimatedTime: 5,
             stepType: ProjectStepType.REFLECTION,
-            isOptional: false
+            isOptional: false,
           },
           {
             stepNumber: 1,
-            title: 'Set up an IAM user',
-            description: 'Create a secure IAM user for this project instead of using your root account.',
+            title: "Set up an IAM user",
+            description:
+              "Create a secure IAM user for this project instead of using your root account.",
             instructions: `# Setting up IAM User
 
 First things first... do you have an IAM user?
@@ -102,21 +74,21 @@ You should create IAM users instead. If a root user is a master key to your AWS 
    - EC2FullAccess
    - VPCFullAccess
 4. Download the credentials and save them securely`,
-            expectedOutput: 'IAM user created with appropriate permissions',
+            expectedOutput: "IAM user created with appropriate permissions",
             validationCriteria: [
-              'IAM user has been created',
-              'User has EC2 and VPC permissions',
-              'Credentials have been downloaded'
+              "IAM user has been created",
+              "User has EC2 and VPC permissions",
+              "Credentials have been downloaded",
             ],
             mediaUrls: [],
             estimatedTime: 10,
             stepType: ProjectStepType.INSTRUCTION,
-            isOptional: false
+            isOptional: false,
           },
           {
             stepNumber: 2,
-            title: 'Launch an EC2 Instance',
-            description: 'Set up your cloud development environment.',
+            title: "Launch an EC2 Instance",
+            description: "Set up your cloud development environment.",
             instructions: `# Launch Your EC2 Instance
 
 Now let's create your cloud development server.
@@ -144,21 +116,22 @@ Start setting up an EC2 instance and name it **nextwork-devops-[enter your name]
 - Source: My IP (for security)
 
 Make sure to save your key pair file (.pem) in a secure location!`,
-            expectedOutput: 'Running EC2 instance with proper security configuration',
+            expectedOutput:
+              "Running EC2 instance with proper security configuration",
             validationCriteria: [
-              'EC2 instance is in running state',
-              'Security group allows SSH access',
-              'Key pair has been downloaded and saved'
+              "EC2 instance is in running state",
+              "Security group allows SSH access",
+              "Key pair has been downloaded and saved",
             ],
             mediaUrls: [],
             estimatedTime: 15,
             stepType: ProjectStepType.INSTRUCTION,
-            isOptional: false
+            isOptional: false,
           },
           {
             stepNumber: 3,
-            title: 'Install VS Code',
-            description: 'Set up your development environment.',
+            title: "Install VS Code",
+            description: "Set up your development environment.",
             instructions: `# Install VS Code and Extensions
 
 Let's set up your local development environment to connect to your cloud server.
@@ -172,21 +145,22 @@ Let's set up your local development environment to connect to your cloud server.
 - Open VS Code
 - Check that the Remote - SSH extension is installed and active
 - You should see a remote connection icon in the bottom left corner`,
-            expectedOutput: 'VS Code installed with Remote SSH extension',
+            expectedOutput: "VS Code installed with Remote SSH extension",
             validationCriteria: [
-              'VS Code is installed',
-              'Remote - SSH extension is active',
-              'Can see remote connection option'
+              "VS Code is installed",
+              "Remote - SSH extension is active",
+              "Can see remote connection option",
             ],
             mediaUrls: [],
             estimatedTime: 10,
             stepType: ProjectStepType.INSTRUCTION,
-            isOptional: false
+            isOptional: false,
           },
           {
             stepNumber: 4,
-            title: 'Connect to your EC2 Instance',
-            description: 'Establish SSH connection from VS Code to your cloud server.',
+            title: "Connect to your EC2 Instance",
+            description:
+              "Establish SSH connection from VS Code to your cloud server.",
             instructions: `# Connect VS Code with your EC2 Instance
 
 Time to connect your local VS Code to your cloud development environment.
@@ -211,21 +185,21 @@ Host mydevserver
 - Make sure your .pem file has correct permissions: \`chmod 400 your-key.pem\`
 - Verify your EC2 instance is running
 - Check security group allows SSH from your IP`,
-            expectedOutput: 'VS Code successfully connected to EC2 instance',
+            expectedOutput: "VS Code successfully connected to EC2 instance",
             validationCriteria: [
-              'SSH connection established',
-              'VS Code shows remote connection status',
-              'Can access EC2 file system through VS Code'
+              "SSH connection established",
+              "VS Code shows remote connection status",
+              "Can access EC2 file system through VS Code",
             ],
             mediaUrls: [],
             estimatedTime: 20,
             stepType: ProjectStepType.INSTRUCTION,
-            isOptional: false
+            isOptional: false,
           },
           {
             stepNumber: 5,
-            title: 'Install Apache Maven and Amazon Corretto',
-            description: 'Set up Java development tools on your EC2 instance.',
+            title: "Install Apache Maven and Amazon Corretto",
+            description: "Set up Java development tools on your EC2 instance.",
             instructions: `# Install Development Tools
 
 Let's install the tools we need for Java web development.
@@ -255,21 +229,21 @@ mvn -version
 
 ## Expected Output:
 You should see version information for both Java and Maven indicating successful installation.`,
-            expectedOutput: 'Java and Maven successfully installed',
+            expectedOutput: "Java and Maven successfully installed",
             validationCriteria: [
-              'Java 11 is installed and accessible',
-              'Maven is installed and accessible',
-              'Both tools show version information when queried'
+              "Java 11 is installed and accessible",
+              "Maven is installed and accessible",
+              "Both tools show version information when queried",
             ],
             mediaUrls: [],
             estimatedTime: 10,
             stepType: ProjectStepType.INSTRUCTION,
-            isOptional: false
+            isOptional: false,
           },
           {
             stepNumber: 6,
-            title: 'Create the Application',
-            description: 'Generate a basic web application using Maven.',
+            title: "Create the Application",
+            description: "Generate a basic web application using Maven.",
             instructions: `# Create Your Web Application
 
 Time to create your first cloud-based web application!
@@ -299,21 +273,21 @@ Edit the index.jsp file to include:
 - A message about what you learned
 
 This will be part of your project documentation!`,
-            expectedOutput: 'Functional web application created and customized',
+            expectedOutput: "Functional web application created and customized",
             validationCriteria: [
-              'Maven project generated successfully',
-              'Project builds without errors',
-              'index.jsp has been customized with personal information'
+              "Maven project generated successfully",
+              "Project builds without errors",
+              "index.jsp has been customized with personal information",
             ],
             mediaUrls: [],
             estimatedTime: 15,
             stepType: ProjectStepType.INSTRUCTION,
-            isOptional: false
+            isOptional: false,
           },
           {
             stepNumber: 7,
-            title: 'Delete Your Resources',
-            description: 'Clean up AWS resources to avoid charges.',
+            title: "Delete Your Resources",
+            description: "Clean up AWS resources to avoid charges.",
             instructions: `# Before You Go - Delete Your Resources
 
 You **MUST** delete your resources to avoid charges to your AWS account.
@@ -348,21 +322,21 @@ You don't have to delete your resources (so you won't have to repeat this projec
 - No custom security groups (unless needed for other projects)
 
 **💡 Challenge yourself:** Can you delete everything on your own? Keeping track of your resources and deleting them at the end is a key skill that will help you avoid charges to your account.`,
-            expectedOutput: 'All AWS resources properly cleaned up',
+            expectedOutput: "All AWS resources properly cleaned up",
             validationCriteria: [
-              'EC2 instance has been terminated',
-              'Key pair has been deleted (if not needed)',
-              'No unexpected charges on AWS account'
+              "EC2 instance has been terminated",
+              "Key pair has been deleted (if not needed)",
+              "No unexpected charges on AWS account",
             ],
             mediaUrls: [],
             estimatedTime: 10,
             stepType: ProjectStepType.INSTRUCTION,
-            isOptional: false
+            isOptional: false,
           },
           {
             stepNumber: 8,
-            title: 'Share Your Work',
-            description: 'Document and share your accomplishment.',
+            title: "Share Your Work",
+            description: "Document and share your accomplishment.",
             instructions: `# Share Your Project!
 
 Now it's time to **share** and let people know just what an amazing job you've done.
@@ -393,39 +367,39 @@ Your responses throughout this project have been compiled into a comprehensive p
 - Use as a reference for future projects
 
 **Congratulations on completing your first cloud development project!** 🎉`,
-            expectedOutput: 'Project documentation ready for sharing',
+            expectedOutput: "Project documentation ready for sharing",
             validationCriteria: [
-              'All project steps completed',
-              'Documentation generated',
-              'Ready to share accomplishment'
+              "All project steps completed",
+              "Documentation generated",
+              "Ready to share accomplishment",
             ],
             mediaUrls: [],
             estimatedTime: 5,
             stepType: ProjectStepType.REFLECTION,
-            isOptional: false
-          }
-        ]
-      }
-    }
-  })
+            isOptional: false,
+          },
+        ],
+      },
+    },
+  });
 
   // Create a second sample project
   const project2 = await prisma.project.create({
     data: {
-      title: 'Kubernetes Fundamentals',
-      description: 'Learn container orchestration with Kubernetes. Deploy your first application to a Kubernetes cluster.',
-      categoryId: kubernetesCategory.id,
+      title: "Kubernetes Fundamentals",
+      description:
+        "Learn container orchestration with Kubernetes. Deploy your first application to a Kubernetes cluster.",
       difficulty: DifficultyLevel.INTERMEDIATE,
       estimatedTime: 180, // 3 hours
       estimatedCost: 500, // $5.00
-      thumbnailUrl: '/images/projects/kubernetes-basics.jpg',
-      prerequisites: ['Docker fundamentals', 'Basic Linux knowledge'],
+      thumbnailUrl: "/images/projects/kubernetes-basics.jpg",
+      prerequisites: ["Docker fundamentals", "Basic Linux knowledge"],
       learningObjectives: [
-        'Set up a Kubernetes cluster',
-        'Deploy applications using kubectl',
-        'Understand pods, services, and deployments'
+        "Set up a Kubernetes cluster",
+        "Deploy applications using kubectl",
+        "Understand pods, services, and deployments",
       ],
-      keyTechnologies: ['Kubernetes', 'Docker', 'kubectl'],
+      keyTechnologies: ["Kubernetes", "Docker", "kubectl"],
       isPremium: true,
       isPublished: true,
       projectType: ProjectType.CHALLENGE,
@@ -433,8 +407,9 @@ Your responses throughout this project have been compiled into a comprehensive p
         create: [
           {
             stepNumber: 0,
-            title: 'Project Overview',
-            description: 'Understand what we\'ll build and why Kubernetes matters.',
+            title: "Project Overview",
+            description:
+              "Understand what we'll build and why Kubernetes matters.",
             instructions: `# Kubernetes Learning Journey
 
 ## What are we building?
@@ -453,17 +428,18 @@ In this project, you'll deploy a multi-container application to Kubernetes and l
 - [ ] Terminal/command line experience
 
 Document your current experience with these technologies and what you hope to achieve.`,
-            expectedOutput: 'Learning objectives and prerequisite assessment',
-            validationCriteria: ['Clear learning goals documented'],
+            expectedOutput: "Learning objectives and prerequisite assessment",
+            validationCriteria: ["Clear learning goals documented"],
             mediaUrls: [],
             estimatedTime: 10,
             stepType: ProjectStepType.REFLECTION,
-            isOptional: false
+            isOptional: false,
           },
           {
             stepNumber: 1,
-            title: 'Set Up Kubernetes Cluster',
-            description: 'Install and configure a local Kubernetes environment.',
+            title: "Set Up Kubernetes Cluster",
+            description:
+              "Install and configure a local Kubernetes environment.",
             instructions: `# Set Up Your Kubernetes Environment
 
 We'll use minikube for local development.
@@ -488,41 +464,143 @@ kubectl cluster-info
 \`\`\`
 
 Verify your cluster is running and kubectl can connect to it.`,
-            expectedOutput: 'Working Kubernetes cluster',
+            expectedOutput: "Working Kubernetes cluster",
             validationCriteria: [
-              'minikube cluster is running',
-              'kubectl can communicate with cluster',
-              'Cluster info shows master and DNS running'
+              "minikube cluster is running",
+              "kubectl can communicate with cluster",
+              "Cluster info shows master and DNS running",
             ],
             mediaUrls: [],
             estimatedTime: 20,
             stepType: ProjectStepType.INSTRUCTION,
-            isOptional: false
-          }
-        ]
-      }
-    }
-  })
+            isOptional: false,
+          },
+        ],
+      },
+    },
+  });
 
-  console.log('✅ Sample projects created successfully!')
-  console.log(`📝 Project 1: ${project1.title} (${project1.id})`)
-  console.log(`📝 Project 2: ${project2.title} (${project2.id})`)
-  
-  return { project1, project2 }
+  console.log("✅ Sample projects created successfully!");
+  console.log(`📝 Project 1: ${project1.title} (${project1.id})`);
+  console.log(`📝 Project 2: ${project2.title} (${project2.id})`);
+
+  // Assign projects to ProjectCategories
+  console.log("\n📂 Assigning projects to categories...");
+  console.log(`   Project 1 ID: ${project1.id}`);
+  console.log(`   Project 2 ID: ${project2.id}`);
+
+  // Get or create project categories
+  const allCategory = await prisma.projectCategory.upsert({
+    where: { slug: "all" },
+    update: {},
+    create: {
+      name: "All",
+      slug: "all",
+      description: "Browse all available projects",
+      sortOrder: 0,
+    },
+  });
+  console.log(`   All Category ID: ${allCategory.id}`);
+
+  const beginnersCategory = await prisma.projectCategory.upsert({
+    where: { slug: "beginners-challenge" },
+    update: {},
+    create: {
+      name: "Beginners Challenge",
+      slug: "beginners-challenge",
+      description: "Perfect projects for those starting their cloud journey",
+      sortOrder: 4,
+    },
+  });
+  console.log(`   Beginners Category ID: ${beginnersCategory.id}`);
+
+  const roadmapsCategory = await prisma.projectCategory.upsert({
+    where: { slug: "roadmaps" },
+    update: {},
+    create: {
+      name: "Roadmaps",
+      slug: "roadmaps",
+      description: "Structured learning paths to master cloud technologies",
+      sortOrder: 1,
+    },
+  });
+  console.log(`   Roadmaps Category ID: ${roadmapsCategory.id}`);
+
+  const toolsCategory = await prisma.projectCategory.upsert({
+    where: { slug: "tools" },
+    update: {},
+    create: {
+      name: "Tools",
+      slug: "tools",
+      description: "Learn essential cloud tools and services",
+      sortOrder: 3,
+    },
+  });
+  console.log(`   Tools Category ID: ${toolsCategory.id}`);
+
+  const proCategory = await prisma.projectCategory.upsert({
+    where: { slug: "pro" },
+    update: {},
+    create: {
+      name: "PRO",
+      slug: "pro",
+      description: "Advanced projects for experienced cloud professionals",
+      sortOrder: 6,
+    },
+  });
+  console.log(`   PRO Category ID: ${proCategory.id}`);
+
+  // Assign Project 1 (AWS Web App - Beginner) to categories
+  console.log("\n🔗 Creating assignments for Project 1...");
+  const project1Assignments = await prisma.projectCategoryAssignment.createMany(
+    {
+      data: [
+        { projectId: project1.id, projectCategoryId: allCategory.id },
+        { projectId: project1.id, projectCategoryId: beginnersCategory.id },
+        { projectId: project1.id, projectCategoryId: roadmapsCategory.id },
+      ],
+      skipDuplicates: true,
+    },
+  );
+  console.log(
+    `   Created ${project1Assignments.count} assignments for Project 1`,
+  );
+
+  // Assign Project 2 (Kubernetes - Intermediate) to categories
+  console.log("\n🔗 Creating assignments for Project 2...");
+  const project2Assignments = await prisma.projectCategoryAssignment.createMany(
+    {
+      data: [
+        { projectId: project2.id, projectCategoryId: allCategory.id },
+        { projectId: project2.id, projectCategoryId: toolsCategory.id },
+        { projectId: project2.id, projectCategoryId: proCategory.id },
+      ],
+      skipDuplicates: true,
+    },
+  );
+  console.log(
+    `   Created ${project2Assignments.count} assignments for Project 2`,
+  );
+
+  console.log("\n✅ Projects assigned to categories!");
+  console.log(`   - ${project1.title}: All, Beginners Challenge, Roadmaps`);
+  console.log(`   - ${project2.title}: All, Tools, PRO`);
+
+  return { project1, project2 };
 }
 
 async function main() {
   try {
-    await seedProjects()
+    await seedProjects();
   } catch (error) {
-    console.error('❌ Error seeding projects:', error)
-    throw error
+    console.error("❌ Error seeding projects:", error);
+    throw error;
   } finally {
-    await prisma.$disconnect()
+    await prisma.$disconnect();
   }
 }
 
 // Run if this file is executed directly
-main()
+main();
 
-export { seedProjects }
+export { seedProjects };

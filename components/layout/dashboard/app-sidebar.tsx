@@ -75,12 +75,12 @@ const NAVIGATION_DATA: NavSection[] = [
         icon: Trophy, // Changed icon to Trophy
         // isNew: true, // Mark as new
       },
-      // {
-      //   title: "Hands-On Labs",
-      //   url: "/dashboard/labs",
-      //   icon: TestTube,
-      //   isNew: true,
-      // },
+      {
+        title: "Hands-On Labs",
+        url: "/dashboard/labs",
+        icon: TestTube,
+        // isNew: true,
+      },
     ],
   },
   {
@@ -148,7 +148,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <span className="truncate font-kaushan ">Clouddojo</span>
           </div>
         </SidebarMenuButton>
-        {/* <hr className="border-t border-border mx-2 -mt-px" /> */}
       </SidebarHeader>
 
       <SidebarContent>
