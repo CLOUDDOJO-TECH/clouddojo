@@ -1,12 +1,16 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { getAuth } from '@clerk/nextjs/server';
-import prisma from '@/lib/prisma';
-import { z } from 'zod';
+import { NextRequest, NextResponse } from "next/server";
+import { getAuth } from "@clerk/nextjs/server";
+import prisma from "@/lib/prisma";
+import { z } from "zod";
 
 const projectsQuerySchema = z.object({
   category: z.string().optional(),
-  difficulty: z.enum(['BEGINER', 'INTERMEDIATE', 'ADVANCED', 'EXPERT']).optional(),
-  projectType: z.enum(['TUTORIAL', 'CHALLENGE', 'ASSESSMENT', 'CAPSTONE']).optional(),
+  difficulty: z
+    .enum(["BEGINER", "INTERMEDIATE", "ADVANCED", "EXPERT"])
+    .optional(),
+  projectType: z
+    .enum(["TUTORIAL", "CHALLENGE", "ASSESSMENT", "CAPSTONE"])
+    .optional(),
   isPremium: z.coerce.boolean().optional(),
   search: z.string().optional(),
   page: z.coerce.number().min(1).default(1),
@@ -16,12 +20,9 @@ const projectsQuerySchema = z.object({
 export async function GET(req: NextRequest) {
   try {
     const { userId } = await getAuth(req);
-    
+
     if (!userId) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     // Parse and validate query parameters
@@ -34,7 +35,7 @@ export async function GET(req: NextRequest) {
       isPremium,
       search,
       page,
-      limit
+      limit,
     } = projectsQuerySchema.parse(queryData);
 
     // Build filter conditions
@@ -46,8 +47,8 @@ export async function GET(req: NextRequest) {
       where.category = {
         name: {
           contains: category,
-          mode: 'insensitive'
-        }
+          mode: "insensitive",
+        },
       };
     }
 
@@ -68,20 +69,20 @@ export async function GET(req: NextRequest) {
         {
           title: {
             contains: search,
-            mode: 'insensitive'
-          }
+            mode: "insensitive",
+          },
         },
         {
           description: {
             contains: search,
-            mode: 'insensitive'
-          }
+            mode: "insensitive",
+          },
         },
         {
           keyTechnologies: {
-            hasSome: [search]
-          }
-        }
+            hasSome: [search],
+          },
+        },
       ];
     }
 
@@ -93,16 +94,21 @@ export async function GET(req: NextRequest) {
       prisma.project.findMany({
         where,
         include: {
-          category: {
-            select: {
-              id: true,
-              name: true,
-              description: true
-            }
+          projectCategoryAssignments: {
+            include: {
+              projectCategory: {
+                select: {
+                  id: true,
+                  name: true,
+                  slug: true,
+                  description: true,
+                },
+              },
+            },
           },
           userProgresses: {
             where: {
-              userId: userId
+              userId: userId,
             },
             select: {
               id: true,
@@ -111,38 +117,38 @@ export async function GET(req: NextRequest) {
               completedSteps: true,
               startedAt: true,
               completedAt: true,
-              timeSpent: true
-            }
+              timeSpent: true,
+            },
           },
           _count: {
             select: {
               steps: true,
               userProgresses: {
                 where: {
-                  status: 'COMPLETED'
-                }
-              }
-            }
-          }
+                  status: "COMPLETED",
+                },
+              },
+            },
+          },
         },
-        orderBy: [
-          { createdAt: 'desc' }
-        ],
+        orderBy: [{ createdAt: "desc" }],
         skip,
         take: limit,
       }),
-      prisma.project.count({ where })
+      prisma.project.count({ where }),
     ]);
 
     // Transform projects to include user progress status
-    const transformedProjects = projects.map(project => {
+    const transformedProjects = projects.map((project) => {
       const userProgress = project.userProgresses[0]; // User can only have one progress per project
-      
+
       return {
         id: project.id,
         title: project.title,
         description: project.description,
-        category: project.category,
+        categories: project.projectCategoryAssignments.map(
+          (assignment) => assignment.projectCategory,
+        ),
         difficulty: project.difficulty,
         estimatedTime: project.estimatedTime,
         estimatedCost: project.estimatedCost,
@@ -157,15 +163,20 @@ export async function GET(req: NextRequest) {
         updatedAt: project.updatedAt,
         totalSteps: project._count.steps,
         completionCount: project._count.userProgresses,
-        userProgress: userProgress ? {
-          status: userProgress.status,
-          currentStep: userProgress.currentStep,
-          completedSteps: userProgress.completedSteps,
-          progressPercentage: Math.round((userProgress.completedSteps.length / project._count.steps) * 100),
-          startedAt: userProgress.startedAt,
-          completedAt: userProgress.completedAt,
-          timeSpent: userProgress.timeSpent
-        } : null
+        userProgress: userProgress
+          ? {
+              status: userProgress.status,
+              currentStep: userProgress.currentStep,
+              completedSteps: userProgress.completedSteps,
+              progressPercentage: Math.round(
+                (userProgress.completedSteps.length / project._count.steps) *
+                  100,
+              ),
+              startedAt: userProgress.startedAt,
+              completedAt: userProgress.completedAt,
+              timeSpent: userProgress.timeSpent,
+            }
+          : null,
       };
     });
 
@@ -177,23 +188,22 @@ export async function GET(req: NextRequest) {
         totalCount,
         totalPages: Math.ceil(totalCount / limit),
         hasNextPage: page < Math.ceil(totalCount / limit),
-        hasPreviousPage: page > 1
-      }
+        hasPreviousPage: page > 1,
+      },
     });
-
   } catch (error) {
-    console.error('Error fetching projects:', error);
-    
+    console.error("Error fetching projects:", error);
+
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Invalid query parameters', details: error.errors },
-        { status: 400 }
+        { error: "Invalid query parameters", details: error.errors },
+        { status: 400 },
       );
     }
 
     return NextResponse.json(
-      { error: 'Failed to fetch projects' },
-      { status: 500 }
+      { error: "Failed to fetch projects" },
+      { status: 500 },
     );
   }
 }

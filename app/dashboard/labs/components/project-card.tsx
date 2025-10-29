@@ -27,7 +27,12 @@ interface Project {
   id: string;
   title: string;
   description: string;
-  category: {
+  categories?: Array<{
+    id: string;
+    name: string;
+    slug: string;
+  }>;
+  category?: {
     id: string;
     name: string;
   };
@@ -53,6 +58,9 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project }: ProjectCardProps) {
+  // Get primary category (for backwards compatibility)
+  const primaryCategory = project.category || project.categories?.[0];
+
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case "BEGINER":
@@ -172,9 +180,11 @@ export function ProjectCard({ project }: ProjectCardProps) {
             <h3 className="font-semibold text-lg leading-tight line-clamp-2 group-hover:text-primary transition-colors">
               {project.title}
             </h3>
-            <Badge variant="outline" className="shrink-0 text-xs">
-              {project.category.name}
-            </Badge>
+            {primaryCategory && (
+              <Badge variant="outline" className="shrink-0 text-xs">
+                {primaryCategory.name}
+              </Badge>
+            )}
           </div>
 
           <p className="text-sm text-muted-foreground line-clamp-2">

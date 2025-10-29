@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, Suspense } from "react";
 import {
   LeaderboardHeader,
   Podium,
@@ -8,6 +8,9 @@ import {
   LoadingState,
   ErrorState,
   EmptyState,
+  LeaderboardSkeleton,
+  PodiumSkeleton,
+  LeaderboardTableSkeleton,
 } from "./components";
 import useGetLeaderboardData from "@/app/(actions)/leaderboard";
 
@@ -40,15 +43,6 @@ export default function LeaderboardPage() {
     setTimeRange(range);
   };
 
-  // Show loading state
-  if (isLoadingLeaderboardData) {
-    return (
-      <div className="flex justify-center items-center h-screen w-full">
-        <LoadingState />
-      </div>
-    );
-  }
-
   // Show error state
   if (isError && error) {
     return (
@@ -64,10 +58,10 @@ export default function LeaderboardPage() {
   }
 
   // Show empty state if no data
-  const isEmpty = leaderboardData.length === 0;
+  const isEmpty = !isLoadingLeaderboardData && leaderboardData?.length === 0;
 
   // Extract top three performers
-  const topThree = leaderboardData.slice(0, 3);
+  const topThree = leaderboardData?.slice(0, 3) || [];
 
   return (
     <div className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
@@ -82,19 +76,24 @@ export default function LeaderboardPage() {
         </div>
       ) : (
         <>
-          {topThree.length > 0 && <Podium topThree={topThree} />}
+          <Suspense fallback={<PodiumSkeleton />}>
+            {topThree.length > 0 && <Podium topThree={topThree} />}
+          </Suspense>
 
-          {leaderboardData.length > 3 && (
-            <LeaderboardTable
-              leaderboardData={leaderboardData}
-              searchTerm={searchTerm}
-              setSearchTerm={setSearchTerm}
-              getAvatarFallback={getAvatarFallback}
-            />
-          )}
+          <Suspense fallback={<LeaderboardTableSkeleton />}>
+            {leaderboardData && leaderboardData.length > 3 && (
+              <LeaderboardTable
+                leaderboardData={leaderboardData}
+                searchTerm={searchTerm}
+                setSearchTerm={setSearchTerm}
+                getAvatarFallback={getAvatarFallback}
+              />
+            )}
+          </Suspense>
 
           {/* Special case when we have 1-3 users and they're all on the podium */}
-          {leaderboardData.length <= 3 &&
+          {leaderboardData &&
+            leaderboardData.length <= 3 &&
             leaderboardData.length > 0 &&
             topThree.length === leaderboardData.length && (
               <div className="text-center py-10 text-lg text-muted-foreground">
@@ -103,6 +102,9 @@ export default function LeaderboardPage() {
             )}
         </>
       )}
+
+      {/* Show skeleton while loading */}
+      {isLoadingLeaderboardData && <LeaderboardSkeleton />}
     </div>
   );
 }

@@ -160,7 +160,6 @@ model Category {
   name        String        @unique
   description String?
   flashcards  Flashcard[]
-  projects    Project[]
   questions   Question[]
   quizzes     Quiz[]
   quizAttempt QuizAttempt[]
@@ -238,31 +237,56 @@ model ProcessedCronJobUser {
 }
 
 model Project {
-  id                 String            @id @default(uuid())
-  title              String
-  description        String
-  categoryId         String
-  difficulty         DifficultyLevel   @default(BEGINER)
-  estimatedTime      Int
-  estimatedCost      Int               @default(0)
-  thumbnailUrl       String?
-  videoUrl           String?
-  prerequisites      String[]
-  learningObjectives String[]
-  keyTechnologies    String[]
-  isPremium          Boolean           @default(false)
-  isPublished        Boolean           @default(false)
-  projectType        ProjectType       @default(TUTORIAL)
-  createdAt          DateTime          @default(now())
-  updatedAt          DateTime          @updatedAt
-  category           Category          @relation(fields: [categoryId], references: [id])
-  userProgresses     ProjectProgress[]
-  steps              ProjectStep[]
+  id                         String                      @id @default(uuid())
+  title                      String
+  description                String
+  difficulty                 DifficultyLevel             @default(BEGINER)
+  estimatedTime              Int
+  estimatedCost              Int                         @default(0)
+  thumbnailUrl               String?
+  videoUrl                   String?
+  prerequisites              String[]
+  learningObjectives         String[]
+  keyTechnologies            String[]
+  isPremium                  Boolean                     @default(false)
+  isPublished                Boolean                     @default(false)
+  projectType                ProjectType                 @default(TUTORIAL)
+  createdAt                  DateTime                    @default(now())
+  updatedAt                  DateTime                    @updatedAt
+  projectCategoryAssignments ProjectCategoryAssignment[]
+  userProgresses             ProjectProgress[]
+  steps                      ProjectStep[]
 
-  @@index([categoryId])
   @@index([difficulty])
   @@index([isPremium])
   @@index([isPublished])
+}
+
+model ProjectCategory {
+  id          String                      @id @default(uuid())
+  name        String                      @unique
+  slug        String                      @unique
+  description String?
+  imageUrl    String?
+  sortOrder   Int                         @default(0)
+  createdAt   DateTime                    @default(now())
+  updatedAt   DateTime                    @updatedAt
+  projects    ProjectCategoryAssignment[]
+
+  @@index([slug])
+}
+
+model ProjectCategoryAssignment {
+  id                String          @id @default(uuid())
+  projectId         String
+  projectCategoryId String
+  assignedAt        DateTime        @default(now())
+  project           Project         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectCategory   ProjectCategory @relation(fields: [projectCategoryId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, projectCategoryId])
+  @@index([projectId])
+  @@index([projectCategoryId])
 }
 
 model ProjectStep {
