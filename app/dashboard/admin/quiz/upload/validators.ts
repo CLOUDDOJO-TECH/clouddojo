@@ -55,6 +55,7 @@ export const AVAILABLE_PROVIDERS = [
   "AWS",
   "Azure",
   "GCP",
+  "Oracle Cloud",
   "Kubernetes",
   "Docker",
   "Terraform",
@@ -62,8 +63,13 @@ export const AVAILABLE_PROVIDERS = [
   "Jenkins",
   "GitHub Actions",
   "GitLab CI",
-  "ArgoCD",
   "Helm",
+  "CompTIA",
+  "SANS",
+  "Cisco",
+  "Red Hat",
+  "VMware",
+  "HashiCorp",
 ] as const;
 
 // Zod schema for quiz metadata
@@ -71,13 +77,13 @@ export const quizMetadataSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters"),
   description: z
     .string()
-    .min(50, "Description must be at least 50 words")
+    .min(10, "Description must be at least 10 characters")
     .refine(
       (val) => {
         const wordCount = val.trim().split(/\s+/).length;
-        return wordCount >= 50 && wordCount <= 125;
+        return wordCount >= 10 && wordCount <= 500;
       },
-      { message: "Description must be between 50-125 words" },
+      { message: "Description must be between 10-500 words" },
     ),
   providers: z
     .array(z.string())
@@ -88,11 +94,25 @@ export const quizMetadataSchema = z.object({
     .max(300, "Duration cannot exceed 300 minutes"),
   categoryId: z.string().optional(),
   categoryName: z.string().optional(),
-  thumbnail: z.string().url("Must be a valid URL").optional().or(z.literal("")),
+  thumbnail: z
+    .string()
+    .optional()
+    .refine(
+      (val) => {
+        if (!val || val.trim() === "") return true;
+        try {
+          new URL(val);
+          return true;
+        } catch {
+          return false;
+        }
+      },
+      { message: "Must be a valid URL" },
+    ),
   level: z.enum(["BEGINER", "INTERMEDIATE", "ADVANCED", "EXPERT"]),
   free: z.boolean(),
   isPublic: z.boolean(),
-  isNew: z.boolean(),
+  isNew: z.boolean().optional(),
 });
 
 export type QuizMetadata = z.infer<typeof quizMetadataSchema>;

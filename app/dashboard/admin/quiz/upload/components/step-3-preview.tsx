@@ -25,6 +25,7 @@ import { QuizMetadata, ParsedQuestion, ValidationResult } from "../validators";
 import { createQuizFromJSON } from "../actions";
 import { useRouter } from "next/navigation";
 import ReactMarkdown from "react-markdown";
+import { getProviderLogo } from "../lib/provider-logos";
 
 interface Step3PreviewProps {
   metadata: QuizMetadata;
@@ -123,61 +124,80 @@ export function Step3Preview({
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Title */}
+          <div>
+            <p className="text-sm text-muted-foreground">Title</p>
+            <p className="font-semibold text-lg">{metadata.title}</p>
+          </div>
+
+          {/* Metadata Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             <div>
-              <p className="text-sm text-muted-foreground">Title</p>
-              <p className="font-medium">{metadata.title}</p>
+              <p className="text-xs text-muted-foreground mb-1">Duration</p>
+              <div className="flex items-center gap-1 font-medium">
+                <Clock className="h-4 w-4" />
+                <span className="text-sm">{metadata.duration} min</span>
+              </div>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Difficulty</p>
+              <p className="text-xs text-muted-foreground mb-1">Questions</p>
+              <div className="flex items-center gap-1 font-medium">
+                <FileText className="h-4 w-4" />
+                <span className="text-sm">{validationResult.stats.valid}</span>
+              </div>
+            </div>
+            <div>
+              <p className="text-xs text-muted-foreground mb-1">Difficulty</p>
               <Badge className={difficultyColors[metadata.level]}>
                 {metadata.level.charAt(0) +
                   metadata.level.slice(1).toLowerCase()}
               </Badge>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Duration</p>
-              <div className="flex items-center gap-1 font-medium">
-                <Clock className="h-4 w-4" />
-                {metadata.duration} minutes
-              </div>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Questions</p>
-              <div className="flex items-center gap-1 font-medium">
-                <FileText className="h-4 w-4" />
-                {validationResult.stats.valid} questions
-              </div>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Access</p>
+              <p className="text-xs text-muted-foreground mb-1">Access</p>
               <Badge variant={metadata.free ? "default" : "secondary"}>
                 {metadata.free ? "Free" : "Premium"}
               </Badge>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Visibility</p>
+              <p className="text-xs text-muted-foreground mb-1">Visibility</p>
               <Badge variant={metadata.isPublic ? "default" : "outline"}>
                 {metadata.isPublic ? "Public" : "Private"}
               </Badge>
             </div>
+            {/* Providers */}
+            {metadata.providers && metadata.providers.length > 0 && (
+              <div>
+                <p className="text-sm text-muted-foreground mb-2">
+                  Providers/Platforms
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {metadata.providers.map((provider) => {
+                    const logoUrl = getProviderLogo(provider);
+                    return (
+                      <Badge
+                        key={provider}
+                        variant="secondary"
+                        className="flex items-center gap-2 px-3 py-1.5"
+                      >
+                        {logoUrl && (
+                          <img
+                            src={logoUrl}
+                            alt={provider}
+                            className="w-4 h-4 object-contain"
+                          />
+                        )}
+                        <span>{provider}</span>
+                      </Badge>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
 
-          {/* Providers */}
-          {metadata.providers && metadata.providers.length > 0 && (
-            <div>
-              <p className="text-sm text-muted-foreground mb-2">
-                Providers/Platforms
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {metadata.providers.map((provider) => (
-                  <Badge key={provider} variant="secondary">
-                    {provider}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-          )}
+          {/* Separator */}
+          <div className="border-t" />
 
           {/* Description with Markdown */}
           <div>

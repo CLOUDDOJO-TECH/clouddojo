@@ -30,15 +30,17 @@ export default function AdminClient({ user }: AdminClientProps) {
           </div>
 
           {/* Quiz Management Card */}
-          <div className="rounded-lg border bg-card p-6 shadow-sm">
-            <h3 className="font-semibold text-lg mb-2">Quiz Management</h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              Create and edit quizzes
-            </p>
-            <button className="w-full bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 transition-colors">
-              Manage Quizzes
-            </button>
-          </div>
+          <Link href="/dashboard/admin/quiz/manage">
+            <div className="rounded-lg border bg-card p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer h-full">
+              <h3 className="font-semibold text-lg mb-2">Quiz Management</h3>
+              <p className="text-sm text-muted-foreground mb-4">
+                View, edit, and manage quizzes
+              </p>
+              <div className="w-full bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 transition-colors text-center">
+                Manage Quizzes
+              </div>
+            </div>
+          </Link>
 
           {/* Upload Quiz Card - NEW */}
           <Link href="/dashboard/admin/quiz/upload">

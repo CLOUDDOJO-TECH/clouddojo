@@ -1,21 +1,41 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Checkbox } from "@/components/ui/checkbox";
-import { quizMetadataSchema, QuizMetadata, ValidationResult, AVAILABLE_PROVIDERS } from "../validators";
+import {
+  quizMetadataSchema,
+  QuizMetadata,
+  ValidationResult,
+  AVAILABLE_PROVIDERS,
+} from "../validators";
 import { getCategories, generateQuizMetadata } from "../actions";
 import { toast } from "sonner";
 import { MarkdownPreview } from "./markdown-preview";
+import { getProviderLogo } from "../lib/provider-logos";
+import { ProviderIcon } from "./provider-icon";
 
 interface Category {
   id: string;
@@ -30,11 +50,17 @@ interface Step2QuizMetadataProps {
   validationResult?: ValidationResult;
 }
 
-export function Step2QuizMetadata({ onComplete, onBack, initialData, validationResult }: Step2QuizMetadataProps) {
+export function Step2QuizMetadata({
+  onComplete,
+  onBack,
+  initialData,
+  validationResult,
+}: Step2QuizMetadataProps) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoadingCategories, setIsLoadingCategories] = useState(true);
   const [showNewCategory, setShowNewCategory] = useState(false);
   const [isGeneratingAI, setIsGeneratingAI] = useState(false);
+  const [imageErrors, setImageErrors] = useState<Record<string, boolean>>({});
 
   const {
     register,
@@ -84,18 +110,26 @@ export function Step2QuizMetadata({ onComplete, onBack, initialData, validationR
     toast.loading("AI is generating quiz details...", { id: "ai-prefill" });
 
     try {
-      const result = await generateQuizMetadata(validationResult.validQuestions);
+      const result = await generateQuizMetadata(
+        validationResult.validQuestions,
+      );
 
       if (result.success && result.metadata) {
         // Prefill form fields
         if (result.metadata.title) setValue("title", result.metadata.title);
-        if (result.metadata.description) setValue("description", result.metadata.description);
-        if (result.metadata.providers) setValue("providers", result.metadata.providers);
-        if (result.metadata.duration) setValue("duration", result.metadata.duration);
+        if (result.metadata.description)
+          setValue("description", result.metadata.description);
+        if (result.metadata.providers)
+          setValue("providers", result.metadata.providers);
+        if (result.metadata.duration)
+          setValue("duration", result.metadata.duration);
         if (result.metadata.level) setValue("level", result.metadata.level);
-        if (result.metadata.free !== undefined) setValue("free", result.metadata.free);
-        if (result.metadata.isPublic !== undefined) setValue("isPublic", result.metadata.isPublic);
-        if (result.metadata.isNew !== undefined) setValue("isNew", result.metadata.isNew);
+        if (result.metadata.free !== undefined)
+          setValue("free", result.metadata.free);
+        if (result.metadata.isPublic !== undefined)
+          setValue("isPublic", result.metadata.isPublic);
+        if (result.metadata.isNew !== undefined)
+          setValue("isNew", result.metadata.isNew);
 
         // Handle category
         if (result.metadata.categoryName) {
@@ -103,12 +137,18 @@ export function Step2QuizMetadata({ onComplete, onBack, initialData, validationR
           setValue("categoryName", result.metadata.categoryName);
         }
 
-        toast.success("AI has prefilled the quiz details!", { id: "ai-prefill" });
+        toast.success("AI has prefilled the quiz details!", {
+          id: "ai-prefill",
+        });
       } else {
-        toast.error(result.error || "Failed to generate metadata", { id: "ai-prefill" });
+        toast.error(result.error || "Failed to generate metadata", {
+          id: "ai-prefill",
+        });
       }
     } catch (error) {
-      toast.error("An error occurred while generating metadata", { id: "ai-prefill" });
+      toast.error("An error occurred while generating metadata", {
+        id: "ai-prefill",
+      });
       console.error("AI prefill error:", error);
     } finally {
       setIsGeneratingAI(false);
@@ -121,6 +161,10 @@ export function Step2QuizMetadata({ onComplete, onBack, initialData, validationR
       ? current.filter((p) => p !== provider)
       : [...current, provider];
     setValue("providers", updated);
+  };
+
+  const handleImageError = (provider: string) => {
+    setImageErrors((prev) => ({ ...prev, [provider]: true }));
   };
 
   const onSubmit = (data: QuizMetadata) => {
@@ -143,7 +187,8 @@ export function Step2QuizMetadata({ onComplete, onBack, initialData, validationR
             <div>
               <CardTitle>Quiz Information</CardTitle>
               <CardDescription>
-                Provide details about the quiz. All fields marked with * are required.
+                Provide details about the quiz. All fields marked with * are
+                required.
               </CardDescription>
             </div>
             {validationResult && validationResult.validQuestions.length > 0 && (
@@ -174,7 +219,8 @@ export function Step2QuizMetadata({ onComplete, onBack, initialData, validationR
             <Alert className="mb-6 bg-blue-50 dark:bg-blue-950/20 border-blue-200">
               <Sparkles className="h-4 w-4 text-blue-600" />
               <AlertDescription className="text-blue-900 dark:text-blue-200">
-                <strong>Tip:</strong> Click AI Prefill to let AI automatically generate quiz details based on your questions!
+                <strong>Tip:</strong> Click AI Prefill to let AI automatically
+                generate quiz details based on your questions!
               </AlertDescription>
             </Alert>
           )}
@@ -191,7 +237,9 @@ export function Step2QuizMetadata({ onComplete, onBack, initialData, validationR
                 {...register("title")}
               />
               {errors.title && (
-                <p className="text-sm text-destructive">{errors.title.message}</p>
+                <p className="text-sm text-destructive">
+                  {errors.title.message}
+                </p>
               )}
             </div>
 
@@ -218,24 +266,37 @@ export function Step2QuizMetadata({ onComplete, onBack, initialData, validationR
                 Select all cloud providers or platforms covered in this quiz
               </p>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                {AVAILABLE_PROVIDERS.map((provider) => (
-                  <div key={provider} className="flex items-center space-x-2">
-                    <Checkbox
-                      id={provider}
-                      checked={selectedProviders?.includes(provider)}
-                      onCheckedChange={() => handleProviderToggle(provider)}
-                    />
-                    <label
-                      htmlFor={provider}
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
-                    >
-                      {provider}
-                    </label>
-                  </div>
-                ))}
+                {AVAILABLE_PROVIDERS.map((provider) => {
+                  const logoUrl = getProviderLogo(provider);
+                  const hasError = imageErrors[provider];
+                  return (
+                    <div key={provider} className="flex items-center gap-2">
+                      <Checkbox
+                        id={`provider-${provider}`}
+                        checked={selectedProviders?.includes(provider)}
+                        onCheckedChange={() => handleProviderToggle(provider)}
+                      />
+                      <label
+                        htmlFor={`provider-${provider}`}
+                        className="text-sm font-medium leading-tight cursor-pointer flex items-center gap-2 select-none"
+                      >
+                        {!hasError && (
+                          <ProviderIcon
+                            provider={provider}
+                            logoUrl={logoUrl}
+                            onError={() => handleImageError(provider)}
+                          />
+                        )}
+                        <span>{provider}</span>
+                      </label>
+                    </div>
+                  );
+                })}
               </div>
               {errors.providers && (
-                <p className="text-sm text-destructive">{errors.providers.message}</p>
+                <p className="text-sm text-destructive">
+                  {errors.providers.message}
+                </p>
               )}
             </div>
 
@@ -255,7 +316,9 @@ export function Step2QuizMetadata({ onComplete, onBack, initialData, validationR
                   {...register("duration", { valueAsNumber: true })}
                 />
                 {errors.duration && (
-                  <p className="text-sm text-destructive">{errors.duration.message}</p>
+                  <p className="text-sm text-destructive">
+                    {errors.duration.message}
+                  </p>
                 )}
               </div>
 
@@ -279,7 +342,9 @@ export function Step2QuizMetadata({ onComplete, onBack, initialData, validationR
                   </SelectContent>
                 </Select>
                 {errors.level && (
-                  <p className="text-sm text-destructive">{errors.level.message}</p>
+                  <p className="text-sm text-destructive">
+                    {errors.level.message}
+                  </p>
                 )}
               </div>
             </div>
@@ -313,7 +378,13 @@ export function Step2QuizMetadata({ onComplete, onBack, initialData, validationR
                   disabled={isLoadingCategories}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder={isLoadingCategories ? "Loading categories..." : "Select a category"} />
+                    <SelectValue
+                      placeholder={
+                        isLoadingCategories
+                          ? "Loading categories..."
+                          : "Select a category"
+                      }
+                    />
                   </SelectTrigger>
                   <SelectContent>
                     {categories.map((cat) => (
@@ -341,7 +412,9 @@ export function Step2QuizMetadata({ onComplete, onBack, initialData, validationR
                 {...register("thumbnail")}
               />
               {errors.thumbnail && (
-                <p className="text-sm text-destructive">{errors.thumbnail.message}</p>
+                <p className="text-sm text-destructive">
+                  {errors.thumbnail.message}
+                </p>
               )}
             </div>
 
