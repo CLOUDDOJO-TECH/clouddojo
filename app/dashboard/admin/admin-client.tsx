@@ -1,4 +1,6 @@
 import { User } from "@prisma/client";
+import Link from "next/link";
+import { Upload } from "lucide-react";
 
 interface AdminClientProps {
   user: Pick<User, "userId" | "email" | "firstName" | "lastName" | "role">;
@@ -37,6 +39,22 @@ export default function AdminClient({ user }: AdminClientProps) {
               Manage Quizzes
             </button>
           </div>
+
+          {/* Upload Quiz Card - NEW */}
+          <Link href="/dashboard/admin/quiz/upload">
+            <div className="rounded-lg border bg-card p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer h-full">
+              <div className="flex items-center gap-2 mb-2">
+                <Upload className="h-5 w-5 text-primary" />
+                <h3 className="font-semibold text-lg">Upload Quiz</h3>
+              </div>
+              <p className="text-sm text-muted-foreground mb-4">
+                Upload JSON file to create new quiz
+              </p>
+              <div className="w-full bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 transition-colors text-center">
+                Upload Now
+              </div>
+            </div>
+          </Link>
 
           {/* Analytics Card */}
           <div className="rounded-lg border bg-card p-6 shadow-sm">

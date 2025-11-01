@@ -6,9 +6,9 @@ import { ThemeProvider } from "next-themes";
 import Script from "next/script";
 
 export const metadata: Metadata = {
-  title: "Shadcn Pricing Page",
+  title: "Pricing | Clouddojo",
   description:
-    "Modern and customizable pricing component built with Shadcn/UI, featuring responsive design, payment frequency toggles, and tiered plans. Perfect for SaaS and subscription-based projects",
+    "Choose the perfect CloudDojo plan for your cloud certification journey. Get unlimited practice tests, AI-powered insights, and personalized study plans for AWS, Azure, and GCP exams. Save with yearly billing.",
 };
 
 export default function RootLayout({
