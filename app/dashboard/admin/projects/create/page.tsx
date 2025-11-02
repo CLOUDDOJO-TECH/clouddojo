@@ -64,9 +64,13 @@ export default function CreateProjectPage() {
 
   // Check for existing draft on mount
   useEffect(() => {
-    if (draftManager.hasDraft()) {
-      setShowRestoreDraftDialog(true);
-    }
+    const checkDraft = async () => {
+      const hasDraft = await draftManager.hasDraft();
+      if (hasDraft) {
+        setShowRestoreDraftDialog(true);
+      }
+    };
+    checkDraft();
   }, []);
 
   // Auto-save draft every 30 seconds
@@ -80,8 +84,8 @@ export default function CreateProjectPage() {
     return () => clearInterval(autoSaveInterval);
   }, [basicInfo, content, steps, categories, currentStep]);
 
-  const saveDraft = () => {
-    const success = draftManager.saveDraft({
+  const saveDraft = async () => {
+    const success = await draftManager.saveDraft({
       currentStep,
       basicInfo,
       content,
@@ -97,8 +101,8 @@ export default function CreateProjectPage() {
     }
   };
 
-  const loadDraft = () => {
-    const draft = draftManager.loadDraft();
+  const loadDraft = async () => {
+    const draft = await draftManager.loadDraft();
     if (draft) {
       setCurrentStep(draft.currentStep as Step);
       setBasicInfo(draft.basicInfo);
@@ -111,13 +115,13 @@ export default function CreateProjectPage() {
     setShowRestoreDraftDialog(false);
   };
 
-  const discardDraft = () => {
-    draftManager.clearDraft();
+  const discardDraft = async () => {
+    await draftManager.clearDraft();
     setShowRestoreDraftDialog(false);
   };
 
-  const clearDraftAfterPublish = () => {
-    draftManager.clearDraft();
+  const clearDraftAfterPublish = async () => {
+    await draftManager.clearDraft();
     setLastSavedAt(null);
   };
 

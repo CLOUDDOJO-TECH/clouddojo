@@ -4,6 +4,12 @@ import {
   ProjectSteps,
   ProjectCategories,
 } from "./validators";
+import {
+  saveDraftToServer,
+  loadDraftFromServer,
+  deleteDraftFromServer,
+  hasDraftOnServer,
+} from "./draft-actions";
 
 const DRAFT_KEY = "project-creation-draft";
 const DRAFT_TIMESTAMP_KEY = "project-creation-draft-timestamp";
@@ -18,15 +24,21 @@ export interface ProjectDraft {
 }
 
 export const draftManager = {
-  // Save draft to localStorage
-  saveDraft: (draft: Omit<ProjectDraft, "savedAt">): boolean => {
+  // Save draft to both localStorage and server
+  saveDraft: async (draft: Omit<ProjectDraft, "savedAt">): Promise<boolean> => {
     try {
       const draftWithTimestamp: ProjectDraft = {
         ...draft,
         savedAt: new Date().toISOString(),
       };
+
+      // Save to localStorage for quick access
       localStorage.setItem(DRAFT_KEY, JSON.stringify(draftWithTimestamp));
       localStorage.setItem(DRAFT_TIMESTAMP_KEY, draftWithTimestamp.savedAt);
+
+      // Save to server for persistence across devices
+      await saveDraftToServer(draft);
+
       return true;
     } catch (error) {
       console.error("Failed to save draft:", error);
@@ -34,23 +46,52 @@ export const draftManager = {
     }
   },
 
-  // Load draft from localStorage
-  loadDraft: (): ProjectDraft | null => {
+  // Load draft (tries localStorage first, then server)
+  loadDraft: async (): Promise<ProjectDraft | null> => {
     try {
+      // Try localStorage first for speed
       const draftJson = localStorage.getItem(DRAFT_KEY);
-      if (!draftJson) return null;
+      if (draftJson) {
+        const draft = JSON.parse(draftJson) as ProjectDraft;
+        return draft;
+      }
 
-      const draft = JSON.parse(draftJson) as ProjectDraft;
-      return draft;
+      // If not in localStorage, try server
+      const serverResult = await loadDraftFromServer();
+      if (serverResult.success && serverResult.draft) {
+        const draft: ProjectDraft = {
+          currentStep: serverResult.draft.currentStep,
+          basicInfo: serverResult.draft.basicInfo,
+          content: serverResult.draft.content,
+          steps: serverResult.draft.steps,
+          categories: serverResult.draft.categories,
+          savedAt: serverResult.draft.updatedAt.toISOString(),
+        };
+
+        // Cache in localStorage
+        localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+        localStorage.setItem(DRAFT_TIMESTAMP_KEY, draft.savedAt);
+
+        return draft;
+      }
+
+      return null;
     } catch (error) {
       console.error("Failed to load draft:", error);
       return null;
     }
   },
 
-  // Check if draft exists
-  hasDraft: (): boolean => {
-    return localStorage.getItem(DRAFT_KEY) !== null;
+  // Check if draft exists (checks both localStorage and server)
+  hasDraft: async (): Promise<boolean> => {
+    // Check localStorage first
+    if (localStorage.getItem(DRAFT_KEY) !== null) {
+      return true;
+    }
+
+    // Check server
+    const serverResult = await hasDraftOnServer();
+    return serverResult.hasDraft;
   },
 
   // Get draft timestamp
@@ -58,10 +99,11 @@ export const draftManager = {
     return localStorage.getItem(DRAFT_TIMESTAMP_KEY);
   },
 
-  // Clear draft
-  clearDraft: (): void => {
+  // Clear draft from both localStorage and server
+  clearDraft: async (): Promise<void> => {
     localStorage.removeItem(DRAFT_KEY);
     localStorage.removeItem(DRAFT_TIMESTAMP_KEY);
+    await deleteDraftFromServer();
   },
 
   // Get formatted time ago
@@ -74,8 +116,10 @@ export const draftManager = {
     const diffDays = Math.floor(diffHours / 24);
 
     if (diffMins < 1) return "just now";
-    if (diffMins < 60) return `${diffMins} minute${diffMins === 1 ? "" : "s"} ago`;
-    if (diffHours < 24) return `${diffHours} hour${diffHours === 1 ? "" : "s"} ago`;
+    if (diffMins < 60)
+      return `${diffMins} minute${diffMins === 1 ? "" : "s"} ago`;
+    if (diffHours < 24)
+      return `${diffHours} hour${diffHours === 1 ? "" : "s"} ago`;
     return `${diffDays} day${diffDays === 1 ? "" : "s"} ago`;
   },
 };
