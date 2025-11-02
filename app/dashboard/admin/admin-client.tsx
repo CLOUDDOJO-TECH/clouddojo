@@ -1,6 +1,6 @@
 import { User } from "@prisma/client";
 import Link from "next/link";
-import { Upload } from "lucide-react";
+import { Upload, Plus, FolderKanban } from "lucide-react";
 
 interface AdminClientProps {
   user: Pick<User, "userId" | "email" | "firstName" | "lastName" | "role">;
@@ -70,15 +70,36 @@ export default function AdminClient({ user }: AdminClientProps) {
           </div>
 
           {/* Project Management Card */}
-          <div className="rounded-lg border bg-card p-6 shadow-sm">
-            <h3 className="font-semibold text-lg mb-2">Project Management</h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              Manage hands-on projects
-            </p>
-            <button className="w-full bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 transition-colors">
-              Manage Projects
-            </button>
-          </div>
+          <Link href="/dashboard/admin/projects/manage">
+            <div className="rounded-lg border bg-card p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer h-full">
+              <div className="flex items-center gap-2 mb-2">
+                <FolderKanban className="h-5 w-5 text-primary" />
+                <h3 className="font-semibold text-lg">Project Management</h3>
+              </div>
+              <p className="text-sm text-muted-foreground mb-4">
+                View, edit, and manage projects
+              </p>
+              <div className="w-full bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 transition-colors text-center">
+                Manage Projects
+              </div>
+            </div>
+          </Link>
+
+          {/* Create Project Card */}
+          <Link href="/dashboard/admin/projects/create">
+            <div className="rounded-lg border bg-card p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer h-full">
+              <div className="flex items-center gap-2 mb-2">
+                <Plus className="h-5 w-5 text-primary" />
+                <h3 className="font-semibold text-lg">Create Project</h3>
+              </div>
+              <p className="text-sm text-muted-foreground mb-4">
+                Build a new hands-on project from scratch
+              </p>
+              <div className="w-full bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 transition-colors text-center">
+                Create Now
+              </div>
+            </div>
+          </Link>
 
           {/* Subscription Management Card */}
           <div className="rounded-lg border bg-card p-6 shadow-sm">

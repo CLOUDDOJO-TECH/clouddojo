@@ -1,13 +1,13 @@
 import type { NextConfig } from "next";
-import createMDX from '@next/mdx';
-import remarkGfm from 'remark-gfm';
-import rehypeHighlight from 'rehype-highlight';
-import rehypeSlug from 'rehype-slug';
-import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import createMDX from "@next/mdx";
+import remarkGfm from "remark-gfm";
+import rehypeHighlight from "rehype-highlight";
+import rehypeSlug from "rehype-slug";
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
 
 const nextConfig: NextConfig = {
-  pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
-  transpilePackages: ['react-element-to-jsx-string'],
+  pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
+  transpilePackages: ["react-element-to-jsx-string"],
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -15,17 +15,28 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "3441c44ci2.ufs.sh", 
+        hostname: "3441c44ci2.ufs.sh",
         pathname: "/f/*",
       },
       {
         protocol: "https",
-        hostname: "res.cloudinary.com", 
+        hostname: "res.cloudinary.com",
         pathname: "/*",
-      }
+      },
+      {
+        protocol: "https",
+        hostname: "clouddojo-media-data-obj.s3.eu-north-1.amazonaws.com",
+        pathname: "/**",
+      },
     ],
+    minimumCacheTTL: 60,
+    dangerouslyAllowSVG: true,
+    contentDispositionType: "attachment",
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+    // Increase timeout for slow S3 responses
+    unoptimized: false,
   },
-  
+
   onDemandEntries: {
     // period (in ms) where the server will keep pages in the buffer
     maxInactiveAge: 15 * 60 * 1000, // 15 minutes
@@ -49,7 +60,7 @@ const withMDX = createMDX({
   rehypePlugins: [
     rehypeHighlight,
     rehypeSlug,
-    [rehypeAutolinkHeadings, { behavior: 'wrap' }],
+    [rehypeAutolinkHeadings, { behavior: "wrap" }],
   ],
 });
 

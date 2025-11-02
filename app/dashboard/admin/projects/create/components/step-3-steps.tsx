@@ -1,0 +1,585 @@
+"use client";
+
+import { useState } from "react";
+import { useForm, useFieldArray } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Loader2,
+  Plus,
+  X,
+  ChevronDown,
+  ChevronUp,
+  GripVertical,
+  FileText,
+  Clock,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Badge } from "@/components/ui/badge";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { MediaUpload } from "@/components/ui/media-upload";
+import { MarkdownEditor } from "@/components/ui/markdown-editor";
+import {
+  projectStepsSchema,
+  ProjectSteps,
+  ProjectStep,
+  PROJECT_STEP_TYPES,
+} from "../validators";
+
+interface Step3StepsProps {
+  onComplete: (data: ProjectSteps) => void;
+  onBack: () => void;
+  initialData?: Partial<ProjectSteps>;
+}
+
+export function Step3Steps({
+  onComplete,
+  onBack,
+  initialData,
+}: Step3StepsProps) {
+  const [openSteps, setOpenSteps] = useState<number[]>([0]);
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    control,
+    setValue,
+    formState: { errors, isSubmitting },
+  } = useForm<ProjectSteps>({
+    resolver: zodResolver(projectStepsSchema),
+    defaultValues: {
+      steps: initialData?.steps || [
+        {
+          stepNumber: 1,
+          title: "",
+          description: "",
+          instructions: "",
+          expectedOutput: "",
+          validationCriteria: [],
+          mediaUrls: [],
+          estimatedTime: 30,
+          stepType: "INSTRUCTION",
+          isOptional: false,
+        },
+      ],
+    },
+  });
+
+  const {
+    fields: stepFields,
+    append: appendStep,
+    remove: removeStep,
+    move: moveStep,
+  } = useFieldArray({
+    control,
+    name: "steps",
+  });
+
+  const toggleStep = (index: number) => {
+    setOpenSteps((prev) =>
+      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index],
+    );
+  };
+
+  const handleAddStep = () => {
+    const newStepNumber = stepFields.length + 1;
+    appendStep({
+      stepNumber: newStepNumber,
+      title: "",
+      description: "",
+      instructions: "",
+      expectedOutput: "",
+      validationCriteria: [],
+      mediaUrls: [],
+      estimatedTime: 30,
+      stepType: "INSTRUCTION",
+      isOptional: false,
+    });
+    setOpenSteps([...openSteps, stepFields.length]);
+  };
+
+  const handleRemoveStep = (index: number) => {
+    removeStep(index);
+    setOpenSteps(openSteps.filter((i) => i !== index));
+
+    // Renumber remaining steps
+    const steps = watch("steps");
+    steps.forEach((_, idx) => {
+      if (idx >= index) {
+        setValue(`steps.${idx}.stepNumber`, idx + 1);
+      }
+    });
+  };
+
+  const handleMoveStep = (index: number, direction: "up" | "down") => {
+    const newIndex = direction === "up" ? index - 1 : index + 1;
+    moveStep(index, newIndex);
+
+    // Update step numbers
+    setValue(`steps.${index}.stepNumber`, newIndex + 1);
+    setValue(`steps.${newIndex}.stepNumber`, index + 1);
+
+    // Update open states
+    setOpenSteps(
+      openSteps.map((i) => {
+        if (i === index) return newIndex;
+        if (i === newIndex) return index;
+        return i;
+      }),
+    );
+  };
+
+  const handleAddValidationCriteria = (stepIndex: number) => {
+    const currentCriteria =
+      watch(`steps.${stepIndex}.validationCriteria`) || [];
+    setValue(`steps.${stepIndex}.validationCriteria`, [...currentCriteria, ""]);
+  };
+
+  const handleRemoveValidationCriteria = (
+    stepIndex: number,
+    criteriaIndex: number,
+  ) => {
+    const currentCriteria =
+      watch(`steps.${stepIndex}.validationCriteria`) || [];
+    setValue(
+      `steps.${stepIndex}.validationCriteria`,
+      currentCriteria.filter((_, idx) => idx !== criteriaIndex),
+    );
+  };
+
+  const handleAddMediaUrl = (stepIndex: number) => {
+    const currentUrls = watch(`steps.${stepIndex}.mediaUrls`) || [];
+    setValue(`steps.${stepIndex}.mediaUrls`, [...currentUrls, ""]);
+  };
+
+  const handleRemoveMediaUrl = (stepIndex: number, urlIndex: number) => {
+    const currentUrls = watch(`steps.${stepIndex}.mediaUrls`) || [];
+    setValue(
+      `steps.${stepIndex}.mediaUrls`,
+      currentUrls.filter((_, idx) => idx !== urlIndex),
+    );
+  };
+
+  const onSubmit = (data: ProjectSteps) => {
+    onComplete(data);
+  };
+
+  const getStepTypeColor = (type: string) => {
+    switch (type) {
+      case "INSTRUCTION":
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400";
+      case "QUIZ":
+        return "bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400";
+      case "VALIDATION":
+        return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400";
+      case "REFLECTION":
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400";
+      case "CHECKPOINT":
+        return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400";
+      default:
+        return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400";
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Project Steps</CardTitle>
+          <CardDescription>
+            Define the step-by-step instructions for completing this project
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            {/* Steps List */}
+            <div className="space-y-3">
+              {stepFields.map((field, index) => {
+                const isOpen = openSteps.includes(index);
+                const stepType = watch(`steps.${index}.stepType`);
+                const stepTitle = watch(`steps.${index}.title`);
+                const validationCriteria =
+                  watch(`steps.${index}.validationCriteria`) || [];
+                const mediaUrls = watch(`steps.${index}.mediaUrls`) || [];
+
+                return (
+                  <Card key={field.id} className="border-2">
+                    <Collapsible
+                      open={isOpen}
+                      onOpenChange={() => toggleStep(index)}
+                    >
+                      <div className="flex items-center gap-2 p-4">
+                        <GripVertical className="h-5 w-5 text-muted-foreground cursor-move" />
+
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2">
+                            <span className="font-semibold">
+                              Step {index + 1}
+                            </span>
+                            <Badge className={getStepTypeColor(stepType)}>
+                              {stepType}
+                            </Badge>
+                            {stepTitle && (
+                              <span className="text-sm text-muted-foreground truncate">
+                                - {stepTitle}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-1">
+                          {index > 0 && (
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleMoveStep(index, "up");
+                              }}
+                            >
+                              <ChevronUp className="h-4 w-4" />
+                            </Button>
+                          )}
+                          {index < stepFields.length - 1 && (
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleMoveStep(index, "down");
+                              }}
+                            >
+                              <ChevronDown className="h-4 w-4" />
+                            </Button>
+                          )}
+                          {stepFields.length > 1 && (
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleRemoveStep(index);
+                              }}
+                            >
+                              <X className="h-4 w-4" />
+                            </Button>
+                          )}
+                          <CollapsibleTrigger asChild>
+                            <Button type="button" variant="ghost" size="icon">
+                              {isOpen ? (
+                                <ChevronUp className="h-4 w-4" />
+                              ) : (
+                                <ChevronDown className="h-4 w-4" />
+                              )}
+                            </Button>
+                          </CollapsibleTrigger>
+                        </div>
+                      </div>
+
+                      <CollapsibleContent>
+                        <div className="px-4 pb-4 space-y-4 border-t pt-4">
+                          {/* Step Title */}
+                          <div className="space-y-2">
+                            <Label htmlFor={`steps.${index}.title`}>
+                              Step Title{" "}
+                              <span className="text-destructive">*</span>
+                            </Label>
+                            <Input
+                              id={`steps.${index}.title`}
+                              placeholder="e.g., Create a Lambda Function"
+                              {...register(`steps.${index}.title`)}
+                            />
+                            {errors.steps?.[index]?.title && (
+                              <p className="text-sm text-destructive">
+                                {errors.steps[index]?.title?.message}
+                              </p>
+                            )}
+                          </div>
+
+                          {/* Step Description */}
+                          <div className="space-y-2">
+                            <Label htmlFor={`steps.${index}.description`}>
+                              Short Description (optional)
+                            </Label>
+                            <Input
+                              id={`steps.${index}.description`}
+                              placeholder="Brief summary of this step"
+                              {...register(`steps.${index}.description`)}
+                            />
+                          </div>
+
+                          {/* Instructions (Markdown) */}
+                          <MarkdownEditor
+                            id={`steps.${index}.instructions`}
+                            label="Instructions"
+                            value={watch(`steps.${index}.instructions`)}
+                            onChange={(value) =>
+                              setValue(`steps.${index}.instructions`, value)
+                            }
+                            placeholder="# Step Instructions
+
+Write detailed instructions using Markdown...
+
+- Item 1
+- Item 2"
+                            rows={8}
+                            required
+                            error={errors.steps?.[index]?.instructions?.message}
+                          />
+
+                          {/* Expected Output */}
+                          <div className="space-y-2">
+                            <Label htmlFor={`steps.${index}.expectedOutput`}>
+                              Expected Output (optional)
+                            </Label>
+                            <Textarea
+                              id={`steps.${index}.expectedOutput`}
+                              placeholder="What should students see or achieve after this step?"
+                              rows={3}
+                              {...register(`steps.${index}.expectedOutput`)}
+                            />
+                          </div>
+
+                          {/* Step Type and Estimated Time */}
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                              <Label htmlFor={`steps.${index}.stepType`}>
+                                Step Type
+                              </Label>
+                              <Select
+                                value={watch(`steps.${index}.stepType`)}
+                                onValueChange={(value) =>
+                                  setValue(
+                                    `steps.${index}.stepType`,
+                                    value as any,
+                                  )
+                                }
+                              >
+                                <SelectTrigger id={`steps.${index}.stepType`}>
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="INSTRUCTION">
+                                    Instruction
+                                  </SelectItem>
+                                  <SelectItem value="QUIZ">Quiz</SelectItem>
+                                  <SelectItem value="VALIDATION">
+                                    Validation
+                                  </SelectItem>
+                                  <SelectItem value="REFLECTION">
+                                    Reflection
+                                  </SelectItem>
+                                  <SelectItem value="CHECKPOINT">
+                                    Checkpoint
+                                  </SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+
+                            <div className="space-y-2">
+                              <Label htmlFor={`steps.${index}.estimatedTime`}>
+                                Estimated Time (minutes)
+                              </Label>
+                              <Input
+                                id={`steps.${index}.estimatedTime`}
+                                type="number"
+                                min="1"
+                                max="300"
+                                {...register(`steps.${index}.estimatedTime`, {
+                                  valueAsNumber: true,
+                                })}
+                              />
+                            </div>
+                          </div>
+
+                          {/* Validation Criteria */}
+                          <div className="space-y-2">
+                            <Label>Validation Criteria (optional)</Label>
+                            <p className="text-xs text-muted-foreground">
+                              How to verify this step was completed correctly
+                            </p>
+                            {validationCriteria.map((_, criteriaIndex) => (
+                              <div
+                                key={criteriaIndex}
+                                className="flex items-center gap-2"
+                              >
+                                <Input
+                                  placeholder="e.g., Function returns 200 status code"
+                                  value={validationCriteria[criteriaIndex]}
+                                  onChange={(e) => {
+                                    const updated = [...validationCriteria];
+                                    updated[criteriaIndex] = e.target.value;
+                                    setValue(
+                                      `steps.${index}.validationCriteria`,
+                                      updated,
+                                    );
+                                  }}
+                                />
+                                <Button
+                                  type="button"
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() =>
+                                    handleRemoveValidationCriteria(
+                                      index,
+                                      criteriaIndex,
+                                    )
+                                  }
+                                >
+                                  <X className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            ))}
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleAddValidationCriteria(index)}
+                              className="gap-2"
+                            >
+                              <Plus className="h-4 w-4" />
+                              Add Criteria
+                            </Button>
+                          </div>
+
+                          {/* Media */}
+                          <div className="space-y-2">
+                            <Label>Media (optional)</Label>
+                            <p className="text-xs text-muted-foreground">
+                              Screenshots, diagrams, or reference images
+                            </p>
+                            {mediaUrls.map((_, urlIndex) => (
+                              <div key={urlIndex} className="space-y-2">
+                                <div className="flex items-start gap-2">
+                                  <div className="flex-1">
+                                    <MediaUpload
+                                      label={`Media ${urlIndex + 1}`}
+                                      value={mediaUrls[urlIndex]}
+                                      onChange={(url) => {
+                                        const updated = [...mediaUrls];
+                                        updated[urlIndex] = url;
+                                        setValue(
+                                          `steps.${index}.mediaUrls`,
+                                          updated,
+                                        );
+                                      }}
+                                      accept="image/*,video/*"
+                                      maxSizeMB={10}
+                                      description="Upload or enter URL"
+                                    />
+                                  </div>
+                                  <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() =>
+                                      handleRemoveMediaUrl(index, urlIndex)
+                                    }
+                                    className="mt-8"
+                                  >
+                                    <X className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                              </div>
+                            ))}
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleAddMediaUrl(index)}
+                              className="gap-2"
+                            >
+                              <Plus className="h-4 w-4" />
+                              Add Media
+                            </Button>
+                          </div>
+
+                          {/* Is Optional Switch */}
+                          <div className="flex items-center justify-between border rounded-lg p-3">
+                            <div className="space-y-0.5">
+                              <Label htmlFor={`steps.${index}.isOptional`}>
+                                Optional Step
+                              </Label>
+                              <p className="text-xs text-muted-foreground">
+                                Students can skip this step
+                              </p>
+                            </div>
+                            <Switch
+                              id={`steps.${index}.isOptional`}
+                              checked={watch(`steps.${index}.isOptional`)}
+                              onCheckedChange={(checked) =>
+                                setValue(`steps.${index}.isOptional`, checked)
+                              }
+                            />
+                          </div>
+                        </div>
+                      </CollapsibleContent>
+                    </Collapsible>
+                  </Card>
+                );
+              })}
+            </div>
+
+            {errors.steps && (
+              <p className="text-sm text-destructive">{errors.steps.message}</p>
+            )}
+
+            {/* Add Step Button */}
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleAddStep}
+              disabled={stepFields.length >= 50}
+              className="w-full gap-2"
+            >
+              <Plus className="h-4 w-4" />
+              Add Another Step
+            </Button>
+
+            {/* Action Buttons */}
+            <div className="flex justify-between pt-4">
+              <Button type="button" variant="outline" onClick={onBack}>
+                Back
+              </Button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Processing...
+                  </>
+                ) : (
+                  "Continue to Categories"
+                )}
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}

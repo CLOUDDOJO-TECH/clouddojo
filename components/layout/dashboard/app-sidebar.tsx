@@ -21,6 +21,8 @@ import {
   PracticeTestIcon,
   DashboardIcon,
   ManageQuizzesIcon,
+  ManageProjectsIcon,
+  CreateProjectIcon,
 } from "./sidebar-icons";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -141,6 +143,16 @@ const ADMIN_NAV_ITEMS: NavItem[] = [
     title: "Manage Quizzes",
     url: "/dashboard/admin/quiz/manage",
     icon: ManageQuizzesIcon,
+  },
+  {
+    title: "Manage Projects",
+    url: "/dashboard/admin/projects/manage",
+    icon: ManageProjectsIcon,
+  },
+  {
+    title: "Create Project",
+    url: "/dashboard/admin/projects/create",
+    icon: CreateProjectIcon,
   },
 ];
 
