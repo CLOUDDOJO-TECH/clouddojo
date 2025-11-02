@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   MoreHorizontal,
   Pencil,
@@ -41,20 +41,33 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { ProjectTableData, deleteProject, toggleProjectPublishStatus } from "../actions";
+import {
+  ProjectTableData,
+  deleteProject,
+  toggleProjectPublishStatus,
+} from "../actions";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface ProjectsTableProps {
   projects: ProjectTableData[];
 }
 
-export function ProjectsTable({ projects: initialProjects }: ProjectsTableProps) {
+export function ProjectsTable({
+  projects: initialProjects,
+}: ProjectsTableProps) {
   const [projects, setProjects] = useState(initialProjects);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [projectToDelete, setProjectToDelete] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const router = useRouter();
+  const queryClient = useQueryClient();
+
+  // Sync local state when props change (from React Query refetch)
+  useEffect(() => {
+    setProjects(initialProjects);
+  }, [initialProjects]);
 
   const handleDeleteClick = (projectId: string) => {
     setProjectToDelete(projectId);
@@ -72,8 +85,12 @@ export function ProjectsTable({ projects: initialProjects }: ProjectsTableProps)
     if (result.success) {
       toast.success("Project deleted successfully", { id: "delete-project" });
       setProjects(projects.filter((p) => p.id !== projectToDelete));
+      // Invalidate query cache to refetch projects
+      queryClient.invalidateQueries({ queryKey: ["allProjects"] });
     } else {
-      toast.error(result.error || "Failed to delete project", { id: "delete-project" });
+      toast.error(result.error || "Failed to delete project", {
+        id: "delete-project",
+      });
     }
 
     setIsDeleting(false);
@@ -87,14 +104,20 @@ export function ProjectsTable({ projects: initialProjects }: ProjectsTableProps)
     const result = await toggleProjectPublishStatus(projectId);
 
     if (result.success) {
-      toast.success(result.message || "Status updated", { id: "toggle-publish" });
+      toast.success(result.message || "Status updated", {
+        id: "toggle-publish",
+      });
       setProjects(
         projects.map((p) =>
-          p.id === projectId ? { ...p, isPublished: result.isPublished! } : p
-        )
+          p.id === projectId ? { ...p, isPublished: result.isPublished! } : p,
+        ),
       );
+      // Invalidate query cache to refetch projects
+      queryClient.invalidateQueries({ queryKey: ["allProjects"] });
     } else {
-      toast.error(result.error || "Failed to update status", { id: "toggle-publish" });
+      toast.error(result.error || "Failed to update status", {
+        id: "toggle-publish",
+      });
     }
   };
 
@@ -132,7 +155,9 @@ export function ProjectsTable({ projects: initialProjects }: ProjectsTableProps)
     if (minutes < 60) return `${minutes}m`;
     const hours = Math.floor(minutes / 60);
     const remainingMinutes = minutes % 60;
-    return remainingMinutes === 0 ? `${hours}h` : `${hours}h ${remainingMinutes}m`;
+    return remainingMinutes === 0
+      ? `${hours}h`
+      : `${hours}h ${remainingMinutes}m`;
   };
 
   const formatCost = (cents: number) => {
@@ -198,21 +223,32 @@ export function ProjectsTable({ projects: initialProjects }: ProjectsTableProps)
               <TableRow key={project.id}>
                 <TableCell className="font-medium">
                   <div className="flex flex-col">
-                    <span className="truncate max-w-[280px]">{project.title}</span>
+                    <span className="truncate max-w-[280px]">
+                      {project.title}
+                    </span>
                     {project.isPremium && (
-                      <Badge className="bg-yellow-500 text-yellow-50 w-fit mt-1" variant="secondary">
+                      <Badge
+                        className="bg-yellow-500 text-yellow-50 w-fit mt-1"
+                        variant="secondary"
+                      >
                         Premium
                       </Badge>
                     )}
                   </div>
                 </TableCell>
                 <TableCell>
-                  <Badge className={getTypeColor(project.projectType)} variant="secondary">
+                  <Badge
+                    className={getTypeColor(project.projectType)}
+                    variant="secondary"
+                  >
                     {project.projectType}
                   </Badge>
                 </TableCell>
                 <TableCell>
-                  <Badge className={getDifficultyColor(project.difficulty)} variant="secondary">
+                  <Badge
+                    className={getDifficultyColor(project.difficulty)}
+                    variant="secondary"
+                  >
                     {project.difficulty}
                   </Badge>
                 </TableCell>
@@ -224,8 +260,12 @@ export function ProjectsTable({ projects: initialProjects }: ProjectsTableProps)
                 <TableCell className="text-center font-semibold">
                   {project.userCount}
                 </TableCell>
-                <TableCell className="text-center">{project.stepsCount}</TableCell>
-                <TableCell className="text-center">{project.categoriesCount}</TableCell>
+                <TableCell className="text-center">
+                  {project.stepsCount}
+                </TableCell>
+                <TableCell className="text-center">
+                  {project.categoriesCount}
+                </TableCell>
                 <TableCell>{formatTime(project.estimatedTime)}</TableCell>
                 <TableCell>{formatCost(project.estimatedCost)}</TableCell>
                 <TableCell className="text-muted-foreground text-sm">
@@ -242,12 +282,18 @@ export function ProjectsTable({ projects: initialProjects }: ProjectsTableProps)
                     <DropdownMenuContent align="end">
                       <DropdownMenuLabel>Actions</DropdownMenuLabel>
                       <DropdownMenuItem
-                        onClick={() => router.push(`/dashboard/admin/projects/edit/${project.id}`)}
+                        onClick={() =>
+                          router.push(
+                            `/dashboard/admin/projects/edit/${project.id}`,
+                          )
+                        }
                       >
                         <Pencil className="mr-2 h-4 w-4" />
                         Edit
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleTogglePublish(project.id)}>
+                      <DropdownMenuItem
+                        onClick={() => handleTogglePublish(project.id)}
+                      >
                         {project.isPublished ? (
                           <>
                             <EyeOff className="mr-2 h-4 w-4" />
@@ -283,7 +329,8 @@ export function ProjectsTable({ projects: initialProjects }: ProjectsTableProps)
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete this project and all associated data. This action cannot be undone.
+              This will permanently delete this project and all associated data.
+              This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

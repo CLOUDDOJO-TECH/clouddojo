@@ -134,3 +134,159 @@ export async function toggleProjectPublishStatus(projectId: string) {
     };
   }
 }
+
+export async function bulkDeleteProjects(projectIds: string[]) {
+  try {
+    await requireAdmin();
+
+    await prisma.project.deleteMany({
+      where: {
+        id: {
+          in: projectIds,
+        },
+      },
+    });
+
+    return {
+      success: true,
+      message: `${projectIds.length} project(s) deleted successfully`,
+    };
+  } catch (error) {
+    console.error("Error bulk deleting projects:", error);
+    return {
+      success: false,
+      error: "Failed to delete projects",
+    };
+  }
+}
+
+export async function bulkPublishProjects(projectIds: string[]) {
+  try {
+    await requireAdmin();
+
+    await prisma.project.updateMany({
+      where: {
+        id: {
+          in: projectIds,
+        },
+      },
+      data: {
+        isPublished: true,
+      },
+    });
+
+    return {
+      success: true,
+      message: `${projectIds.length} project(s) published successfully`,
+    };
+  } catch (error) {
+    console.error("Error bulk publishing projects:", error);
+    return {
+      success: false,
+      error: "Failed to publish projects",
+    };
+  }
+}
+
+export async function bulkUnpublishProjects(projectIds: string[]) {
+  try {
+    await requireAdmin();
+
+    await prisma.project.updateMany({
+      where: {
+        id: {
+          in: projectIds,
+        },
+      },
+      data: {
+        isPublished: false,
+      },
+    });
+
+    return {
+      success: true,
+      message: `${projectIds.length} project(s) unpublished successfully`,
+    };
+  } catch (error) {
+    console.error("Error bulk unpublishing projects:", error);
+    return {
+      success: false,
+      error: "Failed to unpublish projects",
+    };
+  }
+}
+
+export async function duplicateProject(projectId: string) {
+  try {
+    await requireAdmin();
+
+    const project = await prisma.project.findUnique({
+      where: { id: projectId },
+      include: {
+        steps: true,
+        projectCategoryAssignments: {
+          include: {
+            projectCategory: true,
+          },
+        },
+      },
+    });
+
+    if (!project) {
+      return {
+        success: false,
+        error: "Project not found",
+      };
+    }
+
+    // Create duplicate project
+    const duplicatedProject = await prisma.project.create({
+      data: {
+        title: `${project.title} (Copy)`,
+        description: project.description,
+        difficulty: project.difficulty,
+        estimatedTime: project.estimatedTime,
+        estimatedCost: project.estimatedCost,
+        thumbnailUrl: project.thumbnailUrl,
+        videoUrl: project.videoUrl,
+        prerequisites: project.prerequisites,
+        learningObjectives: project.learningObjectives,
+        keyTechnologies: project.keyTechnologies,
+        isPremium: project.isPremium,
+        isPublished: false, // Duplicates start as drafts
+        projectType: project.projectType,
+        steps: {
+          create: project.steps.map((step) => ({
+            stepNumber: step.stepNumber,
+            title: step.title,
+            description: step.description,
+            instructions: step.instructions,
+            expectedOutput: step.expectedOutput,
+            validationCriteria: step.validationCriteria,
+            mediaUrls: step.mediaUrls,
+            estimatedTime: step.estimatedTime,
+            stepType: step.stepType,
+            isOptional: step.isOptional,
+          })),
+        },
+        projectCategoryAssignments: {
+          create: project.projectCategoryAssignments.map((assignment) => ({
+            projectCategoryId: assignment.projectCategoryId,
+          })),
+        },
+      },
+    });
+
+    return {
+      success: true,
+      message: "Project duplicated successfully",
+      projectId: duplicatedProject.id,
+    };
+  } catch (error) {
+    console.error("Error duplicating project:", error);
+    return {
+      success: false,
+      error: "Failed to duplicate project",
+    };
+  }
+}

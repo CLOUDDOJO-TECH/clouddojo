@@ -172,7 +172,7 @@ export default function QuizUploadPage() {
   ];
 
   return (
-    <div className="container mx-auto p-6 max-w-5xl">
+    <div className="w-full max-w-5xl mx-auto p-6">
       {/* Header */}
       <div className="mb-8">
         <Link href="/dashboard/admin">

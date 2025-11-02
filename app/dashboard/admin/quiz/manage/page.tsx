@@ -100,7 +100,7 @@ export default function ManageQuizzesPage() {
   };
 
   return (
-    <div className="container mx-auto p-6 max-w-7xl">
+    <div className="w-full max-w-full p-4 md:p-6 overflow-x-auto">
       {/* Header */}
       <div className="mb-8">
         <Link href="/dashboard/admin">
@@ -130,23 +130,23 @@ export default function ManageQuizzesPage() {
       {/* Stats */}
       {!loading && (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <div className="rounded-lg border bg-card p-4">
+          <div className="rounded-lg bg-gradient-to-br from-sky-50 via-blue-50 to-transparent dark:from-sky-500/10 dark:via-blue-500/10 dark:to-transparent p-4 shadow-sm">
             <p className="text-sm text-muted-foreground">Total Quizzes</p>
             <p className="text-2xl font-bold">{quizzes.length}</p>
           </div>
-          <div className="rounded-lg border bg-card p-4">
+          <div className="rounded-lg bg-gradient-to-br from-rose-50 via-pink-50 to-transparent dark:from-rose-500/10 dark:via-pink-500/10 dark:to-transparent p-4 shadow-sm">
             <p className="text-sm text-muted-foreground">Public Quizzes</p>
             <p className="text-2xl font-bold">
               {quizzes.filter((q) => q.isPublic).length}
             </p>
           </div>
-          <div className="rounded-lg border bg-card p-4">
+          <div className="rounded-lg bg-gradient-to-br from-lime-50 via-green-50 to-transparent dark:from-lime-500/10 dark:via-green-500/10 dark:to-transparent p-4 shadow-sm">
             <p className="text-sm text-muted-foreground">Free Quizzes</p>
             <p className="text-2xl font-bold">
               {quizzes.filter((q) => q.free).length}
             </p>
           </div>
-          <div className="rounded-lg border bg-card p-4">
+          <div className="rounded-lg bg-gradient-to-br from-yellow-50 via-orange-50 to-transparent dark:from-yellow-500/10 dark:via-orange-500/10 dark:to-transparent p-4 shadow-sm">
             <p className="text-sm text-muted-foreground">Total Questions</p>
             <p className="text-2xl font-bold">
               {quizzes.reduce((acc, q) => acc + q._count.questions, 0)}

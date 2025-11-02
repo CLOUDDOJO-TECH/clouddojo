@@ -8,7 +8,7 @@ interface AdminClientProps {
 
 export default function AdminClient({ user }: AdminClientProps) {
   return (
-    <div className="container mx-auto p-6">
+    <div className="w-full max-w-full p-4 md:p-6 overflow-x-auto">
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Admin Dashboard</h1>

@@ -38,7 +38,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ChevronDown, Trash2, Globe, EyeOff, Lock, Unlock } from "lucide-react";
+import { ChevronDown, Trash2, Globe, EyeOff } from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -47,11 +47,10 @@ interface DataTableProps<TData, TValue> {
   onEdit?: (id: string) => void;
   onDelete?: (id: string) => void;
   onDuplicate?: (id: string) => void;
-  onToggleVisibility?: (id: string, isPublic: boolean) => void;
-  onToggleAccess?: (id: string, free: boolean) => void;
+  onTogglePublish?: (id: string, isPublished: boolean) => void;
   onBulkDelete?: (ids: string[]) => void;
-  onBulkUpdateVisibility?: (ids: string[], isPublic: boolean) => void;
-  onBulkUpdateAccess?: (ids: string[], free: boolean) => void;
+  onBulkPublish?: (ids: string[]) => void;
+  onBulkUnpublish?: (ids: string[]) => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -61,11 +60,10 @@ export function DataTable<TData, TValue>({
   onEdit,
   onDelete,
   onDuplicate,
-  onToggleVisibility,
-  onToggleAccess,
+  onTogglePublish,
   onBulkDelete,
-  onBulkUpdateVisibility,
-  onBulkUpdateAccess,
+  onBulkPublish,
+  onBulkUnpublish,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -97,8 +95,7 @@ export function DataTable<TData, TValue>({
       onEdit,
       onDelete,
       onDuplicate,
-      onToggleVisibility,
-      onToggleAccess,
+      onTogglePublish,
     },
   });
 
@@ -111,7 +108,7 @@ export function DataTable<TData, TValue>({
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-2 flex-1">
           <Input
-            placeholder="Search quizzes..."
+            placeholder="Search projects..."
             value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
             onChange={(event) =>
               table.getColumn("title")?.setFilterValue(event.target.value)
@@ -119,14 +116,39 @@ export function DataTable<TData, TValue>({
             className="max-w-sm"
           />
 
-          {/* Difficulty Filter */}
+          {/* Type Filter */}
           <Select
             value={
-              (table.getColumn("level")?.getFilterValue() as string) ?? "all"
+              (table.getColumn("projectType")?.getFilterValue() as string) ??
+              "all"
             }
             onValueChange={(value) =>
               table
-                .getColumn("level")
+                .getColumn("projectType")
+                ?.setFilterValue(value === "all" ? "" : value)
+            }
+          >
+            <SelectTrigger className="w-[150px]">
+              <SelectValue placeholder="Type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Types</SelectItem>
+              <SelectItem value="TUTORIAL">Tutorial</SelectItem>
+              <SelectItem value="CHALLENGE">Challenge</SelectItem>
+              <SelectItem value="ASSESSMENT">Assessment</SelectItem>
+              <SelectItem value="CAPSTONE">Capstone</SelectItem>
+            </SelectContent>
+          </Select>
+
+          {/* Difficulty Filter */}
+          <Select
+            value={
+              (table.getColumn("difficulty")?.getFilterValue() as string) ??
+              "all"
+            }
+            onValueChange={(value) =>
+              table
+                .getColumn("difficulty")
                 ?.setFilterValue(value === "all" ? "" : value)
             }
           >
@@ -142,45 +164,25 @@ export function DataTable<TData, TValue>({
             </SelectContent>
           </Select>
 
-          {/* Access Filter */}
+          {/* Status Filter */}
           <Select
             value={
-              (table.getColumn("free")?.getFilterValue() as string) ?? "all"
+              (table.getColumn("isPublished")?.getFilterValue() as string) ??
+              "all"
             }
             onValueChange={(value) => {
               const filterValue =
-                value === "all" ? "" : value === "free" ? true : false;
-              table.getColumn("free")?.setFilterValue(filterValue);
+                value === "all" ? "" : value === "published" ? true : false;
+              table.getColumn("isPublished")?.setFilterValue(filterValue);
             }}
           >
             <SelectTrigger className="w-[130px]">
-              <SelectValue placeholder="Access" />
+              <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Access</SelectItem>
-              <SelectItem value="free">Free</SelectItem>
-              <SelectItem value="premium">Premium</SelectItem>
-            </SelectContent>
-          </Select>
-
-          {/* Visibility Filter */}
-          <Select
-            value={
-              (table.getColumn("isPublic")?.getFilterValue() as string) ?? "all"
-            }
-            onValueChange={(value) => {
-              const filterValue =
-                value === "all" ? "" : value === "public" ? true : false;
-              table.getColumn("isPublic")?.setFilterValue(filterValue);
-            }}
-          >
-            <SelectTrigger className="w-[130px]">
-              <SelectValue placeholder="Visibility" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Visibility</SelectItem>
-              <SelectItem value="public">Public</SelectItem>
-              <SelectItem value="private">Private</SelectItem>
+              <SelectItem value="all">All Status</SelectItem>
+              <SelectItem value="published">Published</SelectItem>
+              <SelectItem value="draft">Draft</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -226,34 +228,18 @@ export function DataTable<TData, TValue>({
             <Button
               variant="outline"
               size="sm"
-              onClick={() => onBulkUpdateVisibility?.(selectedIds, true)}
+              onClick={() => onBulkPublish?.(selectedIds)}
             >
               <Globe className="h-4 w-4 mr-2" />
-              Make Public
+              Publish
             </Button>
             <Button
               variant="outline"
               size="sm"
-              onClick={() => onBulkUpdateVisibility?.(selectedIds, false)}
+              onClick={() => onBulkUnpublish?.(selectedIds)}
             >
               <EyeOff className="h-4 w-4 mr-2" />
-              Make Private
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => onBulkUpdateAccess?.(selectedIds, true)}
-            >
-              <Unlock className="h-4 w-4 mr-2" />
-              Make Free
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => onBulkUpdateAccess?.(selectedIds, false)}
-            >
-              <Lock className="h-4 w-4 mr-2" />
-              Make Premium
+              Unpublish
             </Button>
             <Button
               variant="destructive"
@@ -311,7 +297,7 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No quizzes found.
+                  No projects found.
                 </TableCell>
               </TableRow>
             )}

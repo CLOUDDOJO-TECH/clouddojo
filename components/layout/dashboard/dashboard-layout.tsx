@@ -41,7 +41,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
               <AppSidebar className="" />
               <SidebarInset className="bg-sidebar !border-none overflow-hidden group/sidebar-inset">
                 <SiteHeader />
-                <div className="flex h-full bg-background md:rounded-s-3xl md:group-peer-data-[state=collapsed]/sidebar-inset:rounded-s-none transition-all ease-in-out duration-300">
+                <div className="h-full bg-background md:rounded-s-3xl md:group-peer-data-[state=collapsed]/sidebar-inset:rounded-s-none transition-all ease-in-out duration-300">
                   {children}
                 </div>
               </SidebarInset>
