@@ -24,7 +24,6 @@ export interface ProjectDraft {
 }
 
 export const draftManager = {
-  // Save draft to both localStorage and server
   saveDraft: async (draft: Omit<ProjectDraft, "savedAt">): Promise<boolean> => {
     try {
       const draftWithTimestamp: ProjectDraft = {
@@ -32,31 +31,26 @@ export const draftManager = {
         savedAt: new Date().toISOString(),
       };
 
-      // Save to localStorage for quick access
       localStorage.setItem(DRAFT_KEY, JSON.stringify(draftWithTimestamp));
       localStorage.setItem(DRAFT_TIMESTAMP_KEY, draftWithTimestamp.savedAt);
 
-      // Save to server for persistence across devices
-      await saveDraftToServer(draft);
+      const result = await saveDraftToServer(draft);
 
-      return true;
+      return result.success;
     } catch (error) {
       console.error("Failed to save draft:", error);
       return false;
     }
   },
 
-  // Load draft (tries localStorage first, then server)
   loadDraft: async (): Promise<ProjectDraft | null> => {
     try {
-      // Try localStorage first for speed
       const draftJson = localStorage.getItem(DRAFT_KEY);
       if (draftJson) {
         const draft = JSON.parse(draftJson) as ProjectDraft;
         return draft;
       }
 
-      // If not in localStorage, try server
       const serverResult = await loadDraftFromServer();
       if (serverResult.success && serverResult.draft) {
         const draft: ProjectDraft = {
@@ -68,7 +62,6 @@ export const draftManager = {
           savedAt: serverResult.draft.updatedAt.toISOString(),
         };
 
-        // Cache in localStorage
         localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
         localStorage.setItem(DRAFT_TIMESTAMP_KEY, draft.savedAt);
 
@@ -82,31 +75,25 @@ export const draftManager = {
     }
   },
 
-  // Check if draft exists (checks both localStorage and server)
   hasDraft: async (): Promise<boolean> => {
-    // Check localStorage first
     if (localStorage.getItem(DRAFT_KEY) !== null) {
       return true;
     }
 
-    // Check server
     const serverResult = await hasDraftOnServer();
     return serverResult.hasDraft;
   },
 
-  // Get draft timestamp
   getDraftTimestamp: (): string | null => {
     return localStorage.getItem(DRAFT_TIMESTAMP_KEY);
   },
 
-  // Clear draft from both localStorage and server
   clearDraft: async (): Promise<void> => {
     localStorage.removeItem(DRAFT_KEY);
     localStorage.removeItem(DRAFT_TIMESTAMP_KEY);
     await deleteDraftFromServer();
   },
 
-  // Get formatted time ago
   getTimeAgo: (timestamp: string): string => {
     const now = new Date();
     const saved = new Date(timestamp);

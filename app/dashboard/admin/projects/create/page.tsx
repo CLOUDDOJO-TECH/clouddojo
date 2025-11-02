@@ -430,6 +430,7 @@ export default function CreateProjectPage() {
                 projectData={completeProjectData}
                 onBack={() => handleBackToStep(4)}
                 onEdit={handleEditFromPreview}
+                onProjectCreated={clearDraftAfterPublish}
               />
             )}
           </div>

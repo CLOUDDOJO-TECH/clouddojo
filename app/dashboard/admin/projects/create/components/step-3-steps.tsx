@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
+import { readStreamableValue } from "ai/rsc";
 import {
   Loader2,
   Plus,
@@ -46,6 +48,8 @@ import {
   ProjectStep,
   PROJECT_STEP_TYPES,
 } from "../validators";
+import { enhanceMarkdownWithAI } from "../ai-actions";
+import { SmartArrayInput } from "@/components/ui/smart-array-input";
 
 interface Step3StepsProps {
   onComplete: (data: ProjectSteps) => void;
@@ -53,12 +57,35 @@ interface Step3StepsProps {
   initialData?: Partial<ProjectSteps>;
 }
 
+const OPEN_STEPS_KEY = "project-creation-open-steps";
+
 export function Step3Steps({
   onComplete,
   onBack,
   initialData,
 }: Step3StepsProps) {
-  const [openSteps, setOpenSteps] = useState<number[]>([0]);
+  const [openSteps, setOpenSteps] = useState<number[]>(() => {
+    // Try to restore from localStorage
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem(OPEN_STEPS_KEY);
+      if (saved) {
+        try {
+          return JSON.parse(saved);
+        } catch {
+          return [0];
+        }
+      }
+    }
+    return [0];
+  });
+  const [enhancingStep, setEnhancingStep] = useState<number | null>(null);
+
+  // Save openSteps to localStorage whenever it changes
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem(OPEN_STEPS_KEY, JSON.stringify(openSteps));
+    }
+  }, [openSteps]);
 
   const {
     register,
@@ -151,24 +178,6 @@ export function Step3Steps({
     );
   };
 
-  const handleAddValidationCriteria = (stepIndex: number) => {
-    const currentCriteria =
-      watch(`steps.${stepIndex}.validationCriteria`) || [];
-    setValue(`steps.${stepIndex}.validationCriteria`, [...currentCriteria, ""]);
-  };
-
-  const handleRemoveValidationCriteria = (
-    stepIndex: number,
-    criteriaIndex: number,
-  ) => {
-    const currentCriteria =
-      watch(`steps.${stepIndex}.validationCriteria`) || [];
-    setValue(
-      `steps.${stepIndex}.validationCriteria`,
-      currentCriteria.filter((_, idx) => idx !== criteriaIndex),
-    );
-  };
-
   const handleAddMediaUrl = (stepIndex: number) => {
     const currentUrls = watch(`steps.${stepIndex}.mediaUrls`) || [];
     setValue(`steps.${stepIndex}.mediaUrls`, [...currentUrls, ""]);
@@ -180,6 +189,46 @@ export function Step3Steps({
       `steps.${stepIndex}.mediaUrls`,
       currentUrls.filter((_, idx) => idx !== urlIndex),
     );
+  };
+
+  const handleEnhanceWithAI = async (stepIndex: number) => {
+    const currentContent = watch(`steps.${stepIndex}.instructions`);
+
+    if (!currentContent || currentContent.trim() === "") {
+      toast.error("Please enter some content first");
+      return;
+    }
+
+    setEnhancingStep(stepIndex);
+    toast.loading("Enhancing with AI...", { id: `enhance-${stepIndex}` });
+
+    try {
+      const result = await enhanceMarkdownWithAI(currentContent);
+
+      if (result.success && result.stream) {
+        let fullContent = "";
+
+        for await (const delta of readStreamableValue(result.stream)) {
+          if (delta) {
+            fullContent += delta;
+            setValue(`steps.${stepIndex}.instructions`, fullContent);
+          }
+        }
+
+        toast.success("Content enhanced successfully!", {
+          id: `enhance-${stepIndex}`,
+        });
+      } else {
+        toast.error(result.error || "Failed to enhance content", {
+          id: `enhance-${stepIndex}`,
+        });
+      }
+    } catch (error) {
+      console.error("Enhancement error:", error);
+      toast.error("Failed to enhance content", { id: `enhance-${stepIndex}` });
+    } finally {
+      setEnhancingStep(null);
+    }
   };
 
   const onSubmit = (data: ProjectSteps) => {
@@ -350,6 +399,8 @@ Write detailed instructions using Markdown...
                             rows={8}
                             required
                             error={errors.steps?.[index]?.instructions?.message}
+                            onFixWithAI={() => handleEnhanceWithAI(index)}
+                            isEnhancing={enhancingStep === index}
                           />
 
                           {/* Expected Output */}
@@ -418,54 +469,18 @@ Write detailed instructions using Markdown...
                           </div>
 
                           {/* Validation Criteria */}
-                          <div className="space-y-2">
-                            <Label>Validation Criteria (optional)</Label>
-                            <p className="text-xs text-muted-foreground">
-                              How to verify this step was completed correctly
-                            </p>
-                            {validationCriteria.map((_, criteriaIndex) => (
-                              <div
-                                key={criteriaIndex}
-                                className="flex items-center gap-2"
-                              >
-                                <Input
-                                  placeholder="e.g., Function returns 200 status code"
-                                  value={validationCriteria[criteriaIndex]}
-                                  onChange={(e) => {
-                                    const updated = [...validationCriteria];
-                                    updated[criteriaIndex] = e.target.value;
-                                    setValue(
-                                      `steps.${index}.validationCriteria`,
-                                      updated,
-                                    );
-                                  }}
-                                />
-                                <Button
-                                  type="button"
-                                  variant="ghost"
-                                  size="icon"
-                                  onClick={() =>
-                                    handleRemoveValidationCriteria(
-                                      index,
-                                      criteriaIndex,
-                                    )
-                                  }
-                                >
-                                  <X className="h-4 w-4" />
-                                </Button>
-                              </div>
-                            ))}
-                            <Button
-                              type="button"
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handleAddValidationCriteria(index)}
-                              className="gap-2"
-                            >
-                              <Plus className="h-4 w-4" />
-                              Add Criteria
-                            </Button>
-                          </div>
+                          <SmartArrayInput
+                            label="Validation Criteria (optional)"
+                            value={validationCriteria.filter(Boolean)}
+                            onChange={(value) =>
+                              setValue(
+                                `steps.${index}.validationCriteria`,
+                                value,
+                              )
+                            }
+                            placeholder="e.g., Function returns 200 status code"
+                            description="How to verify this step was completed correctly. Paste a list to auto-parse!"
+                          />
 
                           {/* Media */}
                           <div className="space-y-2">

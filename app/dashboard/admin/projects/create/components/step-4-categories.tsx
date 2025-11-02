@@ -133,7 +133,8 @@ export function Step4Categories({
     onComplete(data);
   };
 
-  const totalSelected = selectedCategoryIds.length + pendingNewCategories.length;
+  const totalSelected =
+    selectedCategoryIds.length + pendingNewCategories.length;
 
   return (
     <div className="space-y-6">
@@ -141,7 +142,8 @@ export function Step4Categories({
         <CardHeader>
           <CardTitle>Project Categories</CardTitle>
           <CardDescription>
-            Select categories for this project. Projects can belong to multiple categories.
+            Select categories for this project. Projects can belong to multiple
+            categories.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -149,9 +151,36 @@ export function Step4Categories({
             {/* Selection Summary */}
             <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
               <div className="flex items-center gap-2">
-                <FolderTree className="h-5 w-5 text-muted-foreground" />
+                <div className="p-2.5 bg-indigo-500/10 rounded-lg">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20px"
+                    height="20px"
+                    viewBox="0 0 18 18"
+                    className="text-indigo-500"
+                  >
+                    <path
+                      d="M15.5,12h-1.75v-1.75c0-.414-.336-.75-.75-.75s-.75,.336-.75,.75v1.75h-1.75c-.414,0-.75,.336-.75,.75s.336,.75,.75,.75h1.75v1.75c0,.414,.336,.75,.75,.75s.75-.336,.75-.75v-1.75h1.75c.414,0,.75-.336,.75-.75s-.336-.75-.75-.75Z"
+                      fill="currentColor"
+                    ></path>
+                    <circle cx="5" cy="5" r="3.25" fill="currentColor"></circle>
+                    <circle
+                      cx="13"
+                      cy="5"
+                      r="3.25"
+                      fill="currentColor"
+                    ></circle>
+                    <circle
+                      cx="5"
+                      cy="13"
+                      r="3.25"
+                      fill="currentColor"
+                    ></circle>
+                  </svg>
+                </div>
                 <span className="text-sm font-medium">
-                  {totalSelected} {totalSelected === 1 ? "category" : "categories"} selected
+                  {totalSelected}{" "}
+                  {totalSelected === 1 ? "category" : "categories"} selected
                 </span>
               </div>
               <Button
@@ -170,7 +199,9 @@ export function Step4Categories({
             {showNewCategoryForm && (
               <Card className="border-2 border-primary/50">
                 <CardHeader>
-                  <CardTitle className="text-base">Create New Category</CardTitle>
+                  <CardTitle className="text-base">
+                    Create New Category
+                  </CardTitle>
                   <CardDescription>
                     Add a new category if the existing ones don't fit
                   </CardDescription>
@@ -184,7 +215,9 @@ export function Step4Categories({
                       id="newCategoryName"
                       placeholder="e.g., AWS Solutions Architect"
                       value={newCategoryName}
-                      onChange={(e) => handleNewCategoryNameChange(e.target.value)}
+                      onChange={(e) =>
+                        handleNewCategoryNameChange(e.target.value)
+                      }
                     />
                   </div>
 
@@ -199,22 +232,29 @@ export function Step4Categories({
                       onChange={(e) => setNewCategorySlug(e.target.value)}
                     />
                     <p className="text-xs text-muted-foreground">
-                      Auto-generated from name. Use lowercase letters, numbers, and hyphens only.
+                      Auto-generated from name. Use lowercase letters, numbers,
+                      and hyphens only.
                     </p>
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="newCategoryDescription">Description (optional)</Label>
+                    <Label htmlFor="newCategoryDescription">
+                      Description (optional)
+                    </Label>
                     <Input
                       id="newCategoryDescription"
                       placeholder="Brief description of this category"
                       value={newCategoryDescription}
-                      onChange={(e) => setNewCategoryDescription(e.target.value)}
+                      onChange={(e) =>
+                        setNewCategoryDescription(e.target.value)
+                      }
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="newCategoryImageUrl">Image URL (optional)</Label>
+                    <Label htmlFor="newCategoryImageUrl">
+                      Image URL (optional)
+                    </Label>
                     <Input
                       id="newCategoryImageUrl"
                       type="url"
@@ -255,7 +295,9 @@ export function Step4Categories({
             {/* Pending New Categories */}
             {pendingNewCategories.length > 0 && (
               <div className="space-y-2">
-                <Label className="text-sm font-medium">New Categories to Create</Label>
+                <Label className="text-sm font-medium">
+                  New Categories to Create
+                </Label>
                 <div className="space-y-2">
                   {pendingNewCategories.map((cat, index) => (
                     <div
@@ -289,7 +331,9 @@ export function Step4Categories({
 
             {/* Existing Categories */}
             <div className="space-y-2">
-              <Label className="text-sm font-medium">Select Existing Categories</Label>
+              <Label className="text-sm font-medium">
+                Select Existing Categories
+              </Label>
               {isLoadingCategories ? (
                 <div className="flex items-center justify-center p-8">
                   <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
@@ -303,21 +347,24 @@ export function Step4Categories({
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {categories.map((category) => {
-                    const isSelected = selectedCategoryIds?.includes(category.id);
+                    const isSelected = selectedCategoryIds?.includes(
+                      category.id,
+                    );
                     return (
                       <div
                         key={category.id}
-                        className={`flex items-start gap-3 p-3 border rounded-lg transition-colors cursor-pointer ${
+                        className={`flex items-start gap-3 p-3 border rounded-lg transition-colors ${
                           isSelected
                             ? "border-primary bg-primary/5"
                             : "hover:bg-muted/50"
                         }`}
-                        onClick={() => handleCategoryToggle(category.id)}
                       >
                         <Checkbox
                           id={`category-${category.id}`}
                           checked={isSelected}
-                          onCheckedChange={() => handleCategoryToggle(category.id)}
+                          onCheckedChange={() =>
+                            handleCategoryToggle(category.id)
+                          }
                         />
                         <div className="flex-1">
                           <label
@@ -340,7 +387,9 @@ export function Step4Categories({
             </div>
 
             {errors.categoryIds && (
-              <p className="text-sm text-destructive">{errors.categoryIds.message}</p>
+              <p className="text-sm text-destructive">
+                {errors.categoryIds.message}
+              </p>
             )}
 
             {/* Action Buttons */}
@@ -348,7 +397,10 @@ export function Step4Categories({
               <Button type="button" variant="outline" onClick={onBack}>
                 Back
               </Button>
-              <Button type="submit" disabled={isSubmitting || totalSelected === 0}>
+              <Button
+                type="submit"
+                disabled={isSubmitting || totalSelected === 0}
+              >
                 {isSubmitting ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />

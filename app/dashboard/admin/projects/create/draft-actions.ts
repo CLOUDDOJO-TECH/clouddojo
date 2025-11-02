@@ -29,14 +29,13 @@ export async function saveDraftToServer(draft: {
 }): Promise<{ success: boolean; draftId?: string; error?: string }> {
   try {
     const { userId } = await auth();
+
     if (!userId) {
       return { success: false, error: "Unauthorized" };
     }
 
-    // Extract title from basicInfo for easier identification
     const title = draft.basicInfo?.title || "Untitled Project";
 
-    // Check if user already has a draft, update it or create new one
     const existingDraft = await prisma.projectDraft.findFirst({
       where: { userId },
       orderBy: { updatedAt: "desc" },
@@ -56,13 +55,11 @@ export async function saveDraftToServer(draft: {
     let savedDraft;
 
     if (existingDraft) {
-      // Update existing draft
       savedDraft = await prisma.projectDraft.update({
         where: { id: existingDraft.id },
         data: draftData,
       });
     } else {
-      // Create new draft
       savedDraft = await prisma.projectDraft.create({
         data: {
           userId,
@@ -133,12 +130,10 @@ export async function deleteDraftFromServer(
     }
 
     if (draftId) {
-      // Delete specific draft
       await prisma.projectDraft.delete({
         where: { id: draftId, userId },
       });
     } else {
-      // Delete all drafts for user
       await prisma.projectDraft.deleteMany({
         where: { userId },
       });

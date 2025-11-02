@@ -1,7 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Loader2, CheckCircle2, AlertCircle, ArrowRight, ChevronDown, ChevronUp } from "lucide-react";
+import {
+  Loader2,
+  CheckCircle2,
+  AlertCircle,
+  ArrowRight,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -27,16 +34,22 @@ interface Step5PreviewProps {
   projectData: CompleteProject;
   onBack: () => void;
   onEdit: (step: number) => void;
+  onProjectCreated?: () => void;
 }
 
-export function Step5Preview({ projectData, onBack, onEdit }: Step5PreviewProps) {
+export function Step5Preview({
+  projectData,
+  onBack,
+  onEdit,
+  onProjectCreated,
+}: Step5PreviewProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [openSteps, setOpenSteps] = useState<number[]>([]);
   const router = useRouter();
 
   const toggleStep = (index: number) => {
     setOpenSteps((prev) =>
-      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
+      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index],
     );
   };
 
@@ -52,7 +65,12 @@ export function Step5Preview({ projectData, onBack, onEdit }: Step5PreviewProps)
           id: "create-project",
         });
 
-        // Redirect to manage projects page or project details
+        // Clear draft after successful creation
+        if (onProjectCreated) {
+          await onProjectCreated();
+        }
+
+        // Redirect to manage projects page
         router.push("/dashboard/admin/projects/manage");
       } else {
         toast.error(result.error || "Failed to create project", {
@@ -118,7 +136,9 @@ export function Step5Preview({ projectData, onBack, onEdit }: Step5PreviewProps)
     if (minutes < 60) return `${minutes}m`;
     const hours = Math.floor(minutes / 60);
     const remainingMinutes = minutes % 60;
-    return remainingMinutes === 0 ? `${hours}h` : `${hours}h ${remainingMinutes}m`;
+    return remainingMinutes === 0
+      ? `${hours}h`
+      : `${hours}h ${remainingMinutes}m`;
   };
 
   const formatCost = (cents: number) => {
@@ -131,7 +151,8 @@ export function Step5Preview({ projectData, onBack, onEdit }: Step5PreviewProps)
       <Alert className="bg-blue-50 dark:bg-blue-950/20 border-blue-200">
         <CheckCircle2 className="h-4 w-4 text-blue-600" />
         <AlertDescription className="text-blue-900 dark:text-blue-200">
-          Review all project details before publishing. You can edit any section by clicking the "Edit" buttons.
+          Review all project details before publishing. You can edit any section
+          by clicking the "Edit" buttons.
         </AlertDescription>
       </Alert>
 
@@ -169,11 +190,15 @@ export function Step5Preview({ projectData, onBack, onEdit }: Step5PreviewProps)
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
             <div>
               <p className="text-muted-foreground">Duration</p>
-              <p className="font-semibold">{formatTime(projectData.estimatedTime)}</p>
+              <p className="font-semibold">
+                {formatTime(projectData.estimatedTime)}
+              </p>
             </div>
             <div>
               <p className="text-muted-foreground">Cost</p>
-              <p className="font-semibold">{formatCost(projectData.estimatedCost)}</p>
+              <p className="font-semibold">
+                {formatCost(projectData.estimatedCost)}
+              </p>
             </div>
             <div>
               <p className="text-muted-foreground">Steps</p>
@@ -182,7 +207,8 @@ export function Step5Preview({ projectData, onBack, onEdit }: Step5PreviewProps)
             <div>
               <p className="text-muted-foreground">Categories</p>
               <p className="font-semibold">
-                {projectData.categoryIds.length + (projectData.newCategories?.length || 0)}
+                {projectData.categoryIds.length +
+                  (projectData.newCategories?.length || 0)}
               </p>
             </div>
           </div>
@@ -192,7 +218,9 @@ export function Step5Preview({ projectData, onBack, onEdit }: Step5PreviewProps)
           <div>
             <p className="text-sm font-semibold mb-2">Description</p>
             <div className="prose prose-sm dark:prose-invert max-w-none bg-muted/30 p-4 rounded-lg">
-              <pre className="whitespace-pre-wrap font-sans">{projectData.description}</pre>
+              <pre className="whitespace-pre-wrap font-sans">
+                {projectData.description}
+              </pre>
             </div>
           </div>
 
@@ -237,7 +265,9 @@ export function Step5Preview({ projectData, onBack, onEdit }: Step5PreviewProps)
             <p className="text-sm font-semibold mb-2">Prerequisites</p>
             <ul className="list-disc list-inside space-y-1">
               {projectData.prerequisites.map((prereq, index) => (
-                <li key={index} className="text-sm">{prereq}</li>
+                <li key={index} className="text-sm">
+                  {prereq}
+                </li>
               ))}
             </ul>
           </div>
@@ -248,7 +278,9 @@ export function Step5Preview({ projectData, onBack, onEdit }: Step5PreviewProps)
             <p className="text-sm font-semibold mb-2">Learning Objectives</p>
             <ul className="list-disc list-inside space-y-1">
               {projectData.learningObjectives.map((objective, index) => (
-                <li key={index} className="text-sm">{objective}</li>
+                <li key={index} className="text-sm">
+                  {objective}
+                </li>
               ))}
             </ul>
           </div>
@@ -259,7 +291,9 @@ export function Step5Preview({ projectData, onBack, onEdit }: Step5PreviewProps)
             <p className="text-sm font-semibold mb-2">Key Technologies</p>
             <div className="flex flex-wrap gap-2">
               {projectData.keyTechnologies.map((tech) => (
-                <Badge key={tech} variant="secondary">{tech}</Badge>
+                <Badge key={tech} variant="secondary">
+                  {tech}
+                </Badge>
               ))}
             </div>
           </div>
@@ -281,21 +315,35 @@ export function Step5Preview({ projectData, onBack, onEdit }: Step5PreviewProps)
             const isOpen = openSteps.includes(index);
             return (
               <Card key={index} className="border">
-                <Collapsible open={isOpen} onOpenChange={() => toggleStep(index)}>
+                <Collapsible
+                  open={isOpen}
+                  onOpenChange={() => toggleStep(index)}
+                >
                   <div className="flex items-center justify-between p-4">
                     <div className="flex items-center gap-3 flex-1">
-                      <span className="font-semibold text-sm">Step {step.stepNumber}</span>
-                      <Badge className={getStepTypeColor(step.stepType)} variant="secondary">
+                      <span className="font-semibold text-sm">
+                        Step {step.stepNumber}
+                      </span>
+                      <Badge
+                        className={getStepTypeColor(step.stepType)}
+                        variant="secondary"
+                      >
                         {step.stepType}
                       </Badge>
                       <span className="text-sm">{step.title}</span>
                       {step.isOptional && (
-                        <Badge variant="outline" className="text-xs">Optional</Badge>
+                        <Badge variant="outline" className="text-xs">
+                          Optional
+                        </Badge>
                       )}
                     </div>
                     <CollapsibleTrigger asChild>
                       <Button variant="ghost" size="icon">
-                        {isOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                        {isOpen ? (
+                          <ChevronUp className="h-4 w-4" />
+                        ) : (
+                          <ChevronDown className="h-4 w-4" />
+                        )}
                       </Button>
                     </CollapsibleTrigger>
                   </div>
@@ -304,13 +352,17 @@ export function Step5Preview({ projectData, onBack, onEdit }: Step5PreviewProps)
                     <div className="px-4 pb-4 space-y-3 border-t pt-4">
                       {step.description && (
                         <div>
-                          <p className="text-xs font-semibold text-muted-foreground mb-1">Description</p>
+                          <p className="text-xs font-semibold text-muted-foreground mb-1">
+                            Description
+                          </p>
                           <p className="text-sm">{step.description}</p>
                         </div>
                       )}
 
                       <div>
-                        <p className="text-xs font-semibold text-muted-foreground mb-1">Instructions</p>
+                        <p className="text-xs font-semibold text-muted-foreground mb-1">
+                          Instructions
+                        </p>
                         <div className="text-sm bg-muted/30 p-3 rounded font-mono whitespace-pre-wrap">
                           {step.instructions.substring(0, 200)}
                           {step.instructions.length > 200 && "..."}
@@ -319,15 +371,24 @@ export function Step5Preview({ projectData, onBack, onEdit }: Step5PreviewProps)
 
                       <div className="grid grid-cols-2 gap-3 text-xs">
                         <div>
-                          <p className="text-muted-foreground">Estimated Time</p>
-                          <p className="font-semibold">{step.estimatedTime} minutes</p>
+                          <p className="text-muted-foreground">
+                            Estimated Time
+                          </p>
+                          <p className="font-semibold">
+                            {step.estimatedTime} minutes
+                          </p>
                         </div>
-                        {step.validationCriteria && step.validationCriteria.length > 0 && (
-                          <div>
-                            <p className="text-muted-foreground">Validation Criteria</p>
-                            <p className="font-semibold">{step.validationCriteria.length} items</p>
-                          </div>
-                        )}
+                        {step.validationCriteria &&
+                          step.validationCriteria.length > 0 && (
+                            <div>
+                              <p className="text-muted-foreground">
+                                Validation Criteria
+                              </p>
+                              <p className="font-semibold">
+                                {step.validationCriteria.length} items
+                              </p>
+                            </div>
+                          )}
                       </div>
                     </div>
                   </CollapsibleContent>
@@ -357,29 +418,46 @@ export function Step5Preview({ projectData, onBack, onEdit }: Step5PreviewProps)
               </p>
             </div>
 
-            {projectData.newCategories && projectData.newCategories.length > 0 && (
-              <div>
-                <p className="text-sm font-semibold mb-2">New Categories to Create</p>
-                <div className="space-y-2">
-                  {projectData.newCategories.map((cat, index) => (
-                    <div key={index} className="p-3 border rounded-lg bg-primary/5">
-                      <p className="font-medium text-sm">{cat.name}</p>
-                      <p className="text-xs text-muted-foreground">Slug: {cat.slug}</p>
-                    </div>
-                  ))}
+            {projectData.newCategories &&
+              projectData.newCategories.length > 0 && (
+                <div>
+                  <p className="text-sm font-semibold mb-2">
+                    New Categories to Create
+                  </p>
+                  <div className="space-y-2">
+                    {projectData.newCategories.map((cat, index) => (
+                      <div
+                        key={index}
+                        className="p-3 border rounded-lg bg-primary/5"
+                      >
+                        <p className="font-medium text-sm">{cat.name}</p>
+                        <p className="text-xs text-muted-foreground">
+                          Slug: {cat.slug}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
           </div>
         </CardContent>
       </Card>
 
       {/* Action Buttons */}
       <div className="flex justify-between pt-4">
-        <Button type="button" variant="outline" onClick={onBack} disabled={isSubmitting}>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={onBack}
+          disabled={isSubmitting}
+        >
           Back
         </Button>
-        <Button onClick={handleSubmit} disabled={isSubmitting} className="gap-2">
+        <Button
+          onClick={handleSubmit}
+          disabled={isSubmitting}
+          className="gap-2"
+        >
           {isSubmitting ? (
             <>
               <Loader2 className="h-4 w-4 animate-spin" />
