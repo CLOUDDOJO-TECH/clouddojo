@@ -4,14 +4,24 @@ import * as React from "react";
 
 import {
   BookOpen,
-  Bot,
-  SquareTerminal,
   Map,
   TestTube,
   CableCar,
-  Trophy,
-  CogIcon, // Added Trophy icon
+  CogIcon,
+  ChevronRight,
+  LayoutDashboard,
+  FileStack,
+  Upload,
 } from "lucide-react";
+import {
+  AdminIcon,
+  HomeIcon,
+  LeaderboardIcon,
+  HandsOnLabsIcon,
+  PracticeTestIcon,
+  DashboardIcon,
+  ManageQuizzesIcon,
+} from "./sidebar-icons";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -27,8 +37,16 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
 import { cn } from "@/lib/utils";
 import UpgradeCard from "@/components/upgrade-card";
@@ -60,24 +78,22 @@ const NAVIGATION_DATA: NavSection[] = [
       {
         title: "Home",
         url: "/dashboard",
-        icon: SquareTerminal,
+        icon: HomeIcon,
       },
       {
         title: "Practice Tests",
         url: "/dashboard/practice",
-        icon: Bot,
+        icon: PracticeTestIcon,
       },
       {
         title: "Leaderboard",
-        url: "/dashboard/leaderboard", // Updated URL
-        icon: Trophy, // Changed icon to Trophy
-        // isNew: true, // Mark as new
+        url: "/dashboard/leaderboard",
+        icon: LeaderboardIcon,
       },
       {
         title: "Hands-On Labs",
         url: "/dashboard/labs",
-        icon: TestTube,
-        // isNew: true,
+        icon: HandsOnLabsIcon,
       },
     ],
   },
@@ -111,6 +127,20 @@ const NAVIGATION_DATA: NavSection[] = [
         comingSoon: true,
       },
     ],
+  },
+];
+
+// Admin navigation sub-items
+const ADMIN_NAV_ITEMS: NavItem[] = [
+  {
+    title: "Dashboard",
+    url: "/dashboard/admin",
+    icon: DashboardIcon,
+  },
+  {
+    title: "Manage Quizzes",
+    url: "/dashboard/admin/quiz/manage",
+    icon: ManageQuizzesIcon,
   },
 ];
 
@@ -165,6 +195,44 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     isActive={isActive(item.url)}
                   />
                 ))}
+                {/* Add Admin section after Hands-On Labs in Sections group */}
+                {section.title === "Sections" &&
+                  (userRole === "ADMIN" || userRole === "SUPERADMIN") && (
+                    <Collapsible
+                      defaultOpen={pathname.startsWith("/dashboard/admin")}
+                      className="group/collapsible"
+                    >
+                      <SidebarMenuItem>
+                        <CollapsibleTrigger asChild>
+                          <SidebarMenuButton
+                            tooltip="Admin"
+                            className="group/admin-button font-medium gap-3 h-9"
+                          >
+                            <AdminIcon className="text-muted-foreground group-hover/admin-button:text-white" />
+                            <span>Admin</span>
+                            <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                          </SidebarMenuButton>
+                        </CollapsibleTrigger>
+                        <CollapsibleContent>
+                          <SidebarMenuSub>
+                            {ADMIN_NAV_ITEMS.map((item) => (
+                              <SidebarMenuSubItem key={item.url}>
+                                <SidebarMenuSubButton
+                                  asChild
+                                  isActive={isActive(item.url)}
+                                >
+                                  <Link href={item.url}>
+                                    <item.icon size={18} />
+                                    <span>{item.title}</span>
+                                  </Link>
+                                </SidebarMenuSubButton>
+                              </SidebarMenuSubItem>
+                            ))}
+                          </SidebarMenuSub>
+                        </CollapsibleContent>
+                      </SidebarMenuItem>
+                    </Collapsible>
+                  )}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
@@ -172,18 +240,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
 
       <SidebarFooter>
-        {(userRole === "ADMIN" || userRole === "SUPERADMIN") && (
-          <NavItem
-            item={{
-              title: "Admin",
-              url: "/dashboard/admin",
-              icon: CogIcon,
-            }}
-            isActive={isActive("/dashboard/admin")}
-          />
-        )}
-        <hr className="border-t border-border mx-2 -mt-px" />
-
         {planName && (
           <span className="px-4 mb-4">
             <SubscriptionCard plan={planName} variant="outlined" />
