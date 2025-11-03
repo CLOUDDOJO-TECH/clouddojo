@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { formatDistanceToNow } from "date-fns";
+import Image from "next/image";
 
 const SortIcon = () => (
   <svg
@@ -145,6 +146,28 @@ export const columns: ColumnDef<ProjectTableData>[] = [
     ),
     enableSorting: false,
     enableHiding: false,
+  },
+  {
+    accessorKey: "thumbnailUrl",
+    header: "Thumbnail",
+    cell: ({ row }) => {
+      const thumbnailUrl = row.getValue("thumbnailUrl") as string | null;
+      const title = row.original.title;
+      return (
+        <div className="w-16 h-16 relative rounded-md overflow-hidden bg-muted flex items-center justify-center shrink-0">
+          {thumbnailUrl ? (
+            <img
+              src={thumbnailUrl}
+              alt={title}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <span className="text-xs text-muted-foreground">No image</span>
+          )}
+        </div>
+      );
+    },
+    enableSorting: false,
   },
   {
     accessorKey: "title",

@@ -24,6 +24,7 @@ import { webhookHasData, webhookHasMeta } from "./typeguards";
 import { configureLemonSqueezy } from "./lemonsqueezy";
 import { getSignedInUserOrThrow } from "@/lib/utils/database_utils";
 import prisma from "@/lib/prisma";
+import * as amplitude from "@amplitude/analytics-browser";
 
 /**
  * This action will create a checkout on Lemon Squeezy.
@@ -328,13 +329,79 @@ export async function processWebhookEvent(webhookEvent: LsWebhookEvent) {
 
         // Create/update subscription in the database.
         try {
-          await prisma.lsUserSubscription.upsert({
+          const subscriptionResult = await prisma.lsUserSubscription.upsert({
             where: {
               lemonSqueezyId: updateData.lemonSqueezyId,
             },
             create: updateData,
             update: updateData,
           });
+
+          // Track subscription event in Amplitude
+          try {
+            const apiKey = process.env.AMPLITUDE_API_KEY!;
+            // Initialize Amplitude for server-side tracking
+            amplitude.init(apiKey, {
+              autocapture: false, // Disable autocapture for server-side
+            });
+
+            // Determine event type based on webhook event name
+            let eventName = "Subscription Updated";
+            if (webhookEvent.eventName === "subscription_created") {
+              eventName = "Subscription Created";
+            } else if (webhookEvent.eventName === "subscription_updated") {
+              eventName = "Subscription Updated";
+            } else if (webhookEvent.eventName === "subscription_cancelled") {
+              eventName = "Subscription Cancelled";
+            } else if (webhookEvent.eventName === "subscription_resumed") {
+              eventName = "Subscription Resumed";
+            } else if (webhookEvent.eventName === "subscription_expired") {
+              eventName = "Subscription Expired";
+            } else if (webhookEvent.eventName === "subscription_paused") {
+              eventName = "Subscription Paused";
+            } else if (webhookEvent.eventName === "subscription_unpaused") {
+              eventName = "Subscription Unpaused";
+            }
+
+            // Track the subscription event
+            amplitude.track(eventName, {
+              userId: updateData.userId,
+              subscriptionId: updateData.lemonSqueezyId,
+              planName: plan[0].name,
+              planPrice: updateData.price,
+              subscriptionStatus: updateData.status,
+              subscriptionStatusFormatted: updateData.statusFormatted,
+              renewsAt: updateData.renewsAt,
+              endsAt: updateData.endsAt,
+              trialEndsAt: updateData.trialEndsAt,
+              isUsageBased: updateData.isUsageBased,
+              source: "lemonsqueezy_webhook",
+              planId: plan[0].id,
+              variantId: plan[0].variantId,
+            });
+
+            // Set user properties for subscription tracking
+            amplitude.setUserId(updateData.userId);
+            amplitude.identify(
+              new amplitude.Identify()
+                .set("subscriptionStatus", updateData.status)
+                .set("currentPlan", plan[0].name)
+                .set("planPrice", updateData.price)
+                .set("subscriptionRenewsAt", updateData.renewsAt)
+                .set("subscriptionEndsAt", updateData.endsAt)
+                .set("isSubscriber", updateData.status === "active"),
+            );
+
+            console.log(
+              `Amplitude ${eventName} event tracked successfully for user ${updateData.userId}`,
+            );
+          } catch (amplitudeError) {
+            console.error(
+              "Failed to track subscription event in Amplitude:",
+              amplitudeError,
+            );
+            // Don't fail the whole process if Amplitude tracking fails
+          }
         } catch (error) {
           processingError = `Failed to upsert Subscription #${updateData.lemonSqueezyId} to the database.`;
           console.error(error);

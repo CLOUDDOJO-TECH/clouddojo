@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "@/components/ui/sonner";
 import { PricingModalProvider } from "./pricing-modal-provider";
+import { AmplitudeProvider } from "./amplitude-provider";
 import { dark } from "@clerk/themes";
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
@@ -12,10 +13,12 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
     <ClerkProvider appearance={{ baseTheme: dark }}>
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools initialIsOpen={false} />
-        <PricingModalProvider>
-          {children}
-          <Toaster />
-        </PricingModalProvider>
+        <AmplitudeProvider>
+          <PricingModalProvider>
+            {children}
+            <Toaster />
+          </PricingModalProvider>
+        </AmplitudeProvider>
       </QueryClientProvider>
     </ClerkProvider>
   );

@@ -6,6 +6,7 @@ import { requireAdmin } from "@/lib/utils/auth_utils";
 export interface ProjectTableData {
   id: string;
   title: string;
+  thumbnailUrl: string | null;
   projectType: string;
   difficulty: string;
   isPublished: boolean;
@@ -50,6 +51,7 @@ export async function getAllProjects() {
     const projectsData: ProjectTableData[] = projects.map((project) => ({
       id: project.id,
       title: project.title,
+      thumbnailUrl: project.thumbnailUrl,
       projectType: project.projectType,
       difficulty: project.difficulty,
       isPublished: project.isPublished,

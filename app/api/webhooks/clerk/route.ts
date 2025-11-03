@@ -4,6 +4,7 @@ import { WebhookEvent } from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
 import * as seline from "@seline-analytics/web";
 import { sendWelcomeEmail } from "@/lib/emails/send-email";
+import * as amplitude from "@amplitude/analytics-browser";
 
 export async function POST(req: Request) {
   // Get the headers
@@ -118,6 +119,42 @@ export async function POST(req: Request) {
           plan: "free",
           credits: 140,
         });
+
+        // Track signup event in Amplitude
+        try {
+          const apiKey = process.env.AMPLITUDE_API_KEY!;
+
+          // Initialize Amplitude for server-side tracking
+          amplitude.init(apiKey, {
+            autocapture: false, // Disable autocapture for server-side
+          });
+
+          // Track the signup event
+          amplitude.track("User Signed Up", {
+            userId: newUser.userId,
+            email: newUser.email,
+            firstName: newUser.firstName,
+            lastName: newUser.lastName,
+            plan: "free",
+            source: "clerk_webhook",
+          });
+
+          // Set user properties
+          amplitude.setUserId(newUser.userId);
+          amplitude.identify(
+            new amplitude.Identify()
+              .set("email", newUser.email)
+              .set("firstName", newUser.firstName)
+              .set("lastName", newUser.lastName)
+              .set("plan", "free")
+              .set("signupDate", new Date().toISOString()),
+          );
+
+          console.log("Amplitude signup event tracked successfully");
+        } catch (amplitudeError) {
+          console.error("Failed to track signup in Amplitude:", amplitudeError);
+          // Don't fail the whole process if Amplitude tracking fails
+        }
       }
       console.log(
         `Received webhook with ID ${id} and event type of ${eventType}`,
