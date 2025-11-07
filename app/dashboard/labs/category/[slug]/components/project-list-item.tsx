@@ -1,12 +1,52 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Plus, Minus, Clock, Crown } from "lucide-react";
+import { Plus, Minus } from "lucide-react";
 import Link from "next/link";
 import { Project } from "@/validations/project-types";
 import { useState } from "react";
 import { toast } from "sonner";
+import { UserAvatarsGroup } from "./user-avatars-group";
+
+const ProIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    x="0px"
+    y="0px"
+    width="18px"
+    height="18px"
+    viewBox="0 0 18 18"
+  >
+    <path
+      d="M12.25,9c-.414,0-.75-.336-.75-.75v-3.25c0-1.378-1.122-2.5-2.5-2.5s-2.5,1.122-2.5,2.5v3.25c0,.414-.336,.75-.75,.75s-.75-.336-.75-.75v-3.25c0-2.206,1.794-4,4-4s4,1.794,4,4v3.25c0,.414-.336,.75-.75,.75Z"
+      fill="currentColor"
+    />
+    <path
+      d="M12.75,7.5H5.25c-1.517,0-2.75,1.233-2.75,2.75v4c0,1.517,1.233,2.75,2.75,2.75h7.5c1.517,0,2.75-1.233,2.75-2.75v-4c0-1.517-1.233-2.75-2.75-2.75Zm-3,5.25c0,.414-.336,.75-.75,.75s-.75-.336-.75-.75v-1c0-.414,.336-.75,.75-.75s.75,.336,.75,.75v1Z"
+      fill="currentColor"
+    />
+  </svg>
+);
+
+const ClockIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    x="0px"
+    y="0px"
+    width="18px"
+    height="18px"
+    viewBox="0 0 18 18"
+  >
+    <path
+      d="M9.75,3.042v-1.042h1.5c.414,0,.75-.336,.75-.75s-.336-.75-.75-.75H6.75c-.414,0-.75,.336-.75,.75s.336,.75,.75,.75h1.5v1.042c-3.508,.376-6.25,3.352-6.25,6.958,0,3.86,3.14,7,7,7s7-3.14,7-7c0-3.606-2.742-6.583-6.25-6.958Zm-.22,7.489c-.146,.146-.338,.22-.53,.22s-.384-.073-.53-.22l-2.298-2.298c-.293-.293-.293-.768,0-1.061s.768-.293,1.061,0l2.298,2.298c.293,.293,.293,.768,0,1.061Z"
+      fill="currentColor"
+    />
+    <path
+      d="M16.25,5.5c-.192,0-.384-.073-.53-.22l-2-2c-.293-.293-.293-.768,0-1.061s.768-.293,1.061,0l2,2c.293,.293,.293,.768,0,1.061-.146,.146-.338,.22-.53,.22Z"
+      fill="currentColor"
+    />
+  </svg>
+);
 
 interface ProjectListItemProps {
   project: Project;
@@ -20,8 +60,6 @@ export function ProjectListItem({ project }: ProjectListItemProps) {
   // Get primary category
   const primaryCategory = project.category || project.categories?.[0];
 
-  // Generate avatar placeholders (for demonstration)
-  const avatarColors = ["bg-blue-500", "bg-purple-500", "bg-pink-500"];
   const completionCount = project.completionCount || 0;
 
   // Calculate progress percentage
@@ -64,7 +102,7 @@ export function ProjectListItem({ project }: ProjectListItemProps) {
   return (
     <Link
       href={`/dashboard/labs/${project.id}`}
-      className="flex items-center justify-between py-5 px-2 hover:bg-muted/50 rounded-lg transition-colors group"
+      className="flex items-center justify-between py-5 px-2 hover:bg-muted/50 rounded-lg transition-colors group bg-muted"
     >
       {/* Left side: Progress Circle + Category/Title + Metadata + Avatars + Completion */}
       <div className="flex items-center gap-4 flex-1">
@@ -120,7 +158,7 @@ export function ProjectListItem({ project }: ProjectListItemProps) {
             {project.isPremium && (
               <span className="text-xs text-muted-foreground flex items-center gap-1">
                 <span className="w-1 h-1 rounded-full bg-muted-foreground" />
-                <Crown className="w-3 h-3" />
+                <ProIcon />
                 <span>Pro</span>
               </span>
             )}
@@ -128,31 +166,14 @@ export function ProjectListItem({ project }: ProjectListItemProps) {
             {/* Estimated Time */}
             <span className="text-xs text-muted-foreground flex items-center gap-1">
               <span className="w-1 h-1 rounded-full bg-muted-foreground" />
-              <Clock className="w-3 h-3" />
+              <ClockIcon />
               <span>{formatTime(project.estimatedTime)}</span>
             </span>
           </div>
         </div>
 
         {/* Avatars showing who completed */}
-        <div className="flex items-center gap-2 flex-shrink-0">
-          <div className="flex -space-x-2">
-            {Array.from({
-              length: Math.min(3, Math.max(1, completionCount)),
-            }).map((_, i) => (
-              <Avatar key={i} className="w-6 h-6 border-2 border-background">
-                <AvatarFallback
-                  className={avatarColors[i % avatarColors.length]}
-                >
-                  {String.fromCharCode(65 + i)}
-                </AvatarFallback>
-              </Avatar>
-            ))}
-          </div>
-          <span className="text-sm text-muted-foreground whitespace-nowrap">
-            {completionCount}+ completed
-          </span>
-        </div>
+        <UserAvatarsGroup count={completionCount} />
       </div>
 
       {/* Right side: Add/Remove Projects button */}

@@ -322,7 +322,7 @@ export function Step5Preview({
                   <div className="flex items-center justify-between p-4">
                     <div className="flex items-center gap-3 flex-1">
                       <span className="font-semibold text-sm">
-                        Step {step.stepNumber}
+                        Step {index + 1}
                       </span>
                       <Badge
                         className={getStepTypeColor(step.stepType)}

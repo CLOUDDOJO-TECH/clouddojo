@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { LabsBanner } from "./labs-banner";
 
 export const metadata: Metadata = {
   title: "Projects | Clouddojo",
@@ -12,8 +13,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
+    <>
+      <LabsBanner />
+      {children}
+    </>
   );
 }

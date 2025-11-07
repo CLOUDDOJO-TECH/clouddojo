@@ -101,7 +101,7 @@ export function SiteHeader() {
             <Button
               variant="outline"
               size="sm"
-              className="md:flex items-center hidden relative h-9 justify-between text-sm text-brand-beige-500  md:w-40 border-brand-beige-800 lg:w-64"
+              className="md:flex items-center hidden relative h-9 justify-between text-sm dark:text-brand-beige-500 text-gray-700 md:w-40 border-brand-beige-800 lg:w-64"
               onClick={() => setCommandMenuOpen(true)}
             >
               <div className="flex items-center">

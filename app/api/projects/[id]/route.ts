@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { getAuth } from '@clerk/nextjs/server';
-import prisma from '@/lib/prisma';
+import { NextRequest, NextResponse } from "next/server";
+import { getAuth } from "@clerk/nextjs/server";
+import prisma from "@/lib/prisma";
 
 interface RouteParams {
   params: Promise<{
@@ -11,12 +11,9 @@ interface RouteParams {
 export async function GET(req: NextRequest, { params }: RouteParams) {
   try {
     const { userId } = await getAuth(req);
-    
+
     if (!userId) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const { id } = await params;
@@ -26,19 +23,24 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
     const project = await prisma.project.findUnique({
       where: {
         id: projectId,
-        isPublished: true
+        isPublished: true,
       },
       include: {
-        category: {
-          select: {
-            id: true,
-            name: true,
-            description: true
-          }
+        projectCategoryAssignments: {
+          include: {
+            projectCategory: {
+              select: {
+                id: true,
+                name: true,
+                description: true,
+                slug: true,
+              },
+            },
+          },
         },
         steps: {
           orderBy: {
-            stepNumber: 'asc'
+            stepNumber: "asc",
           },
           select: {
             id: true,
@@ -51,43 +53,40 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
             mediaUrls: true,
             estimatedTime: true,
             stepType: true,
-            isOptional: true
-          }
+            isOptional: true,
+          },
         },
         userProgresses: {
           where: {
-            userId: userId
+            userId: userId,
           },
           include: {
             stepResponses: {
               include: {
                 step: {
                   select: {
-                    stepNumber: true
-                  }
-                }
-              }
+                    stepNumber: true,
+                  },
+                },
+              },
             },
-            achievements: true
-          }
+            achievements: true,
+          },
         },
         _count: {
           select: {
             userProgresses: {
               where: {
-                status: 'COMPLETED'
-              }
-            }
-          }
-        }
-      }
+                status: "COMPLETED",
+              },
+            },
+          },
+        },
+      },
     });
 
     if (!project) {
-      return NextResponse.json(
-        { error: 'Project not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Project not found" }, { status: 404 });
     }
 
     // Check if user has access to premium content
@@ -98,15 +97,15 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
         where: {
           userId: userId,
           status: {
-            in: ['active', 'on_trial']
-          }
-        }
+            in: ["active", "on_trial"],
+          },
+        },
       });
 
       if (userSubscriptions.length === 0) {
         return NextResponse.json(
-          { error: 'Premium subscription required to access this project' },
-          { status: 403 }
+          { error: "Premium subscription required to access this project" },
+          { status: 403 },
         );
       }
     }
@@ -118,7 +117,9 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
       id: project.id,
       title: project.title,
       description: project.description,
-      category: project.category,
+      categories: project.projectCategoryAssignments.map(
+        (assignment) => assignment.projectCategory,
+      ),
       difficulty: project.difficulty,
       estimatedTime: project.estimatedTime,
       estimatedCost: project.estimatedCost,
@@ -134,38 +135,44 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
       totalSteps: project.steps.length,
       completionCount: project._count.userProgresses,
       steps: project.steps,
-      userProgress: userProgress ? {
-        id: userProgress.id,
-        status: userProgress.status,
-        currentStep: userProgress.currentStep,
-        completedSteps: userProgress.completedSteps,
-        guidanceMode: userProgress.guidanceMode,
-        progressPercentage: Math.round((userProgress.completedSteps.length / project.steps.length) * 100),
-        startedAt: userProgress.startedAt,
-        completedAt: userProgress.completedAt,
-        timeSpent: userProgress.timeSpent,
-        stepResponses: userProgress.stepResponses.reduce((acc, response) => {
-          acc[response.step.stepNumber] = {
-            id: response.id,
-            response: response.response,
-            completedAt: response.completedAt,
-            timeSpent: response.timeSpent,
-            hintsUsed: response.hintsUsed,
-            validationPassed: response.validationPassed
-          };
-          return acc;
-        }, {} as Record<number, any>),
-        achievements: userProgress.achievements
-      } : null
+      userProgress: userProgress
+        ? {
+            id: userProgress.id,
+            status: userProgress.status,
+            currentStep: userProgress.currentStep,
+            completedSteps: userProgress.completedSteps,
+            guidanceMode: userProgress.guidanceMode,
+            progressPercentage: Math.round(
+              (userProgress.completedSteps.length / project.steps.length) * 100,
+            ),
+            startedAt: userProgress.startedAt,
+            completedAt: userProgress.completedAt,
+            timeSpent: userProgress.timeSpent,
+            stepResponses: userProgress.stepResponses.reduce(
+              (acc, response) => {
+                acc[response.step.stepNumber] = {
+                  id: response.id,
+                  response: response.response,
+                  completedAt: response.completedAt,
+                  timeSpent: response.timeSpent,
+                  hintsUsed: response.hintsUsed,
+                  validationPassed: response.validationPassed,
+                };
+                return acc;
+              },
+              {} as Record<number, any>,
+            ),
+            achievements: userProgress.achievements,
+          }
+        : null,
     };
 
     return NextResponse.json(response);
-
   } catch (error) {
-    console.error('Error fetching project:', error);
+    console.error("Error fetching project:", error);
     return NextResponse.json(
-      { error: 'Failed to fetch project details' },
-      { status: 500 }
+      { error: "Failed to fetch project details" },
+      { status: 500 },
     );
   }
 }

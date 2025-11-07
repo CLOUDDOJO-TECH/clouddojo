@@ -12,7 +12,7 @@ import { z } from "zod";
  * Create a complete project with all steps and categories in a single transaction
  */
 export async function createProject(
-  data: CompleteProject
+  data: CompleteProject,
 ): Promise<CreateProjectResult> {
   try {
     // Check authentication
@@ -49,6 +49,18 @@ export async function createProject(
       return {
         success: false,
         error: "At least one step is required",
+      };
+    }
+
+    // Validate step numbers are unique
+    const stepNumbers = data.steps.map((step) => step.stepNumber);
+    const duplicates = stepNumbers.filter(
+      (num, index) => stepNumbers.indexOf(num) !== index,
+    );
+    if (duplicates.length > 0) {
+      return {
+        success: false,
+        error: `Duplicate step numbers found: ${duplicates.join(", ")}. Each step must have a unique step number.`,
       };
     }
 
@@ -185,23 +197,21 @@ const aiProjectMetadataSchema = z.object({
   description: z
     .string()
     .describe(
-      "A comprehensive 100-300 word description in Markdown format. Use headings (###), bold (**text**), and bullet lists. Structure: ### Overview (brief intro), ### Key Features (bullet list), ### What You'll Build (specifics), ### Target Audience (who it's for)."
+      "A comprehensive 100-300 word description in Markdown format. Use headings (###), bold (**text**), and bullet lists. Structure: ### Overview (brief intro), ### Key Features (bullet list), ### What You'll Build (specifics), ### Target Audience (who it's for).",
     ),
   difficulty: z
     .enum(["BEGINER", "INTERMEDIATE", "ADVANCED", "EXPERT"])
     .describe("Estimated difficulty level based on complexity"),
   estimatedTime: z
     .number()
-    .describe(
-      "Total estimated time in minutes to complete the entire project"
-    ),
+    .describe("Total estimated time in minutes to complete the entire project"),
   estimatedCost: z
     .number()
     .describe("Estimated AWS/cloud cost in cents (0 for free projects)"),
   projectType: z
     .enum(["TUTORIAL", "CHALLENGE", "ASSESSMENT", "CAPSTONE"])
     .describe(
-      "TUTORIAL for step-by-step guidance, CHALLENGE for problem-solving, ASSESSMENT for testing knowledge, CAPSTONE for comprehensive projects"
+      "TUTORIAL for step-by-step guidance, CHALLENGE for problem-solving, ASSESSMENT for testing knowledge, CAPSTONE for comprehensive projects",
     ),
 });
 

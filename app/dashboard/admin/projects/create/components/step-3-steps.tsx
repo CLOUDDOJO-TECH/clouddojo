@@ -149,24 +149,30 @@ export function Step3Steps({
 
   const handleRemoveStep = (index: number) => {
     removeStep(index);
-    setOpenSteps(openSteps.filter((i) => i !== index));
+    setOpenSteps(
+      openSteps.filter((i) => i !== index).map((i) => (i > index ? i - 1 : i)),
+    );
 
-    // Renumber remaining steps
-    const steps = watch("steps");
-    steps.forEach((_, idx) => {
-      if (idx >= index) {
+    // Renumber all remaining steps after removal
+    setTimeout(() => {
+      const steps = watch("steps");
+      steps.forEach((_, idx) => {
         setValue(`steps.${idx}.stepNumber`, idx + 1);
-      }
-    });
+      });
+    }, 0);
   };
 
   const handleMoveStep = (index: number, direction: "up" | "down") => {
     const newIndex = direction === "up" ? index - 1 : index + 1;
     moveStep(index, newIndex);
 
-    // Update step numbers
-    setValue(`steps.${index}.stepNumber`, newIndex + 1);
-    setValue(`steps.${newIndex}.stepNumber`, index + 1);
+    // Update all step numbers to match array order
+    setTimeout(() => {
+      const steps = watch("steps");
+      steps.forEach((_, idx) => {
+        setValue(`steps.${idx}.stepNumber`, idx + 1);
+      });
+    }, 0);
 
     // Update open states
     setOpenSteps(
@@ -232,7 +238,15 @@ export function Step3Steps({
   };
 
   const onSubmit = (data: ProjectSteps) => {
-    onComplete(data);
+    // Ensure all step numbers are sequential before submitting
+    const normalizedData = {
+      ...data,
+      steps: data.steps.map((step, index) => ({
+        ...step,
+        stepNumber: index + 1,
+      })),
+    };
+    onComplete(normalizedData);
   };
 
   const getStepTypeColor = (type: string) => {

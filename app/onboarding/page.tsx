@@ -93,7 +93,7 @@ export default function CloudDojoOnboarding() {
             currentStep={currentStep}
             totalSteps={totalSteps}
           />
-          <StepIcon icon={currentStepData.icon} />
+          {/*<StepIcon icon={currentStepData.icon} />*/}
           <StepHeader
             title={currentStepData.title}
             subtitle={currentStepData.subtitle}

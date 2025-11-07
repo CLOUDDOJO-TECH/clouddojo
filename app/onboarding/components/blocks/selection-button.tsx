@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { StepOption } from "../../types/onboarding";
 
 interface SelectionButtonProps {
@@ -27,7 +27,7 @@ export function SelectionButton({
         <h4 className="text-white font-medium">{option.title}</h4>
         <p className="text-gray-400 text-sm">{option.desc}</p>
       </div>
-      <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-white transition-colors duration-300" />
+      <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-white transition-colors duration-300" />
     </button>
   );
 }

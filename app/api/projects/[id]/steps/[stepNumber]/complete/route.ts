@@ -12,7 +12,7 @@ const completeStepSchema = z.object({
 interface RouteParams {
   params: Promise<{
     id: string;
-    stepId: string;
+    stepNumber: string;
   }>;
 }
 
@@ -27,17 +27,27 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
       );
     }
 
-    const { id: projectId, stepId } = await params;
+    const { id: projectId, stepNumber } = await params;
+    const stepNum = parseInt(stepNumber, 10);
+
+    if (isNaN(stepNum)) {
+      return NextResponse.json(
+        { error: 'Invalid step number' },
+        { status: 400 }
+      );
+    }
 
     // Parse and validate request body
     const body = await req.json();
     const { response, timeSpent, hintsUsed } = completeStepSchema.parse(body);
 
-    // Get project and step information
+    // Get project and step information using stepNumber
     const step = await prisma.projectStep.findUnique({
       where: {
-        id: stepId,
-        projectId: projectId
+        projectId_stepNumber: {
+          projectId: projectId,
+          stepNumber: stepNum,
+        }
       },
       include: {
         project: {
@@ -88,12 +98,12 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
     // Basic validation - check response length
     const validationPassed = response.length >= 10; // Minimum 10 characters
 
-    // Check if step response already exists
+    // Check if step response already exists using stepId
     const existingResponse = await prisma.projectStepResponse.findUnique({
       where: {
         progressId_stepId: {
           progressId: progress.id,
-          stepId: stepId
+          stepId: step.id
         }
       }
     });
@@ -105,7 +115,7 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
         where: {
           progressId_stepId: {
             progressId: progress.id,
-            stepId: stepId
+            stepId: step.id
           }
         },
         data: {
@@ -121,7 +131,7 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
       stepResponse = await prisma.projectStepResponse.create({
         data: {
           progressId: progress.id,
-          stepId: stepId,
+          stepId: step.id,
           response: response,
           timeSpent: timeSpent,
           hintsUsed: hintsUsed,
