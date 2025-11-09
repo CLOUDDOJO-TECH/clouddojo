@@ -14,11 +14,13 @@ export function StepHeader({ title, subtitle }: StepHeaderProps) {
 
   return (
     <div className="text-center flex flex-col items-center justify-center mb-8 font-main">
-      <h1 className="text-2xl md:text-4xl font-bold text-white mb-3">
+      <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3">
         {title}
       </h1>
       {/*<TypewriterEffectSmooth words={words} />*/}
-      <p className="text-gray-400 text-sm leading-relaxed">{subtitle}</p>
+      <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+        {subtitle}
+      </p>
     </div>
   );
 }

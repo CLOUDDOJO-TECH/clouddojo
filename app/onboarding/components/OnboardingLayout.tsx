@@ -1,8 +1,6 @@
 "use client";
 
 import React from "react";
-import OnboardingStepper from "./OnboardingStepper";
-import Image from "next/image";
 interface OnboardingLayoutProps {
   children: React.ReactNode;
   currentStep: number;
@@ -15,7 +13,7 @@ export default function OnboardingLayout({
   totalSteps,
 }: OnboardingLayoutProps) {
   return (
-    <div className="flex min-h-screen bg-background w-full bg-white dark:bg-slate-950">
+    <div className="flex min-h-screen bg-background w-full bg-white dark:bg-slate-950 font-main">
       {/* Content area */}
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center p-4 w-full">
         <main className="flex-1 flex items-center justify-center p-4 md:p-8">

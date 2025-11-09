@@ -1,17 +1,18 @@
 "use client";
 
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import type { OnboardingData } from "./types/onboarding";
 import { onboardingSteps } from "./components/data/onboarding_data";
 import { CompletionScreen } from "./components/Onboarding_Complete";
-import { GlassCard } from "./components/blocks/glass-card";
-import { StepIcon } from "./components/blocks/step-icon";
 import { StepHeader } from "./components/blocks/step-header";
 import { StepContent } from "./components/blocks/step-content";
 import { NavigationButtons } from "./components/blocks/navigation-button";
-import { StepCounter } from "./components/blocks/step-counter";
 import { ProgressIndicator } from "./components/blocks/progress-indicator";
+import { ThemeToggle } from "./components/blocks/theme-toggle";
 import { cn } from "@/lib/utils";
+
+import PathDrawing from "@/public/illustrations/animate-desk";
 
 export default function CloudDojoOnboarding() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -73,49 +74,79 @@ export default function CloudDojoOnboarding() {
   }
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br font-main from-background via-background/50 to-background/60  items-center  flex-col justify-center p-4 w-full my-6 flex">
-      {/*grid backgroun*/}
+    <div className="relative min-h-screen items-center flex-col justify-center p-4 w-full my-6 flex overflow-hidden font-main">
+      {/* Theme Toggle */}
+      <ThemeToggle />
+
+      {/*to be taken out :)*/}
+      <PathDrawing />
+
+      {/* Grid background - Behind everything */}
       <div
         className={cn(
-          "absolute inset-0",
+          "absolute inset-0 -z-10",
           "[background-size:20px_20px]",
-          "[background-image:radial-gradient(#d4d4d4_1px,transparent_1px)]",
-          "dark:[background-image:radial-gradient(#404040_1px,transparent_1px)]",
+          "[background-image:radial-gradient(circle,#e5e5e5_1px,transparent_1px)]",
+          "dark:[background-image:radial-gradient(circle,#404040_1px,transparent_1px)]",
         )}
       />
 
-      {/* Radial gradient for the container to give a faded look */}
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-background"></div>
+      {/* Radial gradient overlay - Behind the card */}
+      <div className="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center bg-background [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" />
 
-      <div className="items-center justify-center flex-col md:my-8 my-4 md:w-[60%]">
-        <GlassCard>
+      {/* Content - Directly on the grid, no card wrapper */}
+      <div className="relative z-10 items-center justify-center flex-col md:my-8 my-4 md:w-[60%] w-full max-w-4xl space-y-8">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
           <ProgressIndicator
             currentStep={currentStep}
             totalSteps={totalSteps}
           />
-          {/*<StepIcon icon={currentStepData.icon} />*/}
-          <StepHeader
-            title={currentStepData.title}
-            subtitle={currentStepData.subtitle}
-          />
+        </motion.div>
 
-          <div className="mb-8 justify-center items-center w-full">
+        {/*<StepIcon icon={currentStepData.icon} />*/}
+
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentStep}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.3 }}
+          >
+            <StepHeader
+              title={currentStepData.title}
+              subtitle={currentStepData.subtitle}
+            />
+          </motion.div>
+        </AnimatePresence>
+
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={`content-${currentStep}`}
+            className="mb-8 justify-center items-center w-full"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3, delay: 0.1 }}
+          >
             <StepContent
               step={currentStepData}
               selectedData={selectedData}
               onSelection={handleSelection}
             />
-          </div>
+          </motion.div>
+        </AnimatePresence>
 
-          <NavigationButtons
-            currentStep={currentStep}
-            totalSteps={totalSteps}
-            onBack={handleBack}
-            onNext={handleNext}
-          />
-
-          <StepCounter currentStep={currentStep} totalSteps={totalSteps} />
-        </GlassCard>
+        <NavigationButtons
+          currentStep={currentStep}
+          totalSteps={totalSteps}
+          onBack={handleBack}
+          onNext={handleNext}
+        />
       </div>
     </div>
   );

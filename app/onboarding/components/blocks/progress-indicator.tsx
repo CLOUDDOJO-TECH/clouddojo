@@ -14,10 +14,10 @@ export function ProgressIndicator({
           key={index}
           className={`h-2 rounded-full transition-all duration-500 ${
             index === currentStep
-              ? "bg-emerald-400 shadow-lg shadow-emerald-400/50 w-6"
+              ? "bg-emerald-500 shadow-lg shadow-emerald-500/50 w-6"
               : index < currentStep
                 ? "bg-emerald-500 w-2"
-                : "bg-gray-600 w-2"
+                : "bg-gray-300 dark:bg-gray-600 w-2"
           }`}
         />
       ))}

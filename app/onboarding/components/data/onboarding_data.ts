@@ -59,7 +59,7 @@ export const onboardingSteps: OnboardingStep[] = [
   },
   {
     id: 2,
-    title: "Which cloud platforms?",
+    title: "Which Platforms interest you?",
     subtitle: "Select all platforms you're interested in",
     icon: Settings,
     type: "multiple",
@@ -84,10 +84,16 @@ export const onboardingSteps: OnboardingStep[] = [
         color: "green",
       },
       {
-        id: "alibaba",
-        title: "Alibaba Cloud",
-        desc: "Leading in Asia-Pacific",
-        color: "orange",
+        id: "docker",
+        title: "Docker",
+        desc: "Container platform",
+        color: "blue",
+      },
+      {
+        id: "kubernetes",
+        title: "Kubernetes",
+        desc: "Container orchestration",
+        color: "blue",
       },
       {
         id: "oracle",
@@ -95,47 +101,22 @@ export const onboardingSteps: OnboardingStep[] = [
         desc: "Database and enterprise apps",
         color: "red",
       },
+      {
+        id: "cloudflare",
+        title: "Cloudflare",
+        desc: "Edge computing and CDN",
+        color: "orange",
+      },
     ],
   },
   {
     id: 3,
     title: "Target certifications?",
-    subtitle: "What certifications are you aiming for?",
+    subtitle: "Select all certifications you're interested in pursuing",
     icon: Award,
     type: "multiple",
     category: "certifications",
-    options: [
-      {
-        id: "aws-cp",
-        title: "AWS Cloud Practitioner",
-        desc: "Entry-level AWS certification",
-      },
-      {
-        id: "aws-saa",
-        title: "AWS Solutions Architect",
-        desc: "Most popular AWS cert",
-      },
-      {
-        id: "azure-fundamentals",
-        title: "Azure Fundamentals",
-        desc: "Entry-level Azure cert",
-      },
-      {
-        id: "azure-admin",
-        title: "Azure Administrator",
-        desc: "Azure infrastructure management",
-      },
-      {
-        id: "gcp-ace",
-        title: "GCP Associate Engineer",
-        desc: "Google Cloud fundamentals",
-      },
-      {
-        id: "security",
-        title: "Security Certifications",
-        desc: "Cloud security focused",
-      },
-    ],
+    options: [], // Options are now handled by CertificationGrid component
   },
   {
     id: 4,

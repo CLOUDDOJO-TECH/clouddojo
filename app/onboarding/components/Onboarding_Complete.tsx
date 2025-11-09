@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Loader, Rocket } from "lucide-react";
 import type { OnboardingData } from "../types/onboarding";
 import { GlassCard } from "./blocks/glass-card";
+import { ThemeToggle } from "./blocks/theme-toggle";
 import { cn } from "@/lib/utils";
 import { useOnboardingQueries } from "../hooks/useOnboardingQueries";
 
@@ -25,74 +26,49 @@ export function CompletionScreen({ selectedData }: CompletionScreenProps) {
     submitOnboardingData(formattedData);
   };
 
-  // upload this data to the server
-  const {} = useOnboardingQueries();
   return (
-    <div className="min-h-screen   font-main bg-background flex items-center justify-center p-4">
+    <div className="min-h-screen font-main flex items-center justify-center p-4 overflow-hidden">
+      {/* Theme Toggle */}
+      <ThemeToggle />
+
+      {/* Grid background - Behind everything */}
       <div
         className={cn(
-          "absolute inset-0",
+          "absolute inset-0 -z-10",
           "[background-size:20px_20px]",
-          "[background-image:radial-gradient(#d4d4d4_1px,transparent_1px)]",
-          "dark:[background-image:radial-gradient(#404040_1px,transparent_1px)]",
+          "[background-image:radial-gradient(circle,#e5e5e5_1px,transparent_1px)]",
+          "dark:[background-image:radial-gradient(circle,#404040_1px,transparent_1px)]",
         )}
       />
 
-      {/* Radial gradient for the container to give a faded look */}
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-background max-w-lg"></div>
-      <div className="text-center space-y-6 flex z-10 flex-col p-4 max-w-lg">
+      {/* Radial gradient overlay - Behind the card */}
+      <div className="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center bg-background [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" />
+
+      {/* Content */}
+      <div className="text-center space-y-8 flex z-10 flex-col p-4 max-w-2xl">
         <div className="flex justify-center">
           <div className="relative">
-            <div className="w-60 h-60 flex items-center justify-center ">
+            <div className="w-96 h-96 flex items-center justify-center">
               <Image
-                src="/images/wallet-icon.png"
-                alt="CloudDojo Logo"
-                width={220}
-                height={220}
+                src="/illustrations/onboarding-done.svg"
+                alt="Onboarding Complete"
+                width={500}
+                height={500}
               />
             </div>
           </div>
         </div>
 
         <div className="space-y-3">
-          <h1 className="text-3xl font-bold text-white">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
             Welcome to CloudDojo!
           </h1>
-          <p className="text-gray-300 leading-relaxed">
-            Your personalized cloud certification journey starts now. We've
-            tailored everything based on your preferences.
-          </p>
-        </div>
-
-        {/* Personalized Stats */}
-        <div className="hidden grid grid-cols-2 gap-4 py-6">
-          <div className="text-center p-3 bg-white/5 rounded-xl border border-white/10">
-            <div className="text-xl font-bold text-emerald-400">
-              {selectedData.platforms.length}
-            </div>
-            <div className="text-xs text-gray-400">Cloud Platforms</div>
-          </div>
-          <div className="text-center p-3 bg-white/5 rounded-xl border border-white/10">
-            <div className="text-xl font-bold text-emerald-400">
-              {selectedData.certifications.length}
-            </div>
-            <div className="text-xs text-gray-400">Target Certs</div>
-          </div>
-          <div className="text-center p-3 bg-white/5 rounded-xl border border-white/10">
-            <div className="text-xl font-bold text-emerald-400">
-              {selectedData.focusArea.length}
-            </div>
-            <div className="text-xs text-gray-400">Focus Areas</div>
-          </div>
-          <div className="text-center p-3 bg-white/5 rounded-xl border border-white/10">
-            <div className="text-xl font-bold text-emerald-400">✨</div>
-            <div className="text-xs text-gray-400">Ready to Go</div>
-          </div>
         </div>
 
         <button
           onClick={() => handleSubmit()}
-          className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 rounded-2xl text-white font-semibold transition-all duration-300 shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/50 hover:scale-105"
+          disabled={isSubmitting}
+          className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-emerald-500 dark:bg-emerald-600 hover:bg-emerald-600 dark:hover:bg-emerald-700 rounded-2xl text-white font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isSubmitting ? (
             <Loader className="w-5 h-5 animate-spin" />

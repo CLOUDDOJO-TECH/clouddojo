@@ -54,7 +54,7 @@ export default function CompanyTypeStep() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 font-main">
       <StepHeader
         title="What type of organization are you?"
         subtitle="This helps us tailor your AWS certification experience to your specific needs."

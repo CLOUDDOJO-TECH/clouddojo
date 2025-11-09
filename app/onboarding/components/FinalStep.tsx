@@ -84,7 +84,7 @@ export default function FinalStep() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 font-main">
       {showConfetti && (
         <Confetti
           width={windowSize.width}
