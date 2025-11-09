@@ -14,7 +14,7 @@ import {
   StatsRowSimple,
   KeyConceptsSimple,
   GuidanceSelector,
-} from "./components-v2";
+} from "./components";
 
 export default function ProjectDetailMultiStep() {
   const { getToken } = useAuth();
@@ -25,7 +25,9 @@ export default function ProjectDetailMultiStep() {
 
   const [isStarting, setIsStarting] = useState(false);
   const [projectStarted, setProjectStarted] = useState(false);
-  const [selectedGuidanceMode, setSelectedGuidanceMode] = useState<string | null>(null);
+  const [selectedGuidanceMode, setSelectedGuidanceMode] = useState<
+    string | null
+  >(null);
 
   // Fetch project details
   const {
@@ -99,24 +101,31 @@ export default function ProjectDetailMultiStep() {
 
   // Complete step mutation
   const completeStepMutation = useMutation({
-    mutationFn: async ({ stepId, stepNumber, response }: { 
-      stepId: string; 
+    mutationFn: async ({
+      stepId,
+      stepNumber,
+      response,
+    }: {
+      stepId: string;
       stepNumber: number;
       response: string;
     }) => {
       const token = await getToken();
-      const apiResponse = await fetch(`/api/projects/${projectId}/steps/${stepNumber}/complete`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+      const apiResponse = await fetch(
+        `/api/projects/${projectId}/steps/${stepNumber}/complete`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            response: response || "Step completed via multi-step viewer",
+            timeSpent: 0,
+            hintsUsed: 0,
+          }),
         },
-        body: JSON.stringify({
-          response: response || "Step completed via multi-step viewer",
-          timeSpent: 0,
-          hintsUsed: 0,
-        }),
-      });
+      );
 
       if (!apiResponse.ok) {
         const errorData = await apiResponse.json();
@@ -168,7 +177,9 @@ export default function ProjectDetailMultiStep() {
   if (stepsError) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-destructive">Error loading project steps: {stepsError}</p>
+        <p className="text-destructive">
+          Error loading project steps: {stepsError}
+        </p>
       </div>
     );
   }
@@ -216,7 +227,9 @@ export default function ProjectDetailMultiStep() {
           <>
             {isLoadingSteps ? (
               <div className="flex items-center justify-center py-12">
-                <p className="text-muted-foreground">Loading project steps...</p>
+                <p className="text-muted-foreground">
+                  Loading project steps...
+                </p>
               </div>
             ) : stepsData ? (
               <ProjectStepViewer

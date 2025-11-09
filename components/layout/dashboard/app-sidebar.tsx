@@ -92,11 +92,11 @@ const NAVIGATION_DATA: NavSection[] = [
         url: "/dashboard/leaderboard",
         icon: LeaderboardIcon,
       },
-      {
-        title: "Hands-On Labs",
-        url: "/dashboard/labs",
-        icon: HandsOnLabsIcon,
-      },
+      // {
+      //   title: "Hands-On Labs",
+      //   url: "/dashboard/labs",
+      //   icon: HandsOnLabsIcon,
+      // },
     ],
   },
   {

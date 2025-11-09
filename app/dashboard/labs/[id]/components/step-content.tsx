@@ -1,7 +1,13 @@
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Clock, CheckCircle2 } from "lucide-react";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { Clock, CheckCircle2, Lightbulb, ChevronDown } from "lucide-react";
 
 interface StepContentProps {
   step: {
@@ -16,7 +22,10 @@ interface StepContentProps {
     estimatedTime: number;
     stepType: string;
     isOptional: boolean;
+    hints?: string[];
   };
+  guidanceMode: string;
+  onHintUsed?: () => void;
   onComplete?: () => void;
   onNext?: () => void;
   isCompleted?: boolean;
@@ -24,10 +33,14 @@ interface StepContentProps {
 
 export function StepContent({
   step,
+  guidanceMode,
+  onHintUsed,
   onComplete,
   onNext,
   isCompleted,
 }: StepContentProps) {
+  const [revealedHints, setRevealedHints] = useState<number[]>([]);
+
   const formatTime = (minutes: number) => {
     if (minutes < 60) return `${minutes} mins`;
     const hours = Math.floor(minutes / 60);
@@ -35,8 +48,19 @@ export function StepContent({
     return mins > 0 ? `${hours}h ${mins}m` : `${hours}h`;
   };
 
+  const handleRevealHint = (index: number) => {
+    if (!revealedHints.includes(index)) {
+      setRevealedHints([...revealedHints, index]);
+      onHintUsed?.();
+    }
+  };
+
+  const shouldShowHints =
+    guidanceMode === "SOME_GUIDANCE" || guidanceMode === "STEP_BY_STEP";
+  const hints = step.hints || [];
+
   return (
-    <div className="space-y-6 py-8">
+    <div className="space-y-6">
       {/* Step Header */}
       <div className="space-y-3">
         <div className="flex items-center gap-3">
@@ -109,6 +133,45 @@ export function StepContent({
         </Card>
       )}
 
+      {/* Hints Section - Only show based on guidance mode */}
+      {shouldShowHints && hints.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Lightbulb className="h-5 w-5" />
+              Hints Available ({hints.length})
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {hints.map((hint, index) => (
+              <Collapsible key={index}>
+                <CollapsibleTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-between"
+                    onClick={() => handleRevealHint(index)}
+                  >
+                    <span className="flex items-center gap-2">
+                      <Lightbulb className="h-4 w-4" />
+                      Hint {index + 1}
+                      {revealedHints.includes(index) && (
+                        <Badge variant="secondary" className="text-xs">
+                          Revealed
+                        </Badge>
+                      )}
+                    </span>
+                    <ChevronDown className="h-4 w-4" />
+                  </Button>
+                </CollapsibleTrigger>
+                <CollapsibleContent className="mt-2 p-4 rounded-lg bg-muted">
+                  <p className="text-sm">{hint}</p>
+                </CollapsibleContent>
+              </Collapsible>
+            ))}
+          </CardContent>
+        </Card>
+      )}
+
       {/* Media */}
       {step.mediaUrls.length > 0 && (
         <Card>
@@ -133,20 +196,6 @@ export function StepContent({
           </CardContent>
         </Card>
       )}
-
-      {/* Action Buttons */}
-      <div className="flex items-center gap-3 pt-4">
-        {!isCompleted && onComplete && (
-          <Button onClick={onComplete} size="lg">
-            Mark as Complete
-          </Button>
-        )}
-        {isCompleted && onNext && (
-          <Button onClick={onNext} size="lg">
-            Next Step
-          </Button>
-        )}
-      </div>
     </div>
   );
 }

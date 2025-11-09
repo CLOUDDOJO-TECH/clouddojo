@@ -5,3 +5,6 @@ export { GuidanceSelector } from "./guidance-selector";
 export { StepDivider } from "./step-divider";
 export { StepContent } from "./step-content";
 export { StepSkeleton } from "./step-skeleton";
+export { StepNavigation } from "./step-navigation";
+export { AchievementToast } from "./achievement-toast";
+export { DocumentationModal } from "./documentation-modal";
