@@ -1,11 +1,11 @@
 "use client";
-import Image from "next/image";
 import { Loader, Rocket } from "lucide-react";
 import type { OnboardingData } from "../types/onboarding";
-import { GlassCard } from "./blocks/glass-card";
 import { ThemeToggle } from "./blocks/theme-toggle";
+import { AnimatedOnboardingSvg } from "./blocks/animated-onboarding-svg";
 import { cn } from "@/lib/utils";
 import { useOnboardingQueries } from "../hooks/useOnboardingQueries";
+import { Button } from "@/components/ui/button";
 
 interface CompletionScreenProps {
   selectedData: OnboardingData;
@@ -48,27 +48,24 @@ export function CompletionScreen({ selectedData }: CompletionScreenProps) {
       <div className="text-center space-y-8 flex z-10 flex-col p-4 max-w-2xl">
         <div className="flex justify-center">
           <div className="relative">
-            <div className="w-96 h-96 flex items-center justify-center">
-              <Image
-                src="/illustrations/onboarding-done.svg"
-                alt="Onboarding Complete"
-                width={500}
-                height={500}
-              />
+            <div className="w-[430px] h-[430px] flex items-center justify-center">
+              <AnimatedOnboardingSvg className="w-full h-full" />
             </div>
           </div>
         </div>
 
         <div className="space-y-3">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white font-kaushan">
             Welcome to CloudDojo!
           </h1>
         </div>
 
-        <button
+        <Button
           onClick={() => handleSubmit()}
           disabled={isSubmitting}
-          className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-emerald-500 dark:bg-emerald-600 hover:bg-emerald-600 dark:hover:bg-emerald-700 rounded-2xl text-white font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          variant="outline"
+          size="lg"
+          className="border border-priamry text-primary rounded-lg"
         >
           {isSubmitting ? (
             <Loader className="w-5 h-5 animate-spin" />
@@ -76,7 +73,7 @@ export function CompletionScreen({ selectedData }: CompletionScreenProps) {
             <Rocket className="w-5 h-5" />
           )}
           <span>{isSubmitting ? "Filling you in..." : "Join the club"}</span>
-        </button>
+        </Button>
       </div>
     </div>
   );

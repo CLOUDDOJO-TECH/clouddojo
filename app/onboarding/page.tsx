@@ -79,7 +79,7 @@ export default function CloudDojoOnboarding() {
       <ThemeToggle />
 
       {/*to be taken out :)*/}
-      <PathDrawing />
+      {/*<PathDrawing />*/}
 
       {/* Grid background - Behind everything */}
       <div
