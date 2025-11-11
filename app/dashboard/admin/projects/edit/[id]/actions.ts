@@ -119,7 +119,7 @@ export async function updateProject(
       },
       {
         maxWait: 10000, // Maximum time to wait for a transaction to start (10 seconds)
-        timeout: 20000, // Maximum time for the transaction to complete (20 seconds)
+        timeout: 10000, // Maximum time for the transaction to complete (20 seconds)
       },
     );
 
