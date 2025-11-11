@@ -287,7 +287,7 @@ export async function generateQuizMetadata(
 
     // Call AI to generate structured metadata using generateObject
     const { object: aiMetadata } = await generateObject({
-      model: google("gemini-2.0-flash-exp"),
+      model: google("gemini-2.0-flash"),
       schema: aiQuizMetadataSchema,
       prompt: `You are a cloud certification quiz analyzer. Analyze the following quiz questions and generate comprehensive quiz metadata.
 
@@ -344,7 +344,7 @@ Do NOT include any thumbnail information.`,
       isNew: aiMetadata.isNew,
     };
 
-    // Validate word count (50-125 words)
+    // Validate description word count (50-125 words)
     const wordCount = metadata.description?.trim().split(/\s+/).length || 0;
     if (wordCount < 50 || wordCount > 125) {
       console.warn(
