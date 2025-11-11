@@ -81,47 +81,53 @@ export async function createQuizFromJSON(
     }
 
     // Create quiz with all questions in a transaction
-    const quiz = await prisma.$transaction(async (tx) => {
-      // Create the quiz
-      const createdQuiz = await tx.quiz.create({
-        data: {
-          title: metadata.title.trim(),
-          description: metadata.description?.trim() || null,
-          providers: metadata.providers || [],
-          duration: metadata.duration,
-          level: metadata.level,
-          free: metadata.free,
-          isPublic: metadata.isPublic,
-          isNew: metadata.isNew,
-          thumbnail: metadata.thumbnail || null,
-          categoryId: categoryId,
-        },
-      });
-
-      // Create all questions with their options
-      for (const question of questions) {
-        await tx.question.create({
+    const quiz = await prisma.$transaction(
+      async (tx) => {
+        // Create the quiz
+        const createdQuiz = await tx.quiz.create({
           data: {
-            quizId: createdQuiz.id,
-            content: question.content,
-            isMultiSelect: question.isMultiSelect,
-            correctAnswer: question.correctAnswers,
-            explanation: question.explanation || "",
-            difficultyLevel: question.difficultyLevel || "Medium",
-            awsService: question.awsService || null,
+            title: metadata.title.trim(),
+            description: metadata.description?.trim() || null,
+            providers: metadata.providers || [],
+            duration: metadata.duration,
+            level: metadata.level,
+            free: metadata.free,
+            isPublic: metadata.isPublic,
+            isNew: metadata.isNew,
+            thumbnail: metadata.thumbnail || null,
             categoryId: categoryId,
-            options: {
-              create: question.options.map((option) => ({
-                content: option.content,
-                isCorrect: option.isCorrect,
-              })),
-            },
           },
         });
-      }
 
-      return createdQuiz;
-    });
+        // Create all questions with their options
+        for (const question of questions) {
+          await tx.question.create({
+            data: {
+              quizId: createdQuiz.id,
+              content: question.content,
+              isMultiSelect: question.isMultiSelect,
+              correctAnswer: question.correctAnswers,
+              explanation: question.explanation || "",
+              difficultyLevel: question.difficultyLevel || "Medium",
+              awsService: question.awsService || null,
+              categoryId: categoryId,
+              options: {
+                create: question.options.map((option) => ({
+                  content: option.content,
+                  isCorrect: option.isCorrect,
+                })),
+              },
+            },
+          });
+        }
+
+        return createdQuiz;
+      },
+      {
+        maxWait: 10000, // Maximum time to wait for a transaction to start (10 seconds)
+        timeout: 20000, // Maximum time for the transaction to complete (20 seconds)
+      },
+    );
 
     // Revalidate relevant paths
     revalidatePath("/dashboard/practice");

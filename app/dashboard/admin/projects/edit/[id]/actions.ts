@@ -16,7 +16,7 @@ export interface UpdateProjectResult {
  */
 export async function updateProject(
   projectId: string,
-  data: CompleteProject
+  data: CompleteProject,
 ): Promise<UpdateProjectResult> {
   try {
     // Check authentication
@@ -69,53 +69,59 @@ export async function updateProject(
     }
 
     // Update project with all related data in a transaction
-    await prisma.$transaction(async (tx) => {
-      // Update main project
-      await tx.project.update({
-        where: { id: projectId },
-        data: {
-          title: data.title,
-          description: data.description,
-          projectType: data.projectType,
-          difficulty: data.difficulty,
-          estimatedTime: data.estimatedTime,
-          estimatedCost: data.estimatedCost,
-          isPremium: data.isPremium,
-          prerequisites: data.prerequisites,
-          learningObjectives: data.learningObjectives,
-        },
-      });
+    await prisma.$transaction(
+      async (tx) => {
+        // Update main project
+        await tx.project.update({
+          where: { id: projectId },
+          data: {
+            title: data.title,
+            description: data.description,
+            projectType: data.projectType,
+            difficulty: data.difficulty,
+            estimatedTime: data.estimatedTime,
+            estimatedCost: data.estimatedCost,
+            isPremium: data.isPremium,
+            prerequisites: data.prerequisites,
+            learningObjectives: data.learningObjectives,
+          },
+        });
 
-      // Delete existing steps
-      await tx.projectStep.deleteMany({
-        where: { projectId },
-      });
+        // Delete existing steps
+        await tx.projectStep.deleteMany({
+          where: { projectId },
+        });
 
-      // Create new steps
-      await tx.projectStep.createMany({
-        data: data.steps.map((step, index) => ({
-          projectId,
-          title: step.title,
-          description: step.description || "",
-          order: index + 1,
-        })),
-      });
-
-      // Delete existing category assignments
-      await tx.projectCategoryAssignment.deleteMany({
-        where: { projectId },
-      });
-
-      // Create new category assignments
-      if (data.categoryIds && data.categoryIds.length > 0) {
-        await tx.projectCategoryAssignment.createMany({
-          data: data.categoryIds.map((categoryId) => ({
+        // Create new steps
+        await tx.projectStep.createMany({
+          data: data.steps.map((step, index) => ({
             projectId,
-            categoryId,
+            title: step.title,
+            description: step.description || "",
+            order: index + 1,
           })),
         });
-      }
-    });
+
+        // Delete existing category assignments
+        await tx.projectCategoryAssignment.deleteMany({
+          where: { projectId },
+        });
+
+        // Create new category assignments
+        if (data.categoryIds && data.categoryIds.length > 0) {
+          await tx.projectCategoryAssignment.createMany({
+            data: data.categoryIds.map((categoryId) => ({
+              projectId,
+              categoryId,
+            })),
+          });
+        }
+      },
+      {
+        maxWait: 10000, // Maximum time to wait for a transaction to start (10 seconds)
+        timeout: 20000, // Maximum time for the transaction to complete (20 seconds)
+      },
+    );
 
     // Revalidate paths
     revalidatePath("/dashboard/admin/projects/manage");
