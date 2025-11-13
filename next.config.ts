@@ -28,6 +28,11 @@ const nextConfig: NextConfig = {
         hostname: "clouddojo-media-data-obj.s3.eu-north-1.amazonaws.com",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "ik.imagekit.io",
+        pathname: "/**",
+      },
     ],
     minimumCacheTTL: 60,
     dangerouslyAllowSVG: true,
