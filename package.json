@@ -118,6 +118,7 @@
     "react-shiki": "^0.7.2",
     "react-syntax-highlighter": "^15.6.3",
     "react-use": "latest",
+    "react-use-measure": "^2.1.7",
     "reading-time": "^1.5.0",
     "recharts": "2.15.0",
     "rehype-autolink-headings": "^7.1.0",

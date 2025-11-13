@@ -1,189 +1,301 @@
-"use client";
-
-import { useState } from "react";
-import { motion } from "motion/react";
+import React from "react";
 import Link from "next/link";
-import RotatingText from "./rotating-text";
-import { SignInButton, useUser } from "@clerk/nextjs";
-import { Headset, SendIcon } from "lucide-react";
-import TrustBadge from "./landing/trust-badge";
-import PreviewTabs from "./preview-tabs";
-import TabsNav from "./tabs-nav";
+import { ArrowRight, ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { useTheme } from "next-themes";
-import { Button } from "./ui/button";
+import { TextEffect } from "@/components/ui/text-effect";
+import { AnimatedGroup } from "@/components/ui/animated-group";
+import { HeroHeader } from "./header";
+
+const transitionVariants = {
+  item: {
+    hidden: {
+      opacity: 0,
+      filter: "blur(12px)",
+      y: 12,
+    },
+    visible: {
+      opacity: 1,
+      filter: "blur(0px)",
+      y: 0,
+      transition: {
+        type: "spring",
+        bounce: 0.3,
+        duration: 1.5,
+      },
+    },
+  },
+};
 
 export default function HeroSection() {
-  const { isSignedIn } = useUser();
-  const [activeTab, setActiveTab] = useState("dashboard");
-
-  const handleTabChange = (tabId: string) => {
-    setActiveTab(tabId);
-  };
-
-  const { theme } = useTheme()
-  const mascotSrc = theme === "light" ? "/images/extras/sensie-black.png" : "/images/extras/sensie-brown.png";
-
   return (
-    <div className="relative mx-auto md:my-16 my-2 flex flex-col items-center justify-center w-full overflow-hidden">
-      <div className="px-4 pt-10 md:pt-12 w-full flex flex-col items-center justify-center">
-        <div className="max-w-7xl w-full">
-          <span className="">
-            <TrustBadge />
-          </span>
-          <h1 className="relative z-10 mx-auto max-w-3xl md:max-w-5xl text-center text-4xl font-bold text-black md:text-4xl lg:text-6xl dark:text-slate-200">
-            {"Level Up. Get Certified. Become".split(" ").map((word, index) => (
-              <motion.span
-                key={index}
-                initial={{ opacity: 0, filter: "blur(4px)", y: 10 }}
-                animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-                transition={{
-                  duration: 0.3,
-                  delay: index * 0.1,
-                  ease: "easeInOut",
-                }}
-                className="mr-2 inline-block"
-              >
-                {word}
-              </motion.span>
-            ))}
-            <RotatingText
-              texts={["Hired", "Confident", "Professional", "Cloud"]}
-              mainClassName="px-2 sm:px-2 md:px-3 dark:text-primary text-emerald-700 overflow-hidden py-0.5 sm:py-1 md:py-2 justify-center rounded-lg"
-              staggerFrom={"last"}
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              exit={{ y: "-120%" }}
-              staggerDuration={0.025}
-              splitLevelClassName="overflow-hidden pb-0.5 sm:pb-1 md:pb-1"
-              transition={{ type: "spring", damping: 30, stiffness: 400 }}
-              rotationInterval={2000}
-            />
-          </h1>
-          <motion.p
-            initial={{
-              opacity: 0,
-            }}
-            animate={{
-              opacity: 1,
-            }}
-            transition={{
-              duration: 0.3,
-              delay: 0.8,
-            }}
-            className="relative z-10 mx-auto max-w-md md:max-w-xl py-4  text-center text-md md:text-lg font-normal text-gray-500 dark:text-neutral-100"
-          >
-            CloudDojo helps you crush your cloud certification exams with
-            smarter practice tests, perfromance analystics,and real-time ai
-            feedback.
-          </motion.p>
-
-          <motion.div
-            initial={{
-              opacity: 0,
-            }}
-            animate={{
-              opacity: 1,
-            }}
-            transition={{
-              duration: 0.3,
-              delay: 1,
-            }}
-            className="relative z-10 mt-8 flex flex-wrap items-center justify-center gap-4 mb-16"
-          >
-            {isSignedIn ? (
-              <Link href="/dashboard">
-                <button className="bg-slate-800 no-underline group cursor-pointer relative shadow-2xl shadow-zinc-900 rounded-full p-px text-xs font-semibold leading-6  text-white inline-block">
-                  <span className="absolute inset-0 overflow-hidden rounded-full">
-                    <span className="absolute inset-0 rounded-full bg-[image:radial-gradient(75%_100%_at_50%_0%,rgba(56,189,248,0.6)_0%,rgba(56,189,248,0)_75%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100"></span>
-                  </span>
-                  <div className="relative flex space-x-2 items-center z-10 rounded-full bg-zinc-950 py-2 px-6 ring-1 ring-white/10 ">
-                    <span>{`Explore Now`}</span>
-                    <svg
-                      width="22"
-                      height="22"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="1.5"
-                        d="M10.75 8.75L14.25 12L10.75 15.25"
-                      ></path>
-                    </svg>
-                  </div>
-                  <span className="absolute -bottom-0 left-[1.125rem] h-px w-[calc(100%-2.25rem)] bg-gradient-to-r from-emerald-400/0 via-emerald-400/90 to-emerald-400/0 transition-opacity duration-500 group-hover:opacity-40"></span>
-                </button>
-              </Link>
-            ) : (
-              <div className="bg-slate-800 no-underline group cursor-pointer relative shadow-2xl shadow-zinc-900 rounded-full p-px text-xs font-semibold leading-6  text-white inline-block">
-                <span className="absolute inset-0 overflow-hidden rounded-full">
-                  <span className="absolute inset-0 rounded-full bg-[image:radial-gradient(75%_100%_at_50%_0%,rgba(56,189,248,0.6)_0%,rgba(56,189,248,0)_75%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100"></span>
-                </span>
-                <div className="relative flex space-x-2 items-center z-10 rounded-full bg-gradient-to-b from-emerald-600 to-emerald-700 py-3 px-6 ring-1 ring-white/10 ">
-                  <SignInButton mode="modal" appearance={{ elements: { formButtonPrimary: "bg-emerald-600", }}}>
-                    <div className="flex items-center">
-                      <span className="text-sm flex items-center overflow-hidden relative">
-                        <p className="mr-8">{`Get Started`}</p>
-                        <SendIcon className="h-5 left-3 w-5 text-foreground-primary ml-[84px] absolute group-hover:translate-y-10 transition-all duration-500" />
-                        <SendIcon className="h-5 w-5 left-3 text-foreground-primary ml-[84px] absolute -translate-y-10 group-hover:translate-y-0 transition-all duration-500" />
-                      </span>
-                    </div>
-                  </SignInButton>
-                </div>
-                <span className="absolute -bottom-0 left-[1.125rem] h-px w-[calc(100%-2.25rem)] bg-gradient-to-r from-orange-400/0 via-orange-400/90 to-orange-400/0 transition-opacity duration-500 group-hover:opacity-40"></span>
-              </div>
-            )}
-            <Link
-              href="https://calendar.notion.so/meet/glenmiracle/7fnt4l09"
-              target="_blank"
-              rel="noopener noreferrer"
-              className=""
+    <>
+      <HeroHeader />
+      <main className="overflow-hidden">
+        <div
+          aria-hidden
+          className="absolute inset-0 isolate hidden opacity-65 contain-strict lg:block"
+        >
+          <div className="w-140 h-320 -translate-y-87.5 absolute left-0 top-0 -rotate-45 rounded-full bg-[radial-gradient(68.54%_68.72%_at_55.02%_31.46%,hsla(0,0%,85%,.08)_0,hsla(0,0%,55%,.02)_50%,hsla(0,0%,45%,0)_80%)]" />
+          <div className="h-320 absolute left-0 top-0 w-60 -rotate-45 rounded-full bg-[radial-gradient(50%_50%_at_50%_50%,hsla(0,0%,85%,.06)_0,hsla(0,0%,45%,.02)_80%,transparent_100%)] [translate:5%_-50%]" />
+          <div className="h-320 -translate-y-87.5 absolute left-0 top-0 w-60 -rotate-45 bg-[radial-gradient(50%_50%_at_50%_50%,hsla(0,0%,85%,.04)_0,hsla(0,0%,45%,.02)_80%,transparent_100%)]" />
+        </div>
+        <section>
+          <div className="relative pt-24 md:pt-36">
+            <AnimatedGroup
+              variants={{
+                container: {
+                  visible: {
+                    transition: {
+                      delayChildren: 1,
+                    },
+                  },
+                },
+                item: {
+                  hidden: {
+                    opacity: 0,
+                    y: 20,
+                  },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: {
+                      type: "spring",
+                      bounce: 0.3,
+                      duration: 2,
+                    },
+                  },
+                },
+              }}
+              className="mask-b-from-35% mask-b-to-90% absolute inset-0 top-56 -z-20 lg:top-32"
             >
-              <Button variant="glass" size='lg' className="rounded-full py-5 hover:text-primary hover:border-primary">
-                Support
-                <Headset className="ml-2 inline-block h-4 w-4" />
-              </Button>
-            </Link>
-          </motion.div>
-
-          <div className="preview-container relative">
-            <div className="absolute z-50 h-28 w-28 md:[h-450px] md:w-[250px] md:-top-[210px] md:-right-10  -top-[110px] -right-0">
               <Image
-                src={mascotSrc}
-                layout="intrinsic"
-                width={250}
-                height={150}
-                alt="mascot"
-                className="mx-auto max-w-2xl"
+                src="/images/night-background.webp"
+                alt="background"
+                className="hidden size-full dark:block"
+                width="3276"
+                height="4095"
               />
-            </div>
-            <PreviewTabs activeTab={activeTab} />
-          </div>
-        </div>
-      </div>
+            </AnimatedGroup>
 
-      {/* Full-width section with divider line that positions tabs in the middle */}
-      <div className="w-full border-t border-gray-200 dark:border-gray-800 mt-16 z-10 relative bg-[#FAFAF9] dark:bg-background pb-2">
-        <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
-          <TabsNav onTabChange={handleTabChange} activeTab={activeTab} />
-        </div>
-        <div className="max-w-7xl mr-12 mx-auto px-4 pt-10">
-          {/* Content for the next section would go here */}
-          <div>
-            <Image
-              src="/images/extras/features.png"
-              width={300}
-              height={100}
-              alt="instructions"
-              className="mx-auto  max-w-2xl"
+            <div
+              aria-hidden
+              className="absolute inset-0 -z-10 size-full [background:radial-gradient(125%_125%_at_50%_100%,transparent_0%,var(--color-background)_75%)]"
             />
+
+            <div className="mx-auto max-w-7xl px-6">
+              <div className="text-center sm:mx-auto lg:mr-auto lg:mt-0">
+                <AnimatedGroup variants={transitionVariants}>
+                  <Link
+                    href="#link"
+                    className="hover:bg-background dark:hover:border-t-border bg-muted group mx-auto flex w-fit items-center gap-4 rounded-full border p-1 pl-4 shadow-md shadow-zinc-950/5 transition-colors duration-300 dark:border-t-white/5 dark:shadow-zinc-950"
+                  >
+                    <span className="text-foreground text-sm">
+                      Introducing Support for AI Models
+                    </span>
+                    <span className="dark:border-background block h-4 w-0.5 border-l bg-white dark:bg-zinc-700"></span>
+
+                    <div className="bg-background group-hover:bg-muted size-6 overflow-hidden rounded-full duration-500">
+                      <div className="flex w-12 -translate-x-1/2 duration-500 ease-in-out group-hover:translate-x-0">
+                        <span className="flex size-6">
+                          <ArrowRight className="m-auto size-3" />
+                        </span>
+                        <span className="flex size-6">
+                          <ArrowRight className="m-auto size-3" />
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                </AnimatedGroup>
+
+                <TextEffect
+                  preset="fade-in-blur"
+                  speedSegment={0.3}
+                  as="h1"
+                  className="mx-auto mt-8 max-w-4xl text-balance text-5xl max-md:font-semibold md:text-7xl lg:mt-16 xl:text-[5.25rem]"
+                >
+                  Modern Solutions for Customer Engagement
+                </TextEffect>
+                <TextEffect
+                  per="line"
+                  preset="fade-in-blur"
+                  speedSegment={0.3}
+                  delay={0.5}
+                  as="p"
+                  className="mx-auto mt-8 max-w-2xl text-balance text-lg"
+                >
+                  Highly customizable components for building modern websites
+                  and applications that look and feel the way you mean it.
+                </TextEffect>
+
+                <AnimatedGroup
+                  variants={{
+                    container: {
+                      visible: {
+                        transition: {
+                          staggerChildren: 0.05,
+                          delayChildren: 0.75,
+                        },
+                      },
+                    },
+                    ...transitionVariants,
+                  }}
+                  className="mt-12 flex flex-col items-center justify-center gap-2 md:flex-row"
+                >
+                  <div
+                    key={1}
+                    className="bg-foreground/10 rounded-[calc(var(--radius-xl)+0.125rem)] border p-0.5"
+                  >
+                    <Button
+                      asChild
+                      size="lg"
+                      className="rounded-xl px-5 text-base"
+                    >
+                      <Link href="#link">
+                        <span className="text-nowrap">Start Building</span>
+                      </Link>
+                    </Button>
+                  </div>
+                  <Button
+                    key={2}
+                    asChild
+                    size="lg"
+                    variant="ghost"
+                    className="h-10.5 rounded-xl px-5"
+                  >
+                    <Link href="#link">
+                      <span className="text-nowrap">Request a demo</span>
+                    </Link>
+                  </Button>
+                </AnimatedGroup>
+              </div>
+            </div>
+
+            <AnimatedGroup
+              variants={{
+                container: {
+                  visible: {
+                    transition: {
+                      staggerChildren: 0.05,
+                      delayChildren: 0.75,
+                    },
+                  },
+                },
+                ...transitionVariants,
+              }}
+            >
+              <div className="mask-b-from-55% relative -mr-56 mt-8 overflow-hidden px-2 sm:mr-0 sm:mt-12 md:mt-20">
+                <div className="inset-shadow-2xs ring-background dark:inset-shadow-white/20 bg-background relative mx-auto max-w-6xl overflow-hidden rounded-2xl border p-4 shadow-lg shadow-zinc-950/15 ring-1">
+                  <Image
+                    className="bg-background aspect-15/8 relative hidden rounded-2xl dark:block"
+                    src="/images/features/dashboard.png"
+                    alt="app screen"
+                    width="2700"
+                    height="1440"
+                  />
+                  <Image
+                    className="z-2 border-border/25 aspect-15/8 relative rounded-2xl border dark:hidden"
+                    src="/mail2-light.png"
+                    alt="app screen"
+                    width="2700"
+                    height="1440"
+                  />
+                </div>
+              </div>
+            </AnimatedGroup>
           </div>
-        </div>
-      </div>
-    </div>
+        </section>
+        <section className="bg-background pb-16 pt-16 md:pb-32">
+          <div className="group relative m-auto max-w-5xl px-6">
+            <div className="absolute inset-0 z-10 flex scale-95 items-center justify-center opacity-0 duration-500 group-hover:scale-100 group-hover:opacity-100">
+              <Link
+                href="/"
+                className="block text-sm duration-150 hover:opacity-75"
+              >
+                <span> Meet Our Customers</span>
+
+                <ChevronRight className="ml-1 inline-block size-3" />
+              </Link>
+            </div>
+            <div className="group-hover:blur-xs mx-auto mt-12 grid max-w-2xl grid-cols-4 gap-x-12 gap-y-8 transition-all duration-500 group-hover:opacity-50 sm:gap-x-16 sm:gap-y-14">
+              <div className="flex">
+                <img
+                  className="mx-auto h-5 w-fit dark:invert"
+                  src="https://html.tailus.io/blocks/customers/nvidia.svg"
+                  alt="Nvidia Logo"
+                  height="20"
+                  width="auto"
+                />
+              </div>
+
+              <div className="flex">
+                <img
+                  className="mx-auto h-4 w-fit dark:invert"
+                  src="https://html.tailus.io/blocks/customers/column.svg"
+                  alt="Column Logo"
+                  height="16"
+                  width="auto"
+                />
+              </div>
+              <div className="flex">
+                <img
+                  className="mx-auto h-4 w-fit dark:invert"
+                  src="https://html.tailus.io/blocks/customers/github.svg"
+                  alt="GitHub Logo"
+                  height="16"
+                  width="auto"
+                />
+              </div>
+              <div className="flex">
+                <img
+                  className="mx-auto h-5 w-fit dark:invert"
+                  src="https://html.tailus.io/blocks/customers/nike.svg"
+                  alt="Nike Logo"
+                  height="20"
+                  width="auto"
+                />
+              </div>
+              <div className="flex">
+                <img
+                  className="mx-auto h-5 w-fit dark:invert"
+                  src="https://html.tailus.io/blocks/customers/lemonsqueezy.svg"
+                  alt="Lemon Squeezy Logo"
+                  height="20"
+                  width="auto"
+                />
+              </div>
+              <div className="flex">
+                <img
+                  className="mx-auto h-4 w-fit dark:invert"
+                  src="https://html.tailus.io/blocks/customers/laravel.svg"
+                  alt="Laravel Logo"
+                  height="16"
+                  width="auto"
+                />
+              </div>
+              <div className="flex">
+                <img
+                  className="mx-auto h-7 w-fit dark:invert"
+                  src="https://html.tailus.io/blocks/customers/lilly.svg"
+                  alt="Lilly Logo"
+                  height="28"
+                  width="auto"
+                />
+              </div>
+
+              <div className="flex">
+                <img
+                  className="mx-auto h-6 w-fit dark:invert"
+                  src="https://html.tailus.io/blocks/customers/openai.svg"
+                  alt="OpenAI Logo"
+                  height="24"
+                  width="auto"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </>
   );
 }
