@@ -1,6 +1,13 @@
 "use client";
 import { motion } from "framer-motion";
-import { BookOpen, BrainIcon, Cloud, LayoutDashboard, LibraryBigIcon, MedalIcon } from "lucide-react";
+import {
+  BookOpen,
+  BrainIcon,
+  Cloud,
+  LayoutDashboard,
+  LibraryBigIcon,
+  MedalIcon,
+} from "lucide-react";
 import { FaHandsWash } from "react-icons/fa";
 
 const FeaturesSection = () => {
@@ -9,47 +16,46 @@ const FeaturesSection = () => {
       icon: BrainIcon,
       title: "AI-Powered Reports",
       description:
-        "Our AI analyzes your recent performances and generates detailed reports highlighting your strengths and tailored recommendations to help you maximize your score."
+        "Our AI analyzes your recent performances and generates detailed reports highlighting your strengths and tailored recommendations to help you maximize your score.",
     },
     {
       icon: LibraryBigIcon,
       title: "Extensive Resource Library",
       description:
-        "Access a vast collection of resources including video lectures, practice exams, and interactive quizzes, all customized to suit your chosen certification path."
+        "Access a vast collection of resources including video lectures, practice exams, and interactive quizzes, all customized to suit your chosen certification path.",
     },
     {
       icon: BookOpen,
       title: "Detailed Performance Insights",
       description:
-        "Track your progress with in-depth analytics that pinpoint areas needing improvement and celebrate your mastery milestones."
+        "Track your progress with in-depth analytics that pinpoint areas needing improvement and celebrate your mastery milestones.",
     },
     {
       icon: Cloud,
       title: "Multiple Certification Providers",
       description:
-        "Prepare confidently for certifications across AWS, Azure, GCP, Oracle, Docker, and more—empowering you to enter any IT industry."
+        "Prepare confidently for certifications across AWS, Azure, GCP, Oracle, Docker, and more—empowering you to enter any IT industry.",
     },
     {
       icon: MedalIcon,
       title: "Global Leaderboard",
       description:
-        "Compete on weekly and monthly leaderboards, earn badges, and gain rewards as you climb the ranks of cloud certification achievers worldwide."
+        "Compete on weekly and monthly leaderboards, earn badges, and gain rewards as you climb the ranks of cloud certification achievers worldwide.",
     },
     {
       icon: LayoutDashboard,
       title: "Comprehensive Analytics Dashboard",
       description:
-        "Gain clear visibility into your performance trends and growth trajectory to identify exactly where to focus your learning effort."
-    }
-    
+        "Gain clear visibility into your performance trends and growth trajectory to identify exactly where to focus your learning effort.",
+    },
   ];
 
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.15 }
-    }
+      transition: { staggerChildren: 0.15 },
+    },
   };
 
   const featureVariants = {
@@ -57,18 +63,12 @@ const FeaturesSection = () => {
     visible: {
       opacity: 1,
       y: 0,
-      transition: { type: "spring", stiffness: 300, damping: 20 }
-    }
+      transition: { type: "spring", stiffness: 300, damping: 20 },
+    },
   };
 
   return (
     <section className="text-foreground py-16 md:py-24 px-6 md:px-12 relative overflow-hidden">
-      {/* Background pattern */}
-      {/* <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-0 left-0 w-40 h-40 bg-white rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
-        <div className="absolute bottom-0 right-0 w-60 h-60 bg-white rounded-full blur-3xl translate-x-1/3 translate-y-1/3"></div>
-      </div> */}
-
       <div className="container mx-auto flex flex-col items-center justify-center relative z-10">
         <motion.h2
           className="text-2xl md:text-5xl font-bold mb-4"
@@ -87,7 +87,9 @@ const FeaturesSection = () => {
           transition={{ duration: 0.6, delay: 0.1 }}
           viewport={{ once: true }}
         >
-          CloudDojo combines cutting-edge AI technology with expertly curated content to deliver the most effective and efficient cloud certification preparation experience.
+          CloudDojo combines cutting-edge AI technology with expertly curated
+          content to deliver the most effective and efficient cloud
+          certification preparation experience.
         </motion.p>
 
         <motion.div
@@ -111,7 +113,9 @@ const FeaturesSection = () => {
                     </h3>
                   </div>
                   <div>
-                    <p className="text-foreground/80 text-sm  font-light">{feature.description}</p>
+                    <p className="text-foreground/80 text-sm  font-light">
+                      {feature.description}
+                    </p>
                   </div>
                 </div>
               </motion.div>

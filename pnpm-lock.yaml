@@ -317,6 +317,9 @@ importers:
       react-use:
         specifier: latest
         version: 17.6.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      react-use-measure:
+        specifier: ^2.1.7
+        version: 2.1.7(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       reading-time:
         specifier: ^1.5.0
         version: 1.5.0
