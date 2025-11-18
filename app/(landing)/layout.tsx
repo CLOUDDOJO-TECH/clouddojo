@@ -1,5 +1,5 @@
 import type React from "react";
-import "../styles/globals.css";
+import "../../styles/globals.css";
 import { Inter } from "next/font/google";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Spotlight } from "@/components/spotlight";
@@ -57,10 +57,10 @@ export const jetbrains_mono = JetBrains_Mono({
 
 const satoshi = localFont({
   src: [
-    { path: "/fonts/Satoshi-Black.ttf", weight: "800" },
-    { path: "/fonts/Satoshi-Bold.ttf", weight: "700" },
-    { path: "/fonts/Satoshi-Medium.ttf", weight: "500" },
-    { path: "/fonts/Satoshi-Regular.ttf", weight: "400" },
+    { path: "../fonts/Satoshi-Black.ttf", weight: "800" },
+    { path: "../fonts/Satoshi-Bold.ttf", weight: "700" },
+    { path: "../fonts/Satoshi-Medium.ttf", weight: "500" },
+    { path: "../fonts/Satoshi-Regular.ttf", weight: "400" },
   ],
   variable: "--font-satoshi",
 });
