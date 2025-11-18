@@ -69,39 +69,27 @@ export function QuestionCard({
     selectedOptions.every((id) => correctAnswers.includes(id));
 
   return (
-    <div className="w-full rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+    <div className="w-full rounded-xl border border-border bg-background/50 p-6 backdrop-blur">
       {/* Question Header */}
       <div className="mb-4 flex items-start justify-between">
         <div>
           <div className="mb-2 flex items-center gap-2">
-            <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-600 dark:bg-blue-900 dark:text-blue-300">
+            <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-500">
               Question {questionNumber} of {totalQuestions}
             </span>
             {question.difficultyLevel && (
-              <span
-                className={cn(
-                  "rounded-full px-3 py-1 text-xs font-semibold",
-                  question.difficultyLevel === "BEGINER" &&
-                    "bg-green-100 text-green-600 dark:bg-green-900 dark:text-green-300",
-                  question.difficultyLevel === "INTERMEDIATE" &&
-                    "bg-yellow-100 text-yellow-600 dark:bg-yellow-900 dark:text-yellow-300",
-                  question.difficultyLevel === "ADVANCED" &&
-                    "bg-orange-100 text-orange-600 dark:bg-orange-900 dark:text-orange-300",
-                  question.difficultyLevel === "EXPERT" &&
-                    "bg-red-100 text-red-600 dark:bg-red-900 dark:text-red-300"
-                )}
-              >
+              <span className="rounded-full bg-foreground/10 px-3 py-1 text-xs font-semibold text-foreground/60">
                 {question.difficultyLevel}
               </span>
             )}
             {question.awsService && (
-              <span className="rounded-full bg-purple-100 px-3 py-1 text-xs font-semibold text-purple-600 dark:bg-purple-900 dark:text-purple-300">
+              <span className="rounded-full bg-foreground/10 px-3 py-1 text-xs font-semibold text-foreground/60">
                 {question.awsService}
               </span>
             )}
           </div>
           {question.isMultiSelect && (
-            <div className="mb-2 flex items-center gap-1 text-sm text-amber-600 dark:text-amber-400">
+            <div className="mb-2 flex items-center gap-1 text-sm text-foreground/60">
               <AlertCircle className="h-4 w-4" />
               <span>Select all that apply</span>
             </div>
@@ -110,7 +98,7 @@ export function QuestionCard({
       </div>
 
       {/* Question Text */}
-      <p className="mb-6 text-lg font-medium leading-relaxed text-gray-900 dark:text-white">
+      <p className="mb-6 text-lg font-medium leading-relaxed text-foreground">
         {question.content}
       </p>
 
@@ -128,12 +116,12 @@ export function QuestionCard({
               onClick={() => handleOptionClick(option.id)}
               disabled={isAnswered}
               className={cn(
-                "relative w-full rounded-lg border-2 p-4 text-left transition-all",
-                "hover:scale-[1.02] disabled:cursor-not-allowed",
-                !isAnswered && !isSelected && "border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800",
-                !isAnswered && isSelected && "border-blue-500 bg-blue-50 dark:border-blue-400 dark:bg-blue-950",
-                showCorrect && "border-green-500 bg-green-50 dark:border-green-400 dark:bg-green-950",
-                showIncorrect && "border-red-500 bg-red-50 dark:border-red-400 dark:bg-red-950"
+                "relative w-full rounded-lg border p-4 text-left transition-all",
+                "disabled:cursor-not-allowed",
+                !isAnswered && !isSelected && "border-border bg-background hover:bg-foreground/5",
+                !isAnswered && isSelected && "border-emerald-500 bg-emerald-500/10",
+                showCorrect && "border-emerald-500 bg-emerald-500/10",
+                showIncorrect && "border-red-500/50 bg-red-500/10"
               )}
             >
               <div className="flex items-start gap-3">
@@ -141,9 +129,9 @@ export function QuestionCard({
                 <span
                   className={cn(
                     "flex h-8 w-8 shrink-0 items-center justify-center rounded-full font-semibold",
-                    !isAnswered && !isSelected && "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300",
-                    !isAnswered && isSelected && "bg-blue-500 text-white",
-                    showCorrect && "bg-green-500 text-white",
+                    !isAnswered && !isSelected && "bg-foreground/10 text-foreground/60",
+                    !isAnswered && isSelected && "bg-emerald-500 text-white",
+                    showCorrect && "bg-emerald-500 text-white",
                     showIncorrect && "bg-red-500 text-white"
                   )}
                 >
@@ -151,13 +139,13 @@ export function QuestionCard({
                 </span>
 
                 {/* Option Text */}
-                <span className="flex-1 pt-1 text-gray-900 dark:text-white">
+                <span className="flex-1 pt-1 text-foreground">
                   {option.content}
                 </span>
 
                 {/* Result Icon */}
                 {showCorrect && (
-                  <CheckCircle2 className="h-6 w-6 shrink-0 text-green-500" />
+                  <CheckCircle2 className="h-6 w-6 shrink-0 text-emerald-500" />
                 )}
                 {showIncorrect && (
                   <XCircle className="h-6 w-6 shrink-0 text-red-500" />
@@ -173,7 +161,7 @@ export function QuestionCard({
         <button
           onClick={handleSubmit}
           disabled={selectedOptions.length === 0}
-          className="mt-6 w-full rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 px-6 py-3 font-semibold text-white transition-all hover:scale-105 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100"
+          className="mt-6 w-full rounded-lg border border-border bg-foreground px-6 py-3 font-semibold text-background transition-all hover:bg-foreground/90 disabled:cursor-not-allowed disabled:opacity-50"
         >
           Submit Answer
         </button>
@@ -185,22 +173,22 @@ export function QuestionCard({
           {/* Result Banner */}
           <div
             className={cn(
-              "rounded-lg border-2 p-4",
+              "rounded-lg border p-4",
               userAnswerCorrect
-                ? "border-green-500 bg-green-50 dark:border-green-400 dark:bg-green-950"
-                : "border-red-500 bg-red-50 dark:border-red-400 dark:bg-red-950"
+                ? "border-emerald-500/50 bg-emerald-500/10"
+                : "border-red-500/50 bg-red-500/10"
             )}
           >
             <div className="flex items-center gap-3">
               {userAnswerCorrect ? (
-                <CheckCircle2 className="h-6 w-6 text-green-500" />
+                <CheckCircle2 className="h-6 w-6 text-emerald-500" />
               ) : (
                 <XCircle className="h-6 w-6 text-red-500" />
               )}
               <span
                 className={cn(
                   "font-semibold",
-                  userAnswerCorrect ? "text-green-700 dark:text-green-300" : "text-red-700 dark:text-red-300"
+                  userAnswerCorrect ? "text-emerald-500" : "text-red-500"
                 )}
               >
                 {userAnswerCorrect ? "Correct!" : "Incorrect"}
@@ -210,12 +198,12 @@ export function QuestionCard({
 
           {/* Explanation */}
           {question.explanation && (
-            <div className="rounded-lg border border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-950">
-              <div className="mb-2 flex items-center gap-2 text-blue-700 dark:text-blue-300">
-                <Lightbulb className="h-5 w-5" />
+            <div className="rounded-lg border border-border bg-foreground/5 p-4">
+              <div className="mb-2 flex items-center gap-2 text-foreground">
+                <Lightbulb className="h-5 w-5 text-emerald-500" />
                 <span className="font-semibold">Explanation</span>
               </div>
-              <p className="text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+              <p className="text-sm leading-relaxed text-foreground/80">
                 {question.explanation}
               </p>
             </div>
