@@ -29,46 +29,47 @@ export default function ProvidersSection() {
           </div>
 
           <div className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            <ProvderCard
+            <ProviderCard
               title="Amazon Web Services"
               description="From Cloud Practitioner to Solutions Architect — prepare for every AWS certification with real-world practice tests and hands-on projects."
             >
               <AmazonWebServices />
-            </ProvderCard>
+            </ProviderCard>
 
-            <ProvderCard
+            <ProviderCard
               title="Azure"
               description="Azure certifications unlock enterprise opportunities. CloudDojo helps you master them with targeted practice tests and performance analytics."
             >
               <MicrosoftAzure />
-            </ProvderCard>
+            </ProviderCard>
 
-            <ProvderCard
+            <ProviderCard
               title="Google Cloud Platform"
               description="Master GCP certifications with practice tests built to mirror actual Google Cloud exams — from Associate to Professional level."
             >
               <GoogleCloud />
-            </ProvderCard>
+            </ProviderCard>
 
-            <ProvderCard
+            <ProviderCard
               title="Oracle Cloud "
               description="Oracle Cloud is growing fast. Get ahead with OCI certification prep — practice tests, analytics, and study resources all in one place"
             >
               <Oracle />
-            </ProvderCard>
+            </ProviderCard>
 
-            <ProvderCard
+            <ProviderCard
               title="Docker"
               description="Learn Docker by doing. Build containerized apps, write Dockerfiles, and master the containerization skills that every cloud role requires."
             >
               <Docker />
-            </ProvderCard>
+            </ProviderCard>
 
-            <ProvderCard
+            <ProviderCard
               title="Kubernetes"
               description="Master Kubernetes through real projects. Deploy apps, configure clusters, and build the container orchestration skills every cloud engineer needs."
-                            <Kubernetes />
-            </ProvderCard>
+            >
+              <Kubernetes />
+            </ProviderCard>
           </div>
         </div>
       </div>
@@ -76,7 +77,7 @@ export default function ProvidersSection() {
   );
 }
 
-const ProvderCard = ({
+const ProviderCard = ({
   title,
   description,
   children,
