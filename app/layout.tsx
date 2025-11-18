@@ -169,7 +169,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           src="https://cdn.seline.com/seline.js"
           data-token="9b13f9d446740a0"
         ></Script>
-        <div className="relative">
+        <div className="">
           <Providers>
             <SpeedInsights />
             <Analytics />
@@ -179,10 +179,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               enableSystem
               disableTransitionOnChange
             >
-              <div className="fixed inset-0 z-0 bg-background">
-                <div className="h-full w-full bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:35px_35px] opacity-30 [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
-              </div>
-              <div className="relative z-10">{children}</div>
+              <div className="">{children}</div>
             </ThemeProvider>
           </Providers>
         </div>
