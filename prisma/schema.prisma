@@ -24,6 +24,15 @@ model User {
   onboarding             UserOnboarding?
   progress               UserProgress[]
   ProjectDraft           ProjectDraft[]
+
+  // Gamification relations
+  streak                 UserStreak?
+  dailyActivities        DailyActivity[]
+  xp                     UserXP?
+  xpTransactions         XPTransaction[]
+  badges                 UserBadge[]
+  leaderboardEntries     LeaderboardEntry[]
+  gamificationSettings   UserGamificationSettings?
 }
 
 model UserOnboarding {
@@ -385,6 +394,125 @@ model ProjectDraft {
 
   @@index([userId])
   @@index([updatedAt])
+}
+
+// ============================================
+// GAMIFICATION MODELS
+// ============================================
+
+model UserStreak {
+  id             String   @id @default(uuid())
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  currentStreak  Int      @default(0)
+  longestStreak  Int      @default(0)
+  lastActivityAt DateTime @default(now())
+  streakFreezes  Int      @default(0) // Available freezes
+  streakData     Json     @default("{}") // Daily activity timestamps
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model DailyActivity {
+  id                String   @id @default(uuid())
+  userId            String
+  user              User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  date              DateTime @db.Date
+  questionsAnswered Int      @default(0)
+  quizzesTaken      Int      @default(0)
+  flashcardsStudied Int      @default(0)
+  minutesSpent      Int      @default(0)
+  xpEarned          Int      @default(0)
+  createdAt         DateTime @default(now())
+
+  @@unique([userId, date])
+  @@index([userId, date])
+}
+
+model UserXP {
+  id            String   @id @default(uuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  totalXP       Int      @default(0)
+  currentLevel  Int      @default(1)
+  xpToNextLevel Int      @default(100)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model XPTransaction {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  amount      Int
+  source      String // "quiz_completion", "streak_milestone", etc.
+  description String
+  metadata    Json?
+  createdAt   DateTime @default(now())
+
+  @@index([userId, createdAt])
+}
+
+model Badge {
+  id          String      @id @default(uuid())
+  name        String      @unique
+  description String
+  icon        String // Emoji or icon identifier
+  category    String // "streak", "quiz", "learning", "social", "special"
+  tier        String // "bronze", "silver", "gold", "platinum"
+  requirement Json // Conditions to unlock
+  xpReward    Int      @default(0)
+  createdAt   DateTime @default(now())
+  userBadges  UserBadge[]
+
+  @@index([category])
+}
+
+model UserBadge {
+  id       String   @id @default(uuid())
+  userId   String
+  user     User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  badgeId  String
+  badge    Badge    @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+  earnedAt DateTime @default(now())
+  progress Int? // For progressive badges
+
+  @@unique([userId, badgeId])
+  @@index([userId])
+  @@index([badgeId])
+}
+
+model LeaderboardEntry {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  type      String // "global_xp", "weekly_xp", "streak", "aws", etc.
+  score     Int
+  rank      Int
+  period    String // "all_time", "2025-01", "2025-W04"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, type, period])
+  @@index([type, period, score])
+}
+
+model UserGamificationSettings {
+  id                       String   @id @default(uuid())
+  userId                   String   @unique
+  user                     User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  dailyXPGoal              Int      @default(100)
+  showOnLeaderboard        Boolean  @default(true)
+  streakReminders          Boolean  @default(true)
+  achievementNotifications Boolean  @default(true)
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
+
+  @@index([userId])
 }
 
 enum SubscriptionTier {

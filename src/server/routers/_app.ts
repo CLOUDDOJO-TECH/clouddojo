@@ -7,9 +7,11 @@
 
 import { router } from '../trpc';
 import { quizRouter } from './quiz';
+import { gamificationRouter } from './gamification';
 
 export const appRouter = router({
   quiz: quizRouter,
+  gamification: gamificationRouter,
   // Add more routers here as we migrate:
   // user: userRouter,
   // progress: progressRouter,
