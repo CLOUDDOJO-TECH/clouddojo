@@ -1,23 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Loader2, ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { ProviderSelector, PROVIDERS } from "@/components/demo/provider-selector";
+import { trpc } from "@/lib/trpc/react";
+import { ProviderSelector } from "@/components/demo/provider-selector";
 import { QuestionCard, Question } from "@/components/demo/question-card";
 import { ResultsSummary } from "@/components/demo/results-summary";
-
-interface ApiResponse {
-  success: boolean;
-  data?: {
-    quizTitle: string;
-    quizDescription: string;
-    provider: string;
-    category: string;
-    questions: Question[];
-  };
-  error?: string;
-}
 
 interface AnswerState {
   [questionId: string]: {
@@ -31,92 +20,71 @@ type DemoStep = "select-provider" | "taking-quiz" | "view-results";
 
 export default function DemoPage() {
   const [step, setStep] = useState<DemoStep>("select-provider");
-  const [selectedProvider, setSelectedProvider] = useState<string>("AWS");
-  const [questions, setQuestions] = useState<Question[]>([]);
+  const [selectedProvider, setSelectedProvider] = useState<
+    "AWS" | "Azure" | "GCP" | "Kubernetes" | "Terraform" | "Docker"
+  >("AWS");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<AnswerState>({});
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [quizInfo, setQuizInfo] = useState<{
-    title: string;
-    description: string;
-  } | null>(null);
+  const [shouldFetchQuestions, setShouldFetchQuestions] = useState(false);
 
-  const fetchQuestions = async (provider: string) => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      const response = await fetch(
-        `/api/demo/questions?provider=${provider}&limit=10`
-      );
-      const data: ApiResponse = await response.json();
-
-      if (!data.success || !data.data) {
-        throw new Error(data.error || "Failed to fetch questions");
-      }
-
-      setQuestions(data.data.questions);
-      setQuizInfo({
-        title: data.data.quizTitle,
-        description: data.data.quizDescription || "",
-      });
-      setCurrentQuestionIndex(0);
-      setAnswers({});
-      setStep("taking-quiz");
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Failed to load questions"
-      );
-    } finally {
-      setLoading(false);
+  // ✅ tRPC Query - Fully type-safe!
+  const {
+    data: questions,
+    isLoading,
+    error,
+    refetch,
+  } = trpc.quiz.getPublicQuestions.useQuery(
+    {
+      provider: selectedProvider,
+      limit: 10,
+    },
+    {
+      enabled: shouldFetchQuestions, // Only fetch when user clicks "Start Quiz"
+      refetchOnWindowFocus: false,
+      retry: 1,
     }
-  };
+  );
+
+  // ✅ tRPC Mutation - Fully type-safe!
+  const verifyMutation = trpc.quiz.verifyAnswer.useMutation({
+    onSuccess: (data, variables) => {
+      setAnswers((prev) => ({
+        ...prev,
+        [variables.questionId]: {
+          selectedOptions: variables.selectedOptionIds,
+          correctOptions: data.correctOptionIds,
+          isCorrect: data.isCorrect,
+        },
+      }));
+    },
+    onError: (error) => {
+      console.error("Error verifying answer:", error.message);
+    },
+  });
 
   const handleProviderSelect = (provider: string) => {
-    setSelectedProvider(provider);
+    setSelectedProvider(
+      provider as "AWS" | "Azure" | "GCP" | "Kubernetes" | "Terraform" | "Docker"
+    );
   };
 
   const handleStartQuiz = () => {
-    fetchQuestions(selectedProvider);
+    setShouldFetchQuestions(true);
+    setCurrentQuestionIndex(0);
+    setAnswers({});
+    setStep("taking-quiz");
   };
 
   const handleAnswer = async (questionId: string, selectedOptionIds: string[]) => {
-    const question = questions.find((q) => q.id === questionId);
-    if (!question) return;
-
-    try {
-      // Verify answer with backend
-      const response = await fetch("/api/demo/verify", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          questionId,
-          selectedOptionIds,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        setAnswers((prev) => ({
-          ...prev,
-          [questionId]: {
-            selectedOptions: selectedOptionIds,
-            correctOptions: data.data.correctOptionIds,
-            isCorrect: data.data.isCorrect,
-          },
-        }));
-      }
-    } catch (error) {
-      console.error("Error verifying answer:", error);
-    }
+    // ✅ Use tRPC mutation - auto type-checked!
+    verifyMutation.mutate({
+      questionId,
+      selectedOptionIds,
+    });
   };
 
   const handleNext = () => {
-    if (currentQuestionIndex < questions.length - 1) {
+    if (currentQuestionIndex < (questions?.length || 0) - 1) {
       setCurrentQuestionIndex((prev) => prev + 1);
     } else {
       setStep("view-results");
@@ -133,20 +101,15 @@ export default function DemoPage() {
     setStep("select-provider");
     setAnswers({});
     setCurrentQuestionIndex(0);
-    setQuestions([]);
-    setQuizInfo(null);
+    setShouldFetchQuestions(false);
   };
 
-  const currentQuestion = questions[currentQuestionIndex];
-  const isQuestionAnswered = currentQuestion
-    ? !!answers[currentQuestion.id]
-    : false;
+  const currentQuestion = questions?.[currentQuestionIndex];
+  const isQuestionAnswered = currentQuestion ? !!answers[currentQuestion.id] : false;
 
   // Calculate results
   const totalAnswered = Object.keys(answers).length;
-  const correctAnswersCount = Object.values(answers).filter(
-    (a) => a.isCorrect
-  ).length;
+  const correctAnswersCount = Object.values(answers).filter((a) => a.isCorrect).length;
 
   return (
     <div className="min-h-screen bg-[#FAFAF9] dark:bg-background">
@@ -189,22 +152,22 @@ export default function DemoPage() {
             <ProviderSelector
               selectedProvider={selectedProvider}
               onProviderChange={handleProviderSelect}
-              disabled={loading}
+              disabled={isLoading}
             />
 
             {error && (
               <div className="rounded-lg border border-red-500/20 bg-red-500/10 p-4 text-center text-red-600 dark:text-red-400">
-                {error}
+                {error.message}
               </div>
             )}
 
             <div className="text-center">
               <button
                 onClick={handleStartQuiz}
-                disabled={loading}
+                disabled={isLoading}
                 className="inline-flex items-center gap-2 rounded-lg border border-border bg-foreground px-8 py-4 text-lg font-semibold text-background transition-all hover:bg-foreground/90 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {loading ? (
+                {isLoading ? (
                   <>
                     <Loader2 className="h-5 w-5 animate-spin" />
                     Loading Questions...
@@ -314,30 +277,28 @@ export default function DemoPage() {
             {/* Quiz Header */}
             <div className="text-center">
               <h1 className="mb-2 text-3xl font-bold text-foreground">
-                {quizInfo?.title || "Practice Quiz"}
+                {selectedProvider} Practice Quiz
               </h1>
-              {quizInfo?.description && (
-                <p className="text-foreground/60">
-                  {quizInfo.description}
-                </p>
-              )}
+              <p className="text-foreground/60">
+                Test your knowledge with real exam-style questions
+              </p>
             </div>
 
             {/* Progress Bar */}
             <div className="space-y-2">
               <div className="flex items-center justify-between text-sm text-foreground/60">
                 <span>
-                  Question {currentQuestionIndex + 1} of {questions.length}
+                  Question {currentQuestionIndex + 1} of {questions?.length || 0}
                 </span>
                 <span>
-                  {totalAnswered} / {questions.length} answered
+                  {totalAnswered} / {questions?.length || 0} answered
                 </span>
               </div>
               <div className="h-2 overflow-hidden rounded-full bg-foreground/10">
                 <div
                   className="h-full bg-emerald-500 transition-all"
                   style={{
-                    width: `${((currentQuestionIndex + 1) / questions.length) * 100}%`,
+                    width: `${((currentQuestionIndex + 1) / (questions?.length || 1)) * 100}%`,
                   }}
                 />
               </div>
@@ -347,11 +308,9 @@ export default function DemoPage() {
             <QuestionCard
               question={currentQuestion}
               questionNumber={currentQuestionIndex + 1}
-              totalQuestions={questions.length}
+              totalQuestions={questions?.length || 0}
               onAnswer={handleAnswer}
-              correctAnswers={
-                answers[currentQuestion.id]?.correctOptions || []
-              }
+              correctAnswers={answers[currentQuestion.id]?.correctOptions || []}
               isAnswered={isQuestionAnswered}
             />
 
@@ -370,7 +329,7 @@ export default function DemoPage() {
                 disabled={!isQuestionAnswered}
                 className="rounded-lg border border-border bg-foreground px-6 py-3 font-semibold text-background transition-all hover:bg-foreground/90 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {currentQuestionIndex === questions.length - 1
+                {currentQuestionIndex === (questions?.length || 0) - 1
                   ? "View Results"
                   : "Next Question"}
               </button>
@@ -385,14 +344,12 @@ export default function DemoPage() {
               <h1 className="mb-2 text-3xl font-bold text-foreground">
                 Quiz Complete!
               </h1>
-              <p className="text-foreground/60">
-                Here's how you did
-              </p>
+              <p className="text-foreground/60">Here's how you did</p>
             </div>
 
             <ResultsSummary
               correctAnswers={correctAnswersCount}
-              totalQuestions={questions.length}
+              totalQuestions={questions?.length || 0}
               onTryAgain={handleTryAgain}
             />
           </div>
