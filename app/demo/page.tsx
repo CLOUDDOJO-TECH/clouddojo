@@ -149,21 +149,21 @@ export default function DemoPage() {
   ).length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950">
+    <div className="min-h-screen bg-[#FAFAF9] dark:bg-background">
       {/* Header */}
-      <header className="border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
+      <header className="border-b border-border bg-background/50 backdrop-blur">
         <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             <Link
               href="/"
-              className="flex items-center gap-2 text-gray-600 transition-colors hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400"
+              className="flex items-center gap-2 text-foreground/60 transition-colors hover:text-foreground"
             >
               <ArrowLeft className="h-5 w-5" />
               <span className="font-medium">Back to Home</span>
             </Link>
             <Link
               href="/onboarding"
-              className="rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 px-6 py-2 font-semibold text-white transition-all hover:scale-105 hover:shadow-lg"
+              className="rounded-lg border border-border bg-foreground px-6 py-2 font-semibold text-background transition-all hover:bg-foreground/90"
             >
               Sign Up Free
             </Link>
@@ -177,10 +177,10 @@ export default function DemoPage() {
         {step === "select-provider" && (
           <div className="space-y-8">
             <div className="text-center">
-              <h1 className="mb-4 text-4xl font-bold text-gray-900 dark:text-white">
+              <h1 className="mb-4 text-4xl font-bold text-foreground">
                 Try CloudDojo Free
               </h1>
-              <p className="text-lg text-gray-600 dark:text-gray-400">
+              <p className="text-lg text-foreground/60">
                 Experience real certification practice questions with AI-powered
                 explanations. No signup required.
               </p>
@@ -193,7 +193,7 @@ export default function DemoPage() {
             />
 
             {error && (
-              <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-center text-red-700 dark:border-red-800 dark:bg-red-950 dark:text-red-300">
+              <div className="rounded-lg border border-red-500/20 bg-red-500/10 p-4 text-center text-red-600 dark:text-red-400">
                 {error}
               </div>
             )}
@@ -202,7 +202,7 @@ export default function DemoPage() {
               <button
                 onClick={handleStartQuiz}
                 disabled={loading}
-                className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 px-8 py-4 text-lg font-semibold text-white transition-all hover:scale-105 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-50"
+                className="inline-flex items-center gap-2 rounded-lg border border-border bg-foreground px-8 py-4 text-lg font-semibold text-background transition-all hover:bg-foreground/90 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {loading ? (
                   <>
@@ -212,7 +212,7 @@ export default function DemoPage() {
                 ) : (
                   <>
                     Start Practice Quiz
-                    <span className="rounded-full bg-white/20 px-3 py-1 text-sm">
+                    <span className="rounded-full bg-background/20 px-3 py-1 text-sm">
                       10 Questions
                     </span>
                   </>
@@ -221,16 +221,16 @@ export default function DemoPage() {
             </div>
 
             {/* Features Preview */}
-            <div className="mt-12 rounded-2xl border border-gray-200 bg-white p-8 dark:border-gray-700 dark:bg-gray-800">
-              <h3 className="mb-6 text-center text-xl font-bold text-gray-900 dark:text-white">
+            <div className="mt-12 rounded-2xl border border-border bg-background/50 p-8 backdrop-blur">
+              <h3 className="mb-6 text-center text-xl font-bold text-foreground">
                 What You'll Experience
               </h3>
               <div className="grid gap-6 sm:grid-cols-3">
                 <div className="text-center">
                   <div className="mb-3 flex justify-center">
-                    <div className="rounded-full bg-blue-100 p-4 dark:bg-blue-900">
+                    <div className="rounded-full bg-emerald-500/10 p-4">
                       <svg
-                        className="h-6 w-6 text-blue-600 dark:text-blue-300"
+                        className="h-6 w-6 text-emerald-500"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -244,19 +244,19 @@ export default function DemoPage() {
                       </svg>
                     </div>
                   </div>
-                  <h4 className="mb-2 font-semibold text-gray-900 dark:text-white">
+                  <h4 className="mb-2 font-semibold text-foreground">
                     Real Exam Questions
                   </h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <p className="text-sm text-foreground/60">
                     Actual certification-style questions
                   </p>
                 </div>
 
                 <div className="text-center">
                   <div className="mb-3 flex justify-center">
-                    <div className="rounded-full bg-purple-100 p-4 dark:bg-purple-900">
+                    <div className="rounded-full bg-emerald-500/10 p-4">
                       <svg
-                        className="h-6 w-6 text-purple-600 dark:text-purple-300"
+                        className="h-6 w-6 text-emerald-500"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -270,19 +270,19 @@ export default function DemoPage() {
                       </svg>
                     </div>
                   </div>
-                  <h4 className="mb-2 font-semibold text-gray-900 dark:text-white">
+                  <h4 className="mb-2 font-semibold text-foreground">
                     AI Explanations
                   </h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <p className="text-sm text-foreground/60">
                     Understand why answers are correct
                   </p>
                 </div>
 
                 <div className="text-center">
                   <div className="mb-3 flex justify-center">
-                    <div className="rounded-full bg-green-100 p-4 dark:bg-green-900">
+                    <div className="rounded-full bg-emerald-500/10 p-4">
                       <svg
-                        className="h-6 w-6 text-green-600 dark:text-green-300"
+                        className="h-6 w-6 text-emerald-500"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -296,10 +296,10 @@ export default function DemoPage() {
                       </svg>
                     </div>
                   </div>
-                  <h4 className="mb-2 font-semibold text-gray-900 dark:text-white">
+                  <h4 className="mb-2 font-semibold text-foreground">
                     Instant Feedback
                   </h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <p className="text-sm text-foreground/60">
                     See results and track progress
                   </p>
                 </div>
@@ -313,11 +313,11 @@ export default function DemoPage() {
           <div className="space-y-6">
             {/* Quiz Header */}
             <div className="text-center">
-              <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white">
+              <h1 className="mb-2 text-3xl font-bold text-foreground">
                 {quizInfo?.title || "Practice Quiz"}
               </h1>
               {quizInfo?.description && (
-                <p className="text-gray-600 dark:text-gray-400">
+                <p className="text-foreground/60">
                   {quizInfo.description}
                 </p>
               )}
@@ -325,7 +325,7 @@ export default function DemoPage() {
 
             {/* Progress Bar */}
             <div className="space-y-2">
-              <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
+              <div className="flex items-center justify-between text-sm text-foreground/60">
                 <span>
                   Question {currentQuestionIndex + 1} of {questions.length}
                 </span>
@@ -333,9 +333,9 @@ export default function DemoPage() {
                   {totalAnswered} / {questions.length} answered
                 </span>
               </div>
-              <div className="h-2 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
+              <div className="h-2 overflow-hidden rounded-full bg-foreground/10">
                 <div
-                  className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all"
+                  className="h-full bg-emerald-500 transition-all"
                   style={{
                     width: `${((currentQuestionIndex + 1) / questions.length) * 100}%`,
                   }}
@@ -360,7 +360,7 @@ export default function DemoPage() {
               <button
                 onClick={handlePrevious}
                 disabled={currentQuestionIndex === 0}
-                className="rounded-lg border-2 border-gray-300 bg-white px-6 py-3 font-semibold text-gray-700 transition-all hover:scale-105 hover:border-blue-500 hover:bg-blue-50 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-blue-400 dark:hover:bg-blue-950"
+                className="rounded-lg border border-border bg-background px-6 py-3 font-semibold text-foreground transition-all hover:bg-foreground/5 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Previous
               </button>
@@ -368,7 +368,7 @@ export default function DemoPage() {
               <button
                 onClick={handleNext}
                 disabled={!isQuestionAnswered}
-                className="rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 px-6 py-3 font-semibold text-white transition-all hover:scale-105 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100"
+                className="rounded-lg border border-border bg-foreground px-6 py-3 font-semibold text-background transition-all hover:bg-foreground/90 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {currentQuestionIndex === questions.length - 1
                   ? "View Results"
@@ -382,10 +382,10 @@ export default function DemoPage() {
         {step === "view-results" && (
           <div className="space-y-6">
             <div className="text-center">
-              <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white">
+              <h1 className="mb-2 text-3xl font-bold text-foreground">
                 Quiz Complete!
               </h1>
-              <p className="text-gray-600 dark:text-gray-400">
+              <p className="text-foreground/60">
                 Here's how you did
               </p>
             </div>
