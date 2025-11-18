@@ -39,6 +39,7 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <ClerkProvider appearance={{ baseTheme: dark }}>
+<<<<<<< HEAD
       <trpc.Provider client={trpcClient} queryClient={queryClient}>
         <QueryClientProvider client={queryClient}>
           <ReactQueryDevtools initialIsOpen={false} />
@@ -50,6 +51,17 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
           </AmplitudeProvider>
         </QueryClientProvider>
       </trpc.Provider>
+=======
+      <QueryClientProvider client={queryClient}>
+        {/*<ReactQueryDevtools initialIsOpen={false} />*/}
+        <AmplitudeProvider>
+          <PricingModalProvider>
+            {children}
+            <Toaster />
+          </PricingModalProvider>
+        </AmplitudeProvider>
+      </QueryClientProvider>
+>>>>>>> c92bab7 (working on landing page)
     </ClerkProvider>
   );
 };
