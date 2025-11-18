@@ -73,6 +73,7 @@
     "@react-three/fiber": "^9.3.0",
     "@remixicon/react": "^4.6.0",
     "@seline-analytics/web": "^1.0.1",
+    "@sentry/nextjs": "^10.25.0",
     "@tabler/icons-react": "^3.31.0",
     "@tailwindcss/postcss": "^4.1.4",
     "@tailwindcss/typography": "^0.5.16",
