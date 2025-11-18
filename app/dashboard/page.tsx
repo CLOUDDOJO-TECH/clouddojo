@@ -8,8 +8,11 @@ import PerformanceSection from "@/components/dashboard/performance-section";
 import RecentActivitySection from "@/components/dashboard/recent-activity-section";
 import { useDashboardQueries } from "./hooks/useDashboardQueries";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ChartArea, ChartLineIcon, Zap } from "lucide-react";
+import { ChartArea, ChartLineIcon, Zap, Trophy } from "lucide-react";
 import PremiumAnalysisDashboard from "@/components/ai-report/premium-ai-analysis";
+import { ActivityHeatmap } from "@/components/gamification/activity-heatmap";
+import { StreakDisplay } from "@/components/gamification/streak-display";
+import { DailyGoalCard } from "@/components/gamification/daily-goal-card";
 import { CheckUser } from "@/app/(actions)/user/check-user";
 import React from "react";
 import UpgradeBadge from "@/components/ui/upgrade-badge";
@@ -37,10 +40,14 @@ export default function DashboardPage() {
   });
 
   const initialTab =
-    searchParams.get("tab") === "ai-report" ? "report" : "analytics";
+    searchParams.get("tab") === "ai-report"
+      ? "report"
+      : searchParams.get("tab") === "gamification"
+        ? "gamification"
+        : "analytics";
   // function to update the URL with the selected tab
   const handleTabChange = (value: string) => {
-    const newParams = value === "report" ? "ai-report" : "analytics";
+    const newParams = value === "report" ? "ai-report" : value === "gamification" ? "gamification" : "analytics";
     const url = new URL(window.location.href);
     url.searchParams.set("tab", newParams);
     window.history.pushState({}, "", url);
@@ -86,10 +93,14 @@ export default function DashboardPage() {
         className="w-full"
         onValueChange={handleTabChange}
       >
-        <TabsList className="grid w-full grid-cols-2 ">
+        <TabsList className="grid w-full grid-cols-3 ">
           <TabsTrigger value="analytics" className="flex items-center gap-2">
             <ChartLineIcon className="h-4 w-4" />
             Analytics
+          </TabsTrigger>
+          <TabsTrigger value="gamification" className="flex items-center gap-2">
+            <Trophy className="h-4 w-4" />
+            Progress
           </TabsTrigger>
           <TabsTrigger className="flex items-center gap-3" value="report">
             AI Report
@@ -114,6 +125,18 @@ export default function DashboardPage() {
                 />
               </Suspense>
             </div>
+          </div>
+        </TabsContent>
+        <TabsContent value="gamification">
+          <div className="space-y-6">
+            {/* Top Row: Streak and Daily Goal */}
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+              <StreakDisplay />
+              <DailyGoalCard />
+            </div>
+
+            {/* Activity Heatmap */}
+            <ActivityHeatmap />
           </div>
         </TabsContent>
         <TabsContent value="report">
