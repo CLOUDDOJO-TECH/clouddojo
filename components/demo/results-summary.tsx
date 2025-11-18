@@ -36,40 +36,40 @@ export function ResultsSummary({
   return (
     <div className="w-full space-y-6">
       {/* Score Card */}
-      <div className="overflow-hidden rounded-2xl border border-gray-200 bg-gradient-to-br from-blue-50 to-purple-50 shadow-lg dark:border-gray-700 dark:from-blue-950 dark:to-purple-950">
+      <div className="overflow-hidden rounded-2xl border border-border bg-background/50 backdrop-blur">
         <div className="p-8 text-center">
           <div className="mb-4 flex justify-center">
             <div
-              className={`rounded-full p-4 ${isPassing ? "bg-green-100 dark:bg-green-900" : "bg-orange-100 dark:bg-orange-900"}`}
+              className={`rounded-full p-4 ${isPassing ? "bg-emerald-500/10" : "bg-orange-100 dark:bg-orange-900"}`}
             >
               <Trophy
-                className={`h-12 w-12 ${isPassing ? "text-green-600 dark:text-green-300" : "text-orange-600 dark:text-orange-300"}`}
+                className={`h-12 w-12 ${isPassing ? "text-emerald-500" : "text-orange-600 dark:text-orange-300"}`}
               />
             </div>
           </div>
 
-          <h2 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white">
+          <h2 className="mb-2 text-3xl font-bold text-foreground">
             {getMessage()}
           </h2>
 
           <div className="mb-4">
-            <div className="text-6xl font-bold text-blue-600 dark:text-blue-400">
+            <div className={`text-6xl font-bold ${isPassing ? "text-emerald-500" : "text-orange-600 dark:text-orange-400"}`}>
               {percentage}%
             </div>
-            <p className="mt-2 text-lg text-gray-600 dark:text-gray-400">
+            <p className="mt-2 text-lg text-foreground/60">
               {correctAnswers} out of {totalQuestions} correct
             </p>
           </div>
 
-          <p className="mx-auto max-w-md text-gray-700 dark:text-gray-300">
+          <p className="mx-auto max-w-md text-foreground/80">
             {getMotivation()}
           </p>
         </div>
 
         {/* Progress Bar */}
-        <div className="h-3 bg-gray-200 dark:bg-gray-700">
+        <div className="h-3 bg-foreground/10">
           <div
-            className={`h-full transition-all ${isPassing ? "bg-green-500" : "bg-orange-500"}`}
+            className={`h-full transition-all ${isPassing ? "bg-emerald-500" : "bg-orange-500"}`}
             style={{ width: `${percentage}%` }}
           />
         </div>
@@ -77,43 +77,43 @@ export function ResultsSummary({
 
       {/* Stats Grid */}
       <div className="grid gap-4 sm:grid-cols-3">
-        <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
-          <div className="mb-2 flex items-center gap-2 text-blue-600 dark:text-blue-400">
+        <div className="rounded-xl border border-border bg-background/50 p-6 backdrop-blur">
+          <div className="mb-2 flex items-center gap-2 text-emerald-500">
             <Target className="h-5 w-5" />
             <span className="text-sm font-medium">Accuracy</span>
           </div>
-          <div className="text-2xl font-bold text-gray-900 dark:text-white">
+          <div className="text-2xl font-bold text-foreground">
             {percentage}%
           </div>
         </div>
 
-        <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
-          <div className="mb-2 flex items-center gap-2 text-green-600 dark:text-green-400">
+        <div className="rounded-xl border border-border bg-background/50 p-6 backdrop-blur">
+          <div className="mb-2 flex items-center gap-2 text-emerald-500">
             <TrendingUp className="h-5 w-5" />
             <span className="text-sm font-medium">Correct</span>
           </div>
-          <div className="text-2xl font-bold text-gray-900 dark:text-white">
+          <div className="text-2xl font-bold text-foreground">
             {correctAnswers}/{totalQuestions}
           </div>
         </div>
 
-        <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
-          <div className="mb-2 flex items-center gap-2 text-purple-600 dark:text-purple-400">
+        <div className="rounded-xl border border-border bg-background/50 p-6 backdrop-blur">
+          <div className="mb-2 flex items-center gap-2 text-emerald-500">
             <Clock className="h-5 w-5" />
             <span className="text-sm font-medium">Questions</span>
           </div>
-          <div className="text-2xl font-bold text-gray-900 dark:text-white">
+          <div className="text-2xl font-bold text-foreground">
             {totalQuestions}
           </div>
         </div>
       </div>
 
       {/* CTA Section */}
-      <div className="rounded-2xl border-2 border-blue-200 bg-gradient-to-r from-blue-50 to-purple-50 p-8 dark:border-blue-800 dark:from-blue-950 dark:to-purple-950">
-        <h3 className="mb-3 text-center text-2xl font-bold text-gray-900 dark:text-white">
+      <div className="rounded-2xl border border-border bg-background/50 p-8 backdrop-blur">
+        <h3 className="mb-3 text-center text-2xl font-bold text-foreground">
           Ready to Master Your Certification?
         </h3>
-        <p className="mb-6 text-center text-gray-700 dark:text-gray-300">
+        <p className="mb-6 text-center text-foreground/60">
           Get access to 1000+ practice questions, AI-powered explanations,
           personalized study plans, and detailed progress tracking.
         </p>
@@ -121,13 +121,13 @@ export function ResultsSummary({
         <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
           <Link
             href="/onboarding"
-            className="rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 px-8 py-3 text-center font-semibold text-white transition-all hover:scale-105 hover:shadow-lg"
+            className="rounded-lg border border-border bg-foreground px-8 py-3 text-center font-semibold text-background transition-all hover:bg-foreground/90"
           >
             Sign Up Free
           </Link>
           <button
             onClick={onTryAgain}
-            className="rounded-lg border-2 border-gray-300 bg-white px-8 py-3 font-semibold text-gray-700 transition-all hover:scale-105 hover:border-blue-500 hover:bg-blue-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-blue-400 dark:hover:bg-blue-950"
+            className="rounded-lg border border-border bg-background px-8 py-3 font-semibold text-foreground transition-all hover:bg-foreground/5"
           >
             Try Different Questions
           </button>
@@ -136,49 +136,49 @@ export function ResultsSummary({
 
       {/* Features Highlight */}
       <div className="grid gap-4 sm:grid-cols-2">
-        <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
-          <h4 className="mb-2 font-semibold text-gray-900 dark:text-white">
+        <div className="rounded-xl border border-border bg-background/50 p-6 backdrop-blur">
+          <h4 className="mb-2 font-semibold text-foreground">
             What You'll Get
           </h4>
-          <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+          <ul className="space-y-2 text-sm text-foreground/60">
             <li className="flex items-start gap-2">
-              <span className="text-green-500">✓</span>
+              <span className="text-emerald-500">✓</span>
               <span>1000+ practice questions across all certifications</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-green-500">✓</span>
+              <span className="text-emerald-500">✓</span>
               <span>AI-powered explanations for every answer</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-green-500">✓</span>
+              <span className="text-emerald-500">✓</span>
               <span>Personalized study plans based on your progress</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-green-500">✓</span>
+              <span className="text-emerald-500">✓</span>
               <span>Performance analytics and weak area identification</span>
             </li>
           </ul>
         </div>
 
-        <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
-          <h4 className="mb-2 font-semibold text-gray-900 dark:text-white">
+        <div className="rounded-xl border border-border bg-background/50 p-6 backdrop-blur">
+          <h4 className="mb-2 font-semibold text-foreground">
             Why CloudDojo?
           </h4>
-          <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+          <ul className="space-y-2 text-sm text-foreground/60">
             <li className="flex items-start gap-2">
-              <span className="text-blue-500">★</span>
+              <span className="text-emerald-500">★</span>
               <span>AI chatbot to answer your study questions 24/7</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-blue-500">★</span>
+              <span className="text-emerald-500">★</span>
               <span>Realistic exam simulations with timing</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-blue-500">★</span>
+              <span className="text-emerald-500">★</span>
               <span>Flashcards for quick concept review</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-blue-500">★</span>
+              <span className="text-emerald-500">★</span>
               <span>Track progress and get readiness assessment</span>
             </li>
           </ul>
