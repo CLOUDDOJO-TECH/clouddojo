@@ -65,10 +65,10 @@ export function ProviderSelector({
 }: ProviderSelectorProps) {
   return (
     <div className="w-full">
-      <h2 className="mb-4 text-center text-2xl font-bold text-gray-900 dark:text-white">
+      <h2 className="mb-4 text-center text-2xl font-bold text-foreground">
         Choose Your Certification Path
       </h2>
-      <p className="mb-6 text-center text-gray-600 dark:text-gray-400">
+      <p className="mb-6 text-center text-foreground/60">
         Select a platform to try sample practice questions
       </p>
 
@@ -79,15 +79,15 @@ export function ProviderSelector({
             onClick={() => onProviderChange(provider.id)}
             disabled={disabled}
             className={cn(
-              "relative flex flex-col items-start gap-3 rounded-xl border-2 p-6 text-left transition-all",
-              "hover:scale-105 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-50",
+              "relative flex flex-col items-start gap-3 rounded-xl border p-6 text-left transition-all",
+              "hover:bg-foreground/5 disabled:cursor-not-allowed disabled:opacity-50",
               selectedProvider === provider.id
-                ? "border-blue-500 bg-blue-50 dark:border-blue-400 dark:bg-blue-950"
-                : "border-gray-200 bg-white hover:border-blue-300 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-blue-600"
+                ? "border-emerald-500 bg-emerald-500/10 dark:border-emerald-400"
+                : "border-border bg-background/50 backdrop-blur hover:border-emerald-500/50"
             )}
           >
             {provider.popular && (
-              <span className="absolute -top-2 right-4 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 px-3 py-1 text-xs font-semibold text-white">
+              <span className="absolute -top-2 right-4 rounded-full bg-emerald-500 px-3 py-1 text-xs font-semibold text-white">
                 Popular
               </span>
             )}
@@ -96,8 +96,8 @@ export function ProviderSelector({
               className={cn(
                 "rounded-lg p-3",
                 selectedProvider === provider.id
-                  ? "bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-300"
-                  : "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300"
+                  ? "bg-emerald-500/20 text-emerald-500"
+                  : "bg-foreground/5 text-foreground/60"
               )}
             >
               {provider.icon}
@@ -108,19 +108,19 @@ export function ProviderSelector({
                 className={cn(
                   "text-lg font-semibold",
                   selectedProvider === provider.id
-                    ? "text-blue-700 dark:text-blue-300"
-                    : "text-gray-900 dark:text-white"
+                    ? "text-emerald-500"
+                    : "text-foreground"
                 )}
               >
                 {provider.name}
               </h3>
-              <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+              <p className="mt-1 text-sm text-foreground/60">
                 {provider.description}
               </p>
             </div>
 
             {selectedProvider === provider.id && (
-              <div className="absolute right-4 top-4 flex h-6 w-6 items-center justify-center rounded-full bg-blue-500">
+              <div className="absolute right-4 top-4 flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500">
                 <svg
                   className="h-4 w-4 text-white"
                   fill="none"
