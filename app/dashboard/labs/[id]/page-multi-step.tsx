@@ -6,8 +6,8 @@ import { useAuth } from "@clerk/nextjs";
 import { useParams, useRouter } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
-import { ProjectStepViewer } from "@/components/projects/project-step-viewer";
-import { GuidanceModeExplanation } from "@/components/projects/guidance-mode-explanation";
+import { ProjectStepViewer } from "@/features/projects/components/project-step-viewer";
+import { GuidanceModeExplanation } from "@/features/projects/components/guidance-mode-explanation";
 import { useProjectSteps } from "@/hooks/use-project-steps";
 import {
   ProjectTitle,

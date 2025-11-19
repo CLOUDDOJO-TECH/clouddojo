@@ -14,11 +14,11 @@ import {
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { ExitTestAlert } from "@/components/dashboard/exit-test-alert";
+import { ExitTestAlert } from "@/features/dashboard/components/exit-test-alert";
 
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import FilterComponent from "@/components/dashboard/filter-component";
-import SearchBar from "@/components/dashboard/search-bar";
+import FilterComponent from "@/features/dashboard/components/filter-component";
+import SearchBar from "@/features/dashboard/components/search-bar";
 import Link from "next/link";
 import { GetPracticeTests } from "@/app/(actions)/quiz/get-quizes";
 import prisma from "@/lib/prisma";
@@ -28,7 +28,7 @@ import { cn } from "@/lib/utils";
 import PracticeTestsSkeleton from "./components/PracticeTestsSkeleton";
 import { useRouter } from "next/navigation";
 import { useSubscription } from "@/hooks/use-subscription";
-import PracticeTestCard from "@/components/dashboard/test-card";
+import PracticeTestCard from "@/features/dashboard/components/test-card";
 import UpgradeButton from "@/components/ui/upgrade-button";
 import MainFilters from "./main-filters";
 
