@@ -7,8 +7,9 @@
 
 import { inngest } from "@/inngest/client";
 import { prisma } from "@/lib/prisma";
-import { callGeminiAI } from "@/app/(actions)/ai-analysis/call-gemini";
+import { callAIWithSchema, AISchemas } from "@/lib/ai/call-ai";
 import { formatQuizDataForAI } from "@/inngest/helpers/quiz-data";
+import * as Sentry from "@sentry/nextjs";
 
 export const analyzeRecommendations = inngest.createFunction(
   {
