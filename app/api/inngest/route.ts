@@ -8,37 +8,32 @@
 import { serve } from "inngest/next";
 import { inngest } from "@/inngest/client";
 
-// Import all Inngest functions (we'll add these as we create them)
-// import { analyzeQuizOrchestrator } from "@/inngest/functions/analyze-quiz-orchestrator";
-// import { analyzeCategoryScores } from "@/inngest/functions/analyze-category-scores";
-// import { analyzeTimeEfficiency } from "@/inngest/functions/analyze-time-efficiency";
-// import { analyzeStrengthsWeaknesses } from "@/inngest/functions/analyze-strengths-weaknesses";
-// import { analyzeRecommendations } from "@/inngest/functions/analyze-recommendations";
-// import { analyzeTopicMastery } from "@/inngest/functions/analyze-topic-mastery";
-// import { updateDashboardAnalysis } from "@/inngest/functions/update-dashboard-analysis";
-
-// For now, create a simple test function
-const testFunction = inngest.createFunction(
-  { id: "test-function" },
-  { event: "test/hello" },
-  async ({ event }) => {
-    console.log("Test function executed:", event.data);
-    return { success: true };
-  }
-);
+// Import all Inngest analysis functions
+import { analyzeQuizOrchestrator } from "@/inngest/functions/analyze-quiz-orchestrator";
+import { analyzeCategoryScores } from "@/inngest/functions/analyze-category-scores";
+import { analyzeTimeEfficiency } from "@/inngest/functions/analyze-time-efficiency";
+import { analyzeStrengthsWeaknesses } from "@/inngest/functions/analyze-strengths-weaknesses";
+import { analyzeRecommendations } from "@/inngest/functions/analyze-recommendations";
+import { analyzeTopicMastery } from "@/inngest/functions/analyze-topic-mastery";
+import { updateDashboardAnalysis } from "@/inngest/functions/update-dashboard-analysis";
 
 // Create the serve handler
 export const { GET, POST, PUT } = serve({
   client: inngest,
   functions: [
-    testFunction,
-    // When we create the functions, we'll add them here:
-    // analyzeQuizOrchestrator,
-    // analyzeCategoryScores,
-    // analyzeTimeEfficiency,
-    // analyzeStrengthsWeaknesses,
-    // analyzeRecommendations,
-    // analyzeTopicMastery,
-    // updateDashboardAnalysis,
+    // Main orchestrator
+    analyzeQuizOrchestrator,
+
+    // Free tier analyses
+    analyzeCategoryScores,
+    analyzeTimeEfficiency,
+
+    // Premium tier analyses
+    analyzeStrengthsWeaknesses,
+    analyzeRecommendations,
+    analyzeTopicMastery,
+
+    // Dashboard compilation
+    updateDashboardAnalysis,
   ],
 });
