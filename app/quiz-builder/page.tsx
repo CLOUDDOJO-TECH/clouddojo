@@ -8,7 +8,7 @@ import { trpc } from "@/src/lib/trpc/react";
 import {
   QuizBuilderFilters,
   type QuizFilters,
-} from "@/components/quiz-builder/quiz-builder-filters";
+} from "@/features/quiz/components/quiz-builder-filters";
 
 export default function QuizBuilderPage() {
   const router = useRouter();

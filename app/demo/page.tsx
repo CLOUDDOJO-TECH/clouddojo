@@ -4,9 +4,9 @@ import { useState } from "react";
 import { Loader2, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { trpc } from "@/lib/trpc/react";
-import { ProviderSelector } from "@/components/demo/provider-selector";
-import { QuestionCard, Question } from "@/components/demo/question-card";
-import { ResultsSummary } from "@/components/demo/results-summary";
+import { ProviderSelector } from "@/features/quiz/components/provider-selector";
+import { QuestionCard, Question } from "@/features/quiz/components/question-card";
+import { ResultsSummary } from "@/features/quiz/components/results-summary";
 
 interface AnswerState {
   [questionId: string]: {

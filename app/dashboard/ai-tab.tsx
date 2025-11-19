@@ -1,6 +1,6 @@
 "use client"
 
-import PremiumAnalysisDashboard from "@/components/ai-report/premium-ai-analysis"
+import PremiumAnalysisDashboard from "@/features/ai-analysis/components/premium-ai-analysis"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 
 export default function AITab() {

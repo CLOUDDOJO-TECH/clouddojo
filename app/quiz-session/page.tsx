@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft, Clock, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { trpc } from "@/src/lib/trpc/react";
-import { QuestionCard } from "@/components/demo/question-card";
-import { ResultsSummary } from "@/components/demo/results-summary";
+import { QuestionCard } from "@/features/quiz/components/question-card";
+import { ResultsSummary } from "@/features/quiz/components/results-summary";
 
 interface QuizSession {
   questions: Array<{

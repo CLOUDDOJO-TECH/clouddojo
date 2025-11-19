@@ -4,15 +4,15 @@ import { useUser } from "@clerk/nextjs";
 import { Suspense, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import PerformanceSection from "@/components/dashboard/performance-section";
-import RecentActivitySection from "@/components/dashboard/recent-activity-section";
-import { useDashboardQueries } from "./hooks/useDashboardQueries";
+import PerformanceSection from "@/features/dashboard/components/performance-section";
+import RecentActivitySection from "@/features/dashboard/components/recent-activity-section";
+import { useDashboardQueries } from "@/features/dashboard/hooks/useDashboardQueries";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ChartArea, ChartLineIcon, Zap, Trophy } from "lucide-react";
-import PremiumAnalysisDashboard from "@/components/ai-report/premium-ai-analysis";
-import { ActivityHeatmap } from "@/components/gamification/activity-heatmap";
-import { StreakDisplay } from "@/components/gamification/streak-display";
-import { DailyGoalCard } from "@/components/gamification/daily-goal-card";
+import PremiumAnalysisDashboard from "@/features/ai-analysis/components/premium-ai-analysis";
+import { ActivityHeatmap } from "@/features/gamification/components/activity-heatmap";
+import { StreakDisplay } from "@/features/gamification/components/streak-display";
+import { DailyGoalCard } from "@/features/gamification/components/daily-goal-card";
 import { CheckUser } from "@/app/(actions)/user/check-user";
 import React from "react";
 import UpgradeBadge from "@/components/ui/upgrade-badge";
@@ -20,7 +20,7 @@ import { useSubscription } from "@/hooks/use-subscription";
 import {
   QuizAttemptsSkeleton,
   RecentActivitySkeleton,
-} from "@/components/dashboard/dashboard-loading";
+} from "@/features/dashboard/components/dashboard-loading";
 
 export default function DashboardPage() {
   const { user, isLoaded } = useUser();
