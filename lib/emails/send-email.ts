@@ -6,6 +6,7 @@ import FeedbackThankYouEmail from './feedback-thank-you'
 import FeedbackNotificationEmail from './feedback-notification'
 import CloudDojoAiReportEmail from './drafts/new-report'
 import WelcomeEmail from './drafts/welcome-mail'
+import StreakRiskEmail from './streak-risk-email'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 const ADMIN_EMAIL = 'bonyuglen@gmail.com'
@@ -130,5 +131,57 @@ export async function sendFeedbackEmails({
   } catch (error) {
     console.error('Failed to send feedback emails:', error)
     return { success: false, error }
+  }
+}
+
+/**
+ * Generic send email function for template-based emails
+ */
+interface SendEmailParams {
+  to: string;
+  subject: string;
+  template: "streak-risk" | "welcome" | "analysis" | "feedback-thank-you" | "feedback-notification";
+  data: Record<string, any>;
+}
+
+export async function sendEmail({ to, subject, template, data }: SendEmailParams) {
+  if (!process.env.RESEND_API_KEY) {
+    throw new Error("RESEND_API_KEY is not defined");
+  }
+
+  try {
+    let emailComponent;
+
+    switch (template) {
+      case "streak-risk":
+        emailComponent = StreakRiskEmail(data);
+        break;
+      case "welcome":
+        emailComponent = WelcomeEmail(data);
+        break;
+      case "analysis":
+        emailComponent = CloudDojoAiReportEmail(data);
+        break;
+      case "feedback-thank-you":
+        emailComponent = FeedbackThankYouEmail(data);
+        break;
+      case "feedback-notification":
+        emailComponent = FeedbackNotificationEmail(data);
+        break;
+      default:
+        throw new Error(`Unknown email template: ${template}`);
+    }
+
+    const result = await resend.emails.send({
+      from: "CloudDojo <welcome@clouddojo.tech>",
+      to,
+      subject,
+      react: emailComponent,
+    });
+
+    return { success: true, data: result };
+  } catch (error) {
+    console.error(`Failed to send email (${template}):`, error);
+    return { success: false, error };
   }
 }

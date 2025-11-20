@@ -13,6 +13,7 @@ import PremiumAnalysisDashboard from "@/features/ai-analysis/components/premium-
 import { ActivityHeatmap } from "@/features/gamification/components/activity-heatmap";
 import { StreakDisplay } from "@/features/gamification/components/streak-display";
 import { DailyGoalCard } from "@/features/gamification/components/daily-goal-card";
+import { StreakRiskAlert } from "@/features/gamification/components/streak-risk-alert";
 import { CheckUser } from "@/app/(actions)/user/check-user";
 import React from "react";
 import UpgradeBadge from "@/components/ui/upgrade-badge";
@@ -88,6 +89,9 @@ export default function DashboardPage() {
           Here's an overview of your learning progress.
         </p>
       </div>
+
+      {/* Streak Risk Alert */}
+      <StreakRiskAlert />
 
       <Tabs
         defaultValue={initialTab}
