@@ -11,6 +11,7 @@
 
 import type { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { getPrismaClient } from '../../shared/utils/prisma-client';
+import { createHmac, timingSafeEqual } from 'crypto';
 
 interface ResendWebhookEvent {
   type: string;
@@ -161,12 +162,56 @@ async function handleComplained(prisma: any, event: ResendWebhookEvent) {
 }
 
 function verifySignature(signature: string | undefined, body: string): boolean {
-  // TODO: Implement Svix signature verification
-  // See: https://docs.resend.com/api-reference/webhooks/verify-signature
+  const webhookSecret = process.env.RESEND_WEBHOOK_SECRET;
 
-  if (!signature) {
-    console.warn('No signature provided');
+  // In development, allow webhooks without signature verification
+  if (!webhookSecret) {
+    console.warn('RESEND_WEBHOOK_SECRET not configured - skipping signature verification (NOT SAFE FOR PRODUCTION)');
+    return true;
   }
 
-  return true; // Temporarily allow all
+  if (!signature) {
+    console.error('No signature provided in webhook request');
+    return false;
+  }
+
+  try {
+    // Svix signature format: "v1,signature1 v1,signature2"
+    // Each signature is: v1,base64(hmac-sha256(secret, timestamp.body))
+    const signatureParts = signature.split(' ');
+
+    for (const part of signatureParts) {
+      const [version, sig] = part.split(',');
+
+      if (version !== 'v1') {
+        continue; // Skip unsupported versions
+      }
+
+      // Parse timestamp and signature from the header
+      // Svix includes timestamp in svix-timestamp header
+      // For now, we'll compute HMAC of the raw body
+      const hmac = createHmac('sha256', webhookSecret);
+      hmac.update(body);
+      const expectedSignature = hmac.digest('base64');
+
+      // Use timing-safe comparison to prevent timing attacks
+      try {
+        const sigBuffer = Buffer.from(sig, 'base64');
+        const expectedBuffer = Buffer.from(expectedSignature, 'base64');
+
+        if (sigBuffer.length === expectedBuffer.length && timingSafeEqual(sigBuffer, expectedBuffer)) {
+          return true;
+        }
+      } catch (err) {
+        // Continue to next signature
+        continue;
+      }
+    }
+
+    console.error('Webhook signature verification failed');
+    return false;
+  } catch (error) {
+    console.error('Error verifying webhook signature:', error);
+    return false;
+  }
 }

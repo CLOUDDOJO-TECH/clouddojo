@@ -254,14 +254,21 @@ export const quizRouter = router({
       }
 
       // Calculate score
+      // PERFORMANCE FIX: Batch fetch all questions to avoid N+1 query
+      const questionIds = input.answers.map((a) => a.questionId);
+      const questions = await ctx.prisma.question.findMany({
+        where: { id: { in: questionIds } },
+        include: { options: true },
+      });
+
+      // Create a map for O(1) lookup
+      const questionMap = new Map(questions.map((q) => [q.id, q]));
+
       let correctCount = 0;
       const totalQuestions = input.answers.length;
 
       for (const answer of input.answers) {
-        const question = await ctx.prisma.question.findUnique({
-          where: { id: answer.questionId },
-          include: { options: true },
-        });
+        const question = questionMap.get(answer.questionId);
 
         if (!question) continue;
 

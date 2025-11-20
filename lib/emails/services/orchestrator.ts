@@ -264,10 +264,9 @@ export async function triggerFeatureAdoption(
 
 /**
  * Generate HMAC signature for request authentication
+ * Uses HMAC-SHA256 to sign the email event data
  */
 async function generateSignature(event: EmailEvent): Promise<string> {
-  // TODO: Implement HMAC signature
-  // For now, return a simple hash
   const crypto = await import('crypto');
   return crypto
     .createHmac('sha256', ORCHESTRATOR_SECRET)

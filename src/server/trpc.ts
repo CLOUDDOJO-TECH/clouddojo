@@ -58,6 +58,40 @@ export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
 });
 
 /**
+ * Admin-only procedure
+ * Requires user to be logged in AND have ADMIN or SUPERADMIN role
+ */
+export const adminProcedure = protectedProcedure.use(async ({ ctx, next }) => {
+  // Fetch user from database to check role
+  const user = await ctx.prisma.user.findUnique({
+    where: { userId: ctx.userId },
+    select: { role: true },
+  });
+
+  if (!user) {
+    throw new TRPCError({
+      code: 'UNAUTHORIZED',
+      message: 'User not found',
+    });
+  }
+
+  if (user.role !== 'ADMIN' && user.role !== 'SUPERADMIN') {
+    throw new TRPCError({
+      code: 'FORBIDDEN',
+      message: 'You must be an admin to access this resource',
+    });
+  }
+
+  return next({
+    ctx: {
+      ...ctx,
+      userId: ctx.userId,
+      userRole: user.role, // Add role to context
+    },
+  });
+});
+
+/**
  * Example: Rate limiting middleware (optional)
  * Uncomment and customize as needed
  */

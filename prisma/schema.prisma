@@ -11,7 +11,7 @@ datasource db {
 model User {
   userId                 String               @id @default(uuid())
   email                  String               @unique
-  firstName              String               @unique
+  firstName              String
   lastName               String
   role                   userRole?            @default(BASIC)
   createdAt              DateTime             @default(now())
@@ -674,4 +674,152 @@ model EmailEvent {
   @@index([eventType, processed])
   @@index([userId])
   @@index([createdAt])
+}
+
+// ============================================
+// GAMIFICATION MODELS
+// ============================================
+
+model UserXP {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  totalXP   Int      @default(0)
+  level     Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([totalXP])
+  @@index([level])
+}
+
+model UserStreak {
+  id               String   @id @default(uuid())
+  userId           String   @unique
+  user             User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  currentStreak    Int      @default(0)
+  longestStreak    Int      @default(0)
+  lastActivityDate DateTime @default(now())
+  freezesAvailable Int      @default(0) // Streak freeze power-ups
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([currentStreak])
+  @@index([lastActivityDate])
+}
+
+model UserBadge {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  badgeId    String // Unique identifier for badge type (e.g., "first_quiz", "streak_7")
+  badgeName  String // Display name (e.g., "Quiz Master")
+  badgeTier  String? // "bronze", "silver", "gold", "platinum"
+  unlockedAt DateTime @default(now())
+
+  @@unique([userId, badgeId])
+  @@index([userId])
+  @@index([badgeId])
+}
+
+model XPTransaction {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  amount    Int // Can be positive (earned) or negative (spent)
+  reason    String // "quiz_completed", "daily_login", "achievement_unlocked", etc.
+  metadata  Json? // Additional data about the transaction
+  timestamp DateTime @default(now())
+
+  @@index([userId])
+  @@index([timestamp])
+}
+
+model DailyActivity {
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  date            DateTime @db.Date
+  quizzesCompleted Int     @default(0)
+  projectsWorked  Int      @default(0)
+  xpEarned        Int      @default(0)
+  timeSpentMins   Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([userId, date])
+  @@index([userId])
+  @@index([date])
+}
+
+model LeaderboardEntry {
+  id        String           @id @default(uuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  period    LeaderboardPeriod
+  periodKey String // e.g., "2025-W47" for weekly, "2025-11" for monthly
+  rank      Int
+  score     Int // XP for that period
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  @@unique([userId, period, periodKey])
+  @@index([period, periodKey, rank])
+  @@index([userId])
+}
+
+enum LeaderboardPeriod {
+  DAILY
+  WEEKLY
+  MONTHLY
+  ALL_TIME
+}
+
+model UserGamificationSettings {
+  id                     String   @id @default(uuid())
+  userId                 String   @unique
+  user                   User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  showLeaderboardProfile Boolean  @default(true)
+  showBadges             Boolean  @default(true)
+  enableNotifications    Boolean  @default(true)
+  shareProgress          Boolean  @default(false)
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+}
+
+// ============================================
+// AI ANALYSIS MODELS (PLACEHOLDER - MANAGED BY ANOTHER AGENT)
+// ============================================
+
+model QuizAnalysis {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  quizId    String
+  analysis  Json // AI-generated analysis data
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model DashboardAnalysis {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  analysis  Json // Overall performance analysis
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model TopicMastery {
+  id           String   @id @default(uuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  topic        String
+  masteryLevel Int // 0-100
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([userId, topic])
+  @@index([userId])
 }

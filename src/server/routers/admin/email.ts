@@ -10,12 +10,8 @@
  */
 
 import { z } from 'zod';
-import { router, protectedProcedure } from '../../trpc';
+import { router, adminProcedure } from '../../trpc';
 import { TRPCError } from '@trpc/server';
-
-// TODO: Add admin role check middleware
-// For now, any authenticated user can access
-// In production, add: .use(adminMiddleware)
 
 const emailStatusEnum = z.enum([
   'PENDING',
@@ -50,7 +46,7 @@ export const adminEmailRouter = router({
    * Get email logs with advanced filtering
    * Supports: status, email type, date range, user search, pagination
    */
-  getEmailLogs: protectedProcedure
+  getEmailLogs: adminProcedure
     .input(
       z.object({
         // Filters
@@ -139,7 +135,7 @@ export const adminEmailRouter = router({
   /**
    * Get email analytics and metrics
    */
-  getEmailAnalytics: protectedProcedure
+  getEmailAnalytics: adminProcedure
     .input(
       z.object({
         fromDate: z.date().optional(),
@@ -248,7 +244,7 @@ export const adminEmailRouter = router({
   /**
    * Get template performance metrics
    */
-  getTemplatePerformance: protectedProcedure
+  getTemplatePerformance: adminProcedure
     .input(
       z.object({
         emailType: emailTypeEnum.optional(),
@@ -325,7 +321,7 @@ export const adminEmailRouter = router({
   /**
    * Get user segments
    */
-  getUserSegments: protectedProcedure
+  getUserSegments: adminProcedure
     .input(
       z.object({
         limit: z.number().min(1).max(100).default(50),
@@ -373,7 +369,7 @@ export const adminEmailRouter = router({
   /**
    * Get email templates
    */
-  getTemplates: protectedProcedure.query(async ({ ctx }) => {
+  getTemplates: adminProcedure.query(async ({ ctx }) => {
     const templates = await ctx.prisma.emailTemplate.findMany({
       orderBy: { createdAt: 'desc' },
     });
@@ -384,7 +380,7 @@ export const adminEmailRouter = router({
   /**
    * Update template
    */
-  updateTemplate: protectedProcedure
+  updateTemplate: adminProcedure
     .input(
       z.object({
         id: z.string(),
@@ -410,7 +406,7 @@ export const adminEmailRouter = router({
   /**
    * Create campaign
    */
-  createCampaign: protectedProcedure
+  createCampaign: adminProcedure
     .input(
       z.object({
         name: z.string().min(1),
@@ -438,7 +434,7 @@ export const adminEmailRouter = router({
   /**
    * Get campaigns
    */
-  getCampaigns: protectedProcedure
+  getCampaigns: adminProcedure
     .input(
       z.object({
         status: z.enum(['DRAFT', 'SCHEDULED', 'SENDING', 'SENT', 'CANCELLED']).optional(),
@@ -472,7 +468,7 @@ export const adminEmailRouter = router({
   /**
    * Get single email log details
    */
-  getEmailLogDetails: protectedProcedure
+  getEmailLogDetails: adminProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input, ctx }) => {
       const log = await ctx.prisma.emailLog.findUnique({
@@ -502,7 +498,7 @@ export const adminEmailRouter = router({
   /**
    * Resend failed email
    */
-  resendEmail: protectedProcedure
+  resendEmail: adminProcedure
     .input(z.object({ emailLogId: z.string() }))
     .mutation(async ({ input, ctx }) => {
       const log = await ctx.prisma.emailLog.findUnique({
@@ -537,7 +533,7 @@ export const adminEmailRouter = router({
    * Preview email content
    * Returns rendered HTML for preview
    */
-  previewEmail: protectedProcedure
+  previewEmail: adminProcedure
     .input(
       z.object({
         emailLogId: z.string().optional(),
@@ -603,7 +599,7 @@ export const adminEmailRouter = router({
   /**
    * Bulk resend emails
    */
-  bulkResendEmails: protectedProcedure
+  bulkResendEmails: adminProcedure
     .input(
       z.object({
         emailLogIds: z.array(z.string()).min(1).max(100),
@@ -633,7 +629,7 @@ export const adminEmailRouter = router({
   /**
    * Bulk delete email logs
    */
-  bulkDeleteEmailLogs: protectedProcedure
+  bulkDeleteEmailLogs: adminProcedure
     .input(
       z.object({
         emailLogIds: z.array(z.string()).min(1).max(100),
@@ -658,7 +654,7 @@ export const adminEmailRouter = router({
   /**
    * Export email logs to CSV
    */
-  exportEmailLogs: protectedProcedure
+  exportEmailLogs: adminProcedure
     .input(
       z.object({
         status: emailStatusEnum.optional(),
