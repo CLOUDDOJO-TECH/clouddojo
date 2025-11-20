@@ -155,15 +155,23 @@ async function processEmailEvent(emailEvent: EmailEvent) {
  */
 function mapEventToEmailType(eventType: string): string | null {
   const mapping: Record<string, string> = {
+    // Phase 1 - Transactional
     'user.created': 'welcome',
-    'quiz.completed': 'quiz_milestone',
+    'quiz.completed': 'quiz_basic',
     'quiz.perfect_score': 'perfect_score',
-    'milestone.reached': 'milestone_celebration',
+    'ai_analysis.ready': 'ai_analysis_notification',
+
+    // Phase 1 - Lifecycle
     'user.inactive_3d': 'inactive_3day',
     'user.inactive_7d': 'inactive_7day',
     'user.inactive_14d': 'inactive_14day',
-    'ai_analysis.ready': 'ai_analysis_notification',
-    'feature.unused': 'feature_spotlight',
+
+    // Phase 2 - Behavior-Triggered
+    'quiz.milestone': 'quiz_milestone',
+    'badge.unlocked': 'badge_unlocked',
+    'streak.milestone': 'streak_milestone',
+    'level.up': 'level_up',
+    'feature.adoption': 'feature_adoption',
   };
 
   return mapping[eventType] || null;
@@ -177,16 +185,26 @@ function shouldSendEmail(preferences: any, emailType: string): boolean {
   if (preferences.unsubscribedAll) return false;
 
   const preferenceMapping: Record<string, string> = {
+    // Phase 1 - Transactional
     welcome: 'productUpdates',
-    quiz_milestone: 'milestoneEmails',
+    quiz_basic: 'productUpdates',
     perfect_score: 'milestoneEmails',
-    milestone_celebration: 'milestoneEmails',
+    ai_analysis_notification: 'aiAnalysisNotifs',
+
+    // Phase 1 - Lifecycle
     inactive_3day: 'productUpdates',
     inactive_7day: 'productUpdates',
     inactive_14day: 'productUpdates',
-    ai_analysis_notification: 'aiAnalysisNotifs',
-    feature_spotlight: 'featureUpdates',
     weekly_progress: 'weeklyProgressReport',
+
+    // Phase 2 - Behavior-Triggered
+    quiz_milestone: 'milestoneEmails',
+    badge_unlocked: 'milestoneEmails',
+    streak_milestone: 'milestoneEmails',
+    level_up: 'milestoneEmails',
+    feature_adoption: 'featureUpdates',
+
+    // Marketing
     marketing: 'marketingEmails',
   };
 
@@ -212,16 +230,24 @@ function getFromAddress(emailType: string): string {
  */
 function getSubject(emailType: string, eventData: any): string {
   const subjects: Record<string, string> = {
+    // Phase 1 - Transactional
     welcome: 'Welcome to CloudDojo! 🚀',
-    quiz_milestone: `Great progress, ${eventData.username}! 🎯`,
+    quiz_basic: `Great progress, ${eventData.username}! 🎯`,
     perfect_score: `Perfect Score! You're on fire! 🔥`,
-    milestone_celebration: `${eventData.milestone} Milestone Unlocked! 🎉`,
+    ai_analysis_notification: `Your AI Analysis is Ready! 📊`,
+
+    // Phase 1 - Lifecycle
     inactive_3day: `We miss you! Come back and practice 📚`,
     inactive_7day: `Your progress is waiting for you 💪`,
     inactive_14day: `Last chance to continue your journey 🎓`,
-    ai_analysis_notification: `Your AI Analysis is Ready! 📊`,
-    feature_spotlight: `Unlock this powerful feature 💡`,
     weekly_progress: 'Your Weekly Progress Report 📈',
+
+    // Phase 2 - Behavior-Triggered
+    quiz_milestone: `${eventData.quizCount} Quizzes Completed! 🎯`,
+    badge_unlocked: `Badge Unlocked: ${eventData.badgeName}! 🏆`,
+    streak_milestone: `${eventData.currentStreak}-Day Streak! 🔥`,
+    level_up: `Level Up! You're now Level ${eventData.newLevel}! ⚡`,
+    feature_adoption: `Unlock ${eventData.featureName} - You're Missing Out! 💡`,
   };
 
   return subjects[emailType] || 'CloudDojo Update';
@@ -231,8 +257,8 @@ function getSubject(emailType: string, eventData: any): string {
  * Get priority based on email type
  */
 function getPriority(emailType: string): 'high' | 'normal' | 'low' {
-  const highPriority = ['welcome', 'ai_analysis_notification'];
-  const lowPriority = ['marketing', 'weekly_progress'];
+  const highPriority = ['welcome', 'ai_analysis_notification', 'perfect_score'];
+  const lowPriority = ['marketing', 'weekly_progress', 'feature_adoption'];
 
   if (highPriority.includes(emailType)) return 'high';
   if (lowPriority.includes(emailType)) return 'low';

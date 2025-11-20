@@ -128,6 +128,140 @@ export async function triggerAIAnalysisReady(
   });
 }
 
+// ============================================
+// PHASE 2: BEHAVIOR-TRIGGERED EMAILS
+// ============================================
+
+/**
+ * Helper: Trigger quiz milestone email (10, 25, 50, 100 quizzes)
+ */
+export async function triggerQuizMilestoneEmail(
+  userId: string,
+  quizCount: number,
+  totalScore: number,
+  averageScore: number,
+  nextMilestone: number,
+  topCategory?: string
+) {
+  // Only trigger on milestones
+  const milestones = [10, 25, 50, 100];
+  if (!milestones.includes(quizCount)) {
+    return { success: false, reason: 'Not a milestone quiz count' };
+  }
+
+  return triggerEmail({
+    eventType: 'quiz.milestone',
+    userId,
+    eventData: {
+      quizCount,
+      totalScore,
+      averageScore,
+      nextMilestone,
+      topCategory,
+    },
+  });
+}
+
+/**
+ * Helper: Trigger badge unlocked email
+ */
+export async function triggerBadgeUnlocked(
+  userId: string,
+  badgeName: string,
+  badgeDescription: string,
+  badgeIcon: string,
+  badgeTier: string,
+  totalBadges: number,
+  nextBadge?: string
+) {
+  return triggerEmail({
+    eventType: 'badge.unlocked',
+    userId,
+    eventData: {
+      badgeName,
+      badgeDescription,
+      badgeIcon,
+      badgeTier,
+      totalBadges,
+      nextBadge,
+    },
+  });
+}
+
+/**
+ * Helper: Trigger streak milestone email (7, 14, 30, 100 days)
+ */
+export async function triggerStreakMilestone(
+  userId: string,
+  currentStreak: number,
+  longestStreak: number,
+  streakFreezes: number,
+  totalXP: number
+) {
+  // Only trigger on milestones
+  const milestones = [7, 14, 30, 100];
+  if (!milestones.includes(currentStreak)) {
+    return { success: false, reason: 'Not a streak milestone' };
+  }
+
+  return triggerEmail({
+    eventType: 'streak.milestone',
+    userId,
+    eventData: {
+      currentStreak,
+      longestStreak,
+      streakFreezes,
+      totalXP,
+    },
+  });
+}
+
+/**
+ * Helper: Trigger level up email
+ */
+export async function triggerLevelUp(
+  userId: string,
+  newLevel: number,
+  totalXP: number,
+  xpToNextLevel: number,
+  unlockedFeatures?: string[]
+) {
+  return triggerEmail({
+    eventType: 'level.up',
+    userId,
+    eventData: {
+      newLevel,
+      totalXP,
+      xpToNextLevel,
+      unlockedFeatures,
+    },
+  });
+}
+
+/**
+ * Helper: Trigger feature adoption nudge
+ */
+export async function triggerFeatureAdoption(
+  userId: string,
+  featureName: string,
+  featureDescription: string,
+  featureBenefits: string[],
+  featureIcon: string,
+  ctaUrl: string
+) {
+  return triggerEmail({
+    eventType: 'feature.adoption',
+    userId,
+    eventData: {
+      featureName,
+      featureDescription,
+      featureBenefits,
+      featureIcon,
+      ctaUrl,
+    },
+  });
+}
+
 /**
  * Generate HMAC signature for request authentication
  */
