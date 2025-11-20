@@ -21,6 +21,7 @@ import {
   QuizAttemptsSkeleton,
   RecentActivitySkeleton,
 } from "@/features/dashboard/components/dashboard-loading";
+import { DashboardAISummary } from "@/features/ai-analysis/components/DashboardAISummary";
 
 export default function DashboardPage() {
   const { user, isLoaded } = useUser();
@@ -117,6 +118,9 @@ export default function DashboardPage() {
                   isLoading={isLoadingPerformance}
                 />
               </Suspense>
+
+              {/* AI Insights Summary */}
+              {hasAttempts && <DashboardAISummary />}
 
               <Suspense fallback={<RecentActivitySkeleton />}>
                 <RecentActivitySection
