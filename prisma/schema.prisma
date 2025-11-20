@@ -682,3 +682,15 @@ enum AchievementType {
   STREAK
   CATEGORY_EXPERT
 }
+
+// Demo lead capture for email marketing
+model DemoLead {
+  id             String   @id @default(uuid())
+  email          String   @unique
+  score          Int
+  totalQuestions Int
+  percentage     Int
+  provider       String?
+  createdAt      DateTime @default(now())
+  convertedToUser Boolean @default(false)
+}
