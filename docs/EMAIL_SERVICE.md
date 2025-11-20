@@ -242,13 +242,23 @@ await triggerWelcomeEmail(user.id, user.email, user.firstName);
 | **7-Day Inactive** | Daily 2 PM | `productUpdates` | Re-engagement |
 | **14-Day Inactive** | Daily 2 PM | `productUpdates` | Last chance |
 
-### Future Email Types (Phase 2+)
+### Phase 2: Behavior-Triggered Emails ✅
+
+| Email Type | Event Trigger | Preference Key | Description |
+|------------|--------------|----------------|-------------|
+| **Quiz Milestone** | `quiz.milestone` | `milestoneEmails` | 10, 25, 50, 100 quizzes |
+| **Badge Unlocked** | `badge.unlocked` | `milestoneEmails` | Badge celebration |
+| **Streak Milestone** | `streak.milestone` | `milestoneEmails` | 7, 14, 30, 100 day streaks |
+| **Level Up** | `level.up` | `milestoneEmails` | XP level progression |
+| **Feature Adoption** | `feature.adoption` | `featureUpdates` | Feature nudge emails |
+
+### Future Email Types (Phase 3+)
 
 - Monthly Certification Readiness
 - Feature Spotlight
 - Upgrade Nudges
-- Celebration Emails (badges, streaks)
 - Social Emails (leaderboard position)
+- Personalized learning paths
 
 ---
 
@@ -465,12 +475,17 @@ Add manually:
 
 ## Future Phases
 
-### Phase 2: Event-Driven Emails (Weeks 3-4)
+### Phase 2: Behavior-Triggered Emails (Weeks 3-4) ✅ COMPLETE
 
-- [ ] Quiz milestones (5, 10, 25, 50, 100 quizzes)
-- [ ] Feature adoption nudges
-- [ ] Badge unlocked celebrations
-- [ ] Streak milestones
+- [x] Quiz milestones (10, 25, 50, 100 quizzes)
+- [x] Feature adoption nudges
+- [x] Badge unlocked celebrations
+- [x] Streak milestones (7, 14, 30, 100 days)
+- [x] Level up emails
+- [x] Gamification router with email triggers
+- [x] Analysis router with email triggers
+
+See `PHASE_2_SUMMARY.md` for complete details.
 
 ### Phase 3: Admin Dashboard (Weeks 5-6)
 
