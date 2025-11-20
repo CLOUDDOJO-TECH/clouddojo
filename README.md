@@ -9,7 +9,7 @@
 
 ---
 
-## 🚀 **Core Features**
+##  **Core Features**
 
 ### 1. **Simulated Certification Exams**
    - Practice with **realistic AWS certification exams** that mimic the actual test environment.
