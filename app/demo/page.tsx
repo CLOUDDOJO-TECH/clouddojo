@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Loader2, ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { trpc } from "@/lib/trpc/react";
+import { trpc } from "@/src/lib/trpc/react";
 import { ProviderSelector } from "@/components/demo/provider-selector";
 import { QuestionCard, Question } from "@/components/demo/question-card";
 import { ResultsSummary } from "@/components/demo/results-summary";
@@ -42,7 +42,7 @@ export default function DemoPage() {
       enabled: shouldFetchQuestions, // Only fetch when user clicks "Start Quiz"
       refetchOnWindowFocus: false,
       retry: 1,
-    }
+    },
   );
 
   // ✅ tRPC Mutation - Fully type-safe!
@@ -64,7 +64,13 @@ export default function DemoPage() {
 
   const handleProviderSelect = (provider: string) => {
     setSelectedProvider(
-      provider as "AWS" | "Azure" | "GCP" | "Kubernetes" | "Terraform" | "Docker"
+      provider as
+        | "AWS"
+        | "Azure"
+        | "GCP"
+        | "Kubernetes"
+        | "Terraform"
+        | "Docker",
     );
   };
 
@@ -75,7 +81,10 @@ export default function DemoPage() {
     setStep("taking-quiz");
   };
 
-  const handleAnswer = async (questionId: string, selectedOptionIds: string[]) => {
+  const handleAnswer = async (
+    questionId: string,
+    selectedOptionIds: string[],
+  ) => {
     // ✅ Use tRPC mutation - auto type-checked!
     verifyMutation.mutate({
       questionId,
@@ -105,11 +114,15 @@ export default function DemoPage() {
   };
 
   const currentQuestion = questions?.[currentQuestionIndex];
-  const isQuestionAnswered = currentQuestion ? !!answers[currentQuestion.id] : false;
+  const isQuestionAnswered = currentQuestion
+    ? !!answers[currentQuestion.id]
+    : false;
 
   // Calculate results
   const totalAnswered = Object.keys(answers).length;
-  const correctAnswersCount = Object.values(answers).filter((a) => a.isCorrect).length;
+  const correctAnswersCount = Object.values(answers).filter(
+    (a) => a.isCorrect,
+  ).length;
 
   return (
     <div className="min-h-screen bg-[#FAFAF9] dark:bg-background">
@@ -288,7 +301,8 @@ export default function DemoPage() {
             <div className="space-y-2">
               <div className="flex items-center justify-between text-sm text-foreground/60">
                 <span>
-                  Question {currentQuestionIndex + 1} of {questions?.length || 0}
+                  Question {currentQuestionIndex + 1} of{" "}
+                  {questions?.length || 0}
                 </span>
                 <span>
                   {totalAnswered} / {questions?.length || 0} answered
