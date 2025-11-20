@@ -531,4 +531,292 @@ export const adminEmailRouter = router({
         emailLog: updatedLog,
       };
     }),
+
+  /**
+   * Preview email content
+   * Returns rendered HTML for preview
+   */
+  previewEmail: protectedProcedure
+    .input(
+      z.object({
+        emailLogId: z.string().optional(),
+        emailType: emailTypeEnum.optional(),
+        templateData: z.record(z.any()).optional(),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      const { emailLogId, emailType, templateData } = input;
+
+      let emailData: any = {};
+      let type: string;
+
+      if (emailLogId) {
+        // Preview existing email
+        const log = await ctx.prisma.emailLog.findUnique({
+          where: { id: emailLogId },
+          include: {
+            user: {
+              select: {
+                firstName: true,
+                lastName: true,
+                email: true,
+              },
+            },
+          },
+        });
+
+        if (!log) {
+          throw new TRPCError({
+            code: 'NOT_FOUND',
+            message: 'Email log not found',
+          });
+        }
+
+        type = log.emailType;
+        emailData = {
+          ...(log.metadata as any),
+          username: log.user?.firstName || 'User',
+          email: log.to,
+        };
+      } else if (emailType && templateData) {
+        // Preview new email with custom data
+        type = emailType;
+        emailData = templateData;
+      } else {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'Either emailLogId or emailType+templateData must be provided',
+        });
+      }
+
+      // Get fallback HTML template (same as queue processor)
+      const htmlContent = getFallbackTemplate(type, emailData);
+
+      return {
+        htmlContent,
+        emailType: type,
+        subject: getSubjectForEmailType(type, emailData),
+      };
+    }),
+
+  /**
+   * Bulk resend emails
+   */
+  bulkResendEmails: protectedProcedure
+    .input(
+      z.object({
+        emailLogIds: z.array(z.string()).min(1).max(100),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const { emailLogIds } = input;
+
+      // Update all emails to pending
+      const result = await ctx.prisma.emailLog.updateMany({
+        where: {
+          id: { in: emailLogIds },
+          status: { in: ['FAILED', 'BOUNCED'] }, // Only resend failed/bounced
+        },
+        data: {
+          status: 'PENDING',
+        },
+      });
+
+      return {
+        success: true,
+        message: `${result.count} emails queued for resending`,
+        count: result.count,
+      };
+    }),
+
+  /**
+   * Bulk delete email logs
+   */
+  bulkDeleteEmailLogs: protectedProcedure
+    .input(
+      z.object({
+        emailLogIds: z.array(z.string()).min(1).max(100),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const { emailLogIds } = input;
+
+      const result = await ctx.prisma.emailLog.deleteMany({
+        where: {
+          id: { in: emailLogIds },
+        },
+      });
+
+      return {
+        success: true,
+        message: `${result.count} email logs deleted`,
+        count: result.count,
+      };
+    }),
+
+  /**
+   * Export email logs to CSV
+   */
+  exportEmailLogs: protectedProcedure
+    .input(
+      z.object({
+        status: emailStatusEnum.optional(),
+        emailType: emailTypeEnum.optional(),
+        fromDate: z.date().optional(),
+        toDate: z.date().optional(),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      const { status, emailType, fromDate, toDate } = input;
+
+      const where: any = {};
+      if (status) where.status = status;
+      if (emailType) where.emailType = emailType;
+      if (fromDate || toDate) {
+        where.createdAt = {};
+        if (fromDate) where.createdAt.gte = fromDate;
+        if (toDate) where.createdAt.lte = toDate;
+      }
+
+      const logs = await ctx.prisma.emailLog.findMany({
+        where,
+        include: {
+          user: {
+            select: {
+              userId: true,
+              email: true,
+              firstName: true,
+              lastName: true,
+            },
+          },
+        },
+        orderBy: { createdAt: 'desc' },
+        take: 1000, // Limit export to 1000 records
+      });
+
+      // Convert to CSV format
+      const csvRows = [
+        [
+          'ID',
+          'Email Type',
+          'Status',
+          'Recipient',
+          'User Name',
+          'Subject',
+          'Sent At',
+          'Opened At',
+          'Clicked At',
+          'Created At',
+        ],
+      ];
+
+      logs.forEach((log) => {
+        csvRows.push([
+          log.id,
+          log.emailType,
+          log.status,
+          log.to,
+          `${log.user?.firstName || ''} ${log.user?.lastName || ''}`.trim(),
+          log.subject || '',
+          log.sentAt?.toISOString() || '',
+          log.openedAt?.toISOString() || '',
+          log.clickedAt?.toISOString() || '',
+          log.createdAt.toISOString(),
+        ]);
+      });
+
+      const csvContent = csvRows.map((row) => row.map(escapeCSV).join(',')).join('\n');
+
+      return {
+        csvContent,
+        totalRecords: logs.length,
+      };
+    }),
 });
+
+/**
+ * Helper: Get fallback HTML template
+ */
+function getFallbackTemplate(emailType: string, data: Record<string, any>): string {
+  // Simplified fallback templates for preview
+  const templates: Record<string, string> = {
+    welcome: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <h1 style="color: #6366f1;">Welcome to CloudDojo, ${data.username}! 🚀</h1>
+        <p>We're excited to have you on board!</p>
+        <a href="https://clouddojo.tech/dashboard" style="display: inline-block; background: #6366f1; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px;">Get Started</a>
+      </div>
+    `,
+    quiz_milestone: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="background: linear-gradient(135deg, #8b5cf6, #6366f1); padding: 40px; border-radius: 12px; text-align: center; color: white;">
+          <h1>🎯 ${data.quizCount} Quizzes Completed!</h1>
+          <p style="font-size: 18px;">You're unstoppable, ${data.username}!</p>
+        </div>
+        <div style="background: white; padding: 32px; margin-top: 24px;">
+          <p><strong>Average Score:</strong> ${data.averageScore}%</p>
+          <p><strong>Next Milestone:</strong> ${data.nextMilestone} quizzes</p>
+        </div>
+      </div>
+    `,
+    badge_unlocked: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #0f172a; padding: 20px;">
+        <div style="background: linear-gradient(135deg, #eab308, #f59e0b); padding: 40px; border-radius: 12px; text-align: center;">
+          <div style="font-size: 64px;">${data.badgeIcon || '🏆'}</div>
+          <h1 style="color: #0f172a;">Badge Unlocked!</h1>
+          <p style="font-size: 24px; font-weight: bold; color: #0f172a;">${data.badgeName}</p>
+        </div>
+      </div>
+    `,
+    streak_milestone: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="background: linear-gradient(135deg, #f59e0b, #ef4444); padding: 40px; border-radius: 12px; text-align: center; color: white;">
+          <div style="font-size: 64px;">🔥</div>
+          <h1>${data.currentStreak}-Day Streak!</h1>
+          <p style="font-size: 18px;">You're on fire, ${data.username}!</p>
+        </div>
+      </div>
+    `,
+    level_up: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="background: linear-gradient(135deg, #6366f1, #8b5cf6); padding: 40px; border-radius: 12px; text-align: center; color: white;">
+          <div style="width: 100px; height: 100px; background: white; border-radius: 50%; margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; font-size: 48px; font-weight: bold; color: #6366f1;">${data.newLevel}</div>
+          <h1>Level Up! ⚡</h1>
+          <p style="font-size: 18px;">You're now Level ${data.newLevel}, ${data.username}!</p>
+        </div>
+      </div>
+    `,
+  };
+
+  return templates[emailType] || `<p>Preview not available for ${emailType}</p>`;
+}
+
+/**
+ * Helper: Get subject line for email type
+ */
+function getSubjectForEmailType(emailType: string, data: Record<string, any>): string {
+  const subjects: Record<string, string> = {
+    welcome: 'Welcome to CloudDojo!',
+    quiz_milestone: `${data.quizCount} Quizzes Completed! 🎯`,
+    badge_unlocked: `Badge Unlocked: ${data.badgeName}! 🏆`,
+    streak_milestone: `${data.currentStreak}-Day Streak! 🔥`,
+    level_up: `Level Up! You're now Level ${data.newLevel}! ⚡`,
+    perfect_score: 'Perfect Score! 🔥',
+    feature_adoption: `Unlock ${data.featureName} - You're Missing Out! 💡`,
+  };
+
+  return subjects[emailType] || `CloudDojo Email - ${emailType}`;
+}
+
+/**
+ * Helper: Escape CSV values
+ */
+function escapeCSV(value: string): string {
+  if (value === null || value === undefined) return '';
+  const stringValue = String(value);
+  // Escape quotes and wrap in quotes if contains comma, quote, or newline
+  if (stringValue.includes(',') || stringValue.includes('"') || stringValue.includes('\n')) {
+    return `"${stringValue.replace(/"/g, '""')}"`;
+  }
+  return stringValue;
+}
