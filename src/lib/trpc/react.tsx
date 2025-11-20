@@ -5,14 +5,14 @@
  * Import `trpc` from here to use in your components.
  */
 
-'use client';
+"use client";
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { httpBatchLink } from '@trpc/client';
-import { createTRPCReact } from '@trpc/react-query';
-import { useState } from 'react';
-import superjson from 'superjson';
-import type { AppRouter } from '@/server/routers/_app';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { httpBatchLink } from "@trpc/client";
+import { createTRPCReact } from "@trpc/react-query";
+import { useState } from "react";
+import superjson from "superjson";
+import type { AppRouter } from "@/src/server/routers/_app";
 
 // Create tRPC React hooks
 export const trpc = createTRPCReact<AppRouter>();
@@ -31,18 +31,18 @@ export function TRPCProvider({ children }: { children: React.ReactNode }) {
             refetchOnWindowFocus: false,
           },
         },
-      })
+      }),
   );
 
   const [trpcClient] = useState(() =>
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: '/api/trpc',
+          url: "/api/trpc",
           transformer: superjson,
         }),
       ],
-    })
+    }),
   );
 
   return (

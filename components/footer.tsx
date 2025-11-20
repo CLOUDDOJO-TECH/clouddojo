@@ -6,29 +6,25 @@ import { Input } from "@/components/ui/input";
 import { Logo } from "@/components/logo";
 
 const enterpriseLinks = [
-  { href: "#", label: "About" },
-  { href: "#", label: "Customers" },
-  { href: "#", label: "Enterprise" },
-  { href: "#", label: "Partners" },
-  { href: "#", label: "Jobs" },
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact Sales" },
+  { href: "/pricing", label: "Pricing" },
+  { href: "/blog", label: "Blog" },
 ];
 
 const productLinks = [
-  { href: "#", label: "Security" },
-  { href: "#", label: "Customization" },
-  { href: "#", label: "Enterprise" },
-  { href: "#", label: "Partners" },
+  { href: "/features", label: "Features" },
+  { href: "/demo", label: "Demo" },
+  { href: "/dashboard", label: "Dashboard" },
+  { href: "/pricing", label: "Pricing" },
 ];
 
 const docsLinks = [
-  { href: "#", label: "Introduction" },
-  { href: "#", label: "Installation" },
-  { href: "#", label: "Utils" },
-  { href: "#", label: "Principles" },
-  { href: "#", label: "Jargon" },
-  { href: "#", label: "Plugin" },
-  { href: "#", label: "Customizer" },
-  { href: "#", label: "Boilerplates" },
+  { href: "/about", label: "About" },
+  { href: "/features", label: "Features" },
+  { href: "/blog", label: "Blog" },
+  { href: "/demo", label: "Try Demo" },
+  { href: "/contact", label: "Contact" },
 ];
 
 const communityLinks = [
@@ -40,15 +36,15 @@ const communityLinks = [
 
 const footerLinks = [
   {
-    name: "Enterprise",
+    name: "Company",
     links: enterpriseLinks,
   },
   {
-    name: "Product",
+    name: "Platform",
     links: productLinks,
   },
   {
-    name: "Docs",
+    name: "Resources",
     links: docsLinks,
   },
 ];
@@ -183,13 +179,21 @@ export default function Footer() {
           </div>
         </div>
         <div className="bg-muted mt-16 flex items-center justify-between rounded-md p-4 px-6 py-3">
-          <span>&copy; tailus 2021 - Present</span>
-          <Link
-            href="#"
-            className="text-muted-foreground hover:text-primary text-sm"
-          >
-            Licence
-          </Link>
+          <span>&copy; CloudDojo 2025 - Present</span>
+          <div className="flex gap-4">
+            <Link
+              href="/privacy"
+              className="text-muted-foreground hover:text-primary text-sm"
+            >
+              Privacy
+            </Link>
+            <Link
+              href="/tos"
+              className="text-muted-foreground hover:text-primary text-sm"
+            >
+              Terms
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
