@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { QuizWithRelations } from "../../../dashboard/practice/types";
 import { triggerQuizAnalysis } from "@/app/(actions)/ai-analysis/trigger-quiz-analysis";
+import { recordUserActivity } from "@/lib/gamification/record-activity";
 
 interface SaveQuizAttemptParams {
   quiz: QuizWithRelations;
@@ -110,6 +111,28 @@ export async function SaveQuizAttempt({ quiz, answers, timeTaken, score }: SaveQ
     } catch (analysisError) {
       // Don't fail quiz save if analysis trigger fails
       console.error("Failed to trigger AI analysis:", analysisError);
+    }
+
+    // Record gamification activity (streaks, XP, daily goals)
+    try {
+      // Calculate XP based on performance
+      const baseXP = 10; // Base XP per quiz
+      const bonusXP = Math.floor((percentageScore / 100) * 20); // Up to 20 bonus XP for perfect score
+      const totalXP = baseXP + bonusXP;
+
+      await recordUserActivity({
+        userId,
+        type: "quiz",
+        xpAwarded: totalXP,
+        metadata: {
+          quizId: quiz.id,
+          questionsAnswered: quiz.questions.length,
+          timeTaken,
+        },
+      });
+    } catch (gamificationError) {
+      // Don't fail quiz save if gamification fails
+      console.error("Failed to record gamification activity:", gamificationError);
     }
 
     return {

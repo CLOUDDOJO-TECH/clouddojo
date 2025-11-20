@@ -3,6 +3,7 @@
 import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
 import { triggerQuizAnalysis } from "@/app/(actions)/ai-analysis/trigger-quiz-analysis";
+import { recordUserActivity } from "@/lib/gamification/record-activity";
 import type { ExperienceLevel, CloudPlatform } from "@/app/activation/types";
 
 interface ActivationQuizData {
@@ -123,6 +124,26 @@ export async function saveActivationQuizAttempt(data: ActivationQuizData) {
     } catch (analysisError) {
       console.error("Failed to trigger AI analysis for activation quiz:", analysisError);
       // Don't fail the whole operation if analysis fails
+    }
+
+    // Record gamification activity (activation quiz counts for streaks/XP)
+    try {
+      const baseXP = 10;
+      const bonusXP = Math.floor((data.score / 100) * 20);
+      const totalXP = baseXP + bonusXP;
+
+      await recordUserActivity({
+        userId,
+        type: "quiz",
+        xpAwarded: totalXP,
+        metadata: {
+          quizId: quiz.id,
+          questionsAnswered: data.questionIds.length,
+        },
+      });
+    } catch (gamificationError) {
+      console.error("Failed to record gamification activity for activation quiz:", gamificationError);
+      // Don't fail the whole operation if gamification fails
     }
 
     return {
