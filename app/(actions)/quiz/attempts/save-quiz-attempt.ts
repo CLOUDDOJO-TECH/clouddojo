@@ -3,6 +3,7 @@
 import prisma from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { QuizWithRelations } from "../../../dashboard/practice/types";
+import { triggerQuizAnalysis } from "@/app/(actions)/ai-analysis/trigger-quiz-analysis";
 
 interface SaveQuizAttemptParams {
   quiz: QuizWithRelations;
@@ -101,6 +102,14 @@ export async function SaveQuizAttempt({ quiz, answers, timeTaken, score }: SaveQ
           attempts: 1
         }
       });
+    }
+
+    // Trigger AI analysis in background (non-blocking)
+    try {
+      await triggerQuizAnalysis(quizAttempt.id);
+    } catch (analysisError) {
+      // Don't fail quiz save if analysis trigger fails
+      console.error("Failed to trigger AI analysis:", analysisError);
     }
 
     return {
