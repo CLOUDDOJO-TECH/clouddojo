@@ -1,6 +1,6 @@
 import { User } from "@prisma/client";
 import Link from "next/link";
-import { Upload, Plus, FolderKanban } from "lucide-react";
+import { Upload, Plus, FolderKanban, Mail } from "lucide-react";
 
 interface AdminClientProps {
   user: Pick<User, "userId" | "email" | "firstName" | "lastName" | "role">;
@@ -54,6 +54,22 @@ export default function AdminClient({ user }: AdminClientProps) {
               </p>
               <div className="w-full bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 transition-colors text-center">
                 Upload Now
+              </div>
+            </div>
+          </Link>
+
+          {/* Email Management Card */}
+          <Link href="/dashboard/admin/emails">
+            <div className="rounded-lg border bg-card p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer h-full">
+              <div className="flex items-center gap-2 mb-2">
+                <Mail className="h-5 w-5 text-primary" />
+                <h3 className="font-semibold text-lg">Email System</h3>
+              </div>
+              <p className="text-sm text-muted-foreground mb-4">
+                Manage emails, campaigns, and templates
+              </p>
+              <div className="w-full bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 transition-colors text-center">
+                Manage Emails
               </div>
             </div>
           </Link>
