@@ -51,6 +51,7 @@ export interface ResultsProps {
   answers: Record<string, string[]>;
   markedQuestions: string[];
   timeTaken: number;
+  quizAttemptId: string | null;
   onRestart: () => void;
   onReview: () => void;
 } 

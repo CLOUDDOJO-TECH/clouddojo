@@ -23,7 +23,167 @@ const providerEnum = z.enum([
 
 const questionModeEnum = z.enum(['practice', 'timed', 'exam']);
 
+const difficultyEnum = z.enum(['BEGINER', 'INTERMEDIATE', 'ADVANCED', 'EXPERT']);
+
 export const quizRouter = router({
+  /**
+   * PUBLIC: Get available topics/categories for a provider
+   * Used in quiz builder filter dropdown
+   */
+  getTopics: publicProcedure
+    .input(
+      z.object({
+        provider: providerEnum,
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      // Get unique categories from quizzes for this provider
+      const categories = await ctx.prisma.category.findMany({
+        where: {
+          quizzes: {
+            some: {
+              providers: {
+                has: input.provider,
+              },
+              isPublic: true,
+            },
+          },
+        },
+        select: {
+          id: true,
+          name: true,
+          description: true,
+        },
+        orderBy: {
+          name: 'asc',
+        },
+      });
+
+      return categories;
+    }),
+
+  /**
+   * PUBLIC: Get available AWS services for filtering
+   * Returns unique service names from questions
+   */
+  getServices: publicProcedure
+    .input(
+      z.object({
+        provider: providerEnum,
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      // Get unique services from questions
+      const services = await ctx.prisma.question.findMany({
+        where: {
+          quiz: {
+            providers: {
+              has: input.provider,
+            },
+            isPublic: true,
+          },
+          awsService: {
+            not: null,
+          },
+        },
+        select: {
+          awsService: true,
+        },
+        distinct: ['awsService'],
+        orderBy: {
+          awsService: 'asc',
+        },
+      });
+
+      return services
+        .filter((s: { awsService: string | null }) => s.awsService !== null)
+        .map((s: { awsService: string | null }) => s.awsService as string);
+    }),
+
+  /**
+   * PUBLIC: Get filtered questions with advanced filtering
+   * Used for custom quiz builder
+   */
+  getFilteredQuestions: publicProcedure
+    .input(
+      z.object({
+        provider: providerEnum,
+        limit: z.number().min(5).max(50).default(10),
+        categoryId: z.string().optional(),
+        difficulty: difficultyEnum.optional(),
+        service: z.string().optional(),
+        isMultiSelect: z.boolean().optional(),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      // Build where clause dynamically
+      const whereClause: any = {
+        quiz: {
+          providers: {
+            has: input.provider,
+          },
+          isPublic: true,
+          free: true,
+        },
+      };
+
+      // Add optional filters
+      if (input.categoryId) {
+        whereClause.categoryId = input.categoryId;
+      }
+
+      if (input.difficulty) {
+        whereClause.difficultyLevel = input.difficulty;
+      }
+
+      if (input.service) {
+        whereClause.awsService = input.service;
+      }
+
+      if (input.isMultiSelect !== undefined) {
+        whereClause.isMultiSelect = input.isMultiSelect;
+      }
+
+      // Fetch filtered questions
+      const questions = await ctx.prisma.question.findMany({
+        where: whereClause,
+        include: {
+          options: {
+            select: {
+              id: true,
+              content: true,
+              // Don't expose isCorrect for unauthenticated users
+            },
+          },
+          quiz: {
+            select: {
+              id: true,
+              title: true,
+            },
+          },
+        },
+        take: input.limit * 2, // Get more for randomization
+      });
+
+      // Randomize and limit
+      const shuffled = questions
+        .sort(() => Math.random() - 0.5)
+        .slice(0, input.limit);
+
+      return shuffled.map((q: any) => ({
+        id: q.id,
+        text: q.content,
+        difficulty: q.difficultyLevel,
+        service: q.awsService,
+        isMultiSelect: q.isMultiSelect,
+        options: q.options.map((opt: any) => ({
+          id: opt.id,
+          text: opt.content,
+        })),
+        quizTitle: q.quiz.title,
+      }));
+    }),
+
   /**
    * PUBLIC: Get demo/public questions
    * Used on /demo page for unauthenticated users
@@ -65,14 +225,14 @@ export const quizRouter = router({
       });
 
       // Flatten all questions from all quizzes
-      const allQuestions = quizzes.flatMap((quiz) => quiz.questions);
+      const allQuestions = quizzes.flatMap((quiz: any) => quiz.questions);
 
       // Randomize and limit to requested amount
       const shuffled = allQuestions
         .sort(() => Math.random() - 0.5)
         .slice(0, input.limit);
 
-      return shuffled.map((q) => ({
+      return shuffled.map((q: any) => ({
         id: q.id,
         text: q.text,
         difficulty: q.difficulty,
@@ -114,8 +274,8 @@ export const quizRouter = router({
 
       // Get IDs of correct options
       const correctOptionIds = question.options
-        .filter((opt) => opt.isCorrect)
-        .map((opt) => opt.id)
+        .filter((opt: any) => opt.isCorrect)
+        .map((opt: any) => opt.id)
         .sort();
 
       // Sort user's selections for comparison
@@ -124,7 +284,7 @@ export const quizRouter = router({
       // Check if answer is correct (must match exactly)
       const isCorrect =
         correctOptionIds.length === userOptionIds.length &&
-        correctOptionIds.every((id, index) => id === userOptionIds[index]);
+        correctOptionIds.every((id: string, index: number) => id === userOptionIds[index]);
 
       return {
         isCorrect,
@@ -262,15 +422,15 @@ export const quizRouter = router({
         if (!question) continue;
 
         const correctIds = question.options
-          .filter((opt) => opt.isCorrect)
-          .map((opt) => opt.id)
+          .filter((opt: any) => opt.isCorrect)
+          .map((opt: any) => opt.id)
           .sort();
 
         const userIds = [...answer.selectedOptionIds].sort();
 
         const isCorrect =
           correctIds.length === userIds.length &&
-          correctIds.every((id, i) => id === userIds[i]);
+          correctIds.every((id: any, i: number) => id === userIds[i]);
 
         if (isCorrect) correctCount++;
       }

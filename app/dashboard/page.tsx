@@ -4,12 +4,16 @@ import { useUser } from "@clerk/nextjs";
 import { Suspense, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import PerformanceSection from "@/components/dashboard/performance-section";
-import RecentActivitySection from "@/components/dashboard/recent-activity-section";
-import { useDashboardQueries } from "./hooks/useDashboardQueries";
+import PerformanceSection from "@/features/dashboard/components/performance-section";
+import RecentActivitySection from "@/features/dashboard/components/recent-activity-section";
+import { useDashboardQueries } from "@/features/dashboard/hooks/useDashboardQueries";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ChartArea, ChartLineIcon, Zap } from "lucide-react";
-import PremiumAnalysisDashboard from "@/components/ai-report/premium-ai-analysis";
+import { ChartArea, ChartLineIcon, Zap, Trophy } from "lucide-react";
+import PremiumAnalysisDashboard from "@/features/ai-analysis/components/premium-ai-analysis";
+import { ActivityHeatmap } from "@/features/gamification/components/activity-heatmap";
+import { StreakDisplay } from "@/features/gamification/components/streak-display";
+import { DailyGoalCard } from "@/features/gamification/components/daily-goal-card";
+import { StreakRiskAlert } from "@/features/gamification/components/streak-risk-alert";
 import { CheckUser } from "@/app/(actions)/user/check-user";
 import React from "react";
 import UpgradeBadge from "@/components/ui/upgrade-badge";
@@ -17,7 +21,8 @@ import { useSubscription } from "@/hooks/use-subscription";
 import {
   QuizAttemptsSkeleton,
   RecentActivitySkeleton,
-} from "@/components/dashboard/dashboard-loading";
+} from "@/features/dashboard/components/dashboard-loading";
+import { DashboardAISummary } from "@/features/ai-analysis/components/DashboardAISummary";
 
 export default function DashboardPage() {
   const { user, isLoaded } = useUser();
@@ -37,10 +42,14 @@ export default function DashboardPage() {
   });
 
   const initialTab =
-    searchParams.get("tab") === "ai-report" ? "report" : "analytics";
+    searchParams.get("tab") === "ai-report"
+      ? "report"
+      : searchParams.get("tab") === "gamification"
+        ? "gamification"
+        : "analytics";
   // function to update the URL with the selected tab
   const handleTabChange = (value: string) => {
-    const newParams = value === "report" ? "ai-report" : "analytics";
+    const newParams = value === "report" ? "ai-report" : value === "gamification" ? "gamification" : "analytics";
     const url = new URL(window.location.href);
     url.searchParams.set("tab", newParams);
     window.history.pushState({}, "", url);
@@ -81,15 +90,22 @@ export default function DashboardPage() {
         </p>
       </div>
 
+      {/* Streak Risk Alert */}
+      <StreakRiskAlert />
+
       <Tabs
         defaultValue={initialTab}
         className="w-full"
         onValueChange={handleTabChange}
       >
-        <TabsList className="grid w-full grid-cols-2 ">
+        <TabsList className="grid w-full grid-cols-3 ">
           <TabsTrigger value="analytics" className="flex items-center gap-2">
             <ChartLineIcon className="h-4 w-4" />
             Analytics
+          </TabsTrigger>
+          <TabsTrigger value="gamification" className="flex items-center gap-2">
+            <Trophy className="h-4 w-4" />
+            Progress
           </TabsTrigger>
           <TabsTrigger className="flex items-center gap-3" value="report">
             AI Report
@@ -107,6 +123,9 @@ export default function DashboardPage() {
                 />
               </Suspense>
 
+              {/* AI Insights Summary */}
+              {hasAttempts && <DashboardAISummary />}
+
               <Suspense fallback={<RecentActivitySkeleton />}>
                 <RecentActivitySection
                   activity={activityHistory || []}
@@ -114,6 +133,18 @@ export default function DashboardPage() {
                 />
               </Suspense>
             </div>
+          </div>
+        </TabsContent>
+        <TabsContent value="gamification">
+          <div className="space-y-6">
+            {/* Top Row: Streak and Daily Goal */}
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+              <StreakDisplay />
+              <DailyGoalCard />
+            </div>
+
+            {/* Activity Heatmap */}
+            <ActivityHeatmap />
           </div>
         </TabsContent>
         <TabsContent value="report">
