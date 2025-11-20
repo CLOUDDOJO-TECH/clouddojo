@@ -10,12 +10,16 @@ import { quizRouter } from './quiz';
 import { gamificationRouter } from './gamification';
 import { analysisRouter } from './analysis';
 import { emailRouter } from './email';
+import { adminEmailRouter } from './admin/email';
+import { adminAudienceRouter } from './admin/audience';
 
 export const appRouter = router({
   quiz: quizRouter,
   gamification: gamificationRouter,
   analysis: analysisRouter,
   email: emailRouter,
+  adminEmail: adminEmailRouter,
+  adminAudience: adminAudienceRouter,
   // Add more routers here as we migrate:
   // user: userRouter,
   // progress: progressRouter,
