@@ -1,0 +1,22 @@
+{
+  "name": "queue-processor-lambda",
+  "version": "1.0.0",
+  "description": "Email Queue Processor Lambda Function",
+  "main": "src/handler.ts",
+  "scripts": {
+    "build": "tsc",
+    "package": "zip -r function.zip dist node_modules"
+  },
+  "dependencies": {
+    "@prisma/client": "6.8.2",
+    "@aws-sdk/client-sqs": "^3.600.0",
+    "@react-email/components": "^0.0.38",
+    "resend": "^4.5.0",
+    "ioredis": "^5.4.1"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.145",
+    "@types/node": "^22.14.1",
+    "typescript": "^5.8.3"
+  }
+}
