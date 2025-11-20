@@ -1,4 +1,7 @@
 import { Metadata } from "next";
+import { TRPCProvider } from "@/src/lib/trpc/react";
+import { ThemeProvider } from "@/components/theme-provider";
+import "@/app/globals.css";
 
 export const metadata: Metadata = {
   title: "Free Cloud Certification Practice Questions | Try CloudDojo Demo",
@@ -45,5 +48,11 @@ export default function DemoLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return (
+    <TRPCProvider>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        {children}
+      </ThemeProvider>
+    </TRPCProvider>
+  );
 }

@@ -1,19 +1,16 @@
-import Navbar from "@/components/navbar";
-import HeroSection from "@/components/hero-section";
 import FeatureCards from "@/features/marketing/components/feature-cards";
 
 import FaqSection from "@/features/marketing/components/faq-section";
-import Footer from "@/components/footer";
 import { FeaturesBento } from "@/features/marketing/components/wobble-section";
 import { StickyBanner } from "@/components/ui/sticky-banner";
-import { ThreeStepFramework } from "@/features/marketing/components/three-steps-section";
 import { VendorCompanies } from "@/features/marketing/components/vendor-section";
 import { FounderTestimonial } from "@/features/marketing/components/founder-testimonial";
-import { Spotlight } from "@/components/spotlight";
 import FeaturesSection from "@/features/marketing/components/features-section";
-import TestimonialsSection from "@/features/marketing/components/testimonials";
-import Silk from "@/components/backgrounds/Silk";
 import ThemedBackground from "@/components/backgrounds/ThemedBackground";
+import HeroSection from "@/features/marketing/components/hero-section";
+import Navbar from "@/features/marketing/components/navbar";
+import Footer from "@/features/marketing/components/footer";
+import WallOfLoveSection from "@/features/marketing/components/testimonials";
 
 export default function Home() {
   return (
@@ -39,7 +36,6 @@ export default function Home() {
         </p>
       </StickyBanner> */}
 
-     
       <div className="absolute font-main z-20">
         <Navbar />
         <main>
@@ -47,7 +43,7 @@ export default function Home() {
           <FeaturesSection />
           <FeatureCards />
           <FeaturesBento />
-          <TestimonialsSection />
+          <WallOfLoveSection />
           {/* <ThreeStepFramework ctaLink="/dashboard" showCta={false} /> */}
           {/* <VendorCompanies /> */}
           <FounderTestimonial />
