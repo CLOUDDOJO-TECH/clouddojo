@@ -4,16 +4,7 @@ This directory contains Infrastructure as Code (IaC) for the CloudDojo email ser
 
 ## Architecture Overview
 
-```
-Next.js App (Vercel) ──> Lambda Orchestrator ──> SQS Queue ──> Queue Processor ──> Resend API
-                                                                      │
-                                                                      └──> Database (Email Logs)
-EventBridge Cron Jobs ──> Scheduled Campaign Lambdas ──> SQS Queue
-
-Resend Webhooks ──> Webhook Lambda ──> Database (Update Email Status)
-
-Redis (ElastiCache) ──> Used by all Lambdas for caching & deduplication
-```
+![Architecture Diagram](./architecture-diagram.png)
 
 ## Infrastructure Components
 
@@ -393,13 +384,3 @@ For issues:
 1. Check CloudWatch logs
 2. Review [AWS Lambda documentation](https://docs.aws.amazon.com/lambda/)
 3. Review [Terraform AWS Provider docs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
-
-## Next Steps
-
-After infrastructure is deployed:
-1. ✅ Update Next.js environment variables
-2. ✅ Configure Resend webhooks
-3. ✅ Run database migrations
-4. 📝 Integrate email service into your Next.js app
-5. 🧪 Test email flows
-6. 🚀 Deploy to production
