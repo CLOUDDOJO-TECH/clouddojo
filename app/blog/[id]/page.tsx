@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { getBlogPostBySlug, getAllBlogPostSlugs, getAllBlogPosts, getRelatedPosts } from "@/lib/mdx";
-import { BlogPost } from "@/components/blog/BlogPost";
+import { BlogPost } from "@/features/marketing/components/blog/BlogPost";
 
 interface BlogPostPageProps {
   params: Promise<{ id: string }>;

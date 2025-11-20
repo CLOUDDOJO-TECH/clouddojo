@@ -1,4 +1,4 @@
-import { Blog } from "@/components/blog/Blog";
+import { Blog } from "@/features/marketing/components/blog/Blog";
 import { getAllBlogPosts } from "@/lib/mdx";
 
 export const metadata = {
