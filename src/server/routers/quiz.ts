@@ -10,6 +10,10 @@
 import { z } from 'zod';
 import { router, publicProcedure, protectedProcedure } from '../trpc';
 import { TRPCError } from '@trpc/server';
+import {
+  triggerQuizMilestoneEmail,
+  triggerPerfectScore,
+} from '@/lib/emails/services/orchestrator';
 
 // Validation schemas
 const providerEnum = z.enum([
@@ -284,7 +288,90 @@ export const quizRouter = router({
           score,
           completedAt: new Date(),
         },
+        include: {
+          quiz: true,
+        },
       });
+
+      // ============================================
+      // PHASE 2: EMAIL TRIGGERS
+      // ============================================
+
+      // Get user info for emails
+      const user = await ctx.prisma.user.findUnique({
+        where: { userId: ctx.userId },
+        select: {
+          email: true,
+          firstName: true,
+        },
+      });
+
+      // Trigger perfect score email
+      if (score === 100 && user) {
+        await triggerPerfectScore(
+          ctx.userId,
+          updatedAttempt.quiz.title
+        ).catch((error) => {
+          console.error('Failed to trigger perfect score email:', error);
+          // Don't throw - email failure shouldn't break quiz submission
+        });
+      }
+
+      // Get quiz statistics for milestone detection
+      const completedQuizzes = await ctx.prisma.quizAttempt.count({
+        where: {
+          userId: ctx.userId,
+          completedAt: { not: null },
+        },
+      });
+
+      // Calculate average score
+      const allAttempts = await ctx.prisma.quizAttempt.findMany({
+        where: {
+          userId: ctx.userId,
+          completedAt: { not: null },
+          score: { not: null },
+        },
+        select: {
+          score: true,
+          quiz: {
+            select: {
+              providers: true,
+            },
+          },
+        },
+      });
+
+      const totalScore = allAttempts.reduce((sum, a) => sum + (a.score || 0), 0);
+      const averageScore = allAttempts.length > 0 ? Math.round(totalScore / allAttempts.length) : 0;
+
+      // Find top category (most common provider)
+      const providerCounts: Record<string, number> = {};
+      allAttempts.forEach((a) => {
+        a.quiz.providers.forEach((provider) => {
+          providerCounts[provider] = (providerCounts[provider] || 0) + 1;
+        });
+      });
+      const topCategory = Object.entries(providerCounts).sort((a, b) => b[1] - a[1])[0]?.[0];
+
+      // Determine next milestone
+      const milestones = [10, 25, 50, 100];
+      const nextMilestone = milestones.find((m) => m > completedQuizzes) || 100;
+
+      // Trigger quiz milestone email if applicable
+      if (user) {
+        await triggerQuizMilestoneEmail(
+          ctx.userId,
+          completedQuizzes,
+          Math.round(totalScore),
+          averageScore,
+          nextMilestone,
+          topCategory
+        ).catch((error) => {
+          console.error('Failed to trigger quiz milestone email:', error);
+          // Don't throw - email failure shouldn't break quiz submission
+        });
+      }
 
       return {
         attemptId: updatedAttempt.id,
