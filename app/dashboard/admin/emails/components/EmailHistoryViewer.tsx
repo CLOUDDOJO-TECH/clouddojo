@@ -237,6 +237,11 @@ export default function EmailHistoryViewer() {
                 <SelectItem value="level_up">Level Up</SelectItem>
                 <SelectItem value="perfect_score">Perfect Score</SelectItem>
                 <SelectItem value="feature_adoption">Feature Adoption</SelectItem>
+                <SelectItem value="weekly_progress">Weekly Progress</SelectItem>
+                <SelectItem value="monthly_certification_readiness">Monthly Readiness</SelectItem>
+                <SelectItem value="inactive_3day">Inactive (3 days)</SelectItem>
+                <SelectItem value="inactive_7day">Inactive (7 days)</SelectItem>
+                <SelectItem value="inactive_14day">Inactive (14 days)</SelectItem>
               </SelectContent>
             </Select>
             <Button

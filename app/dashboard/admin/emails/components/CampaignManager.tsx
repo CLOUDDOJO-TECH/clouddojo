@@ -134,6 +134,7 @@ export default function CampaignManager() {
                         <SelectItem value="level_up">Level Up</SelectItem>
                         <SelectItem value="feature_adoption">Feature Adoption</SelectItem>
                         <SelectItem value="weekly_progress">Weekly Progress</SelectItem>
+                        <SelectItem value="monthly_certification_readiness">Monthly Readiness</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>

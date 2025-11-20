@@ -451,6 +451,86 @@ function getTemplateFromMemory(emailType: string, data: Record<string, any>): st
         </body>
       </html>
     `,
+
+    // ============================================
+    // PHASE 4: SCHEDULED CAMPAIGNS
+    // ============================================
+    monthly_certification_readiness: `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <title>${data.certificationName} Readiness Report</title>
+        </head>
+        <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: #f3f4f6;">
+          <div style="background: linear-gradient(135deg, #0ea5e9, #3b82f6); padding: 40px; border-radius: 12px; text-align: center; color: white;">
+            <div style="font-size: 64px; margin-bottom: 16px;">📊</div>
+            <h1 style="margin: 0; font-size: 32px;">Your ${data.certificationName} Readiness Report</h1>
+            <p style="font-size: 18px; margin-top: 8px;">Hi ${data.username}, here's your monthly progress update!</p>
+          </div>
+
+          <div style="background: white; padding: 32px; border-radius: 12px; margin-top: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <div style="text-align: center; padding: 24px; background: linear-gradient(135deg, #0ea5e9, #3b82f6); border-radius: 12px; color: white; margin-bottom: 24px;">
+              <div style="font-size: 14px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9;">Readiness Score</div>
+              <div style="font-size: 56px; font-weight: bold; margin-top: 8px;">${data.readinessScore}%</div>
+              <div style="margin-top: 8px; font-size: 14px; opacity: 0.9;">
+                ${data.readinessScore >= 80 ? 'You\'re ready to take the exam!' : data.readinessScore >= 60 ? 'Almost there! Keep practicing.' : 'Keep studying - you\'re making progress!'}
+              </div>
+            </div>
+
+            <h2 style="color: #1f2937; margin-top: 32px;">📈 This Month's Stats</h2>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 16px;">
+              <div style="background: #eff6ff; padding: 20px; border-radius: 8px; text-align: center; border: 2px solid #3b82f6;">
+                <div style="font-size: 32px; font-weight: bold; color: #3b82f6;">${data.quizzesCompleted}</div>
+                <div style="color: #1e40af; margin-top: 4px; font-size: 14px;">Quizzes Completed</div>
+              </div>
+              <div style="background: #f0fdf4; padding: 20px; border-radius: 8px; text-align: center; border: 2px solid #10b981;">
+                <div style="font-size: 32px; font-weight: bold; color: #10b981;">${data.averageScore}%</div>
+                <div style="color: #065f46; margin-top: 4px; font-size: 14px;">Average Score</div>
+              </div>
+            </div>
+
+            ${data.strengths && data.strengths.length > 0 ? `
+              <h3 style="color: #1f2937; margin-top: 32px;">💪 Your Strengths</h3>
+              <ul style="color: #10b981; margin-top: 12px; line-height: 1.8;">
+                ${data.strengths.map((s: string) => `<li style="margin-bottom: 8px;"><strong>${s}</strong></li>`).join('')}
+              </ul>
+            ` : ''}
+
+            ${data.weaknesses && data.weaknesses.length > 0 ? `
+              <h3 style="color: #1f2937; margin-top: 24px;">🎯 Areas to Focus On</h3>
+              <ul style="color: #ef4444; margin-top: 12px; line-height: 1.8;">
+                ${data.weaknesses.map((w: string) => `<li style="margin-bottom: 8px;"><strong>${w}</strong></li>`).join('')}
+              </ul>
+            ` : ''}
+
+            ${data.recommendations && data.recommendations.length > 0 ? `
+              <div style="background: #fef3c7; padding: 20px; border-radius: 8px; margin-top: 24px; border-left: 4px solid #f59e0b;">
+                <h3 style="color: #92400e; margin-top: 0;">💡 Recommendations</h3>
+                <ul style="color: #78350f; margin-top: 12px; line-height: 1.8;">
+                  ${data.recommendations.map((r: string) => `<li style="margin-bottom: 8px;">${r}</li>`).join('')}
+                </ul>
+              </div>
+            ` : ''}
+
+            <div style="text-align: center; margin-top: 32px;">
+              <a href="https://clouddojo.tech/dashboard" style="display: inline-block; background: linear-gradient(135deg, #0ea5e9, #3b82f6); color: white; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px;">Continue Your Journey</a>
+            </div>
+
+            <div style="background: #f9fafb; padding: 16px; border-radius: 8px; margin-top: 24px; text-align: center;">
+              <p style="color: #6b7280; margin: 0; font-size: 14px;">
+                Next report: ${data.nextReportDate || 'Next month'}
+              </p>
+            </div>
+          </div>
+
+          <div style="text-align: center; margin-top: 24px; color: #9ca3af; font-size: 12px;">
+            <p>You're receiving this because you opted in to certification readiness reports.</p>
+            <a href="https://clouddojo.tech/settings/preferences" style="color: #6b7280; text-decoration: underline;">Manage preferences</a>
+          </div>
+        </body>
+      </html>
+    `,
   };
 
   return templates[emailType] || null;

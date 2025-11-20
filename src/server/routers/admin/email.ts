@@ -42,6 +42,7 @@ const emailTypeEnum = z.enum([
   'inactive_7day',
   'inactive_14day',
   'weekly_progress',
+  'monthly_certification_readiness',
 ]);
 
 export const adminEmailRouter = router({

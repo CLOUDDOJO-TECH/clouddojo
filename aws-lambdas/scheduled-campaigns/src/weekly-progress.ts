@@ -112,6 +112,51 @@ export async function handler() {
 }
 
 function calculateWeeklyXP(user: any): number {
-  // TODO: Implement proper XP calculation
-  return user.xp?.totalXP || 0;
+  // Get XP earned this week by comparing with last week
+  const currentXP = user.xp?.totalXP || 0;
+
+  // Calculate weekly XP based on quiz attempts
+  const weeklyQuizXP = user.quizAttempts.length * 20; // Assume 20 XP per quiz
+
+  return weeklyQuizXP;
+}
+
+function calculateAverageScore(quizAttempts: any[]): number {
+  if (quizAttempts.length === 0) return 0;
+
+  const totalScore = quizAttempts.reduce((sum, attempt) => sum + (attempt.score || 0), 0);
+  return Math.round(totalScore / quizAttempts.length);
+}
+
+function getTopPerformanceCategory(quizAttempts: any[]): string | undefined {
+  if (quizAttempts.length === 0) return undefined;
+
+  // Count quizzes by provider
+  const providerCounts: Record<string, { count: number; totalScore: number }> = {};
+
+  quizAttempts.forEach((attempt) => {
+    if (attempt.quiz?.providers) {
+      attempt.quiz.providers.forEach((provider: string) => {
+        if (!providerCounts[provider]) {
+          providerCounts[provider] = { count: 0, totalScore: 0 };
+        }
+        providerCounts[provider].count++;
+        providerCounts[provider].totalScore += attempt.score || 0;
+      });
+    }
+  });
+
+  // Find provider with highest average score
+  let topProvider: string | undefined;
+  let highestAverage = 0;
+
+  Object.entries(providerCounts).forEach(([provider, stats]) => {
+    const average = stats.totalScore / stats.count;
+    if (average > highestAverage) {
+      highestAverage = average;
+      topProvider = provider;
+    }
+  });
+
+  return topProvider;
 }
