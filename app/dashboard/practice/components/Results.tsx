@@ -24,12 +24,15 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { ResultsProps } from "../types"
 import QuestionAnalysis from "./QuestionAnalysis"
 import PDFGenerator from "./PDFGenerator"
+import { AnalysisStatus } from "@/features/ai-analysis/components/AnalysisStatus"
+import { QuizInsights } from "@/features/ai-analysis/components/QuizInsights"
 
 export default function Results({
   quiz,
   answers,
   markedQuestions,
   timeTaken,
+  quizAttemptId,
   onRestart,
   onReview,
 }: ResultsProps) {
@@ -294,6 +297,21 @@ export default function Results({
           </div>
         </CardFooter>
       </Card>
+
+      {/* AI Insights Card */}
+      {quizAttemptId && (
+        <Card className="max-w-7xl mx-auto mb-8">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle>AI Insights</CardTitle>
+              <AnalysisStatus quizAttemptId={quizAttemptId} />
+            </div>
+          </CardHeader>
+          <CardContent>
+            <QuizInsights quizAttemptId={quizAttemptId} />
+          </CardContent>
+        </Card>
+      )}
 
       {/* Question Analysis Card */}
       <Card className="max-w-7xl mx-auto">

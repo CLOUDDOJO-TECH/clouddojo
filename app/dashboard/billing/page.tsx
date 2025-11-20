@@ -1,5 +1,5 @@
 "use client";
-import { PricingHeader } from "@/components/landing/pricing/PricingHeader";
+import { PricingHeader } from "@/features/marketing/components/pricing/PricingHeader";
 import { Plans } from "./(components)/plans";
 import { PAYMENT_FREQUENCIES } from "@/lib/payments/config";
 import { useState } from "react";
