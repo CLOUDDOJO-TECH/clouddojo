@@ -7,6 +7,7 @@ import { trpc } from "@/lib/trpc/react";
 import { ProviderSelector } from "@/features/quiz/components/provider-selector";
 import { QuestionCard, Question } from "@/features/quiz/components/question-card";
 import { ResultsSummary } from "@/features/quiz/components/results-summary";
+import { DemoEmailCapture } from "@/features/quiz/components/demo-email-capture";
 
 interface AnswerState {
   [questionId: string]: {
@@ -26,6 +27,8 @@ export default function DemoPage() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<AnswerState>({});
   const [shouldFetchQuestions, setShouldFetchQuestions] = useState(false);
+  const [showEmailCapture, setShowEmailCapture] = useState(false);
+  const [emailSubmitted, setEmailSubmitted] = useState(false);
 
   // ✅ tRPC Query - Fully type-safe!
   const {
@@ -88,7 +91,13 @@ export default function DemoPage() {
       setCurrentQuestionIndex((prev) => prev + 1);
     } else {
       setStep("view-results");
+      setShowEmailCapture(true); // Show email capture modal when reaching results
     }
+  };
+
+  const handleEmailSubmit = (email: string) => {
+    setEmailSubmitted(true);
+    setShowEmailCapture(false);
   };
 
   const handlePrevious = () => {
@@ -344,13 +353,26 @@ export default function DemoPage() {
               <h1 className="mb-2 text-3xl font-bold text-foreground">
                 Quiz Complete!
               </h1>
-              <p className="text-foreground/60">Here's how you did</p>
+              <p className="text-foreground/60">
+                {emailSubmitted ? "Here's your full analysis" : "You scored " + correctAnswersCount + " out of " + (questions?.length || 0)}
+              </p>
             </div>
 
-            <ResultsSummary
-              correctAnswers={correctAnswersCount}
+            {/* Blur results until email submitted */}
+            <div className={emailSubmitted ? "" : "blur-sm pointer-events-none select-none opacity-40"}>
+              <ResultsSummary
+                correctAnswers={correctAnswersCount}
+                totalQuestions={questions?.length || 0}
+                onTryAgain={handleTryAgain}
+              />
+            </div>
+
+            {/* Email capture modal */}
+            <DemoEmailCapture
+              isOpen={showEmailCapture}
+              onEmailSubmit={handleEmailSubmit}
+              score={correctAnswersCount}
               totalQuestions={questions?.length || 0}
-              onTryAgain={handleTryAgain}
             />
           </div>
         )}
