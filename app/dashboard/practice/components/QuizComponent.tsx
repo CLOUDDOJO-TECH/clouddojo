@@ -60,6 +60,7 @@ export default function QuizComponent({ quiz, quizId }: QuizComponentProps) {
   const [showTimeWarning, setShowTimeWarning] = useState(false);
   const [userProfileExists, setUserProfileExists] = useState(false);
   const [toggleQuestionTraverser, setToggleQuestionTraverser] = useState(false);
+  const [quizAttemptId, setQuizAttemptId] = useState<string | null>(null);
 
   // Query to check user profile
   const { data: checkUserProfile, isLoading: isCheckingProfile } = useQuery({
@@ -185,7 +186,8 @@ export default function QuizComponent({ quiz, quizId }: QuizComponentProps) {
         score: calculateResults(),
       });
 
-      if (response.success) {
+      if (response.success && response.data) {
+        setQuizAttemptId(response.data.id);
         setIsTestSubmitted(true);
         setShowResults(true);
         setShowSubmitDialog(false);
@@ -246,6 +248,7 @@ export default function QuizComponent({ quiz, quizId }: QuizComponentProps) {
         answers={answers}
         markedQuestions={markedQuestions}
         timeTaken={(quiz.duration || 30) * 60 - timeLeft}
+        quizAttemptId={quizAttemptId}
         onRestart={handleRestart}
         onReview={handleReview}
       />
