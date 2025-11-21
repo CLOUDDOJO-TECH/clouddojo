@@ -12,11 +12,11 @@ terraform {
   }
 
   # Backend configuration (uncomment and configure for remote state)
-  # backend "s3" {
-  #   bucket = "clouddojo-terraform-state"
-  #   key    = "email-service/terraform.tfstate"
-  #   region = "us-east-1"
-  # }
+  backend "s3" {
+    bucket = "clouddojo-terraform-state"
+    key    = "email-service/terraform.tfstate"
+    region = "us-east-1"
+  }
 }
 
 provider "aws" {
