@@ -45,3 +45,8 @@ next-env.d.ts
 crash.log
 *.tfvars
 override.tf
+
+# Lambda build artifacts
+aws-lambdas/**/dist/
+aws-lambdas/**/node_modules/
+aws-lambdas/**/*.zip
