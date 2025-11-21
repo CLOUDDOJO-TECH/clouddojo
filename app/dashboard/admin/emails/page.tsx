@@ -3,7 +3,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { EmailHistoryViewer } from './components/EmailHistoryViewer';
 import { EmailAnalyticsDashboard } from './components/EmailAnalyticsDashboard';
 import { AudienceManager } from './audiences/components/AudienceManager';
-import { ArrowLeft, Mail, BarChart3, Users } from 'lucide-react';
+import { TemplateManager } from './templates/components/TemplateManager';
+import { ArrowLeft, Mail, BarChart3, Users, FileText } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
@@ -30,7 +31,7 @@ export default async function AdminEmailsPage() {
 
       {/* Tabs */}
       <Tabs defaultValue="history" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3 lg:w-[600px]">
+        <TabsList className="grid w-full grid-cols-4 lg:w-[800px]">
           <TabsTrigger value="history" className="flex items-center gap-2">
             <Mail className="h-4 w-4" />
             Email History
@@ -42,6 +43,10 @@ export default async function AdminEmailsPage() {
           <TabsTrigger value="audiences" className="flex items-center gap-2">
             <Users className="h-4 w-4" />
             Audiences
+          </TabsTrigger>
+          <TabsTrigger value="templates" className="flex items-center gap-2">
+            <FileText className="h-4 w-4" />
+            Templates
           </TabsTrigger>
         </TabsList>
 
@@ -55,6 +60,10 @@ export default async function AdminEmailsPage() {
 
         <TabsContent value="audiences" className="space-y-4">
           <AudienceManager />
+        </TabsContent>
+
+        <TabsContent value="templates" className="space-y-4">
+          <TemplateManager />
         </TabsContent>
       </Tabs>
     </div>
