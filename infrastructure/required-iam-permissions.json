@@ -1,0 +1,116 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "IAMPermissions",
+      "Effect": "Allow",
+      "Action": [
+        "iam:CreateRole",
+        "iam:GetRole",
+        "iam:DeleteRole",
+        "iam:UpdateRole",
+        "iam:PassRole",
+        "iam:AttachRolePolicy",
+        "iam:DetachRolePolicy",
+        "iam:ListAttachedRolePolicies",
+        "iam:CreatePolicy",
+        "iam:GetPolicy",
+        "iam:GetPolicyVersion",
+        "iam:DeletePolicy",
+        "iam:ListPolicyVersions",
+        "iam:CreatePolicyVersion",
+        "iam:DeletePolicyVersion",
+        "iam:TagRole",
+        "iam:TagPolicy"
+      ],
+      "Resource": [
+        "arn:aws:iam::220657560168:role/clouddojo-*",
+        "arn:aws:iam::220657560168:policy/clouddojo-*"
+      ]
+    },
+    {
+      "Sid": "IAMServiceLinkedRole",
+      "Effect": "Allow",
+      "Action": [
+        "iam:CreateServiceLinkedRole",
+        "iam:GetServiceLinkedRoleDeletionStatus",
+        "iam:DeleteServiceLinkedRole"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "LambdaPermissions",
+      "Effect": "Allow",
+      "Action": [
+        "lambda:*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "S3Permissions",
+      "Effect": "Allow",
+      "Action": [
+        "s3:*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "SQSPermissions",
+      "Effect": "Allow",
+      "Action": [
+        "sqs:*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "SecretsManagerPermissions",
+      "Effect": "Allow",
+      "Action": [
+        "secretsmanager:*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "VPCPermissions",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "ElastiCachePermissions",
+      "Effect": "Allow",
+      "Action": [
+        "elasticache:*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "EventBridgePermissions",
+      "Effect": "Allow",
+      "Action": [
+        "events:*",
+        "scheduler:*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "CloudWatchPermissions",
+      "Effect": "Allow",
+      "Action": [
+        "cloudwatch:*",
+        "logs:*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "DynamoDBPermissions",
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:*"
+      ],
+      "Resource": "*"
+    }
+  ]
+}

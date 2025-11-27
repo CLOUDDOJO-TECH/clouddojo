@@ -1,10 +1,12 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider        = "prisma-client-js"
+  output          = "../node_modules/.prisma/client"
+  binaryTargets   = ["native", "rhel-openssl-3.0.x"]
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
-  provider  = "postgresql"
+  provider = "postgresql"
 }
 
 model User {
@@ -693,9 +695,9 @@ enum AchievementType {
 // ============================================
 
 model EmailPreferences {
-  id       String  @id @default(uuid())
-  userId   String  @unique
-  user     User    @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [userId], onDelete: Cascade)
 
   // Subscription preferences
   marketingEmails      Boolean @default(true)
@@ -716,9 +718,9 @@ model EmailPreferences {
 }
 
 model EmailLog {
-  id       String @id @default(uuid())
-  userId   String?
-  user     User?  @relation(fields: [userId], references: [userId], onDelete: SetNull)
+  id     String  @id @default(uuid())
+  userId String?
+  user   User?   @relation(fields: [userId], references: [userId], onDelete: SetNull)
 
   emailType  String // "welcome", "quiz_milestone", "inactive", etc.
   templateId String?
@@ -764,8 +766,8 @@ enum EmailStatus {
 }
 
 model EmailTemplate {
-  id          String @id @default(uuid())
-  name        String @unique
+  id          String  @id @default(uuid())
+  name        String  @unique
   description String?
   subject     String
 

@@ -4,8 +4,8 @@
   "description": "Email Orchestrator Lambda Function",
   "main": "src/handler.ts",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "package": "zip -r function.zip dist node_modules"
+    "build": "DATABASE_URL=postgresql://placeholder prisma generate --schema=../../prisma/schema.prisma && tsc -p tsconfig.json && tsc-alias -p tsconfig.json",
+    "package": "rm -rf dist/node_modules && mkdir -p dist/node_modules/.prisma && cp -r ../../node_modules/.prisma/client dist/node_modules/.prisma/client && cd dist && zip -r ../function.zip . && cd .."
   },
   "dependencies": {
     "@prisma/client": "^7.0.0",
@@ -17,6 +17,8 @@
   "devDependencies": {
     "@types/aws-lambda": "^8.10.145",
     "@types/node": "^22.14.1",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "prisma": "^7.0.0",
+    "tsc-alias": "^1.8.10"
   }
 }

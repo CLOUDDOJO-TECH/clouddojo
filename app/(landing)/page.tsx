@@ -1,14 +1,12 @@
-import FaqSection from "@/components/faq-section";
-import Footer from "@/components/footer";
-import FeaturesSection from "@/components/landing/features-8";
-import StatsSection from "@/components/landing/stats-section";
-import ProvidersSection from "@/components/landing/providers";
-import FAQsFour from "@/components/landing/faqs-4";
-import WallOfLoveSection from "@/components/testimonials";
 import LogoCloud from "@/components/logo-cloud";
-import HeroSection from "@/components/hero-section";
-import ContentSection from "@/components/landing/content-3";
-import CallToAction from "@/components/landing/call-to-action";
+import CallToAction from "@/features/marketing/components/call-to-action";
+import ContentSection from "@/features/marketing/components/content-3";
+import FAQsFour from "@/features/marketing/components/faqs-4";
+import Footer from "@/features/marketing/components/footer";
+import HeroSection from "@/features/marketing/components/hero-section";
+import ProvidersSection from "@/features/marketing/components/providers";
+import StatsSection from "@/features/marketing/components/statssection";
+import WallOfLoveSection from "@/features/marketing/components/testimonials";
 
 // currently rethinking the silk thing on the current background. this pr from jordan's pc tries to solve that.
 export default function Home() {
@@ -19,7 +17,6 @@ export default function Home() {
         <main>
           <HeroSection />
           <LogoCloud />
-          <StatsSection />
           <ContentSection />
           <ProvidersSection />
           {/*<FeaturesSection />*/}

@@ -86,26 +86,29 @@ resource "aws_iam_role_policy_attachment" "lambda_logs" {
 
 # Lambda Layer for shared dependencies
 resource "aws_lambda_layer_version" "shared_dependencies" {
-  filename            = "../aws-lambdas/shared-layer.zip" # Build this in your CI/CD
+  s3_bucket           = aws_s3_bucket.lambda_deployments.id
+  s3_key              = aws_s3_object.shared_layer.key
   layer_name          = "${var.project_name}-shared-deps-${var.environment}"
   compatible_runtimes = ["nodejs20.x"]
   description         = "Shared dependencies for email service Lambdas"
 
-  # lifecycle {
-  #   create_before_destroy = true
-  # }
+  depends_on = [aws_s3_object.shared_layer]
+
+  lifecycle {
+    ignore_changes = [source_code_hash]
+  }
 }
 
 # 1. Email Orchestrator Lambda
 resource "aws_lambda_function" "email_orchestrator" {
-  filename         = "../aws-lambdas/email-orchestrator/function.zip"
-  function_name    = "${var.project_name}-email-orchestrator-${var.environment}"
-  role             = aws_iam_role.lambda_execution.arn
-  handler          = "dist/handler.handler"
-  source_code_hash = filebase64sha256("../aws-lambdas/email-orchestrator/function.zip")
-  runtime          = "nodejs20.x"
-  timeout          = 30
-  memory_size      = 512
+  s3_bucket     = aws_s3_bucket.lambda_deployments.id
+  s3_key        = aws_s3_object.email_orchestrator.key
+  function_name = "${var.project_name}-email-orchestrator-${var.environment}"
+  role          = aws_iam_role.lambda_execution.arn
+  handler       = "aws-lambdas/email-orchestrator/src/handler.handler"
+  runtime       = "nodejs20.x"
+  timeout       = 30
+  memory_size   = 512
 
   vpc_config {
     subnet_ids         = aws_subnet.private[*].id
@@ -116,14 +119,13 @@ resource "aws_lambda_function" "email_orchestrator" {
     variables = {
       NODE_ENV              = "production"
       EMAIL_QUEUE_URL       = aws_sqs_queue.email_queue.url
-      AWS_REGION           = var.aws_region
       RESEND_API_KEY_SECRET = aws_secretsmanager_secret.resend_api_key.name
       DATABASE_URL_SECRET   = aws_secretsmanager_secret.database_url.name
       REDIS_URL_SECRET      = aws_secretsmanager_secret.redis_url.name
     }
   }
 
-  layers = [aws_lambda_layer_version.shared_dependencies.arn]
+  # layers = [aws_lambda_layer_version.shared_dependencies.arn]
 
   tags = {
     Name = "${var.project_name}-email-orchestrator"
@@ -146,14 +148,14 @@ resource "aws_lambda_function_url" "email_orchestrator" {
 
 # 2. Queue Processor Lambda
 resource "aws_lambda_function" "queue_processor" {
-  filename         = "../aws-lambdas/queue-processor/function.zip"
-  function_name    = "${var.project_name}-queue-processor-${var.environment}"
-  role             = aws_iam_role.lambda_execution.arn
-  handler          = "dist/handler.handler"
-  source_code_hash = filebase64sha256("../aws-lambdas/queue-processor/function.zip")
-  runtime          = "nodejs20.x"
-  timeout          = 60
-  memory_size      = 1024
+  s3_bucket     = aws_s3_bucket.lambda_deployments.id
+  s3_key        = aws_s3_object.queue_processor.key
+  function_name = "${var.project_name}-queue-processor-${var.environment}"
+  role          = aws_iam_role.lambda_execution.arn
+  handler       = "aws-lambdas/queue-processor/src/handler.handler"
+  runtime       = "nodejs20.x"
+  timeout       = 60
+  memory_size   = 1024
 
   vpc_config {
     subnet_ids         = aws_subnet.private[*].id
@@ -187,14 +189,14 @@ resource "aws_lambda_event_source_mapping" "sqs_trigger" {
 
 # 3. Weekly Progress Lambda
 resource "aws_lambda_function" "weekly_progress" {
-  filename         = "../aws-lambdas/scheduled-campaigns/weekly-progress.zip"
-  function_name    = "${var.project_name}-weekly-progress-${var.environment}"
-  role             = aws_iam_role.lambda_execution.arn
-  handler          = "dist/weekly-progress.handler"
-  source_code_hash = filebase64sha256("../aws-lambdas/scheduled-campaigns/weekly-progress.zip")
-  runtime          = "nodejs20.x"
-  timeout          = 300
-  memory_size      = 1024
+  s3_bucket     = aws_s3_bucket.lambda_deployments.id
+  s3_key        = aws_s3_object.weekly_progress.key
+  function_name = "${var.project_name}-weekly-progress-${var.environment}"
+  role          = aws_iam_role.lambda_execution.arn
+  handler       = "aws-lambdas/scheduled-campaigns/src/weekly-progress.handler"
+  runtime       = "nodejs20.x"
+  timeout       = 300
+  memory_size   = 1024
 
   vpc_config {
     subnet_ids         = aws_subnet.private[*].id
@@ -219,14 +221,14 @@ resource "aws_lambda_function" "weekly_progress" {
 
 # 4. Inactive Users Lambda
 resource "aws_lambda_function" "inactive_users" {
-  filename         = "../aws-lambdas/scheduled-campaigns/inactive-users.zip"
-  function_name    = "${var.project_name}-inactive-users-${var.environment}"
-  role             = aws_iam_role.lambda_execution.arn
-  handler          = "dist/inactive-users.handler"
-  source_code_hash = filebase64sha256("../aws-lambdas/scheduled-campaigns/inactive-users.zip")
-  runtime          = "nodejs20.x"
-  timeout          = 300
-  memory_size      = 1024
+  s3_bucket     = aws_s3_bucket.lambda_deployments.id
+  s3_key        = aws_s3_object.inactive_users.key
+  function_name = "${var.project_name}-inactive-users-${var.environment}"
+  role          = aws_iam_role.lambda_execution.arn
+  handler       = "aws-lambdas/scheduled-campaigns/src/inactive-users.handler"
+  runtime       = "nodejs20.x"
+  timeout       = 300
+  memory_size   = 1024
 
   vpc_config {
     subnet_ids         = aws_subnet.private[*].id
@@ -251,14 +253,14 @@ resource "aws_lambda_function" "inactive_users" {
 
 # 5. Resend Webhook Lambda
 resource "aws_lambda_function" "resend_webhook" {
-  filename         = "../aws-lambdas/resend-webhook/function.zip"
-  function_name    = "${var.project_name}-resend-webhook-${var.environment}"
-  role             = aws_iam_role.lambda_execution.arn
-  handler          = "dist/handler.handler"
-  source_code_hash = filebase64sha256("../aws-lambdas/resend-webhook/function.zip")
-  runtime          = "nodejs20.x"
-  timeout          = 30
-  memory_size      = 512
+  s3_bucket     = aws_s3_bucket.lambda_deployments.id
+  s3_key        = aws_s3_object.resend_webhook.key
+  function_name = "${var.project_name}-resend-webhook-${var.environment}"
+  role          = aws_iam_role.lambda_execution.arn
+  handler       = "aws-lambdas/resend-webhook/src/handler.handler"
+  runtime       = "nodejs20.x"
+  timeout       = 30
+  memory_size   = 512
 
   vpc_config {
     subnet_ids         = aws_subnet.private[*].id

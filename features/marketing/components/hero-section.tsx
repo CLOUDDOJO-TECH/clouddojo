@@ -3,9 +3,9 @@ import Link from "next/link";
 import { ArrowRight, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { TextEffect } from "@/components/ui/text-effect";
+import { HeroHeader } from "@/components/layout/header";
 import { AnimatedGroup } from "@/components/ui/animated-group";
-import { HeroHeader } from "./header";
+import { TextEffect } from "@/components/ui/text-effect";
 
 const transitionVariants = {
   item: {
@@ -70,7 +70,7 @@ export default function HeroSection() {
               className="mask-b-from-35% mask-b-to-90% absolute inset-0 top-56 -z-20 lg:top-32"
             >
               <Image
-                src="/images/night-background.webp"
+                src="https://ik.imagekit.io/lrigu76hy/tailark/night-background.jpg?updatedAt=1745733451120"
                 alt="background"
                 className="hidden size-full dark:block"
                 width="3276"
@@ -91,7 +91,7 @@ export default function HeroSection() {
                     className="hover:bg-background dark:hover:border-t-border bg-muted group mx-auto flex w-fit items-center gap-4 rounded-full border p-1 pl-4 shadow-md shadow-zinc-950/5 transition-colors duration-300 dark:border-t-white/5 dark:shadow-zinc-950"
                   >
                     <span className="text-foreground text-sm">
-                      Trusted by over 5k engineers worldwide
+                      Introducing Support for AI Models
                     </span>
                     <span className="dark:border-background block h-4 w-0.5 border-l bg-white dark:bg-zinc-700"></span>
 
@@ -114,7 +114,7 @@ export default function HeroSection() {
                   as="h1"
                   className="mx-auto mt-8 max-w-4xl text-balance text-5xl max-md:font-semibold md:text-7xl lg:mt-16 xl:text-[5.25rem]"
                 >
-                  Stop Wasting Time on 700-Page PDFs
+                  Modern Solutions for Customer Engagement
                 </TextEffect>
                 <TextEffect
                   per="line"
@@ -124,9 +124,8 @@ export default function HeroSection() {
                   as="p"
                   className="mx-auto mt-8 max-w-2xl text-balance text-lg"
                 >
-                  CloudDojo gives you AI-powered practice tests, real-time
-                  performance feedback, and a clear path from "confused" to
-                  "certified" — without the overwhelm.
+                  Highly customizable components for building modern websites
+                  and applications that look and feel the way you mean it.
                 </TextEffect>
 
                 <AnimatedGroup
@@ -189,7 +188,7 @@ export default function HeroSection() {
                 <div className="inset-shadow-2xs ring-background dark:inset-shadow-white/20 bg-background relative mx-auto max-w-6xl overflow-hidden rounded-2xl border p-4 shadow-lg shadow-zinc-950/15 ring-1">
                   <Image
                     className="bg-background aspect-15/8 relative hidden rounded-2xl dark:block"
-                    src="/images/features/dashboard.png"
+                    src="/mail2.png"
                     alt="app screen"
                     width="2700"
                     height="1440"
