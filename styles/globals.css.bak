@@ -1,8 +1,8 @@
+@config "../tailwind.config.ts";
 /* Syntax highlighting styles for code blocks */
 @import "./syntax-highlighting.css";
 
-@tailwind base;
-@tailwind components;
+@import "tailwindcss";
 @tailwind utilities;
 
 body {

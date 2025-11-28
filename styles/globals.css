@@ -1,10 +1,8 @@
+@import "tailwindcss";
 @config "../tailwind.config.ts";
+
 /* Syntax highlighting styles for code blocks */
 @import "./syntax-highlighting.css";
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 body {
   font-family: Arial, Helvetica, sans-serif;
