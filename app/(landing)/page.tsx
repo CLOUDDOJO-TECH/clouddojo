@@ -5,7 +5,7 @@ import FAQsFour from "@/features/marketing/components/faqs-4";
 import Footer from "@/features/marketing/components/footer";
 import HeroSection from "@/features/marketing/components/hero-section";
 import ProvidersSection from "@/features/marketing/components/providers";
-import StatsSection from "@/features/marketing/components/statssection";
+import StatsSection from "@/features/marketing/components/stats-section";
 import WallOfLoveSection from "@/features/marketing/components/testimonials";
 
 // currently rethinking the silk thing on the current background. this pr from jordan's pc tries to solve that.
@@ -16,7 +16,8 @@ export default function Home() {
         {/*<Navbar />*/}
         <main>
           <HeroSection />
-          <LogoCloud />
+          {/*<LogoCloud />*/}
+          <StatsSection />
           <ContentSection />
           <ProvidersSection />
           {/*<FeaturesSection />*/}

@@ -2,7 +2,6 @@ import type React from "react";
 import "../../styles/globals.css";
 import { Inter } from "next/font/google";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Spotlight } from "@/components/spotlight";
 import Script from "next/script";
 import * as seline from "@seline-analytics/web";
 import { Analytics } from "@vercel/analytics/react";
