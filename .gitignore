@@ -50,3 +50,6 @@ override.tf
 aws-lambdas/**/dist/
 aws-lambdas/**/node_modules/
 aws-lambdas/**/*.zip
+
+# All zip files
+*.zip
