@@ -36,7 +36,7 @@ export default function QuestionAnalysis({ quiz, answers }: QuestionAnalysisProp
               <div className="flex items-start gap-3">
                 <div
                   className={cn(
-                    "mt-1 flex-shrink-0 w-6 h-6 rounded-full md:flex items-center justify-center hidden",
+                    "mt-1 shrink-0 w-6 h-6 rounded-full md:flex items-center justify-center hidden",
                     isCorrect
                       ? "bg-green-100 text-green-600"
                       : isSkipped

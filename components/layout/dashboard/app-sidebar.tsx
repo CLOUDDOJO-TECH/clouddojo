@@ -172,7 +172,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const isActive = (url: string): boolean => url === pathname;
 
   return (
-    <Sidebar className="bg-sidebar !border-none " {...props}>
+    <Sidebar className="bg-sidebar border-none! " {...props}>
       <SidebarHeader>
         <SidebarMenuButton
           size="lg"
@@ -312,7 +312,7 @@ function NavItem({ item, isActive }: { item: NavItem; isActive: boolean }) {
     <SidebarMenuItem>
       <SidebarMenuButton
         asChild
-        className="group/menu-button font-medium gap-3 h-9 rounded-md bg-gradient-to-r hover:bg-transparent hover:from-sidebar-accent hover:to-sidebar-accent/40 data-[active=true]:from-primary/20 data-[active=true]:to-primary/5 [&>svg]:size-auto"
+        className="group/menu-button font-medium gap-3 h-9 rounded-md bg-linear-to-r hover:bg-transparent hover:from-sidebar-accent hover:to-sidebar-accent/40 data-[active=true]:from-primary/20 data-[active=true]:to-primary/5 [&>svg]:size-auto"
         isActive={isActive}
       >
         <Link href={item.url}>

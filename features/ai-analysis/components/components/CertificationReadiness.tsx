@@ -37,7 +37,7 @@ export function CertificationReadiness({
           <div className="h-3 relative max-w-xl rounded-full overflow-hidden">
             <div className="w-full h-full bg-gray-200 absolute"></div>
             <div
-              className="h-full bg-gradient-to-r from-yellow-400 via-emerald-500 to-emerald-600 absolute"
+              className="h-full bg-linear-to-r from-yellow-400 via-emerald-500 to-emerald-600 absolute"
               style={{ width: `${certificationReadiness}%` }}
             ></div>
           </div>

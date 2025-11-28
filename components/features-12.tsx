@@ -129,7 +129,7 @@ export default function Features() {
                 >
                   <Image
                     src={images[activeItem].image}
-                    className="size-full object-cover object-left-top dark:mix-blend-lighten"
+                    className="size-full object-cover object-top-left dark:mix-blend-lighten"
                     alt={images[activeItem].alt}
                     width={1207}
                     height={929}

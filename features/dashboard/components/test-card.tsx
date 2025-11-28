@@ -61,7 +61,7 @@ export default function PracticeTestCard({questionsCount, test, onStartTest, }: 
           className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
         />
         {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t dark:from-background from-gray-900  dark:via-background/80 via-gray-700 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t dark:from-background from-gray-900  dark:via-background/80 via-gray-700 to-transparent" />
       </div>
 
       {/* Top Badges */}
@@ -76,7 +76,7 @@ export default function PracticeTestCard({questionsCount, test, onStartTest, }: 
           {hasAccess ? (
             <Badge className="bg-emerald-500/90 text-white border-0 backdrop-blur-sm">Free</Badge>
           ) : (
-            <Badge className="bg-gradient-to-r from-purple-500/90 to-purple-600/90 text-white border-0 backdrop-blur-sm">
+            <Badge className="bg-linear-to-r from-purple-500/90 to-purple-600/90 text-white border-0 backdrop-blur-sm">
               <Zap className="w-3 h-3 mr-1" />
               Upgrade
             </Badge>

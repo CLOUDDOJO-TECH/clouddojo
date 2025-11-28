@@ -60,7 +60,7 @@ export default function PricingPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
         {/* Header */}
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-teal-600">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-linear-to-r from-emerald-400 to-teal-600">
             Simple, Transparent Pricing
           </h1>
           <p className="text-slate-300 text-xl max-w-3xl mx-auto">
@@ -103,7 +103,7 @@ export default function PricingPage() {
 
         {/* Feature Comparison */}
         <div className="mt-24 bg-slate-900/50 rounded-2xl p-8 backdrop-blur-sm border border-slate-800">
-          <h2 className="text-3xl font-bold text-center mb-10 bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-teal-600">
+          <h2 className="text-3xl font-bold text-center mb-10 bg-clip-text text-transparent bg-linear-to-r from-emerald-400 to-teal-600">
             Compare Plans
           </h2>
 
@@ -146,7 +146,7 @@ export default function PricingPage() {
 
         {/* FAQ Section */}
         <div className="mt-24 text-center">
-          <h2 className="text-3xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-teal-600">
+          <h2 className="text-3xl font-bold mb-6 bg-clip-text text-transparent bg-linear-to-r from-emerald-400 to-teal-600">
             Frequently Asked Questions
           </h2>
 

@@ -78,7 +78,7 @@ export const ShinyBlackCard = ({
     <div
       ref={cardRef}
       className={cn(
-        "relative group overflow-hidden rounded-2xl bg-gradient-to-b from-slate-800/90 to-slate-950 p-6 transition-all duration-300",
+        "relative group overflow-hidden rounded-2xl bg-linear-to-b from-slate-800/90 to-slate-950 p-6 transition-all duration-300",
         "border border-slate-900 shadow-lg hover:shadow-xl hover:border-slate-800",
         "backdrop-blur-sm backdrop-filter",
         className,
@@ -106,7 +106,7 @@ export const ShinyBlackCard = ({
       )}
 
       {/* Shine effect overlay */}
-      <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-zinc-800/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      <div className="absolute inset-0 bg-linear-to-tr from-transparent via-zinc-800/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
       {/* Content container */}
       <div className="relative z-10 h-full flex flex-col">

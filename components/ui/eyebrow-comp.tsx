@@ -7,7 +7,7 @@ export const EyebrowComp = ({ title }: { title: string }) => {
         <div className="absolute inset-0 bg-emerald-500/50 dark:bg-emerald-500/30 blur-xl rounded-full"></div>
 
         {/* Reflective highlight */}
-        <div className="absolute inset-x-0 top-0 h-[30%] w-full bg-gradient-to-b from-white/10 to-transparent rounded-t-full"></div>
+        <div className="absolute inset-x-0 top-0 h-[30%] w-full bg-linear-to-b from-white/10 to-transparent rounded-t-full"></div>
         <div className="flex -space-x-1.5 relative z-10"></div>
         <p className="text-white px-2 text-xs relative z-10 font-medium flex items-center">
           {title}

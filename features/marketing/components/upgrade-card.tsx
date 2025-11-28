@@ -31,7 +31,7 @@ export default function UpgradeCard() {
               </p>
             </div>
             {/* <button
-          className="rounded-full bg-gradient-to-b from-primary/80 to-primary text-white font-medium w-fit px-[13px] py-[4px] text-[11px] font-serif mt-2"
+          className="rounded-full bg-linear-to-b from-primary/80 to-primary text-white font-medium w-fit px-[13px] py-[4px] text-[11px] font-serif mt-2"
         >
           Upgrade plan
         </button> */}

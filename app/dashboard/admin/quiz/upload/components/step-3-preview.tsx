@@ -326,9 +326,9 @@ export function Step3Preview({
                       </p>
                     </div>
                     {expandedQuestions.has(index) ? (
-                      <ChevronUp className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
+                      <ChevronUp className="h-4 w-4 shrink-0 text-muted-foreground" />
                     ) : (
-                      <ChevronDown className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
+                      <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground" />
                     )}
                   </div>
 
@@ -350,7 +350,7 @@ export function Step3Preview({
                               </span>
                               <span className="flex-1">{option.content}</span>
                               {option.isCorrect && (
-                                <CheckCircle2 className="h-3 w-3 text-green-600 flex-shrink-0" />
+                                <CheckCircle2 className="h-3 w-3 text-green-600 shrink-0" />
                               )}
                             </div>
                           </div>

@@ -36,7 +36,7 @@ export function StreakRiskAlert() {
   };
 
   return (
-    <div className="relative overflow-hidden rounded-lg border border-orange-500/20 bg-gradient-to-r from-orange-500/10 to-red-500/10 p-4">
+    <div className="relative overflow-hidden rounded-lg border border-orange-500/20 bg-linear-to-r from-orange-500/10 to-red-500/10 p-4">
       {/* Dismiss button */}
       <button
         onClick={handleDismiss}
@@ -48,7 +48,7 @@ export function StreakRiskAlert() {
 
       <div className="flex items-start gap-4">
         {/* Fire icon */}
-        <div className="flex-shrink-0 rounded-full bg-orange-500/20 p-2">
+        <div className="shrink-0 rounded-full bg-orange-500/20 p-2">
           <Flame className="h-6 w-6 text-orange-500" />
         </div>
 

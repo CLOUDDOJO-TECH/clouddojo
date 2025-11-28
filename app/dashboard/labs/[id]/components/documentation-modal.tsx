@@ -149,7 +149,7 @@ export function DocumentationModal({
                             rel="noopener noreferrer"
                             className="flex items-center gap-3 p-3 rounded-lg border hover:bg-accent transition-colors"
                           >
-                            <FileText className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                            <FileText className="h-5 w-5 text-muted-foreground shrink-0" />
                             <div className="flex-1 min-w-0">
                               <p className="text-sm font-medium">
                                 {resource.title || resource.url}
@@ -160,7 +160,7 @@ export function DocumentationModal({
                                 </p>
                               )}
                             </div>
-                            <ExternalLink className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                            <ExternalLink className="h-4 w-4 text-muted-foreground shrink-0" />
                           </a>
                         ))}
                       </div>
@@ -189,7 +189,7 @@ export function DocumentationModal({
                             rel="noopener noreferrer"
                             className="flex items-center gap-3 p-3 rounded-lg border hover:bg-accent transition-colors"
                           >
-                            <ExternalLink className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                            <ExternalLink className="h-5 w-5 text-muted-foreground shrink-0" />
                             <div className="flex-1 min-w-0">
                               <p className="text-sm font-medium">
                                 {link.title || link.url}

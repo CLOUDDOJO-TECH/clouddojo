@@ -21,7 +21,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
     .replace(/\n\n/g, "<br/>")
     .replace(
       /\n([0-9]+)\. (.*)/g,
-      '<div class="ml-6 my-2 flex"><span class="flex-shrink-0 flex items-center justify-center h-6 w-6 rounded-full bg-blue-100 text-foreground/60 text-sm font-medium mr-3">$1</span> <span>$2</span></div>',
+      '<div class="ml-6 my-2 flex"><span class="shrink-0 flex items-center justify-center h-6 w-6 rounded-full bg-blue-100 text-foreground/60 text-sm font-medium mr-3">$1</span> <span>$2</span></div>',
     );
 
   return <div className="space-y-2" dangerouslySetInnerHTML={{ __html: processedContent }} />;

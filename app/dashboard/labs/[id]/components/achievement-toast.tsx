@@ -46,10 +46,10 @@ export function AchievementToast({
         isVisible ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
       )}
     >
-      <Card className="w-96 bg-gradient-to-r from-amber-50 to-yellow-50 dark:from-amber-950 dark:to-yellow-950 border-amber-200 dark:border-amber-800 shadow-lg">
+      <Card className="w-96 bg-linear-to-r from-amber-50 to-yellow-50 dark:from-amber-950 dark:to-yellow-950 border-amber-200 dark:border-amber-800 shadow-lg">
         <CardContent className="p-4">
           <div className="flex items-start gap-3">
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <div className="h-10 w-10 rounded-full bg-amber-500 flex items-center justify-center">
                 <Trophy className="h-5 w-5 text-white" />
               </div>

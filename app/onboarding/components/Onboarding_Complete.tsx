@@ -35,14 +35,14 @@ export function CompletionScreen({ selectedData }: CompletionScreenProps) {
       <div
         className={cn(
           "absolute inset-0 -z-10",
-          "[background-size:20px_20px]",
-          "[background-image:radial-gradient(circle,#e5e5e5_1px,transparent_1px)]",
-          "dark:[background-image:radial-gradient(circle,#404040_1px,transparent_1px)]",
+          "bg-size-[20px_20px]",
+          "bg-[radial-gradient(circle,#e5e5e5_1px,transparent_1px)]",
+          "dark:bg-[radial-gradient(circle,#404040_1px,transparent_1px)]",
         )}
       />
 
       {/* Radial gradient overlay - Behind the card */}
-      <div className="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center bg-background [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" />
+      <div className="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center bg-background mask-[radial-gradient(ellipse_at_center,transparent_20%,black)]" />
 
       {/* Content */}
       <div className="text-center space-y-8 flex z-10 flex-col p-4 max-w-2xl">

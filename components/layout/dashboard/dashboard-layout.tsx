@@ -32,14 +32,14 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
         <div className="relative z-50">
           <AssistantModal />
         </div>
-        <div className="[--header-height:calc(theme(spacing.14))]">
+        <div className="[--header-height:calc(--spacing(14))]">
           {/* Chatbot UI is rendered above all dashboard content */}
           {/* <ChatbotButton onClick={() => setChatOpen(true)} />
         <ChatbotWindow open={chatOpen} onOpenChange={setChatOpen} /> */}
           <SidebarProvider className="flex flex-col ">
             <div className="flex flex-1">
               <AppSidebar className="" />
-              <SidebarInset className="bg-sidebar !border-none overflow-hidden group/sidebar-inset">
+              <SidebarInset className="bg-sidebar border-none! overflow-hidden group/sidebar-inset">
                 <SiteHeader />
                 <div className="h-full bg-background md:rounded-s-3xl md:group-peer-data-[state=collapsed]/sidebar-inset:rounded-s-none transition-all ease-in-out duration-300">
                   {children}

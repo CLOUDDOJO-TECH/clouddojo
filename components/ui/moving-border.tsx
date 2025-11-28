@@ -32,7 +32,7 @@ export function MovingBorderComponent({
   return (
     <Component
       className={cn(
-        "relative h-auto w-auto overflow-hidden bg-transparent p-[1px] text-xl",
+        "relative h-auto w-auto overflow-hidden bg-transparent p-px text-xl",
         containerClassName,
       )}
       style={{

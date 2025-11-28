@@ -56,7 +56,7 @@ export function ProviderIcon({
         alt=""
         width={16}
         height={16}
-        className={`${className} object-contain flex-shrink-0`}
+        className={`${className} object-contain shrink-0`}
         onError={onError}
         unoptimized
       />

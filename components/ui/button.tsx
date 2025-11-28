@@ -10,7 +10,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-gradient-to-t from-primary to-primary/85 text-primary-foreground dark:inset-shadow-2xs dark:inset-shadow-white/10  border border-b-2 border-zinc-950/40 shadow-md shadow-zinc-950/20 ring-1 ring-inset ring-white/25 transition-[filter] duration-200 hover:brightness-110 active:brightness-90 dark:border-x-0 dark:border-t-0 dark:border-zinc-950/50 dark:ring-white/5",
+          "bg-linear-to-t from-primary to-primary/85 text-primary-foreground dark:inset-shadow-2xs dark:inset-shadow-white/10  border border-b-2 border-zinc-950/40 shadow-md shadow-zinc-950/20 ring-1 ring-inset ring-white/25 transition-[filter] duration-200 hover:brightness-110 active:brightness-90 dark:border-x-0 dark:border-t-0 dark:border-zinc-950/50 dark:ring-white/5",
         outline:
           "bg-background hover:bg-muted/50 dark:ring-input border-input/50 dark:border-input relative border-b-2 shadow-sm shadow-zinc-950/15 ring-1 ring-zinc-300",
         secondary:
@@ -24,15 +24,15 @@ const buttonVariants = cva(
         ringHover:
           "bg-primary text-primary-foreground transition-all duration-300 hover:bg-primary/90 hover:ring-2 hover:ring-primary/90 hover:ring-offset-2",
         shine:
-          "text-primary-foreground animate-shine bg-gradient-to-r from-primary via-primary/75 to-primary bg-[length:400%_100%] ",
+          "text-primary-foreground animate-shine bg-linear-to-r from-primary via-primary/75 to-primary bg-size-[400%_100%] ",
         linkHover1:
-          "relative after:absolute after:bg-primary after:bottom-2 after:h-[1px] after:w-2/3 after:origin-bottom-left after:scale-x-100 hover:after:origin-bottom-right hover:after:scale-x-0 after:transition-transform after:ease-in-out after:duration-300",
+          "relative after:absolute after:bg-primary after:bottom-2 after:h-px after:w-2/3 after:origin-bottom-left after:scale-x-100 hover:after:origin-bottom-right hover:after:scale-x-0 after:transition-transform after:ease-in-out after:duration-300",
         linkHover2:
-          "relative after:absolute after:bg-primary after:bottom-2 after:h-[1px] after:w-2/3 after:origin-bottom-right after:scale-x-0 hover:after:origin-bottom-left hover:after:scale-x-100 after:transition-transform after:ease-in-out after:duration-300",
+          "relative after:absolute after:bg-primary after:bottom-2 after:h-px after:w-2/3 after:origin-bottom-right after:scale-x-0 hover:after:origin-bottom-left hover:after:scale-x-100 after:transition-transform after:ease-in-out after:duration-300",
         theme:
           "flex-col h-auto w-auto p-0 gap-3 bg-transparent hover:bg-transparent border-0 shadow-none",
         gradient:
-          "bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-[0_8px_16px_rgba(16,185,129,0.4)] hover:shadow-[0_12px_24px_rgba(16,185,129,0.5)] transition-all duration-300 border-0 font-medium",
+          "bg-linear-to-r from-emerald-500 to-emerald-600 text-white shadow-[0_8px_16px_rgba(16,185,129,0.4)] hover:shadow-[0_12px_24px_rgba(16,185,129,0.5)] transition-all duration-300 border-0 font-medium",
       },
       size: {
         default: "h-9 px-4 py-2",
@@ -93,7 +93,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         )}
         <Slottable>{props.children}</Slottable>
         {Icon && iconPlacement === "right" && (
-          <div className="w-0 translate-x-[100%] pl-0 opacity-0 transition-all duration-200 *:size-4 group-hover:w-5 group-hover:translate-x-0 group-hover:pl-2 group-hover:opacity-100">
+          <div className="w-0 translate-x-full pl-0 opacity-0 transition-all duration-200 *:size-4 group-hover:w-5 group-hover:translate-x-0 group-hover:pl-2 group-hover:opacity-100">
             {React.createElement(Icon)}
           </div>
         )}

@@ -107,7 +107,7 @@ export function ProjectListItem({ project }: ProjectListItemProps) {
       {/* Left side: Progress Circle + Category/Title + Metadata + Avatars + Completion */}
       <div className="flex items-center gap-4 flex-1">
         {/* Progress Circle Indicator */}
-        <div className="relative w-5 h-5 flex-shrink-0">
+        <div className="relative w-5 h-5 shrink-0">
           {/* Background circle */}
           <div className="absolute inset-0 rounded-full border-2 border-muted-foreground/30" />
 
@@ -177,7 +177,7 @@ export function ProjectListItem({ project }: ProjectListItemProps) {
       </div>
 
       {/* Right side: Add/Remove Projects button */}
-      <div className="flex-shrink-0 ml-4">
+      <div className="shrink-0 ml-4">
         <button
           onClick={handleToggleProject}
           className="w-8 h-8 rounded-full border border-border hover:border-primary hover:bg-primary/10 flex items-center justify-center transition-all"

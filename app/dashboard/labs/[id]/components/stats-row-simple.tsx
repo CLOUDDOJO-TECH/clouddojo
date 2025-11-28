@@ -57,7 +57,7 @@ export function StatsRowSimple({
       {stats.map((stat, index) => (
         <div key={index} className="flex items-center gap-4">
           {/* Icon Box */}
-          <div className="w-12 h-12 rounded-xl bg-purple-100 dark:bg-purple-900/30 border border-purple-200 dark:border-purple-800 flex items-center justify-center flex-shrink-0">
+          <div className="w-12 h-12 rounded-xl bg-purple-100 dark:bg-purple-900/30 border border-purple-200 dark:border-purple-800 flex items-center justify-center shrink-0">
             <StatsIcon />
           </div>
 

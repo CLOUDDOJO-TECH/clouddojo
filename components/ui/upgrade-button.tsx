@@ -35,10 +35,10 @@ const UpgradeButton = forwardRef<HTMLButtonElement, UpgradeButtonProps>(
 
     const router = useRouter()
     const gradientVariants = {
-      primary: "bg-gradient-to-r from-[#B2D0F9] via-[#FFDB9A] via-[#F08878] to-[#FDC3B6]",
-      secondary: "bg-gradient-to-r from-purple-400 via-pink-400 to-red-400",
-      premium: "bg-gradient-to-r from-yellow-400 via-orange-400 to-red-500",
-      electric: "bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600",
+      primary: "bg-linear-to-r from-[#B2D0F9] via-[#FFDB9A] via-[#F08878] to-[#FDC3B6]",
+      secondary: "bg-linear-to-r from-purple-400 via-pink-400 to-red-400",
+      premium: "bg-linear-to-r from-yellow-400 via-orange-400 to-red-500",
+      electric: "bg-linear-to-r from-cyan-400 via-blue-500 to-purple-600",
     }
 
     const shadowVariants = {

@@ -624,7 +624,7 @@ export function QuickInsights({ quizAttemptId }: { quizAttemptId: string }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 border border-blue-200 dark:border-blue-800 rounded-lg p-6 space-y-4"
+      className="bg-linear-to-br from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 border border-blue-200 dark:border-blue-800 rounded-lg p-6 space-y-4"
     >
       <h3 className="font-semibold text-lg flex items-center gap-2">
         <Lightbulb className="h-5 w-5 text-blue-600" />
@@ -634,7 +634,7 @@ export function QuickInsights({ quizAttemptId }: { quizAttemptId: string }) {
       {/* Show top strength */}
       {analysis.strengths?.[0] && (
         <div className="flex items-start gap-2">
-          <TrendingUp className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+          <TrendingUp className="h-5 w-5 text-green-600 mt-0.5 shrink-0" />
           <div>
             <Badge variant="outline" className="mb-1">
               Top Strength
@@ -647,7 +647,7 @@ export function QuickInsights({ quizAttemptId }: { quizAttemptId: string }) {
       {/* Show top weakness */}
       {analysis.weaknesses?.[0] && (
         <div className="flex items-start gap-2">
-          <TrendingDown className="h-5 w-5 text-orange-600 mt-0.5 flex-shrink-0" />
+          <TrendingDown className="h-5 w-5 text-orange-600 mt-0.5 shrink-0" />
           <div>
             <Badge variant="outline" className="mb-1">
               Focus Area
@@ -783,9 +783,9 @@ export function PaywallCard({ title, features }: PaywallCardProps) {
       {/* Blurred Preview of Premium Content */}
       <div className="blur-sm pointer-events-none select-none opacity-40">
         <div className="space-y-4 p-6 border rounded-lg">
-          <div className="h-24 bg-gradient-to-r from-green-100 to-green-50 dark:from-green-900 dark:to-green-950 rounded-lg" />
-          <div className="h-24 bg-gradient-to-r from-orange-100 to-orange-50 dark:from-orange-900 dark:to-orange-950 rounded-lg" />
-          <div className="h-32 bg-gradient-to-r from-blue-100 to-blue-50 dark:from-blue-900 dark:to-blue-950 rounded-lg" />
+          <div className="h-24 bg-linear-to-r from-green-100 to-green-50 dark:from-green-900 dark:to-green-950 rounded-lg" />
+          <div className="h-24 bg-linear-to-r from-orange-100 to-orange-50 dark:from-orange-900 dark:to-orange-950 rounded-lg" />
+          <div className="h-32 bg-linear-to-r from-blue-100 to-blue-50 dark:from-blue-900 dark:to-blue-950 rounded-lg" />
         </div>
       </div>
 
@@ -806,7 +806,7 @@ export function PaywallCard({ title, features }: PaywallCardProps) {
             <ul className="text-left space-y-2">
               {features.map((feature, idx) => (
                 <li key={idx} className="flex items-start gap-2">
-                  <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                  <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 shrink-0" />
                   <span className="text-sm">{feature}</span>
                 </li>
               ))}

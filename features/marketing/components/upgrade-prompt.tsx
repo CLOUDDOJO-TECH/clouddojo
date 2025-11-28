@@ -36,12 +36,12 @@ export function UpgradePrompt({
     return (
       <div
         className={cn(
-          "relative overflow-hidden rounded-lg border border-emerald-500/20 bg-gradient-to-r from-emerald-500/10 to-green-500/10 p-4",
+          "relative overflow-hidden rounded-lg border border-emerald-500/20 bg-linear-to-r from-emerald-500/10 to-green-500/10 p-4",
           className
         )}
       >
         <div className="flex items-center gap-4">
-          <div className="flex-shrink-0 rounded-full bg-emerald-500/20 p-3">
+          <div className="shrink-0 rounded-full bg-emerald-500/20 p-3">
             <Sparkles className="h-6 w-6 text-emerald-500" />
           </div>
 
@@ -52,7 +52,7 @@ export function UpgradePrompt({
 
           <Button
             onClick={() => router.push("/pricing")}
-            className="bg-emerald-500 hover:bg-emerald-600 text-white flex-shrink-0"
+            className="bg-emerald-500 hover:bg-emerald-600 text-white shrink-0"
           >
             <Sparkles className="h-4 w-4 mr-2" />
             Upgrade Now
@@ -88,7 +88,7 @@ export function UpgradePrompt({
           <div className="space-y-2 text-left">
             {features.map((feature, idx) => (
               <div key={idx} className="flex items-start gap-2 text-sm">
-                <Zap className="h-4 w-4 text-emerald-500 flex-shrink-0 mt-0.5" />
+                <Zap className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
                 <span className="text-foreground/80">{feature}</span>
               </div>
             ))}
@@ -127,7 +127,7 @@ export function UpgradePrompt({
     <Card className={cn("p-6 border-emerald-500/20 bg-emerald-500/5", className)}>
       <div className="space-y-4">
         <div className="flex items-start gap-3">
-          <div className="flex-shrink-0 rounded-full bg-emerald-500/20 p-2">
+          <div className="shrink-0 rounded-full bg-emerald-500/20 p-2">
             <Target className="h-5 w-5 text-emerald-500" />
           </div>
           <div className="flex-1">
@@ -139,7 +139,7 @@ export function UpgradePrompt({
         <ul className="space-y-2">
           {features.map((feature, idx) => (
             <li key={idx} className="flex items-start gap-2 text-sm">
-              <Sparkles className="h-4 w-4 text-emerald-500 flex-shrink-0 mt-0.5" />
+              <Sparkles className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
               <span className="text-foreground/80">{feature}</span>
             </li>
           ))}

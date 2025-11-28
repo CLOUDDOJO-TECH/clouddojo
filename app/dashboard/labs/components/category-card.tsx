@@ -41,11 +41,11 @@ export function CategoryCard({
             />
           ) : (
             // Fallback gradient if no image
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500 via-blue-500 to-teal-500" />
+            <div className="absolute inset-0 bg-linear-to-br from-purple-500 via-blue-500 to-teal-500" />
           )}
 
           {/* Dark overlay gradient for text readability */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent" />
         </div>
 
         {/* Content */}

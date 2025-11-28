@@ -14,7 +14,7 @@ export function LightThemePreview({ className = "" }: ThemePreviewProps) {
   return (
     <div className={`h-full w-full p-3 space-y-1 bg-white ${className}`}>
       {/* Top bar */}
-      <div className="h-2 w-full rounded-[3px] bg-gradient-to-l from-gray-300 to-gray-400" />
+      <div className="h-2 w-full rounded-[3px] bg-linear-to-l from-gray-300 to-gray-400" />
 
       {/* Content area */}
       <div className="flex gap-1">
@@ -23,9 +23,9 @@ export function LightThemePreview({ className = "" }: ThemePreviewProps) {
 
         {/* Main content */}
         <div className="flex-1 space-y-1.5">
-          <div className="h-3 w-full rounded-[3px] bg-gradient-to-r from-gray-300 to-gray-200" />
-          <div className="h-3 w-full rounded-[3px] bg-gradient-to-r from-gray-100 to-gray-200" />
-          <div className="h-3 w-full rounded-[3px] bg-gradient-to-r from-gray-100 to-gray-200" />
+          <div className="h-3 w-full rounded-[3px] bg-linear-to-r from-gray-300 to-gray-200" />
+          <div className="h-3 w-full rounded-[3px] bg-linear-to-r from-gray-100 to-gray-200" />
+          <div className="h-3 w-full rounded-[3px] bg-linear-to-r from-gray-100 to-gray-200" />
 
           <div className="h-1 w-4 bg-emerald-500 rounded-sm justify-end items-end flex" />
         </div>
@@ -41,7 +41,7 @@ export function DarkThemePreview({ className = "" }: ThemePreviewProps) {
   return (
     <div className={`h-full w-full p-3 space-y-1 bg-gray-900 ${className}`}>
       {/* Top bar */}
-      <div className="h-2 w-full rounded-[3px] bg-gradient-to-l from-gray-700 to-gray-800" />
+      <div className="h-2 w-full rounded-[3px] bg-linear-to-l from-gray-700 to-gray-800" />
 
       {/* Content area */}
       <div className="flex gap-1">
@@ -50,9 +50,9 @@ export function DarkThemePreview({ className = "" }: ThemePreviewProps) {
 
         {/* Main content */}
         <div className="flex-1 space-y-1.5">
-          <div className="h-3 w-full rounded-[3px] bg-gradient-to-r from-gray-600 to-gray-700" />
-          <div className="h-3 w-full rounded-[3px] bg-gradient-to-r from-gray-600 to-gray-700" />
-          <div className="h-3 w-full rounded-[3px] bg-gradient-to-r from-gray-600 to-gray-700" />
+          <div className="h-3 w-full rounded-[3px] bg-linear-to-r from-gray-600 to-gray-700" />
+          <div className="h-3 w-full rounded-[3px] bg-linear-to-r from-gray-600 to-gray-700" />
+          <div className="h-3 w-full rounded-[3px] bg-linear-to-r from-gray-600 to-gray-700" />
 
           <div className="h-1 w-4 bg-emerald-500 rounded-sm justify-end items-end flex" />
         </div>
@@ -71,7 +71,7 @@ export function SystemThemePreview({ className = "" }: ThemePreviewProps) {
       {/* Light Half */}
       <div className="w-1/2 h-full p-3 space-y-1 bg-white">
         {/* Top bar */}
-        <div className="h-2 w-full rounded-l-[3px] bg-gradient-to-l from-gray-300 to-gray-400" />
+        <div className="h-2 w-full rounded-l-[3px] bg-linear-to-l from-gray-300 to-gray-400" />
 
         {/* Content area */}
         <div className="flex gap-1">
@@ -80,9 +80,9 @@ export function SystemThemePreview({ className = "" }: ThemePreviewProps) {
 
           {/* Main content */}
           <div className="flex-1 space-y-1.5">
-            <div className="h-3 w-full rounded-[3px] bg-gradient-to-r from-gray-300 to-gray-200" />
-            <div className="h-3 w-full rounded-[3px] bg-gradient-to-r from-gray-100 to-gray-200" />
-            <div className="h-3 w-full rounded-[3px] bg-gradient-to-r from-gray-100 to-gray-200" />
+            <div className="h-3 w-full rounded-[3px] bg-linear-to-r from-gray-300 to-gray-200" />
+            <div className="h-3 w-full rounded-[3px] bg-linear-to-r from-gray-100 to-gray-200" />
+            <div className="h-3 w-full rounded-[3px] bg-linear-to-r from-gray-100 to-gray-200" />
 
             <div className="h-1 w-4 bg-emerald-500 rounded-sm justify-end items-end flex" />
           </div>
@@ -92,7 +92,7 @@ export function SystemThemePreview({ className = "" }: ThemePreviewProps) {
       {/* Dark Half */}
       <div className="w-1/2 h-full p-3 space-y-1 bg-gray-900">
         {/* Top bar */}
-        <div className="h-2 w-full rounded-r-[3px] bg-gradient-to-l from-gray-700 to-gray-800" />
+        <div className="h-2 w-full rounded-r-[3px] bg-linear-to-l from-gray-700 to-gray-800" />
 
         {/* Content area */}
         <div className="flex gap-1">
@@ -101,9 +101,9 @@ export function SystemThemePreview({ className = "" }: ThemePreviewProps) {
 
           {/* Main content */}
           <div className="flex-1 space-y-1.5">
-            <div className="h-3 w-full rounded-[3px] bg-gradient-to-r from-gray-600 to-gray-700" />
-            <div className="h-3 w-full rounded-[3px] bg-gradient-to-r from-gray-600 to-gray-700" />
-            <div className="h-3 w-full rounded-[3px] bg-gradient-to-r from-gray-600 to-gray-700" />
+            <div className="h-3 w-full rounded-[3px] bg-linear-to-r from-gray-600 to-gray-700" />
+            <div className="h-3 w-full rounded-[3px] bg-linear-to-r from-gray-600 to-gray-700" />
+            <div className="h-3 w-full rounded-[3px] bg-linear-to-r from-gray-600 to-gray-700" />
 
             <div className="h-1 w-4 bg-emerald-500 rounded-sm justify-end items-end flex" />
           </div>

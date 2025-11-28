@@ -115,7 +115,7 @@ const ProviderCard = ({
           >
             <Link href={link}>
               Learn More
-              <ChevronRight className="ml-0 !size-3.5 opacity-50" />
+              <ChevronRight className="ml-0 size-3.5! opacity-50" />
             </Link>
           </Button>
         </div>

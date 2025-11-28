@@ -184,15 +184,15 @@ export function QuizInsights({ quizAttemptId }: QuizInsightsProps) {
               </h4>
               <ul className="space-y-2 text-xs text-foreground/70">
                 <li className="flex items-start gap-2">
-                  <Sparkles className="h-4 w-4 text-emerald-500 flex-shrink-0 mt-0.5" />
+                  <Sparkles className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
                   <span><strong>Personalized insights</strong> - AI analyzes your specific weaknesses and strengths</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <Target className="h-4 w-4 text-emerald-500 flex-shrink-0 mt-0.5" />
+                  <Target className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
                   <span><strong>Custom study plans</strong> - Get recommendations tailored to your learning style</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <TrendingUp className="h-4 w-4 text-emerald-500 flex-shrink-0 mt-0.5" />
+                  <TrendingUp className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
                   <span><strong>Faster certification</strong> - Focus on what matters most for your exam</span>
                 </li>
               </ul>

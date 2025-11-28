@@ -216,7 +216,7 @@ export function DashboardAISummary() {
       </div>
 
       {/* Subtle accent line at top */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-foreground/20 to-transparent" />
+      <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-foreground/20 to-transparent" />
     </Card>
   );
 }

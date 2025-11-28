@@ -27,7 +27,7 @@ export const BlogCard = ({ post, featured = false }: BlogCardProps) => {
         style={{ backgroundImage: `url('${post.image}')` }}
       >
         <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('${post.image}')` }} />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-black/20" />
         <div className="relative z-10 p-8 h-full flex flex-col justify-end text-white space-y-4">
           <div className="space-y-4">
             <Badge className="bg-white/20 text-white hover:bg-white/30 w-fit">
@@ -76,7 +76,7 @@ export const BlogCard = ({ post, featured = false }: BlogCardProps) => {
           className="h-full w-full bg-cover bg-center relative"
           style={{ backgroundImage: `url('${post.image}')` }}
         >
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/20 to-transparent" />
           <div className="absolute bottom-3 right-3">
             <span className="text-2xl opacity-80">{post.category === "Cloud Computing" ? "☁️" : post.category === "DevOps" ? "⚙️" : post.category === "Tutorials" ? "📚" : post.category === "Career Tips" ? "💼" : post.category === "Industry News" ? "🚀" : "📰"}</span>
           </div>

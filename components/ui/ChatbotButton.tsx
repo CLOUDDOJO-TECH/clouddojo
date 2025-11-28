@@ -26,7 +26,7 @@ export function ChatbotButton({ onClick }: { onClick: () => void }) {
         size="icon"
         variant="default"
         aria-label="Open AI Chatbot"
-        className="shadow-lg rounded-full bg-gradient-to-br from-emerald-500 to-blue-600 text-white hover:scale-105 focus:ring-2 focus:ring-emerald-400"
+        className="shadow-lg rounded-full bg-linear-to-br from-emerald-500 to-blue-600 text-white hover:scale-105 focus:ring-2 focus:ring-emerald-400"
         asChild={false}
         onClick={onClick}
       >

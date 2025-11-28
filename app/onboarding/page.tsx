@@ -85,14 +85,14 @@ export default function CloudDojoOnboarding() {
       <div
         className={cn(
           "absolute inset-0 -z-10",
-          "[background-size:20px_20px]",
-          "[background-image:radial-gradient(circle,#e5e5e5_1px,transparent_1px)]",
-          "dark:[background-image:radial-gradient(circle,#404040_1px,transparent_1px)]",
+          "bg-size-[20px_20px]",
+          "bg-[radial-gradient(circle,#e5e5e5_1px,transparent_1px)]",
+          "dark:bg-[radial-gradient(circle,#404040_1px,transparent_1px)]",
         )}
       />
 
       {/* Radial gradient overlay - Behind the card */}
-      <div className="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center bg-background [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" />
+      <div className="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center bg-background mask-[radial-gradient(ellipse_at_center,transparent_20%,black)]" />
 
       {/* Content - Directly on the grid, no card wrapper */}
       <div className="relative z-10 items-center justify-center flex-col md:my-8 my-4 md:w-[60%] w-full max-w-4xl space-y-8">

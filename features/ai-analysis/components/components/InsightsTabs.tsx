@@ -78,7 +78,7 @@ export function InsightsTabs({ data }: InsightsTabsProps) {
                   className="bg-white rounded-lg border border-emerald-200 p-5 shadow-sm hover:shadow-md transition-shadow"
                 >
                   <div className="flex items-start">
-                    <div className="bg-emerald-100 rounded-full p-2 mr-3 flex-shrink-0">
+                    <div className="bg-emerald-100 rounded-full p-2 mr-3 shrink-0">
                       <CheckCircle className="h-5 w-5 text-emerald-600" />
                     </div>
                     <p className="text-gray-700">{strength}</p>
@@ -96,7 +96,7 @@ export function InsightsTabs({ data }: InsightsTabsProps) {
                   className="bg-white rounded-lg border border-blue-200 p-5 shadow-sm hover:shadow-md transition-shadow"
                 >
                   <div className="flex items-start">
-                    <div className="bg-blue-100 rounded-full p-2 mr-3 flex-shrink-0">
+                    <div className="bg-blue-100 rounded-full p-2 mr-3 shrink-0">
                       <AlertCircle className="h-5 w-5 text-blue-600" />
                     </div>
                     <p className="text-gray-700">{weakness}</p>
@@ -114,7 +114,7 @@ export function InsightsTabs({ data }: InsightsTabsProps) {
                   className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm hover:shadow-md transition-shadow"
                 >
                   <div className="flex items-start">
-                    <div className="bg-emerald-100 rounded-full p-2 mr-4 flex-shrink-0">
+                    <div className="bg-emerald-100 rounded-full p-2 mr-4 shrink-0">
                       <BookOpen className="h-5 w-5 text-emerald-600" />
                     </div>
                     <div>

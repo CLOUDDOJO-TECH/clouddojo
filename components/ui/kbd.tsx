@@ -15,7 +15,7 @@ const kbdVariants = cva(
       variant: {
         default: "bg-accent",
         outline:
-          "bg-background px-0 [&_[data-slot='kbd-key']]:min-w-[20px] [&_[data-slot='kbd-key']]:border [&_[data-slot='kbd-key']]:border-border [&_[data-slot='kbd-key']]:bg-muted/30 [&_[data-slot='kbd-key']]:px-1.5 [&_[data-slot='kbd-key']]:shadow-xs",
+          "bg-background px-0 **:data-[slot='kbd-key']:min-w-[20px] **:data-[slot='kbd-key']:border **:data-[slot='kbd-key']:border-border **:data-[slot='kbd-key']:bg-muted/30 **:data-[slot='kbd-key']:px-1.5 **:data-[slot='kbd-key']:shadow-xs",
         ghost: "bg-transparent shadow-none",
       },
     },

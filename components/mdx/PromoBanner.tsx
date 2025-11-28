@@ -26,12 +26,12 @@ export const PromoBanner = ({
   ...props
 }: PromoBannerProps) => {
   const variantStyles = {
-    default: "bg-gradient-to-r from-muted to-muted/50 border-border",
-    primary: "bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20",
+    default: "bg-linear-to-r from-muted to-muted/50 border-border",
+    primary: "bg-linear-to-r from-primary/10 to-primary/5 border-primary/20",
     success:
-      "bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950/30 dark:to-emerald-950/30 border-green-200 dark:border-green-800",
+      "bg-linear-to-r from-green-50 to-emerald-50 dark:from-green-950/30 dark:to-emerald-950/30 border-green-200 dark:border-green-800",
     warning:
-      "bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-950/30 dark:to-orange-950/30 border-yellow-200 dark:border-yellow-800",
+      "bg-linear-to-r from-yellow-50 to-orange-50 dark:from-yellow-950/30 dark:to-orange-950/30 border-yellow-200 dark:border-yellow-800",
   };
 
   const buttonStyles = {
@@ -52,7 +52,7 @@ export const PromoBanner = ({
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:gap-6">
         {/* Image section */}
         {image && (
-          <div className="flex-shrink-0 order-1 md:order-none">
+          <div className="shrink-0 order-1 md:order-0">
             <div className="w-full h-32 sm:w-64 sm:h-36 md:w-56 md:h-32 rounded-lg overflow-hidden bg-background border flex items-center justify-center mx-auto md:mx-0">
               <Image
                 src={image}
@@ -66,7 +66,7 @@ export const PromoBanner = ({
         )}
 
         {/* Content section */}
-        <div className="flex-1 text-center md:text-left order-2 md:order-none">
+        <div className="flex-1 text-center md:text-left order-2 md:order-0">
           <h3 className="text-xl sm:text-2xl font-bold mb-2 text-foreground">
             {title}
           </h3>

@@ -143,7 +143,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
       <CardHeader className="pb-3">
         {/* Thumbnail and Premium Badge */}
         <div className="relative mb-3">
-          <div className="aspect-video w-full bg-gradient-to-br from-primary/10 to-secondary/10 rounded-lg flex items-center justify-center overflow-hidden">
+          <div className="aspect-video w-full bg-linear-to-br from-primary/10 to-secondary/10 rounded-lg flex items-center justify-center overflow-hidden">
             {project.thumbnailUrl ? (
               <Image
                 src={project.thumbnailUrl}
@@ -152,7 +152,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
                 className="object-cover group-hover:scale-105 transition-transform duration-300"
               />
             ) : (
-              <div className="flex items-center justify-center w-full h-full bg-gradient-to-br from-primary/20 via-primary/10 to-secondary/20">
+              <div className="flex items-center justify-center w-full h-full bg-linear-to-br from-primary/20 via-primary/10 to-secondary/20">
                 <Zap className="h-8 w-8 text-primary/60" />
               </div>
             )}

@@ -399,7 +399,7 @@ function TestCard({ test, view, onStartTest }: TestCardProps) {
                 Free
               </Badge>
             ) : (
-              <Badge className="absolute top-2 right-2 bg-gradient-to-b from-emerald-500 to-emerald-600 text-white dark:bg-emerald-900 dark:text-emerald-300 focus:ring-2 focus:ring-emerald-400 hover:shadow-xl transition duration-200">
+              <Badge className="absolute top-2 right-2 bg-linear-to-b from-emerald-500 to-emerald-600 text-white dark:bg-emerald-900 dark:text-emerald-300 focus:ring-2 focus:ring-emerald-400 hover:shadow-xl transition duration-200">
                 Upgrade
               </Badge>
             )}

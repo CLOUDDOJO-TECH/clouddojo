@@ -64,7 +64,7 @@ export function StepNavigation({
                   disabled={!isAccessible}
                 >
                   <div className="flex items-start gap-3 w-full">
-                    <div className="flex-shrink-0 mt-0.5">
+                    <div className="shrink-0 mt-0.5">
                       {isCompleted ? (
                         <CheckCircle2 className="h-5 w-5 text-emerald-500" />
                       ) : isAccessible ? (

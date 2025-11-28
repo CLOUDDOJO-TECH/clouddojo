@@ -135,7 +135,7 @@ export function SubscriptionSettings() {
               {/* Status-specific alerts */}
               {isCancelledButActive && (
                 <div className="flex items-start gap-3 p-4 bg-orange-50 dark:bg-orange-950/20 border border-orange-200 dark:border-orange-900/50 rounded-lg">
-                  <AlertTriangle className="h-5 w-5 text-orange-600 dark:text-orange-400 mt-0.5 flex-shrink-0" />
+                  <AlertTriangle className="h-5 w-5 text-orange-600 dark:text-orange-400 mt-0.5 shrink-0" />
                   <div className="space-y-2">
                     <p className="font-medium text-orange-800 dark:text-orange-200">
                       Subscription Cancelled
@@ -162,7 +162,7 @@ export function SubscriptionSettings() {
 
               {isPastDue && (
                 <div className="flex items-start gap-3 p-4 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/50 rounded-lg">
-                  <CreditCard className="h-5 w-5 text-red-600 dark:text-red-400 mt-0.5 flex-shrink-0" />
+                  <CreditCard className="h-5 w-5 text-red-600 dark:text-red-400 mt-0.5 shrink-0" />
                   <div className="space-y-2">
                     <p className="font-medium text-red-800 dark:text-red-200">
                       Payment Required

@@ -80,15 +80,15 @@ export function MarkdownEditor({
               className="space-y-3 rounded-md border bg-muted/30 p-4"
               style={{ minHeight: `${rows * 24}px` }}
             >
-              <div className="h-4 w-3/4 bg-gradient-to-r from-muted via-muted-foreground/10 to-muted rounded animate-pulse" />
-              <div className="h-4 w-full bg-gradient-to-r from-muted via-muted-foreground/10 to-muted rounded animate-pulse" />
-              <div className="h-4 w-5/6 bg-gradient-to-r from-muted via-muted-foreground/10 to-muted rounded animate-pulse" />
-              <div className="h-4 w-full bg-gradient-to-r from-muted via-muted-foreground/10 to-muted rounded animate-pulse" />
-              <div className="h-4 w-2/3 bg-gradient-to-r from-muted via-muted-foreground/10 to-muted rounded animate-pulse" />
-              <div className="h-4 w-full bg-gradient-to-r from-muted via-muted-foreground/10 to-muted rounded animate-pulse" />
-              <div className="h-4 w-4/5 bg-gradient-to-r from-muted via-muted-foreground/10 to-muted rounded animate-pulse" />
-              <div className="h-4 w-full bg-gradient-to-r from-muted via-muted-foreground/10 to-muted rounded animate-pulse" />
-              <div className="h-4 w-3/4 bg-gradient-to-r from-muted via-muted-foreground/10 to-muted rounded animate-pulse" />
+              <div className="h-4 w-3/4 bg-linear-to-r from-muted via-muted-foreground/10 to-muted rounded animate-pulse" />
+              <div className="h-4 w-full bg-linear-to-r from-muted via-muted-foreground/10 to-muted rounded animate-pulse" />
+              <div className="h-4 w-5/6 bg-linear-to-r from-muted via-muted-foreground/10 to-muted rounded animate-pulse" />
+              <div className="h-4 w-full bg-linear-to-r from-muted via-muted-foreground/10 to-muted rounded animate-pulse" />
+              <div className="h-4 w-2/3 bg-linear-to-r from-muted via-muted-foreground/10 to-muted rounded animate-pulse" />
+              <div className="h-4 w-full bg-linear-to-r from-muted via-muted-foreground/10 to-muted rounded animate-pulse" />
+              <div className="h-4 w-4/5 bg-linear-to-r from-muted via-muted-foreground/10 to-muted rounded animate-pulse" />
+              <div className="h-4 w-full bg-linear-to-r from-muted via-muted-foreground/10 to-muted rounded animate-pulse" />
+              <div className="h-4 w-3/4 bg-linear-to-r from-muted via-muted-foreground/10 to-muted rounded animate-pulse" />
             </div>
           ) : (
             <Textarea

@@ -107,10 +107,10 @@ const defaultComponents = memoizeMarkdownComponents({
     <table className={cn("my-5 w-full border-separate border-spacing-0 overflow-y-auto", className)} {...props} />
   ),
   th: ({ className, ...props }) => (
-    <th className={cn("bg-muted px-4 py-2 text-left font-bold first:rounded-tl-lg last:rounded-tr-lg [&[align=center]]:text-center [&[align=right]]:text-right", className)} {...props} />
+    <th className={cn("bg-muted px-4 py-2 text-left font-bold first:rounded-tl-lg last:rounded-tr-lg [[align=center]]:text-center [[align=right]]:text-right", className)} {...props} />
   ),
   td: ({ className, ...props }) => (
-    <td className={cn("border-b border-l px-4 py-2 text-left last:border-r [&[align=center]]:text-center [&[align=right]]:text-right", className)} {...props} />
+    <td className={cn("border-b border-l px-4 py-2 text-left last:border-r [[align=center]]:text-center [[align=right]]:text-right", className)} {...props} />
   ),
   tr: ({ className, ...props }) => (
     <tr className={cn("m-0 border-b p-0 first:border-t [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg", className)} {...props} />
@@ -119,7 +119,7 @@ const defaultComponents = memoizeMarkdownComponents({
     <sup className={cn("[&>a]:text-xs [&>a]:no-underline", className)} {...props} />
   ),
   pre: ({ className, ...props }) => (
-    <pre className={cn("overflow-x-auto rounded-b-lg !rounded-t-none bg-black p-4 text-white", className)} {...props} />
+    <pre className={cn("overflow-x-auto rounded-b-lg rounded-t-none! bg-black p-4 text-white", className)} {...props} />
   ),
   code: function Code({ className, ...props }) {
     const isCodeBlock = useIsMarkdownCodeBlock();

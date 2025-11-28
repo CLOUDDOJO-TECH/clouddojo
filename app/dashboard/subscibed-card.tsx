@@ -21,7 +21,7 @@ export default function SubscriptionCard({ plan, variant = "minimal", className 
         className={cn(
           "overflow-hidden",
           variant === "minimal" && "border border-emerald-200 bg-white shadow-sm",
-          variant === "gradient" && "border-0 bg-gradient-to-br from-emerald-50 to-emerald-100 shadow-md",
+          variant === "gradient" && "border-0 bg-linear-to-br from-emerald-50 to-emerald-100 shadow-md",
           variant === "outlined" && "border-2 border-emerald-500 bg-sidebar shadow-sm",
           variant === "glass" && "border border-white/20 bg-emerald-100/20 backdrop-blur-md shadow-lg",
           variant === "accent" && "border-0 bg-emerald-500 text-foreground shadow-md",
@@ -69,7 +69,7 @@ export default function SubscriptionCard({ plan, variant = "minimal", className 
             <div className="mt-3 flex items-center">
               <Badge
                 variant={variant === "accent" ? "outline" : "default"}
-                className={cn("text-xs font-normal bg-gradient-to-b from-emerald-500 to-primary shadow-md", variant === "accent" && "border-white/30 text-white")}
+                className={cn("text-xs font-normal bg-linear-to-b from-emerald-500 to-primary shadow-md", variant === "accent" && "border-white/30 text-white")}
               >
                 <Check className="mr-1 h-3 w-3" /> Active
               </Badge>

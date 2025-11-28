@@ -21,7 +21,7 @@ export function PracticeCard({ title, questionCount, status, thumbnail, href }: 
       <CardHeader className="relative p-0">
         <div className="relative h-48 w-full overflow-hidden rounded-t-lg">
           <div className="absolute inset-0 aws-card-bg opacity-80" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-t from-background to-transparent" />
           <div className="absolute bottom-4 left-4">
             <Image src={ thumbnail ? thumbnail : "/aws-logo.png"} alt="AWS Logo" width={80} height={48} className="drop-shadow-lg" />
           </div>

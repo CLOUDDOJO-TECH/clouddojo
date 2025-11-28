@@ -42,12 +42,12 @@ export function CategoryHero({
               priority
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-primary/30 via-primary/20 to-secondary/30" />
+            <div className="w-full h-full bg-linear-to-br from-primary/30 via-primary/20 to-secondary/30" />
           )}
         </div>
 
         {/* Gradient Overlay for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/40 to-black/20" />
 
         {/* Content */}
         <div className="relative h-full flex flex-col justify-end p-6 md:p-8">

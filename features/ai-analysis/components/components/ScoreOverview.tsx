@@ -21,7 +21,7 @@ interface ScoreOverviewProps {
 export function ScoreOverview({ summary }: ScoreOverviewProps) {
   return (
     <Card className="col-span-1 border-none shadow-lg overflow-hidden">
-      <CardHeader className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white pb-2">
+      <CardHeader className="bg-linear-to-r from-emerald-500 to-emerald-600 text-white pb-2">
         <CardTitle className="flex justify-between items-center">
           <span>Overall Score</span>
           <span className="text-3xl font-bold font-mono">{summary.overallScore}%</span>

@@ -237,7 +237,7 @@ export function ChatbotWindow({ open, onOpenChange }: ChatbotWindowProps) {
                   <div
                     className={`rounded-xl px-4 py-2 max-w-[80%] text-sm shadow-sm ${
                       msg.role === "user"
-                        ? "bg-gradient-to-br from-emerald-500 to-blue-600 text-white"
+                        ? "bg-linear-to-br from-emerald-500 to-blue-600 text-white"
                         : "bg-white border text-gray-900"
                     }`}
                   >

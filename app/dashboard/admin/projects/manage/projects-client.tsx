@@ -236,7 +236,7 @@ export default function ProjectsClient({
             <>
               {/* Stats Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                <div className="group rounded-lg bg-gradient-to-br from-blue-50 via-cyan-50 to-transparent dark:from-blue-950/30 dark:via-cyan-950/30 p-4 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer">
+                <div className="group rounded-lg bg-linear-to-br from-blue-50 via-cyan-50 to-transparent dark:from-blue-950/30 dark:via-cyan-950/30 p-4 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer">
                   <div className="flex items-center gap-2 mb-2">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -265,7 +265,7 @@ export default function ProjectsClient({
                     {projects?.length || 0}
                   </p>
                 </div>
-                <div className="group rounded-lg bg-gradient-to-br from-green-50 via-emerald-50 to-transparent dark:from-green-950/30 dark:via-emerald-950/30 p-4 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer">
+                <div className="group rounded-lg bg-linear-to-br from-green-50 via-emerald-50 to-transparent dark:from-green-950/30 dark:via-emerald-950/30 p-4 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer">
                   <div className="flex items-center gap-2 mb-2">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -294,7 +294,7 @@ export default function ProjectsClient({
                     {projects?.filter((p) => p.isPublished).length || 0}
                   </p>
                 </div>
-                <div className="group rounded-lg bg-gradient-to-br from-purple-50 via-fuchsia-50 to-transparent dark:from-purple-950/30 dark:via-fuchsia-950/30 p-4 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer">
+                <div className="group rounded-lg bg-linear-to-br from-purple-50 via-fuchsia-50 to-transparent dark:from-purple-950/30 dark:via-fuchsia-950/30 p-4 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer">
                   <div className="flex items-center gap-2 mb-2">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -332,7 +332,7 @@ export default function ProjectsClient({
                     {projects?.reduce((acc, p) => acc + p.userCount, 0) || 0}
                   </p>
                 </div>
-                <div className="group rounded-lg bg-gradient-to-br from-orange-50 via-amber-50 to-transparent dark:from-orange-950/30 dark:via-amber-950/30 p-4 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer">
+                <div className="group rounded-lg bg-linear-to-br from-orange-50 via-amber-50 to-transparent dark:from-orange-950/30 dark:via-amber-950/30 p-4 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer">
                   <div className="flex items-center gap-2 mb-2">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -405,7 +405,7 @@ export default function ProjectsClient({
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDeleteConfirm}
-              className="bg-gradient-to-b from-red-600 to-red-700 text-white shadow hover:from-red-700 hover:to-red-800"
+              className="bg-linear-to-b from-red-600 to-red-700 text-white shadow hover:from-red-700 hover:to-red-800"
             >
               Delete
             </AlertDialogAction>
@@ -432,7 +432,7 @@ export default function ProjectsClient({
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleBulkDeleteConfirm}
-              className="bg-gradient-to-b from-red-600 to-red-700 text-white shadow hover:from-red-700 hover:to-red-800"
+              className="bg-linear-to-b from-red-600 to-red-700 text-white shadow hover:from-red-700 hover:to-red-800"
             >
               Delete All
             </AlertDialogAction>
