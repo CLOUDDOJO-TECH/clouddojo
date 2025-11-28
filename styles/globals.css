@@ -17,49 +17,6 @@ img {
   .text-balance {
     text-wrap: balance;
   }
-
-  /* Mask utilities for gradient fade effects */
-  /* Usage: mask-b-from-{percentage} sets where the fade starts from the bottom */
-  .mask-b-from-35\% {
-    --mask-from: 35%;
-    -webkit-mask-image: linear-gradient(
-      to bottom,
-      transparent 0%,
-      black var(--mask-from, 0%),
-      black var(--mask-to, 100%)
-    );
-    mask-image: linear-gradient(
-      to bottom,
-      transparent 0%,
-      black var(--mask-from, 0%),
-      black var(--mask-to, 100%)
-    );
-  }
-
-  .mask-b-from-55\% {
-    --mask-from: 55%;
-    -webkit-mask-image: linear-gradient(
-      to bottom,
-      transparent 0%,
-      black var(--mask-from, 0%),
-      black var(--mask-to, 100%)
-    );
-    mask-image: linear-gradient(
-      to bottom,
-      transparent 0%,
-      black var(--mask-from, 0%),
-      black var(--mask-to, 100%)
-    );
-  }
-
-  /* Usage: mask-b-to-{percentage} sets where the fade ends (becomes fully transparent) */
-  .mask-b-to-90\% {
-    --mask-to: 90%;
-  }
-
-  .mask-b-to-100\% {
-    --mask-to: 100%;
-  }
 }
 
 /* TODO: remover -background or change to true white */
