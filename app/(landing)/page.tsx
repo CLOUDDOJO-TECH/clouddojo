@@ -2,6 +2,7 @@ import LogoCloud from "@/components/logo-cloud";
 import CallToAction from "@/features/marketing/components/call-to-action";
 import ContentSection from "@/features/marketing/components/content-3";
 import FAQsFour from "@/features/marketing/components/faqs-4";
+import { FeatureSection } from "@/features/marketing/components/features/index";
 import Footer from "@/features/marketing/components/footer";
 import HeroSection from "@/features/marketing/components/hero-section";
 import ProvidersSection from "@/features/marketing/components/providers";
@@ -17,7 +18,9 @@ export default function Home() {
         <main>
           <HeroSection />
           {/*<LogoCloud />*/}
+          <FeatureSection />
           <StatsSection />
+
           <ContentSection />
           <ProvidersSection />
           {/*<FeaturesSection />*/}

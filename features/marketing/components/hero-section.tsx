@@ -7,6 +7,7 @@ import { HeroHeader } from "@/components/layout/header";
 import { AnimatedGroup } from "@/components/ui/animated-group";
 import { TextEffect } from "@/components/ui/text-effect";
 import LogoCloud from "@/components/logo-cloud";
+import GameOfLife from "../HeroBackground";
 
 const transitionVariants = {
   item: {
@@ -32,10 +33,15 @@ export default function HeroSection() {
   return (
     <>
       <HeroHeader />
-      <main className="overflow-hidden">
+      <main className="overflow-hidden ">
+        {/* Game of Life background */}
+        <div className="absolute inset-0">
+          <GameOfLife />
+        </div>
+        {/*light flare from top left*/}
         <div
           aria-hidden
-          className="absolute inset-0 isolate hidden opacity-65 contain-strict lg:block"
+          className="absolute inset-0 isolate opacity-65 contain-strict lg:block"
         >
           <div className="w-140 h-320 -translate-y-87.5 absolute left-0 top-0 -rotate-45 rounded-full bg-[radial-gradient(68.54%_68.72%_at_55.02%_31.46%,hsla(0,0%,85%,.08)_0,hsla(0,0%,55%,.02)_50%,hsla(0,0%,45%,0)_80%)]" />
           <div className="h-320 absolute left-0 top-0 w-60 -rotate-45 rounded-full bg-[radial-gradient(50%_50%_at_50%_50%,hsla(0,0%,85%,.06)_0,hsla(0,0%,45%,.02)_80%,transparent_100%)] [translate:5%_-50%]" />
@@ -43,45 +49,10 @@ export default function HeroSection() {
         </div>
         <section className="relative">
           <div className="relative pt-24 md:pt-36">
-            <AnimatedGroup
-              variants={{
-                container: {
-                  visible: {
-                    transition: {
-                      delayChildren: 1,
-                    },
-                  },
-                },
-                item: {
-                  hidden: {
-                    opacity: 0,
-                    y: 20,
-                  },
-                  visible: {
-                    opacity: 1,
-                    y: 0,
-                    transition: {
-                      type: "spring",
-                      bounce: 0.3,
-                      duration: 2,
-                    },
-                  },
-                },
-              }}
-              className="mask-b-from-35% mask-b-to-90% absolute inset-0 top-56 -z-20 lg:top-32"
-            >
-              <Image
-                src="/images/night-background.webp"
-                alt="background"
-                className="hidden size-full dark:block"
-                width="3276"
-                height="4095"
-              />
-            </AnimatedGroup>
-
+            {/* Radial gradient vignette */}
             <div
               aria-hidden
-              className="absolute inset-0 -z-10 size-full [background:radial-gradient(125%_125%_at_50%_100%,transparent_0%,var(--color-background)_75%)]"
+              className="absolute inset-0 -z-10 size-full opacity-50 [background:radial-gradient(125%_125%_at_50%_100%,transparent_0%,var(--color-background)_75%)]"
             />
 
             <div className="mx-auto max-w-7xl px-6">
@@ -89,7 +60,7 @@ export default function HeroSection() {
                 <AnimatedGroup variants={transitionVariants}>
                   <Link
                     href="#link"
-                    className="hover:bg-background dark:hover:border-t-border bg-muted group mx-auto flex w-fit items-center gap-4 rounded-full border p-1 pl-4 shadow-md shadow-zinc-950/5 transition-colors duration-300 dark:border-t-white/5 dark:shadow-zinc-950"
+                    className="hover:bg-background dark:hover:border-t-border bg-muted group mx-auto flex w-fit items-center gap-4 rounded-full border p-1 pl-4 shadow-md shadow-emerald-400/5 transition-colors duration-300 dark:border-t-white/5 dark:shadow-emerald-400/20"
                   >
                     <span className="text-foreground text-sm">
                       Introducing Support for AI Models
@@ -185,7 +156,7 @@ export default function HeroSection() {
                 ...transitionVariants,
               }}
             >
-              <div className="mask-b-from-55% relative -mr-56 mt-8 overflow-hidden px-2 sm:mr-0 sm:mt-12 md:mt-20">
+              <div className="relative -mr-56 mt-8 overflow-visible px-2 sm:mr-0 sm:mt-12 md:mt-20">
                 <div className="inset-shadow-2xs ring-background dark:inset-shadow-white/20 bg-background relative mx-auto max-w-6xl overflow-hidden rounded-2xl border p-4 shadow-lg shadow-zinc-950/15 ring-1">
                   <Image
                     className="bg-background aspect-15/8 relative hidden rounded-2xl dark:block"
@@ -195,6 +166,10 @@ export default function HeroSection() {
                     height="1440"
                   />
                 </div>
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-x-0 -bottom-32 z-10 h-64 [background:linear-gradient(to_bottom,transparent_0%,rgb(250_250_249/0.7)_100%)] dark:[background:linear-gradient(to_bottom,transparent_0%,rgba(0,0,0,0.7)_100%)]"
+                />
               </div>
             </AnimatedGroup>
           </div>

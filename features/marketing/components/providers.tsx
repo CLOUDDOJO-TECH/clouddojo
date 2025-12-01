@@ -11,11 +11,15 @@ import {
   Kubernetes,
   Oracle,
 } from "@/components/logos";
+import GameOfLife from "../HeroBackground";
 
 export default function ProvidersSection() {
   return (
-    <section>
-      <div className="py-32">
+    <section className="relative min-h-screen">
+      {/* Game of Life Background */}
+      <GameOfLife />
+
+      <div className="relative py-32 z-10">
         <div className="mx-auto max-w-5xl px-6">
           <div className="text-center">
             <h2 className="text-balance text-3xl font-semibold md:text-4xl">
