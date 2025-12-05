@@ -1,10 +1,11 @@
 "use client";
 import Link from "next/link";
-import { Logo } from "@/components/logo";
+import { CloudDojoLogo } from "@/components/logo";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import React from "react";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 const menuItems = [
   { name: "Features", href: "#link" },
@@ -44,7 +45,17 @@ export const HeroHeader = () => {
                 aria-label="home"
                 className="flex items-center space-x-2"
               >
-                <Logo />
+                {/*TODO: svg logo*/}
+                {/*<CloudDojoLogo />*/}
+                <Image
+                  src="/logos/cld-logo.png"
+                  alt="CloudDojo Logo"
+                  width={72}
+                  height={72}
+                />
+                <h1 className="text-xl font-bold tracking-tight leading-7">
+                  CloudDojo
+                </h1>
               </Link>
 
               <button

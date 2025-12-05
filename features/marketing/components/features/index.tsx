@@ -6,7 +6,7 @@ import { VisualMockup } from "./visual-mockup";
 import { Button } from "@/components/ui/button";
 
 export const FeatureSection: React.FC = () => {
-  const [activeTabId, setActiveTabId] = useState<string>("mapping");
+  const [activeTabId, setActiveTabId] = useState<string>("tests");
   const [direction, setDirection] = useState<"left" | "right">("right");
 
   const handleTabChange = (newTabId: string) => {
@@ -28,13 +28,13 @@ export const FeatureSection: React.FC = () => {
   // Get theme colors for active tab
   const getActiveColors = () => {
     switch (activeTabId) {
-      case "mapping":
+      case "tests":
         return { button: "bg-emerald-600", line: "bg-emerald-500" };
-      case "friction":
+      case "projects":
         return { button: "bg-cyan-600", line: "bg-cyan-500" };
-      case "documentation":
+      case "ai_feedback":
         return { button: "bg-pink-600", line: "bg-pink-500" };
-      case "source":
+      case "leaderboard":
         return { button: "bg-indigo-600", line: "bg-indigo-500" };
       default:
         return { button: "bg-emerald-600", line: "bg-emerald-500" };
@@ -48,9 +48,9 @@ export const FeatureSection: React.FC = () => {
       {/* Header Section */}
       <div className="text-center mb-12 md:mb-16 animate-fade-in-up">
         <h1 className="text-balance text-3xl font-semibold md:text-5xl lg:text-6xl tracking-tight leading-tight">
-          Empowering user-
+          Experience the new wave
           <br className="hidden sm:block" />
-          obsessed teams
+          of cloud education.
         </h1>
       </div>
 
@@ -65,25 +65,25 @@ export const FeatureSection: React.FC = () => {
             // Get hover colors based on tab
             const getHoverColors = () => {
               switch (tab.id) {
-                case "mapping":
+                case "tests":
                   return {
                     bg: "hover:bg-emerald-500/5",
                     iconBg: "group-hover:bg-emerald-500/20",
                     iconText: "group-hover:text-emerald-500",
                   };
-                case "friction":
+                case "projects":
                   return {
                     bg: "hover:bg-cyan-500/5",
                     iconBg: "group-hover:bg-cyan-500/20",
                     iconText: "group-hover:text-cyan-500",
                   };
-                case "documentation":
+                case "ai_feedback":
                   return {
                     bg: "hover:bg-pink-500/5",
                     iconBg: "group-hover:bg-pink-500/20",
                     iconText: "group-hover:text-pink-500",
                   };
-                case "source":
+                case "leaderboard":
                   return {
                     bg: "hover:bg-indigo-500/5",
                     iconBg: "group-hover:bg-indigo-500/20",
