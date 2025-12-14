@@ -14,5 +14,5 @@ export interface FeatureContent {
   description: string;
   description2?: string;
   buttonText: string;
-  visualType: "documentation" | "mapping" | "friction" | "source"; // To toggle different visual mockups
+  visualType: "tests" | "ai_feedback" | "projects" | "leaderboard"; // To toggle different visual mockups
 }

@@ -1,9 +1,5 @@
 import { FeatureTab, FeatureContent } from "./types";
 import {
-  IconRoadmapFillDuo18,
-  IconEyeClosedOutlineDuo18,
-  IconPrinter,
-  IconMagnifier,
   IconFeather,
   IconBookOpen,
   IconHammer,
@@ -48,7 +44,7 @@ export const CONTENT: Record<string, FeatureContent> = {
     description:
       "High quality and well currated scenario based practice tests with hints allow your mind to learn faster. No more 100 page documents and a bunch of disjointed screenshots.",
     buttonText: "Start practicing",
-    visualType: "mapping",
+    visualType: "tests",
   },
   ai_feedback: {
     id: "ai_feedback",
@@ -56,7 +52,7 @@ export const CONTENT: Record<string, FeatureContent> = {
     description:
       "To hell with the old way of learning. Our AI-powered feedback system will help you identify areas for improvement and provide personalized recommendations to help you succeed.",
     buttonText: "Launch a lab",
-    visualType: "friction",
+    visualType: "ai_feedback",
   },
   projects: {
     id: "projects",
@@ -66,7 +62,7 @@ export const CONTENT: Record<string, FeatureContent> = {
     description2:
       "Get personalized study recommendations based on your progress. Know when you're ready to book your certification exam with confidence.",
     buttonText: "View analytics",
-    visualType: "documentation",
+    visualType: "projects",
   },
   leaderboard: {
     id: "leaderboard",
@@ -74,6 +70,6 @@ export const CONTENT: Record<string, FeatureContent> = {
     description:
       "See how you stack up against other learners and experts in the cloud community. Rank your way up to the top and earn badges for your achievements.",
     buttonText: "Explore platforms",
-    visualType: "source",
+    visualType: "leaderboard",
   },
 };

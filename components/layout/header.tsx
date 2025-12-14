@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import React from "react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { LogoGradientFull } from "@/public/brand/logo-gradient-full";
 
 const menuItems = [
   { name: "Features", href: "#link" },
@@ -35,7 +36,7 @@ export const HeroHeader = () => {
           className={cn(
             "mx-auto mt-2 max-w-6xl px-6 transition-all duration-300 lg:px-12",
             isScrolled &&
-              "bg-background/50 max-w-4xl rounded-2xl border backdrop-blur-lg lg:px-5",
+              "bg-background/50 max-w-4xl  border backdrop-blur-lg lg:px-5",
           )}
         >
           <div className="relative flex flex-wrap items-center justify-between gap-6 py-3 lg:gap-0 lg:py-4">
@@ -45,17 +46,7 @@ export const HeroHeader = () => {
                 aria-label="home"
                 className="flex items-center space-x-2"
               >
-                {/*TODO: svg logo*/}
-                {/*<CloudDojoLogo />*/}
-                <Image
-                  src="/logos/cld-logo.png"
-                  alt="CloudDojo Logo"
-                  width={72}
-                  height={72}
-                />
-                <h1 className="text-xl font-bold tracking-tight leading-7">
-                  CloudDojo
-                </h1>
+                <LogoGradientFull />
               </Link>
 
               <button
@@ -83,7 +74,7 @@ export const HeroHeader = () => {
               </ul>
             </div>
 
-            <div className="bg-background in-data-[state=active]:block lg:in-data-[state=active]:flex mb-6 hidden w-full flex-wrap items-center justify-end space-y-8 rounded-3xl border p-6 shadow-2xl shadow-zinc-300/20 md:flex-nowrap lg:m-0 lg:flex lg:w-fit lg:gap-6 lg:space-y-0 lg:border-transparent lg:bg-transparent lg:p-0 lg:shadow-none dark:shadow-none dark:lg:bg-transparent">
+            <div className="bg-background in-data-[state=active]:block lg:in-data-[state=active]:flex mb-6 hidden w-full flex-wrap items-center justify-end space-y-8  border p-6 shadow-2xl shadow-zinc-300/20 md:flex-nowrap lg:m-0 lg:flex lg:w-fit lg:gap-6 lg:space-y-0 lg:border-transparent lg:bg-transparent lg:p-0 lg:shadow-none dark:shadow-none dark:lg:bg-transparent">
               <div className="lg:hidden">
                 <ul className="space-y-6 text-base">
                   {menuItems.map((item, index) => (
@@ -103,7 +94,7 @@ export const HeroHeader = () => {
                   asChild
                   variant="outline"
                   size="sm"
-                  className={cn(isScrolled && "lg:hidden")}
+                  className={cn(isScrolled && "lg:hidden rounded-none")}
                 >
                   <Link href="#">
                     <span>Login</span>
@@ -112,7 +103,7 @@ export const HeroHeader = () => {
                 <Button
                   asChild
                   size="sm"
-                  className={cn(isScrolled && "lg:hidden")}
+                  className={cn(isScrolled && "lg:hidden rounded-none")}
                 >
                   <Link href="#">
                     <span>Sign Up</span>
@@ -121,7 +112,11 @@ export const HeroHeader = () => {
                 <Button
                   asChild
                   size="sm"
-                  className={cn(isScrolled ? "lg:inline-flex" : "hidden")}
+                  className={cn(
+                    isScrolled
+                      ? "lg:inline-flex rounded-none"
+                      : "hidden rounded-none",
+                  )}
                 >
                   <Link href="#">
                     <span>Get Started</span>

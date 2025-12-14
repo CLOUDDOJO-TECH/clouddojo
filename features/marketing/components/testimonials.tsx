@@ -96,10 +96,9 @@ export default function WallOfLoveSection() {
       <div className="py-16 md:py-32">
         <div className="mx-auto max-w-6xl px-6">
           <div className="text-center">
-            <h2 className="text-3xl font-semibold">Loved by the Community</h2>
-            <p className="mt-6">
-              Harum quae dolore orrupti aut temporibus ariatur.
-            </p>
+            <h2 className="text-balance text-3xl font-semibold md:text-5xl text-center bg-clip-text text-transparent bg-linear-to-b from-neutral-50 to-neutral-400 bg-opacity-5">
+              Loved by the Community
+            </h2>
           </div>
           <div className="mt-8 grid gap-3 sm:grid-cols-2 md:mt-12 lg:grid-cols-3">
             {testimonialChunks.map((chunk, chunkIndex) => (

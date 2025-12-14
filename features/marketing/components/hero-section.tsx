@@ -6,8 +6,10 @@ import Image from "next/image";
 import { HeroHeader } from "@/components/layout/header";
 import { AnimatedGroup } from "@/components/ui/animated-group";
 import { TextEffect } from "@/components/ui/text-effect";
-import LogoCloud from "@/components/logo-cloud";
 import GameOfLife from "../HeroBackground";
+import LogoCloud from "../logo-cloud";
+import { CloudIcon } from "./icons/cloud-icon";
+import { RocketIcon } from "./icons/rocket-icon";
 
 const transitionVariants = {
   item: {
@@ -60,14 +62,14 @@ export default function HeroSection() {
                 <AnimatedGroup variants={transitionVariants}>
                   <Link
                     href="#link"
-                    className="hover:bg-background dark:hover:border-t-border bg-muted group mx-auto flex w-fit items-center gap-4 rounded-full border p-1 pl-4 shadow-md shadow-emerald-400/5 transition-colors duration-300 dark:border-t-white/5 dark:shadow-emerald-400/20"
+                    className="hover:bg-background dark:hover:border-t-border bg-muted group mx-auto flex w-fit items-center gap-4 rounded-none border p-1 pl-4 shadow-md shadow-emerald-400/5 transition-colors duration-300 dark:border-t-white/5 dark:shadow-emerald-400/20"
                   >
                     <span className="text-foreground text-sm">
                       Trusted by over 288+ learners
                     </span>
                     <span className="dark:border-background block h-4 w-0.5 border-l bg-white dark:bg-zinc-700"></span>
 
-                    <div className="bg-background group-hover:bg-muted size-6 overflow-hidden rounded-full duration-500">
+                    <div className="bg-background group-hover:bg-muted size-6 overflow-hidden rounded-none duration-500">
                       <div className="flex w-12 -translate-x-1/2 duration-500 ease-in-out group-hover:translate-x-0">
                         <span className="flex size-6">
                           <ArrowRight className="m-auto size-3" />
@@ -80,14 +82,15 @@ export default function HeroSection() {
                   </Link>
                 </AnimatedGroup>
 
-                <TextEffect
-                  preset="fade-in-blur"
-                  speedSegment={0.3}
-                  as="h1"
-                  className="mx-auto mt-8 max-w-4xl text-balance text-5xl max-md:font-semibold md:text-7xl lg:mt-16 xl:text-[5.25rem]"
-                >
-                  Where Cloud Careers Actually Begin
-                </TextEffect>
+                <h1 className="mx-auto mt-8 max-w-5xl text-balance text-center text-5xl tex-bold max-md:font-bold md:text-7xl lg:mt-16 xl:text-[4.25rem] animate-fade-in-blur">
+                  <span className="bg-linear-to-b from-neutral-50 to-neutral-400 bg-clip-text text-transparent bg-opacity-5">
+                    Where Cl
+                  </span>
+                  <CloudIcon className="inline w-[0.8em] h-[0.8em] mx-1 relative -top-[0.1em] animate-[fade-in-blur_0.8s_ease-out_0.6s_both,color-cycle_4s_ease-in-out_1s_infinite]" />
+                  <span className="bg-linear-to-b from-neutral-50 to-neutral-400 bg-clip-text text-transparent bg-opacity-5">
+                    ud Careers Actually Take Off
+                  </span>
+                </h1>
                 <TextEffect
                   per="line"
                   preset="fade-in-blur"
@@ -116,12 +119,12 @@ export default function HeroSection() {
                 >
                   <div
                     key={1}
-                    className="bg-foreground/10 rounded-[calc(var(--radius-xl)+0.125rem)] border p-0.5"
+                    className="bg-foreground/10 rounded-none border p-0.5"
                   >
                     <Button
                       asChild
                       size="lg"
-                      className="rounded-xl px-5 text-base"
+                      className="rounded-none px-5 text-base"
                     >
                       <Link href="#link">
                         <span className="text-nowrap">Start Building</span>
@@ -133,7 +136,7 @@ export default function HeroSection() {
                     asChild
                     size="lg"
                     variant="ghost"
-                    className="h-10.5 rounded-xl px-5"
+                    className="h-10.5 rounded-none px-5 bg-accent hover:bg-accent/80 hover:text-white text-black"
                   >
                     <Link href="#link">
                       <span className="text-nowrap">Request a demo</span>
@@ -157,10 +160,10 @@ export default function HeroSection() {
               }}
             >
               <div className="relative -mr-56 mt-8 overflow-visible px-2 sm:mr-0 sm:mt-12 md:mt-20">
-                <div className="inset-shadow-2xs ring-background dark:inset-shadow-white/20 bg-background relative mx-auto max-w-6xl overflow-hidden rounded-2xl border p-4 shadow-lg shadow-zinc-950/15 ring-1">
+                <div className="inset-shadow-2xs ring-background dark:inset-shadow-white/20 bg-background relative mx-auto max-w-6xl overflow-hidden rounded-none border p-4 shadow-lg shadow-zinc-950/15 ring-1">
                   <Image
-                    className="bg-background aspect-15/8 relative hidden rounded-2xl dark:block"
-                    src="/images/features/dashboard.png"
+                    className="bg-background aspect-15/8 relative hidden rounded-none dark:block object-cover"
+                    src="/previews/landing-preview.png"
                     alt="app screen"
                     width="2700"
                     height="1440"

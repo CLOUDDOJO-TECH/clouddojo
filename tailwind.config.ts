@@ -171,12 +171,36 @@ const config = {
             height: "0",
           },
         },
+        "color-cycle": {
+          "0%, 100%": {
+            color: "rgb(236, 72, 153)", // pink-500 (Scenario-based learning)
+          },
+          "14%": {
+            color: "rgb(168, 85, 247)", // purple-500 (AI-powered feedback)
+          },
+          "28%": {
+            color: "rgb(59, 130, 246)", // blue-500 (Smart progress tracking)
+          },
+          "42%": {
+            color: "rgb(34, 197, 94)", // green-500 (Detailed explanations)
+          },
+          "57%": {
+            color: "rgb(249, 115, 22)", // orange-500 (Hands-on projects)
+          },
+          "71%": {
+            color: "rgb(99, 102, 241)", // indigo-500 (Multiple providers)
+          },
+          "85%": {
+            color: "rgb(6, 182, 212)", // cyan-500 (Exam readiness score)
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         spotlight: "spotlight 2s ease .75s 1 forwards",
         "pulse-slow": "pulse-slow 3s ease-in-out infinite",
+        "color-cycle": "color-cycle 4s ease-in-out infinite",
       },
       width: {
         "square-diagonal": "diagonal",

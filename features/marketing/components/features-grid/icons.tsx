@@ -1,0 +1,450 @@
+import React, { SVGProps } from "react";
+
+export interface IconProps extends React.SVGProps<SVGSVGElement> {
+  size?: string;
+}
+
+export function IconHand2({ size = "20px", ...props }: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      x="0px"
+      y="0px"
+      width={size}
+      height={size}
+      viewBox="0 0 20 20"
+      {...props}
+    >
+      <line
+        x1="16"
+        y1="5"
+        x2="16"
+        y2="11"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+      ></line>
+      <line
+        x1="13"
+        y1="4"
+        x2="13"
+        y2="12"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+      ></line>
+      <line
+        x1="10"
+        y1="3"
+        x2="10"
+        y2="13"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+      ></line>
+      <line
+        x1="7"
+        y1="4"
+        x2="7"
+        y2="12"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+      ></line>
+      <line
+        x1="7.384"
+        y1="15.082"
+        x2="3.5"
+        y2="10"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2.5"
+      ></line>
+      <path
+        d="m7,10.5v1.5l-.793,1.43c.615,2.065,2.528,3.57,4.793,3.57,2.761,0,5-2.239,5-5v-1.5H7Z"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        fill="currentColor"
+      ></path>
+    </svg>
+  );
+}
+
+export function IconChatBot({ size = "20px", ...props }: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      x="0px"
+      y="0px"
+      width={size}
+      height={size}
+      viewBox="0 0 20 20"
+      {...props}
+    >
+      <line
+        x1="7"
+        y1="4"
+        x2="7"
+        y2="7"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+      ></line>
+      <circle
+        cx="7"
+        cy="3"
+        r="1"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+      ></circle>
+      <path
+        d="m13.475,7.439l-1.414-1.414c-.122-.123-.3-.172-.468-.133-.169.04-.305.164-.359.329l-.707,2.121c-.06.18-.013.378.121.512.095.095.223.146.354.146.053,0,.106-.008.158-.026l2.121-.707c.165-.055.289-.19.329-.359.04-.168-.011-.346-.133-.468Z"
+        fill="currentColor"
+        strokeWidth="0"
+        data-color="color-2"
+      ></path>
+      <path
+        d="m8.328,7.028c-.003-.009-.504-.019-.507-.028h-1.822c-1.657,0-3,1.343-3,3v4c0,1.657,1.343,3,3,3h8c1.657,0,3-1.343,3-3v-3.24"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+      ></path>
+      <circle
+        cx="14.5"
+        cy="5"
+        r="3"
+        fill="currentColor"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        data-color="color-2"
+      ></circle>
+      <circle
+        cx="7"
+        cy="11.5"
+        r="1"
+        strokeWidth="0"
+        fill="currentColor"
+      ></circle>
+      <circle
+        cx="13"
+        cy="11.5"
+        r="1"
+        strokeWidth="0"
+        fill="currentColor"
+      ></circle>
+      <path
+        d="m9,13h2c.276,0,.5.224.5.5h0c0,.828-.672,1.5-1.5,1.5h0c-.828,0-1.5-.672-1.5-1.5h0c0-.276.224-.5.5-.5Z"
+        strokeWidth="0"
+        fill="currentColor"
+      ></path>
+    </svg>
+  );
+}
+
+export function IconProgressBar({ size = "20px", ...props }: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      x="0px"
+      y="0px"
+      width={size}
+      height={size}
+      viewBox="0 0 20 20"
+      {...props}
+    >
+      <polygon
+        points="12.5 3 10 6 7.5 3 12.5 3"
+        fill="currentColor"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        data-color="color-2"
+      ></polygon>
+      <path
+        d="m15,9H5c-2.206,0-4,1.794-4,4s1.794,4,4,4h10c2.206,0,4-1.794,4-4s-1.794-4-4-4Zm-5,5h-5c-.552,0-1-.448-1-1s.448-1,1-1h5c.552,0,1,.448,1,1s-.448,1-1,1Z"
+        strokeWidth="0"
+        fill="currentColor"
+      ></path>
+    </svg>
+  );
+}
+
+export function IconPage({ size = "20px", ...props }: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      x="0px"
+      y="0px"
+      width={size}
+      height={size}
+      viewBox="0 0 20 20"
+      {...props}
+    >
+      <rect
+        x="4"
+        y="3"
+        width="12"
+        height="14"
+        rx="3"
+        ry="3"
+        transform="translate(20 20) rotate(180)"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+      ></rect>
+      <rect
+        x="7"
+        y="6"
+        width="2"
+        height="2"
+        fill="currentColor"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        data-color="color-2"
+      ></rect>
+      <path
+        d="m13.25,9h-1.5c-.4141,0-.75-.3359-.75-.75s.3359-.75.75-.75h1.5c.4141,0,.75.3359.75.75s-.3359.75-.75.75Z"
+        fill="currentColor"
+        strokeWidth="0"
+        data-color="color-2"
+      ></path>
+      <path
+        d="m13.25,11.5h-6.5c-.4141,0-.75-.3359-.75-.75s.3359-.75.75-.75h6.5c.4141,0,.75.3359.75.75s-.3359.75-.75.75Z"
+        fill="currentColor"
+        strokeWidth="0"
+        data-color="color-2"
+      ></path>
+      <path
+        d="m11.25,14h-4.5c-.4141,0-.75-.3359-.75-.75s.3359-.75.75-.75h4.5c.4141,0,.75.3359.75.75s-.3359.75-.75.75Z"
+        fill="currentColor"
+        strokeWidth="0"
+        data-color="color-2"
+      ></path>
+    </svg>
+  );
+}
+
+export function IconForklift({ size = "20px", ...props }: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      x="0px"
+      y="0px"
+      width={size}
+      height={size}
+      viewBox="0 0 20 20"
+      {...props}
+    >
+      <path
+        d="m12,9H4c-1.103,0-2,.897-2,2v3c0,.552.447,1,1,1h.277c-.172-.295-.277-.634-.277-1,0-1.105.895-2,2-2s2,.895,2,2c0,.366-.106.705-.277,1h1.555c-.172-.295-.277-.634-.277-1,0-1.105.895-2,2-2s2,.895,2,2c0,.366-.106.705-.277,1h.277c.553,0,1-.448,1-1v-4c0-.552-.447-1-1-1Z"
+        strokeWidth="0"
+        fill="currentColor"
+      ></path>
+      <path
+        d="m17,16h-1c-.552,0-1-.448-1-1V3"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        data-color="color-2"
+      ></path>
+      <polygon
+        points="12 10 6 10 6 4 10 4 12 10"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+      ></polygon>
+      <circle
+        cx="5"
+        cy="14"
+        r="2"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+      ></circle>
+      <circle
+        cx="10"
+        cy="14"
+        r="2"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+      ></circle>
+    </svg>
+  );
+}
+
+export function IconGrid2({ size = "20px", ...props }: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      x="0px"
+      y="0px"
+      width={size}
+      height={size}
+      viewBox="0 0 20 20"
+      {...props}
+    >
+      <rect
+        x="3"
+        y="3"
+        width="5"
+        height="5"
+        rx="1.5"
+        ry="1.5"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+      ></rect>
+      <rect
+        x="12"
+        y="3"
+        width="5"
+        height="5"
+        rx="1.5"
+        ry="1.5"
+        transform="translate(8.136 -8.642) rotate(45)"
+        fill="currentColor"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        data-color="color-2"
+      ></rect>
+      <rect
+        x="3"
+        y="12"
+        width="5"
+        height="5"
+        rx="1.5"
+        ry="1.5"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+      ></rect>
+      <rect
+        x="12"
+        y="12"
+        width="5"
+        height="5"
+        rx="1.5"
+        ry="1.5"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+      ></rect>
+    </svg>
+  );
+}
+
+export function IconHexagonCheck({ size = "20px", ...props }: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      x="0px"
+      y="0px"
+      width={size}
+      height={size}
+      viewBox="0 0 20 20"
+      {...props}
+    >
+      <path
+        d="m16.083,5.056l-4.688-2.858c-.861-.523-1.93-.524-2.791,0l-4.688,2.857c-.874.533-1.417,1.531-1.417,2.604v4.679c0,1.074.543,2.072,1.417,2.604l4.688,2.858c.43.262.913.393,1.395.393s.965-.131,1.395-.393l4.688-2.857c.874-.533,1.417-1.531,1.417-2.604v-4.679c0-1.074-.543-2.072-1.417-2.604Zm-1.799,2.564l-4.75,6c-.183.231-.458.37-.753.379-.01,0-.021,0-.031,0-.283,0-.554-.12-.743-.331l-2.25-2.5c-.369-.411-.336-1.043.074-1.412.411-.37,1.042-.336,1.412.074l1.458,1.62,4.015-5.071c.343-.432.971-.506,1.405-.164.433.343.506.972.163,1.405Z"
+        strokeWidth="0"
+        fill="currentColor"
+      ></path>
+    </svg>
+  );
+}
+
+export function IconUsers({ size = "20px", ...props }: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      x="0px"
+      y="0px"
+      width={size}
+      height={size}
+      viewBox="0 0 20 20"
+      {...props}
+    >
+      <circle
+        cx="6.5"
+        cy="8.5"
+        r="2.5"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+      ></circle>
+      <circle
+        cx="13.5"
+        cy="5.5"
+        r="2.5"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        data-color="color-2"
+      ></circle>
+      <path
+        d="m10.875,11.845c.739-.532,1.645-.845,2.625-.845,1.959,0,3.626,1.252,4.244,3"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        data-color="color-2"
+      ></path>
+      <path
+        d="m2.256,17c.618-1.748,2.285-3,4.244-3s3.626,1.252,4.244,3"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+      ></path>
+    </svg>
+  );
+}
