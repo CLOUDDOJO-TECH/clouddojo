@@ -12,12 +12,12 @@ import {
 export default function LogoCloud() {
   return (
     <section className="bg-background overflow-hidden py-16">
-      <div className="group relative m-auto max-w-[90%] px-6">
+      <div className="group relative w-full">
         <div className="flex flex-col items-center md:flex-row">
           {/*<div className="md:max-w-44 md:border-r md:pr-6">
             <p className="text-end text-sm">Powering the best teams</p>
           </div>*/}
-          <div className="relative py-6 md:w-[calc(100%-11rem)]">
+          <div className="relative py-6 w-full">
             <InfiniteSlider speedOnHover={20} speed={40} gap={112}>
               <div className="flex items-center justify-center">
                 <AmazonWebServices className="h-8 w-auto [&_path]:fill-white .fill-white opacity-60 hover:opacity-100 transition-opacity" />
