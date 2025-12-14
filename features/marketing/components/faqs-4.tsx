@@ -57,27 +57,27 @@ export default function FAQsFour() {
   return (
     <section className="py-16 md:py-24">
       <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <div className="mx-auto max-w-xl text-center">
-          <h2 className="text-balance text-3xl font-bold md:text-4xl lg:text-5xl">
+        <div className="mx-auto max-w-6xl text-center">
+          <h2 className="text-balance text-3xl font-semibold md:text-5xl text-center bg-clip-text text-transparent bg-linear-to-b from-neutral-50 to-neutral-400 bg-opacity-5">
             Frequently Asked Questions
           </h2>
-          <p className="text-muted-foreground mt-4 text-balance">
+          <p className="text-muted-foreground mt-4 text-balance sr-only">
             Discover quick and comprehensive answers to common questions about
             our platform, services, and features.
           </p>
         </div>
 
-        <div className="mx-auto mt-12 max-w-xl">
+        <div className="mx-auto mt-12 max-w-5xl">
           <Accordion
             type="single"
             collapsible
-            className="bg-muted dark:bg-muted/50 w-full rounded-2xl p-1"
+            className="bg-muted dark:bg-muted/50 w-full rounded-none p-1"
           >
             {faqItems.map((item) => (
               <div className="group" key={item.id}>
                 <AccordionItem
                   value={item.id}
-                  className="data-[state=open]:bg-card dark:data-[state=open]:bg-muted peer rounded-xl border-none px-7 py-1 data-[state=open]:border-none data-[state=open]:shadow-sm"
+                  className="data-[state=open]:bg-card dark:data-[state=open]:bg-muted peer rounded-none border-none px-7 py-1 data-[state=open]:border-none data-[state=open]:shadow-sm"
                 >
                   <AccordionTrigger className="cursor-pointer text-base hover:no-underline">
                     {item.question}

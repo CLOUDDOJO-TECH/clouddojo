@@ -1,5 +1,8 @@
+"use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
+import { motion } from "motion/react";
+import { useEffect, useState } from "react";
 
 type Testimonial = {
   name: string;
@@ -10,67 +13,67 @@ type Testimonial = {
 
 const testimonials: Testimonial[] = [
   {
-    name: "Srinivas Dachepally",
-    role: "Cloud Engineer, Bangalore",
-    image: "https://randomuser.me/api/portraits/men/32.jpg",
-    quote:
-      "I tried three different platforms before CloudDojo. None of them told me if I was actually improving or just wasting time. The performance analytics here changed that completely — I could finally see my progress.",
-  },
-  {
-    name: "Amara Okafor",
-    role: "AWS Solutions Architect, Lagos",
-    image: "https://randomuser.me/api/portraits/women/44.jpg",
-    quote:
-      "Look, I'm not going to lie — I almost gave up. The PDFs were boring, the courses were expensive, and I had no idea if I was ready. CloudDojo made it simple. Passed my exam two weeks ago. Still can't believe it.",
-  },
-  {
-    name: "Miguel Santos",
-    role: "DevOps Engineer, São Paulo",
-    image: "https://randomuser.me/api/portraits/men/22.jpg",
-    quote:
-      "The projects are what sold me. I wasn't just clicking through multiple choice questions — I was deploying actual infrastructure. That hands-on experience is what got me my current job.",
-  },
-  {
-    name: "Priya Sharma",
-    role: "Junior Developer, Mumbai",
-    image: "https://randomuser.me/api/portraits/women/65.jpg",
-    quote:
-      "Honestly? I was terrified of cloud. It felt too big, too complicated. CloudDojo breaks everything down so clearly that I actually started enjoying studying. Weird, I know.",
-  },
-  {
-    name: "James Kipchoge",
-    role: "Cloud Architect, Nairobi",
-    image: "https://randomuser.me/api/portraits/men/15.jpg",
-    quote:
-      "Finally, a platform that doesn't treat African developers like an afterthought. Affordable pricing, works offline, and the community actually feels like home.",
-  },
-  {
     name: "Sarah Chen",
-    role: "Solutions Engineer, Singapore",
+    role: "AWS Solutions Architect",
     image: "https://randomuser.me/api/portraits/women/28.jpg",
     quote:
-      "The AI coach is scary good. I asked it to explain VPC peering at 2am and got a better answer than I found in any documentation. Worth it for that alone.",
+      "CloudDojo's practice tests are the closest thing to the real AWS exams I've seen. The AI feedback helped me understand why I got questions wrong, not just the right answer.",
   },
   {
-    name: "Emmanuel Kwame",
-    role: "Software Engineer, Accra",
-    image: "https://randomuser.me/api/portraits/men/41.jpg",
+    name: "Marcus Johnson",
+    role: "DevOps Engineer",
+    image: "https://randomuser.me/api/portraits/men/32.jpg",
     quote:
-      "I love the leaderboard. Sounds silly, but seeing my name climb up every week keeps me going. Competition works.",
+      "Passed my Azure Administrator exam on the first try. The scenario-based questions here prepared me better than any other platform I tried.",
   },
   {
-    name: "Rachel Kimani",
-    role: "IT Consultant, Kigali",
+    name: "Priya Patel",
+    role: "Cloud Engineer",
+    image: "https://randomuser.me/api/portraits/women/44.jpg",
+    quote:
+      "I love the performance analytics. Being able to see exactly which topics I'm weak on saved me weeks of unfocused studying.",
+  },
+  {
+    name: "David Okonkwo",
+    role: "Solutions Architect",
+    image: "https://randomuser.me/api/portraits/men/22.jpg",
+    quote:
+      "The hands-on projects are what set CloudDojo apart. I wasn't just memorizing answers — I was actually building things.",
+  },
+  {
+    name: "Emma Rodriguez",
+    role: "Cloud Security Specialist",
+    image: "https://randomuser.me/api/portraits/women/65.jpg",
+    quote:
+      "Finally, a platform that covers multiple cloud providers. Being able to study for AWS, Azure, and GCP in one place is a game-changer.",
+  },
+  {
+    name: "James Park",
+    role: "Senior DevOps",
+    image: "https://randomuser.me/api/portraits/men/15.jpg",
+    quote:
+      "The AI coach answered my questions at 3am when I was stuck on a Kubernetes concept. It's like having a mentor available 24/7.",
+  },
+  {
+    name: "Aisha Mohammed",
+    role: "Cloud Developer",
     image: "https://randomuser.me/api/portraits/women/52.jpg",
     quote:
-      "Three weeks. That's how long it took me to go from zero to passing Azure Fundamentals. CloudDojo's study plan is no joke — it actually works if you follow it.",
+      "I went from zero cloud knowledge to passing my first certification in 6 weeks. CloudDojo's study path kept me on track the whole time.",
   },
   {
-    name: "David Osei",
-    role: "Full-Stack Developer, Remote",
-    image: "https://randomuser.me/api/portraits/men/8.jpg",
+    name: "Tom Anderson",
+    role: "Infrastructure Engineer",
+    image: "https://randomuser.me/api/portraits/men/41.jpg",
     quote:
-      "Clean UI, fast performance, no BS. Just good content and smart features. This is how all learning platforms should work.",
+      "The leaderboard feature keeps me motivated. A little healthy competition makes studying way more fun than it should be.",
+  },
+  {
+    name: "Lisa Chang",
+    role: "Cloud Consultant",
+    image: "https://randomuser.me/api/portraits/women/8.jpg",
+    quote:
+      "Best investment I made in my career. Landed a new role with a 40% salary increase after getting my certifications through CloudDojo.",
   },
 ];
 
@@ -90,6 +93,83 @@ const testimonialChunks = chunkArray(
   Math.ceil(testimonials.length / 3),
 );
 
+const TestimonialCard = ({ name, role, quote, image }: Testimonial) => (
+  <Card className="rounded-none">
+    <CardContent className="grid grid-cols-[auto_1fr] gap-3 pt-6">
+      <Avatar className="size-9">
+        <AvatarImage
+          alt={name}
+          src={image}
+          loading="lazy"
+          width="120"
+          height="120"
+        />
+        <AvatarFallback>ST</AvatarFallback>
+      </Avatar>
+
+      <div>
+        <h3 className="font-medium">{name}</h3>
+
+        <span className="text-muted-foreground block text-sm tracking-wide">
+          {role}
+        </span>
+
+        <blockquote className="mt-3">
+          <p className="text-gray-700 dark:text-gray-300">{quote}</p>
+        </blockquote>
+      </div>
+    </CardContent>
+  </Card>
+);
+
+const MarqueeColumn = ({
+  testimonials,
+  duration,
+  direction = "up",
+}: {
+  testimonials: Testimonial[];
+  duration: number;
+  direction?: "up" | "down";
+}) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  // Duplicate testimonials for seamless loop
+  const duplicatedTestimonials = [...testimonials, ...testimonials];
+
+  return (
+    <div
+      className="relative h-[600px] overflow-hidden"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {/* Top gradient fade */}
+      <div className="absolute top-0 left-0 right-0 h-32 bg-linear-to-b from-background to-transparent z-10 pointer-events-none" />
+
+      <motion.div
+        className="space-y-3"
+        animate={{
+          y: direction === "up" ? [0, "-50%"] : ["-50%", 0],
+        }}
+        transition={{
+          duration: isHovered ? duration * 3 : duration, // 3x slower on hover
+          repeat: Infinity,
+          ease: "linear",
+          repeatType: "loop",
+        }}
+      >
+        {duplicatedTestimonials.map((testimonial, index) => (
+          <div key={index}>
+            <TestimonialCard {...testimonial} />
+          </div>
+        ))}
+      </motion.div>
+
+      {/* Bottom gradient fade */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-linear-to-t from-background to-transparent z-10 pointer-events-none" />
+    </div>
+  );
+};
+
 export default function WallOfLoveSection() {
   return (
     <section>
@@ -102,38 +182,12 @@ export default function WallOfLoveSection() {
           </div>
           <div className="mt-8 grid gap-3 sm:grid-cols-2 md:mt-12 lg:grid-cols-3">
             {testimonialChunks.map((chunk, chunkIndex) => (
-              <div key={chunkIndex} className="space-y-3">
-                {chunk.map(({ name, role, quote, image }, index) => (
-                  <Card key={index}>
-                    <CardContent className="grid grid-cols-[auto_1fr] gap-3 pt-6">
-                      <Avatar className="size-9">
-                        <AvatarImage
-                          alt={name}
-                          src={image}
-                          loading="lazy"
-                          width="120"
-                          height="120"
-                        />
-                        <AvatarFallback>ST</AvatarFallback>
-                      </Avatar>
-
-                      <div>
-                        <h3 className="font-medium">{name}</h3>
-
-                        <span className="text-muted-foreground block text-sm tracking-wide">
-                          {role}
-                        </span>
-
-                        <blockquote className="mt-3">
-                          <p className="text-gray-700 dark:text-gray-300">
-                            {quote}
-                          </p>
-                        </blockquote>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+              <MarqueeColumn
+                key={chunkIndex}
+                testimonials={chunk}
+                duration={chunkIndex === 1 ? 25 : 30}
+                direction={chunkIndex === 1 ? "down" : "up"}
+              />
             ))}
           </div>
         </div>

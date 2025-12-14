@@ -1,7 +1,5 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
-import Link from "next/link";
 import * as React from "react";
 import {
   MicrosoftAzure,
@@ -23,8 +21,8 @@ const providers = [
       "From Cloud Practitioner to Solutions Architect — prepare for every AWS certification with real-world practice tests and hands-on projects.",
     link: "https://aws.amazon.com",
     icon: AmazonWebServices,
-    borderColor: "border-orange-500",
-    textColor: "text-orange-400",
+    borderColor: "border-orange-300/50",
+    textColor: "text-orange-200/50",
   },
   {
     title: "Azure",
@@ -32,7 +30,7 @@ const providers = [
       "Azure certifications unlock enterprise opportunities. CloudDojo helps you master them with targeted practice tests and performance analytics.",
     link: "https://azure.microsoft.com",
     icon: MicrosoftAzure,
-    borderColor: "border-blue-500",
+    borderColor: "border-blue5300",
     textColor: "text-blue-400",
   },
   {
@@ -41,8 +39,8 @@ const providers = [
       "Master GCP certifications with practice tests built to mirror actual Google Cloud exams — from Associate to Professional level.",
     link: "https://cloud.google.com",
     icon: GoogleCloud,
-    borderColor: "border-red-500",
-    textColor: "text-red-400",
+    borderColor: "border-green-500",
+    textColor: "text-green-400",
   },
   {
     title: "Oracle Cloud",
@@ -86,7 +84,6 @@ export default function ProvidersSection() {
               One platform. Every cloud. Unlimited career opportunities.
             </h2>
           </div>
-
           <HoverEffect items={providers} />
         </div>
       </div>
@@ -112,15 +109,20 @@ const HoverEffect = ({
     >
       {items.map((item, idx) => {
         const Icon = item.icon;
+        const isHovered = hoveredIndex === idx;
+
         return (
-          <div
+          <a
+            href={item.link}
+            target="_blank"
+            rel="noopener noreferrer"
             key={item.link}
-            className="relative group block p-2 h-full w-full cursor-pointer"
+            className="relative group block p-2 h-full w-full"
             onMouseEnter={() => setHoveredIndex(idx)}
             onMouseLeave={() => setHoveredIndex(null)}
           >
             <AnimatePresence>
-              {hoveredIndex === idx && (
+              {isHovered && (
                 <motion.span
                   className="absolute inset-0 h-full w-full bg-neutral-800/50 block rounded-none"
                   layoutId="hoverBackground"
@@ -136,7 +138,11 @@ const HoverEffect = ({
                 />
               )}
             </AnimatePresence>
-            <Card borderColor={hoveredIndex === idx ? item.borderColor : ""}>
+            <Card
+              borderColor={item.borderColor}
+              textColor={item.textColor}
+              isHovered={isHovered}
+            >
               <div className="*:size-10">
                 <Icon />
               </div>
@@ -149,27 +155,18 @@ const HoverEffect = ({
               </div>
 
               <div className="flex gap-3 border-t border-dashed pt-6">
-                <Button
-                  asChild
-                  variant="secondary"
-                  size="sm"
+                <div
                   className={cn(
-                    "gap-1 pr-1.5 rounded-none transition-colors",
-                    hoveredIndex === idx && item.textColor,
+                    "flex items-center gap-1 pr-1.5 text-sm font-medium transition-colors",
+                    isHovered && item.textColor,
                   )}
                 >
-                  <Link
-                    href={item.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Learn More
-                    <ChevronRight className="ml-0 size-3.5! opacity-50" />
-                  </Link>
-                </Button>
+                  Learn More
+                  <ChevronRight className="ml-0 size-3.5 opacity-50" />
+                </div>
               </div>
             </Card>
-          </div>
+          </a>
         );
       })}
     </div>
@@ -180,16 +177,18 @@ const Card = ({
   className,
   children,
   borderColor,
+  isHovered,
 }: {
   className?: string;
   children: React.ReactNode;
   borderColor?: string;
+  isHovered?: boolean;
 }) => {
   return (
     <div
       className={cn(
-        "rounded-none h-full w-full p-4 overflow-hidden bg-background border border-border relative z-20",
-        borderColor,
+        "rounded-none h-full w-full p-4 overflow-hidden bg-background border border-border relative z-20 transition-colors",
+        isHovered && borderColor,
         className,
       )}
     >
