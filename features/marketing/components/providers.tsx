@@ -30,7 +30,7 @@ const providers = [
       "Azure certifications unlock enterprise opportunities. CloudDojo helps you master them with targeted practice tests and performance analytics.",
     link: "https://azure.microsoft.com",
     icon: MicrosoftAzure,
-    borderColor: "border-blue5300",
+    borderColor: "border-blue-500",
     textColor: "text-blue-400",
   },
   {

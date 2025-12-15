@@ -9,6 +9,7 @@ import {
   IconEarthOutlineDuo18,
   IconLinkFillDuo18,
   IconXmarkFillDuo18,
+  IconFeatherFillDuo18,
 } from "./icons";
 import { LogoGradientFull } from "@/public/brand/logo-gradient-full";
 
@@ -17,7 +18,7 @@ const comparisonData = [
     feature: "Study materials",
     clouddojo: "Interactive tests with AI hints",
     others: "Static PDFs and brain dumps",
-    icon: IconLinkFillDuo18,
+    icon: IconFeatherFillDuo18,
     color: "text-teal-400",
   },
   {
