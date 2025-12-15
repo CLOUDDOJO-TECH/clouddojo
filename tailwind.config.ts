@@ -207,7 +207,22 @@ const config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
+  plugins: [
+    require("tailwindcss-animate"),
+    require("@tailwindcss/typography"),
+    function ({ addUtilities }: any) {
+      addUtilities({
+        ".heading-gradient": {
+          "background-clip": "text",
+          "-webkit-background-clip": "text",
+          color: "transparent",
+          "background-image":
+            "linear-gradient(to bottom, rgb(250 250 250), rgb(163 163 163))",
+          "background-opacity": "0.05",
+        },
+      });
+    },
+  ],
 } satisfies Config;
 
 export default config;

@@ -92,7 +92,10 @@ export const HeroHeader = () => {
                   asChild
                   variant="outline"
                   size="sm"
-                  className={cn(isScrolled && "lg:hidden rounded-none")}
+                  className={cn(
+                    "rounded-none",
+                    isScrolled && "lg:hidden rounded-none",
+                  )}
                 >
                   <Link href="#">
                     <span>Login</span>
@@ -101,7 +104,10 @@ export const HeroHeader = () => {
                 <Button
                   asChild
                   size="sm"
-                  className={cn(isScrolled && "lg:hidden rounded-none")}
+                  className={cn(
+                    "rounded-none",
+                    isScrolled && "lg:hidden rounded-none",
+                  )}
                 >
                   <Link href="#">
                     <span>Sign Up</span>

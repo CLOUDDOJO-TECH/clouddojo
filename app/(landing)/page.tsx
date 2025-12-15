@@ -4,6 +4,7 @@ import { FeatureSection } from "@/features/marketing/components/features/index";
 import { FeaturesGrid } from "@/features/marketing/components/features-grid/index";
 import { AISection } from "@/features/marketing/components/ai-section/index";
 import { ComparisonSection } from "@/features/marketing/components/comparison-section/index";
+import { Pricing } from "@/features/marketing/components/pricing/Pricing";
 import Footer from "@/features/marketing/components/footer";
 import HeroSection from "@/features/marketing/components/hero-section";
 import ProvidersSection from "@/features/marketing/components/providers";
@@ -43,6 +44,9 @@ export default function Home() {
 
           <section id="testimonials">
             <WallOfLoveSection />
+          </section>
+          <section id="pricing">
+            <Pricing />
           </section>
           <section id="cta">
             <CallToAction />

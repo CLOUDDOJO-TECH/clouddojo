@@ -48,7 +48,7 @@ export const AISection: React.FC = () => {
       {/* Header */}
       <div className="mb-12 md:mb-16">
         {/* Title */}
-        <h2 className="bg-clip-text text-transparent bg-linear-to-b from-neutral-50 to-neutral-400 bg-opacity-5 text-4xl md:text-5xl lg:text-5xl font-bold mb-6 leading-tight">
+        <h2 className="heading-gradient text-4xl md:text-5xl lg:text-5xl font-bold mb-6 leading-tight">
           AI that actually helps you
           <br />
           pass your certification

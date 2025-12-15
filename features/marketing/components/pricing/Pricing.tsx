@@ -1,22 +1,26 @@
 "use client";
 
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { NoiseBackground } from "@/components/ui/noise-bacground";
 import { IconCheckCircle } from "./icons";
+import IconChevronRightFill12 from "./chevron-icon";
+import IconCircleArrowRightFill24 from "./circle-arrow-icon";
 
 const pricingPlans = [
   {
-    name: "Free",
-    price: "$0",
-    period: "/month",
-    description: "Perfect for getting started",
+    name: "7-Day Free Trial",
+    price: "Free",
+    period: "for 7 days",
+    description: "Try all Pro features risk-free",
     features: [
-      "200+ practice tests",
-      "Community support",
-      "CloudDojo AI Chatbot",
-      "Weekly newsletter",
-      "Flashcards",
+      "All practice tests",
+      "CloudDojo AI Coach",
+      "Premium Flashcards",
+      "Downloadable PDF reports",
+      "Full platform access",
     ],
-    cta: "Get Started",
+    cta: "Start Free Trial",
     highlighted: false,
   },
   {
@@ -59,10 +63,10 @@ export const Pricing = () => {
     <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-14 max-w-7xl mx-auto font-main">
       {/* Header */}
       <div className="text-center mb-12 md:mb-16">
-        <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
+        <h2 className="heading-gradient text-4xl md:text-5xl lg:text-5xl font-bold mb-6 leading-tight">
           Simple, transparent pricing
         </h2>
-        <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+        <p className="sr-only text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
           Choose the plan that fits your needs. All plans include access to our
           core features.
         </p>
@@ -82,7 +86,7 @@ export const Pricing = () => {
             {/* Popular Badge */}
             {plan.badge && (
               <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                <span className="bg-gradient-to-r from-teal-400 to-emerald-400 text-black text-xs font-bold px-4 py-1 rounded-none">
+                <span className="bg-gradient-to-r from-emerald-500 to-emerald-400 text-black text-xs font-bold px-4 py-1 rounded-none">
                   {plan.badge}
                 </span>
               </div>
@@ -101,16 +105,39 @@ export const Pricing = () => {
             <p className="text-muted-foreground mb-6">{plan.description}</p>
 
             {/* CTA Button */}
-            <Link
-              href="/sign-in"
-              className={`w-full py-3 px-6 rounded-none font-semibold text-center mb-8 transition-colors ${
-                plan.highlighted
-                  ? "bg-gradient-to-r from-teal-400 to-emerald-400 text-black hover:opacity-90"
-                  : "bg-foreground text-background hover:bg-foreground/90"
-              }`}
-            >
-              {plan.cta}
-            </Link>
+            <div className="w-full mb-8">
+              {plan.highlighted ? (
+                <Link href="/sign-in" className="flex justify-center">
+                  <NoiseBackground containerClassName="w-full p-2">
+                    <button className="h-full w-full cursor-pointer bg-background px-4 py-2 text-foreground shadow-[0px_2px_0px_0px_var(--color-neutral-50)_inset,0px_0.5px_1px_0px_var(--color-neutral-400)] transition-all duration-200 active:scale-98 dark:shadow-[0px_1px_0px_0px_var(--color-neutral-950)_inset,0px_1px_0px_0px_var(--color-neutral-800)] font-semibold flex items-center justify-center gap-2 group">
+                      <span className="transition-transform duration-200 group-hover:-translate-x-1">
+                        {plan.cta}
+                      </span>
+                      <IconCircleArrowRightFill24
+                        size="20px"
+                        className="transition-transform duration-200 group-hover:translate-x-1"
+                      />
+                    </button>
+                  </NoiseBackground>
+                </Link>
+              ) : (
+                <Link href="/sign-in">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="w-full gap-2 rounded-none group"
+                  >
+                    <span className="transition-transform duration-200 group-hover:-translate-x-1">
+                      {plan.cta}
+                    </span>
+                    <IconCircleArrowRightFill24
+                      size="20px"
+                      className="transition-transform duration-200 group-hover:translate-x-1"
+                    />
+                  </Button>
+                </Link>
+              )}
+            </div>
 
             {/* Features List */}
             <div className="space-y-3 flex-grow">
@@ -119,7 +146,9 @@ export const Pricing = () => {
                   <IconCheckCircle
                     size="20px"
                     className={
-                      plan.highlighted ? "text-teal-400" : "text-foreground"
+                      plan.highlighted
+                        ? "text-primary"
+                        : "text-[rgb(100, 150, 255)]"
                     }
                   />
                   <span className="text-sm">{feature}</span>
