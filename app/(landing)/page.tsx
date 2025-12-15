@@ -21,36 +21,72 @@ export default function Home() {
           <section id="home">
             <HeroSection />
           </section>
+          <div className="w-full flex justify-between px-4 sm:px-6 lg:px-14 py-8">
+            <div className="border-l-2 border-dotted border-border/50 h-16"></div>
+            <div className="border-l-2 border-dotted border-border/50 h-16"></div>
+          </div>
           {/*<LogoCloud />*/}
           <section id="features">
             <FeatureSection />
           </section>
+          <div className="w-full flex justify-between px-4 sm:px-6 lg:px-14 py-8">
+            <div className="border-l-2 border-dotted border-border/50 h-16"></div>
+            <div className="border-l-2 border-dotted border-border/50 h-16"></div>
+          </div>
           <section id="platform">
             <FeaturesGrid />
           </section>
+          <div className="w-full flex justify-between px-4 sm:px-6 lg:px-14 py-8">
+            <div className="border-l-2 border-dotted border-border/50 h-16"></div>
+            <div className="border-l-2 border-dotted border-border/50 h-16"></div>
+          </div>
           {/*<StatsSection />*/}
 
           {/*<ContentSection />*/}
           <section id="ai">
             <AISection />
           </section>
-          <section id="comparison">
-            <ComparisonSection />
-          </section>
+          <div className="w-full flex justify-between px-4 sm:px-6 lg:px-14 py-8">
+            <div className="border-l-2 border-dotted border-border/50 h-16"></div>
+            <div className="border-l-2 border-dotted border-border/50 h-16"></div>
+          </div>
           <section id="providers">
             <ProvidersSection />
           </section>
+          <div className="w-full flex justify-between px-4 sm:px-6 lg:px-14 py-8">
+            <div className="border-l-2 border-dotted border-border/50 h-16"></div>
+            <div className="border-l-2 border-dotted border-border/50 h-16"></div>
+          </div>
           {/*<FeaturesSection />*/}
 
           <section id="testimonials">
             <WallOfLoveSection />
           </section>
+          <div className="w-full flex justify-between px-4 sm:px-6 lg:px-14 py-8">
+            <div className="border-l-2 border-dotted border-border/50 h-16"></div>
+            <div className="border-l-2 border-dotted border-border/50 h-16"></div>
+          </div>
           <section id="pricing">
             <Pricing />
           </section>
+          <div className="w-full flex justify-between px-4 sm:px-6 lg:px-14 py-8">
+            <div className="border-l-2 border-dotted border-border/50 h-16"></div>
+            <div className="border-l-2 border-dotted border-border/50 h-16"></div>
+          </div>
+          <section id="comparison">
+            <ComparisonSection />
+          </section>
+          <div className="w-full flex justify-between px-4 sm:px-6 lg:px-14 py-8">
+            <div className="border-l-2 border-dotted border-border/50 h-16"></div>
+            <div className="border-l-2 border-dotted border-border/50 h-16"></div>
+          </div>
           <section id="cta">
             <CallToAction />
           </section>
+          <div className="w-full flex justify-between px-4 sm:px-6 lg:px-14 py-8">
+            <div className="border-l-2 border-dotted border-border/50 h-16"></div>
+            <div className="border-l-2 border-dotted border-border/50 h-16"></div>
+          </div>
           <section id="faq">
             <FAQsFour />
           </section>

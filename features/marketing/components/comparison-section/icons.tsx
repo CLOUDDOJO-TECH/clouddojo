@@ -386,3 +386,31 @@ export function IconFeatherFillDuo18({ size = "18px", ...props }: IconProps) {
     </svg>
   );
 }
+
+export function IconInfoCircle({ size = "16px", ...props }: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={size}
+      height={size}
+      viewBox="0 0 16 16"
+      fill="none"
+      {...props}
+    >
+      <circle
+        cx="8"
+        cy="8"
+        r="7"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        fill="none"
+      />
+      <path
+        d="M8 7.5V11.5M8 5V5.01"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}

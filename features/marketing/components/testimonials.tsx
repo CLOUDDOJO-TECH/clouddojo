@@ -138,7 +138,7 @@ const MarqueeColumn = ({
 
   return (
     <div
-      className="relative h-[600px] overflow-hidden"
+      className="relative h-[700px] overflow-hidden"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

@@ -10,6 +10,7 @@ import {
   IconLinkFillDuo18,
   IconXmarkFillDuo18,
   IconFeatherFillDuo18,
+  IconInfoCircle,
 } from "./icons";
 import { LogoGradientFull } from "@/public/brand/logo-gradient-full";
 
@@ -20,6 +21,8 @@ const comparisonData = [
     others: "Static PDFs and brain dumps",
     icon: IconFeatherFillDuo18,
     color: "text-teal-400",
+    tooltip:
+      "Practice with real exam-style questions powered by AI that provides instant hints and explanations when you're stuck.",
   },
   {
     feature: "AI feedback",
@@ -27,6 +30,8 @@ const comparisonData = [
     others: "No feedback or days later",
     icon: IconSparkle3OutlineDuo18,
     color: "text-pink-400",
+    tooltip:
+      "Get immediate, personalized analysis after every quiz showing your strengths, weaknesses, and areas to focus on.",
   },
   {
     feature: "Hands-on projects",
@@ -34,6 +39,8 @@ const comparisonData = [
     others: "Theory only or paid separately",
     icon: IconForkliftFillDuo18,
     color: "text-orange-400",
+    tooltip:
+      "Build actual cloud infrastructure on AWS, Azure, and GCP with guided projects that mirror real-world scenarios.",
   },
   {
     feature: "Multi-cloud coverage",
@@ -41,6 +48,8 @@ const comparisonData = [
     others: "One provider per course",
     icon: IconEarthOutlineDuo18,
     color: "text-violet-400",
+    tooltip:
+      "Master all major cloud providers in one place instead of juggling multiple platforms and subscriptions.",
   },
   {
     feature: "Competitive leaderboards",
@@ -48,6 +57,8 @@ const comparisonData = [
     others: "No gamification or limited",
     icon: IconGamingButtonsFillDuo18,
     color: "text-cyan-400",
+    tooltip:
+      "Compete with cloud professionals worldwide, earn achievements, and track your ranking as you progress.",
   },
   {
     feature: "Smart flashcards",
@@ -55,6 +66,8 @@ const comparisonData = [
     others: "Manual creation or none",
     icon: IconTasks2OutlineDuo18,
     color: "text-emerald-400",
+    tooltip:
+      "AI automatically creates flashcards from questions you get wrong, helping you focus on what you need to learn.",
   },
   {
     feature: "Certification roadmap",
@@ -62,6 +75,8 @@ const comparisonData = [
     others: "Generic study guides",
     icon: IconTargetFillDuo18,
     color: "text-blue-400",
+    tooltip:
+      "Follow a customized study plan based on your current skill level, target certification, and learning pace.",
   },
 ];
 
@@ -108,7 +123,17 @@ export const ComparisonSection: React.FC = () => {
               className="grid grid-cols-[1fr_1.5fr_1.5fr] gap-4 py-6 border-b border-border/50 hover:bg-secondary/30 transition-colors"
             >
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                {row.feature}
+                <span>{row.feature}</span>
+                <div className="relative group">
+                  <IconInfoCircle
+                    size="16px"
+                    className="text-muted-foreground/50 cursor-help"
+                  />
+                  <div className="absolute left-0 bottom-full mb-2 hidden group-hover:block w-64 p-3 bg-neutral-900 text-white text-xs rounded-lg shadow-lg z-10">
+                    {row.tooltip}
+                    <div className="absolute left-4 top-full w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-neutral-900"></div>
+                  </div>
+                </div>
               </div>
               <div className="flex items-center gap-2">
                 <Icon size="20px" className={`${row.color} flex-shrink-0`} />

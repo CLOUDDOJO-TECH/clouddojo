@@ -132,7 +132,7 @@ export const Pricing = () => {
                     </span>
                     <IconCircleArrowRightFill24
                       size="20px"
-                      className="transition-transform duration-200 group-hover:translate-x-1"
+                      className={`transition-transform duration-200 group-hover:translate-x-1 ${index === 2 ? "text-[rgb(255,200,100)]" : ""}`}
                     />
                   </Button>
                 </Link>
