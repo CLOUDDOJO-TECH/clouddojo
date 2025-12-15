@@ -147,8 +147,10 @@ export const Pricing = () => {
                     size="20px"
                     className={
                       plan.highlighted
-                        ? "text-primary"
-                        : "text-[rgb(100, 150, 255)]"
+                        ? "text-[rgb(16,185,129)]"
+                        : index === 2
+                          ? "text-[rgb(255,200,100)]"
+                          : "text-foreground"
                     }
                   />
                   <span className="text-sm">{feature}</span>
