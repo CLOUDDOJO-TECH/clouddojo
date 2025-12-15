@@ -7,9 +7,9 @@ import { IconChatBot, IconBrain, IconLightning, IconClock } from "./icons";
 const aiFeatures = [
   {
     icon: IconChatBot,
-    title: "24/7 AI Study Companion",
+    title: "AI Study Companion",
     description:
-      "Get instant answers for AWS, Azure, and GCP concepts at 3am. No waiting for forum responses or office hours.",
+      "Like a study partner, but on steroids. Knows your strengths and weaknesses better than you do.",
     color: "text-blue-400",
     bgColor: "bg-blue-500/10",
   },
@@ -17,7 +17,7 @@ const aiFeatures = [
     icon: IconBrain,
     title: "Personalized Study Plans",
     description:
-      "AI analyzes your performance and creates custom study paths. Focus on what matters for your certification.",
+      "Time is precious. AI creates custom study paths based on what you know and what you don't—no wasted effort.",
     color: "text-purple-400",
     bgColor: "bg-purple-500/10",
   },
@@ -25,7 +25,7 @@ const aiFeatures = [
     icon: IconLightning,
     title: "Smart Performance Insights",
     description:
-      "Know your strengths, weaknesses, and exact certification readiness. Track topic mastery across all cloud providers.",
+      "Taking practice tests isn't enough. AI analyzes every answer and shows you exactly where you're leaking points.",
     color: "text-emerald-400",
     bgColor: "bg-emerald-500/10",
   },
@@ -33,7 +33,7 @@ const aiFeatures = [
     icon: IconClock,
     title: "Adaptive Explanations",
     description:
-      "Complex topics like VPC peering or Kubernetes pods explained multiple ways until you truly understand.",
+      "Not just another generic ChatGPT answer. Get short, bite-sized explanations for Kubernetes, VPC, and every tricky concept.",
     color: "text-orange-400",
     bgColor: "bg-orange-500/10",
   },
@@ -55,11 +55,11 @@ export const AISection: React.FC = () => {
         </h2>
 
         {/* Description */}
-        <p className="text-lg md:text-xl text-muted-foreground max-w-4xl leading-relaxed">
-          Powered by Google Gemini 2.0, our AI doesn't just give you answers—it
+        <p className="text-lg md:text-xl text-muted-foreground max-w-4xl leading-relaxed sr-only">
+          Powered by frontier LLMS, our AI doesn't just give you answers—it
           teaches you to think like a cloud architect. Get personalized feedback
           on every practice question, understand your weak spots, and know
-          exactly when you're ready to book your exam.
+          exactly when you're ready to take your exam.
         </p>
       </div>
 
@@ -108,6 +108,31 @@ export const AISection: React.FC = () => {
             placeholder="blur"
             priority
           />
+        </div>
+      </div>
+
+      {/* Bottom Info Section */}
+      <div className="mt-20 grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto">
+        <div>
+          <h3 className="text-xl md:text-2xl font-semibold mb-4">
+            Per-Quiz Analysis
+          </h3>
+          <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
+            Every practice test gets analyzed immediately. See your category
+            scores, time efficiency, and topic mastery—all tracked
+            automatically. No manual review needed.
+          </p>
+        </div>
+
+        <div>
+          <h3 className="text-xl md:text-2xl font-semibold mb-4">
+            Certification Readiness Score
+          </h3>
+          <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
+            Stop guessing if you're ready. AI predicts your pass probability and
+            tells you exactly when to book your exam—backed by your actual
+            performance data.
+          </p>
         </div>
       </div>
     </section>

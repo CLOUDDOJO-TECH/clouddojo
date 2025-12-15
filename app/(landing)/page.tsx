@@ -1,10 +1,9 @@
-import LogoCloud from "@/features/marketing/logo-cloudmponents/logo-cloudmponents/logo-cloud";
 import CallToAction from "@/features/marketing/components/call-to-action";
-import ContentSection from "@/features/marketing/components/content-3";
 import FAQsFour from "@/features/marketing/components/faqs-4";
 import { FeatureSection } from "@/features/marketing/components/features/index";
 import { FeaturesGrid } from "@/features/marketing/components/features-grid/index";
 import { AISection } from "@/features/marketing/components/ai-section/index";
+import { ComparisonSection } from "@/features/marketing/components/comparison-section/index";
 import Footer from "@/features/marketing/components/footer";
 import HeroSection from "@/features/marketing/components/hero-section";
 import ProvidersSection from "@/features/marketing/components/providers";
@@ -33,6 +32,9 @@ export default function Home() {
           {/*<ContentSection />*/}
           <section id="ai">
             <AISection />
+          </section>
+          <section id="comparison">
+            <ComparisonSection />
           </section>
           <section id="providers">
             <ProvidersSection />
