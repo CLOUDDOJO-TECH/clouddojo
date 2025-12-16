@@ -79,7 +79,7 @@ className="heading-gradient"
 
 ---
 
-## 3. Vertical Section Separators
+## 3. Vertical Section Separators (now overused)
 
 ### Decision
 Use two subtle vertical dotted lines (left and right edges) between major sections instead of horizontal lines.

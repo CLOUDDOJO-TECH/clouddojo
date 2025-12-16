@@ -13,6 +13,12 @@ import {
   IconInfoCircle,
 } from "./icons";
 import { LogoGradientFull } from "@/public/brand/logo-gradient-full";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const comparisonData = [
   {
@@ -82,86 +88,94 @@ const comparisonData = [
 
 export const ComparisonSection: React.FC = () => {
   return (
-    <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-14 max-w-7xl mx-auto font-main">
-      {/* Separator */}
-      <div className="w-full border-t-2 border-dotted border-border/50 mb-16 md:mb-24"></div>
+    <TooltipProvider>
+      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-14 max-w-7xl mx-auto font-main">
+        {/* Separator */}
+        <div className="w-full border-t-2 border-dotted border-border/50 mb-16 md:mb-24"></div>
 
-      {/* Header */}
-      <div className="mb-12 md:mb-16">
-        <h2 className="text-4xl md:text-5xl lg:text-5xl font-bold mb-6 leading-tight">
-          Built for cloud professionals,
-          <br />
-          not certification mills
-        </h2>
-        <p className="text-lg md:text-xl text-muted-foreground max-w-3xl">
-          We built CloudDojo because existing platforms are either too
-          expensive, too outdated, or too generic. Usually all three.
-        </p>
-      </div>
-
-      {/* Comparison Table */}
-      <div className="space-y-1">
-        {/* Header Row */}
-        <div className="grid grid-cols-[1fr_1.5fr_1.5fr] gap-4 pb-6 border-b border-border">
-          <div className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-            Feature
-          </div>
-          <div className="flex items-center">
-            <LogoGradientFull size="40px" />
-          </div>
-          <div className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-            Traditional Platforms
-          </div>
+        {/* Header */}
+        <div className="mb-12 md:mb-16">
+          <h2 className="text-4xl md:text-5xl lg:text-5xl font-bold mb-6 leading-tight">
+            Built for cloud professionals,
+            <br />
+            not certification mills
+          </h2>
+          <p className="text-lg md:text-xl text-muted-foreground max-w-3xl">
+            We built CloudDojo because existing platforms are either too
+            expensive, too outdated, or too generic. Usually all three.
+          </p>
         </div>
 
-        {/* Comparison Rows */}
-        {comparisonData.map((row, index) => {
-          const Icon = row.icon;
-          return (
-            <div
-              key={index}
-              className="grid grid-cols-[1fr_1.5fr_1.5fr] gap-4 py-6 border-b border-border/50 hover:bg-secondary/30 transition-colors"
-            >
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <span>{row.feature}</span>
-                <div className="relative group">
-                  <IconInfoCircle
-                    size="16px"
-                    className="text-muted-foreground/50 cursor-help"
+        {/* Comparison Table */}
+        <div className="space-y-1">
+          {/* Header Row */}
+          <div className="grid grid-cols-[1fr_1.5fr_1.5fr] gap-4 pb-6 border-b border-border">
+            <div className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+              Feature
+            </div>
+            <div className="flex items-center">
+              <LogoGradientFull size="40px" />
+            </div>
+            <div className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+              Traditional Platforms
+            </div>
+          </div>
+
+          {/* Comparison Rows */}
+          {comparisonData.map((row, index) => {
+            const Icon = row.icon;
+            return (
+              <div
+                key={index}
+                className="grid grid-cols-[1fr_1.5fr_1.5fr] gap-4 py-6 border-b border-border/50 hover:bg-secondary/30 transition-colors"
+              >
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <span>{row.feature}</span>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button className="inline-flex">
+                        <IconInfoCircle
+                          size="16px"
+                          className="text-muted-foreground/50 cursor-help"
+                        />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent
+                      side="top"
+                      className="max-w-xs bg-neutral-900 text-white border-neutral-800"
+                    >
+                      <p className="text-xs">{row.tooltip}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Icon size="20px" className={`${row.color} flex-shrink-0`} />
+                  <span className="text-sm font-medium">{row.clouddojo}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <IconXmarkFillDuo18
+                    size="20px"
+                    className="text-red-500 flex-shrink-0"
                   />
-                  <div className="absolute left-0 bottom-full mb-2 hidden group-hover:block w-64 p-3 bg-neutral-900 text-white text-xs rounded-lg shadow-lg z-10">
-                    {row.tooltip}
-                    <div className="absolute left-4 top-full w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-neutral-900"></div>
-                  </div>
+                  <span className="text-sm text-muted-foreground">
+                    {row.others}
+                  </span>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
-                <Icon size="20px" className={`${row.color} flex-shrink-0`} />
-                <span className="text-sm font-medium">{row.clouddojo}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <IconXmarkFillDuo18
-                  size="20px"
-                  className="text-red-500 flex-shrink-0"
-                />
-                <span className="text-sm text-muted-foreground">
-                  {row.others}
-                </span>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
 
-      {/* Bottom CTA */}
-      <div className="mt-12 text-center">
-        <p className="text-muted-foreground">
-          Stop wasting time with outdated study materials.{" "}
-          <span className="text-foreground font-semibold">
-            Start learning smarter.
-          </span>
-        </p>
-      </div>
-    </section>
+        {/* Bottom CTA */}
+        <div className="mt-12 text-center">
+          <p className="text-muted-foreground">
+            Stop wasting time with outdated study materials.{" "}
+            <span className="text-foreground font-semibold">
+              Start learning smarter.
+            </span>
+          </p>
+        </div>
+      </section>
+    </TooltipProvider>
   );
 };
