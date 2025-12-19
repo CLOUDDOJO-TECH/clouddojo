@@ -1,6 +1,8 @@
 "use client";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import Image from "next/image";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import previewImage from "@/public/previews/detail-features-section.png";
 import {
   IconHand2,
@@ -11,7 +13,10 @@ import {
   IconGrid2,
   IconHexagonCheck,
   IconUsers,
+  IconBookOpen,
 } from "./icons";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const features = [
   {
@@ -71,11 +76,50 @@ const features = [
     color: "text-purple-400",
     bgColor: "bg-purple-500/10",
   },
+  {
+    icon: IconBookOpen,
+    title: "Self-paced courses",
+    description: "Learn at your own speed with comprehensive course materials",
+    color: "text-amber-400",
+    bgColor: "bg-amber-500/10",
+  },
 ];
 
 export const FeaturesGrid: React.FC = () => {
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!gridRef.current) return;
+
+    const items = gridRef.current.querySelectorAll(".feature-item");
+
+    gsap.set(items, {
+      opacity: 0,
+      y: 30,
+      scale: 0.95,
+    });
+
+    gsap.to(items, {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      duration: 0.6,
+      stagger: 0.08,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: gridRef.current,
+        start: "top 80%",
+        once: true,
+      },
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    };
+  }, []);
+
   return (
-    <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-14 max-w-7xl mx-auto font-main">
+    <section className="py-20 md:py-32 px-6 sm:px-8 lg:px-16 max-w-7xl mx-auto font-main">
       {/* Header */}
       <div className="mb-12 md:mb-16">
         {/* Title */}
@@ -86,49 +130,71 @@ export const FeaturesGrid: React.FC = () => {
         </h2>
 
         {/* Description */}
-        <p className="text-lg md:text-xl text-muted-foreground max-w-4xl leading-relaxed">
-          Master AWS, Azure, and Google Cloud certifications with our
-          comprehensive learning platform. Get scenario-based practice tests,
-          AI-powered feedback, hands-on projects, and personalized study plans
-          that adapt to your learning style and help you become
-          certification-ready.
+        <p className="text-lg md:text-xl text-muted-foreground max-w-4xl leading-relaxed ">
+          Get scenario-based practice tests, AI-powered feedback, hands-on
+          projects, and personalized study plans that adapt to your learning
+          style and help you become certification-ready.
         </p>
       </div>
 
       {/* Features Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+      <div
+        ref={gridRef}
+        className="grid grid-cols-3 lg:grid-cols-4 gap-8 lg:gap-10 mb-16"
+      >
         {features.map((feature, index) => {
           const Icon = feature.icon;
-          const isNotLastInRow = (index + 1) % 4 !== 0;
-          const isNotLastRow = index < 4;
+
+          // For mobile (3 cols): not last in row if (index + 1) % 3 !== 0
+          // For desktop (4 cols): not last in row if (index + 1) % 4 !== 0
+          const isNotLastInRowMobile = (index + 1) % 3 !== 0;
+          const isNotLastInRowDesktop = (index + 1) % 4 !== 0;
+
+          // For mobile: not last row if index < 6 (first 6 items, 2 rows)
+          // For desktop: not last row if index < 4 (first 4 items, 1 row)
+          const isNotLastRowMobile = index < 6;
+          const isNotLastRowDesktop = index < 4;
 
           return (
-            <div key={index} className="space-y-3 relative">
+            <div
+              key={index}
+              className="feature-item space-y-3 relative min-h-[44px]"
+            >
               {/* Icon */}
               <div
-                className={`w-12 h-12 ${feature.bgColor} flex items-center justify-center`}
+                className={`w-14 h-14 lg:w-12 lg:h-12 ${feature.bgColor} flex items-center justify-center`}
               >
-                <Icon className={`w-6 h-6 ${feature.color}`} />
+                <Icon className={`w-7 h-7 lg:w-6 lg:h-6 ${feature.color}`} />
               </div>
 
               {/* Title */}
-              <h3 className="text-lg font-semibold text-foreground">
+              <h3 className="text-base lg:text-lg font-semibold text-foreground leading-snug min-h-[2.5rem] lg:min-h-0">
                 {feature.title}
               </h3>
 
-              {/* Description */}
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              {/* Description - Hidden on mobile, visible on desktop */}
+              <p className="sr-only lg:not-sr-only lg:text-sm text-muted-foreground leading-relaxed">
                 {feature.description}
               </p>
 
-              {/* Vertical dotted line (right side) - hidden on mobile and last column */}
-              {isNotLastInRow && (
-                <div className="hidden lg:block absolute top-0 -right-4 h-full w-px border-r-2 border-dotted border-border/50"></div>
+              {/* Vertical dotted line (right side) */}
+              {/* Mobile: Show if not last in 3-col row */}
+              {isNotLastInRowMobile && (
+                <div className="lg:hidden absolute top-0 -right-4 h-full w-px border-r-2 border-dotted border-border/50"></div>
+              )}
+              {/* Desktop: Show if not last in 4-col row */}
+              {isNotLastInRowDesktop && (
+                <div className="hidden lg:block absolute top-0 -right-5 h-full w-px border-r-2 border-dotted border-border/50"></div>
               )}
 
-              {/* Horizontal dotted line (bottom) - hidden on last row */}
-              {isNotLastRow && (
-                <div className="hidden sm:block absolute -bottom-4 left-0 w-full h-px border-b-2 border-dotted border-border/50"></div>
+              {/* Horizontal dotted line (bottom) */}
+              {/* Mobile: Show if not in last row (first 6 items) */}
+              {isNotLastRowMobile && (
+                <div className="lg:hidden absolute -bottom-4 left-0 w-full h-px border-b-2 border-dotted border-border/50"></div>
+              )}
+              {/* Desktop: Show if not in last row (first 4 items) */}
+              {isNotLastRowDesktop && (
+                <div className="hidden lg:block absolute -bottom-5 left-0 w-full h-px border-b-2 border-dotted border-border/50"></div>
               )}
             </div>
           );
