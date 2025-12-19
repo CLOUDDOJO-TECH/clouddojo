@@ -20,18 +20,36 @@ const featuresDropdown = {
   features: [
     {
       name: "Simulated Certification Exams",
-      href: "/features#simulated-exams",
+      href: "#features", // TODO: Add specific section anchor when feature page sections are ready
     },
     {
       name: "AI-Powered Progress Tracking",
-      href: "/features#progress-tracking",
+      href: "#features", // TODO: Add specific section anchor when feature page sections are ready
     },
-    { name: "AI-Driven Study Assistance", href: "/features#study-assistance" },
-    { name: "Readiness Assessment", href: "/features#readiness-assessment" },
-    { name: "Comprehensive Question Bank", href: "/features#question-bank" },
-    { name: "Flashcards for Quick Revision", href: "/features#flashcards" },
-    { name: "Performance Analytics", href: "/features#analytics" },
-    { name: "Community and Support", href: "/features#community" },
+    {
+      name: "AI-Driven Study Assistance",
+      href: "#features", // TODO: Add specific section anchor when feature page sections are ready
+    },
+    {
+      name: "Readiness Assessment",
+      href: "#features", // TODO: Add specific section anchor when feature page sections are ready
+    },
+    {
+      name: "Comprehensive Question Bank",
+      href: "#features", // TODO: Add specific section anchor when feature page sections are ready
+    },
+    {
+      name: "Flashcards for Quick Revision",
+      href: "#features", // TODO: Add specific section anchor when feature page sections are ready
+    },
+    {
+      name: "Performance Analytics",
+      href: "#features", // TODO: Add specific section anchor when feature page sections are ready
+    },
+    {
+      name: "Community and Support",
+      href: "#features", // TODO: Add specific section anchor when feature page sections are ready
+    },
   ],
 };
 
@@ -74,7 +92,7 @@ export const HeroHeader = () => {
               <button
                 onClick={() => setMenuState(!menuState)}
                 aria-label={menuState == true ? "Close Menu" : "Open Menu"}
-                className="relative z-20 -m-2.5 -mr-4 block cursor-pointer p-2.5 lg:hidden"
+                className="relative z-20 -mr-2 block cursor-pointer p-3 lg:hidden min-h-[44px] min-w-[44px] flex items-center justify-center"
               >
                 <Menu className="in-data-[state=active]:rotate-180 in-data-[state=active]:scale-0 in-data-[state=active]:opacity-0 m-auto size-6 duration-200" />
                 <X className="in-data-[state=active]:rotate-0 in-data-[state=active]:scale-100 in-data-[state=active]:opacity-100 absolute inset-0 m-auto size-6 -rotate-180 scale-0 opacity-0 duration-200" />
@@ -124,26 +142,26 @@ export const HeroHeader = () => {
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -8 }}
                           transition={{ duration: 0.2, ease: "easeOut" }}
-                          className="fixed left-0 right-0 top-[72px] z-50 flex justify-center pt-4 px-4"
+                          className="fixed left-0 right-0 top-[72px] z-50 flex justify-center pt-4 px-4 max-h-[calc(100vh-88px)] overflow-y-auto"
                         >
-                          <div className="w-full max-w-4xl bg-background/80 backdrop-blur-xl overflow-hidden border border-border/50 rounded-none shadow-lg">
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-0">
+                          <div className="w-full max-w-4xl bg-background/80 backdrop-blur-xl overflow-hidden border border-border/50 rounded-none shadow-lg mb-4">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-0">
                               {/* Left side - Image */}
-                              <div className="relative col-span-1 overflow-hidden min-h-[200px] sm:min-h-[300px]">
+                              <div className="relative col-span-1 overflow-hidden min-h-[180px] md:min-h-[300px]">
                                 <img
                                   src={featuresDropdown.image}
                                   alt="Features overview"
                                   className="h-full w-full object-cover"
                                 />
-                                <div className="absolute inset-0 flex items-end bg-gradient-to-t from-black/60 to-transparent p-6">
-                                  <h3 className="text-2xl font-bold text-white">
+                                <div className="absolute inset-0 flex items-end bg-gradient-to-t from-black/60 to-transparent p-4 md:p-6">
+                                  <h3 className="text-xl md:text-2xl font-bold text-white">
                                     Features
                                   </h3>
                                 </div>
                               </div>
 
                               {/* Right side - Features list in 2 columns */}
-                              <div className="col-span-1 sm:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 p-8">
+                              <div className="col-span-1 md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-x-6 md:gap-x-8 gap-y-3 md:gap-y-4 p-6 md:p-8">
                                 {featuresDropdown.features.map(
                                   (feature, idx) => (
                                     <motion.div
@@ -182,90 +200,161 @@ export const HeroHeader = () => {
               </ul>
             </div>
 
-            <div className="bg-background in-data-[state=active]:block lg:in-data-[state=active]:flex mb-6 hidden w-full flex-wrap items-center justify-end space-y-8  border p-6 shadow-2xl shadow-zinc-300/20 md:flex-nowrap lg:m-0 lg:flex lg:w-fit lg:gap-6 lg:space-y-0 lg:border-transparent lg:bg-transparent lg:p-0 lg:shadow-none dark:shadow-none dark:lg:bg-transparent">
-              <div className="lg:hidden">
-                <ul className="space-y-6 text-base">
-                  {menuItems.map((item, index) => (
-                    <li key={index}>
-                      <Link
-                        href={item.href}
-                        className="text-muted-foreground hover:text-foreground block transition-colors duration-200"
+            <AnimatePresence>
+              {menuState && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{
+                    duration: 0.4,
+                    ease: [0.4, 0, 0.2, 1],
+                    height: { duration: 0.4 },
+                    opacity: { duration: 0.3 },
+                  }}
+                  className="fixed inset-x-0 top-[72px] z-40 lg:hidden overflow-hidden"
+                >
+                  <div
+                    className={cn(
+                      "mx-4 mt-4 overflow-hidden rounded-none shadow-lg transition-all duration-300 backdrop-blur-xl",
+                      isScrolled
+                        ? "bg-background/95 border border-border/50"
+                        : "bg-background/90 border border-border/30",
+                    )}
+                    style={{
+                      WebkitBackdropFilter: "blur(16px)",
+                      backdropFilter: "blur(16px)",
+                    }}
+                  >
+                    <div className="flex flex-col space-y-6 p-6 sm:p-8">
+                      <div>
+                        <ul className="space-y-2">
+                          {menuItems.map((item, index) => (
+                            <motion.li
+                              key={index}
+                              initial={{ opacity: 0, x: -20 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{
+                                duration: 0.3,
+                                delay: 0.1 + index * 0.05,
+                                ease: "easeOut",
+                              }}
+                            >
+                              <Link
+                                href={item.href}
+                                className="text-foreground hover:text-primary block text-lg font-medium transition-colors duration-200 py-3 min-h-[44px] flex items-center"
+                                onClick={() => setMenuState(false)}
+                              >
+                                {item.name}
+                              </Link>
+                            </motion.li>
+                          ))}
+                        </ul>
+                      </div>
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{
+                          duration: 0.3,
+                          delay: 0.3,
+                          ease: "easeOut",
+                        }}
+                        className="flex flex-col space-y-4 pt-6 border-t border-border/50"
                       >
-                        <span>{item.name}</span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">
-                {isSignedIn ? (
-                  <>
+                        {isSignedIn ? (
+                          <Button
+                            asChild
+                            size="lg"
+                            className="rounded-none w-full"
+                          >
+                            <Link
+                              href="/dashboard"
+                              onClick={() => setMenuState(false)}
+                            >
+                              <span>Dashboard</span>
+                            </Link>
+                          </Button>
+                        ) : (
+                          <>
+                            <SignInButton mode="modal">
+                              <Button
+                                variant="outline"
+                                size="lg"
+                                className="rounded-none w-full"
+                              >
+                                <span>Login</span>
+                              </Button>
+                            </SignInButton>
+                            <SignInButton mode="modal">
+                              <Button size="lg" className="rounded-none w-full">
+                                <span>Sign Up</span>
+                              </Button>
+                            </SignInButton>
+                          </>
+                        )}
+                      </motion.div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Desktop Auth Buttons */}
+            <div className="hidden lg:flex lg:items-center lg:gap-6">
+              {isSignedIn ? (
+                <>
+                  <Button
+                    asChild
+                    size="sm"
+                    className={cn("rounded-none", isScrolled && "lg:hidden")}
+                  >
+                    <Link href="/dashboard">
+                      <span>Dashboard</span>
+                    </Link>
+                  </Button>
+                  <Button
+                    asChild
+                    size="sm"
+                    className={cn(
+                      isScrolled ? "lg:inline-flex rounded-none" : "hidden",
+                    )}
+                  >
+                    <Link href="/dashboard">
+                      <span>Dashboard</span>
+                    </Link>
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <SignInButton mode="modal">
                     <Button
-                      asChild
+                      variant="outline"
+                      size="sm"
+                      className={cn("rounded-none", isScrolled && "lg:hidden")}
+                    >
+                      <span>Login</span>
+                    </Button>
+                  </SignInButton>
+                  <SignInButton mode="modal">
+                    <Button
+                      size="sm"
+                      className={cn("rounded-none", isScrolled && "lg:hidden")}
+                    >
+                      <span>Sign Up</span>
+                    </Button>
+                  </SignInButton>
+                  <SignInButton mode="modal">
+                    <Button
                       size="sm"
                       className={cn(
-                        "rounded-none",
-                        isScrolled && "lg:hidden rounded-none",
+                        isScrolled ? "lg:inline-flex rounded-none" : "hidden",
                       )}
                     >
-                      <Link href="/dashboard">
-                        <span>Dashboard</span>
-                      </Link>
+                      <span>Get Started</span>
                     </Button>
-                    <Button
-                      asChild
-                      size="sm"
-                      className={cn(
-                        isScrolled
-                          ? "lg:inline-flex rounded-none"
-                          : "hidden rounded-none",
-                      )}
-                    >
-                      <Link href="/dashboard">
-                        <span>Dashboard</span>
-                      </Link>
-                    </Button>
-                  </>
-                ) : (
-                  <>
-                    <SignInButton mode="modal">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className={cn(
-                          "rounded-none",
-                          isScrolled && "lg:hidden rounded-none",
-                        )}
-                      >
-                        <span>Login</span>
-                      </Button>
-                    </SignInButton>
-                    <SignInButton mode="modal">
-                      <Button
-                        size="sm"
-                        className={cn(
-                          "rounded-none",
-                          isScrolled && "lg:hidden rounded-none",
-                        )}
-                      >
-                        <span>Sign Up</span>
-                      </Button>
-                    </SignInButton>
-                    <SignInButton mode="modal">
-                      <Button
-                        size="sm"
-                        className={cn(
-                          isScrolled
-                            ? "lg:inline-flex rounded-none"
-                            : "hidden rounded-none",
-                        )}
-                      >
-                        <span>Get Started</span>
-                      </Button>
-                    </SignInButton>
-                  </>
-                )}
-              </div>
+                  </SignInButton>
+                </>
+              )}
             </div>
           </div>
         </div>

@@ -159,8 +159,8 @@ export default function HeroSection() {
                 ...transitionVariants,
               }}
             >
-              <div className="relative -mr-56 mt-8 overflow-visible px-2 sm:mr-0 sm:mt-12 md:mt-20">
-                <div className="inset-shadow-2xs ring-background dark:inset-shadow-white/20 bg-background relative mx-auto max-w-6xl overflow-hidden rounded-none border p-4 shadow-lg shadow-zinc-950/15 ring-1">
+              <div className="relative mt-8 overflow-visible px-4 sm:px-2 sm:mt-12 md:mt-20">
+                <div className="inset-shadow-2xs ring-background dark:inset-shadow-white/20 bg-background relative mx-auto max-w-6xl sm:max-w-5xl md:max-w-6xl overflow-hidden rounded-none border p-2 sm:p-4 shadow-lg shadow-zinc-950/15 ring-1">
                   <Image
                     className="bg-background aspect-15/8 relative hidden rounded-none dark:block object-cover"
                     src="/previews/landing-preview.png"
