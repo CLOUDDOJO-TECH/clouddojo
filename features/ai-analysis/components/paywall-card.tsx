@@ -10,7 +10,7 @@ import {
   Brain,
 } from "lucide-react";
 import { useState } from "react";
-import UpgradeButton from "../ui/upgrade-button";
+import UpgradeButton from "@/components/ui/upgrade-button";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
@@ -53,18 +53,17 @@ export default function PaywallCard() {
 
   return (
     <div className="relative w-full max-w-xl lg:max-w-2xl">
-
       {/* Main Card */}
       <div className="relative backdrop-blur-xl  p-8 ">
-      <div
-        className={cn(
-          "absolute inset-0",
-          "bg-size-[40px_40px]",
-          "bg-[linear-gradient(to_right,#e4e4e7_1px,transparent_1px),linear-gradient(to_bottom,#e4e4e7_1px,transparent_1px)]",
-          "dark:bg-[linear-gradient(to_right,#262626_1px,transparent_1px),linear-gradient(to_bottom,#262626_1px,transparent_1px)]",
-        )}
-      />
-            <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-background mask-[radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-background"></div>
+        <div
+          className={cn(
+            "absolute inset-0",
+            "bg-size-[40px_40px]",
+            "bg-[linear-gradient(to_right,#e4e4e7_1px,transparent_1px),linear-gradient(to_bottom,#e4e4e7_1px,transparent_1px)]",
+            "dark:bg-[linear-gradient(to_right,#262626_1px,transparent_1px),linear-gradient(to_bottom,#262626_1px,transparent_1px)]",
+          )}
+        />
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-background mask-[radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-background"></div>
         {/* 3D Contract Icon */}
         <div className="flex justify-center mb-8 relative">
           <div className="absolute inset-0 bg-linear-to-r from-emerald-500/20 to-blue-500/20 blur-2xl rounded-full"></div>
@@ -84,8 +83,8 @@ export default function PaywallCard() {
             Premium AI Analysis
           </h1>
           <p className="text-foreground/60 text-sm leading-relaxed">
-            Unlock advanced insights and personalized learning recommendations to
-            accelerate your certification journey
+            Unlock advanced insights and personalized learning recommendations
+            to accelerate your certification journey
           </p>
         </div>
 

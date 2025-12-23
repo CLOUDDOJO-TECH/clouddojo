@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { Flame, X } from "lucide-react";
-import { trpc } from "@/lib/trpc/react";
+import { trpc } from "@/src/lib/trpc/react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
@@ -59,20 +59,26 @@ export function StreakRiskAlert() {
               🔥 Don't lose your {currentStreak}-day streak!
             </h3>
             <p className="text-sm text-foreground/70">
-              You haven't practiced today yet. Complete just one quiz to keep your streak alive.
+              You haven't practiced today yet. Complete just one quiz to keep
+              your streak alive.
             </p>
           </div>
 
           {/* Streak freezes */}
           {streakFreezes > 0 && (
             <div className="rounded-md bg-blue-500/10 border border-blue-500/20 px-3 py-2 text-xs text-blue-600 dark:text-blue-400">
-              ❄️ You have {streakFreezes} streak freeze{streakFreezes !== 1 ? "s" : ""} available as backup
+              ❄️ You have {streakFreezes} streak freeze
+              {streakFreezes !== 1 ? "s" : ""} available as backup
             </div>
           )}
 
           {/* CTA */}
           <div className="flex items-center gap-2">
-            <Button onClick={handleTakeQuiz} size="sm" className="bg-orange-500 hover:bg-orange-600 text-white">
+            <Button
+              onClick={handleTakeQuiz}
+              size="sm"
+              className="bg-orange-500 hover:bg-orange-600 text-white"
+            >
               <Flame className="h-4 w-4" />
               Take a Quick Quiz
             </Button>

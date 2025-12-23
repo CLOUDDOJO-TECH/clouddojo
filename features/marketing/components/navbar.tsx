@@ -34,7 +34,7 @@ const Navbar = () => {
           Features
         </a>
         <a
-          href="/pricing"
+          href="/#pricing"
           className="text-sm text-cstm_teal hover:text-cstm_teal/80"
         >
           Pricing
@@ -147,7 +147,7 @@ const Navbar = () => {
               Features
             </a>
             <a
-              href="/pricing"
+              href="/#pricing"
               className="text-cstm_teal hover:text-cstm_teal/80"
             >
               Pricing

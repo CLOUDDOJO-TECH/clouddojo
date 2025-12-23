@@ -180,7 +180,18 @@ export default function WallOfLoveSection() {
               Loved by the Community
             </h2>
           </div>
-          <div className="mt-8 grid gap-3 sm:grid-cols-2 md:mt-12 lg:grid-cols-3">
+
+          {/* Mobile: Single column with all testimonials */}
+          <div className="mt-8 md:hidden">
+            <MarqueeColumn
+              testimonials={testimonials}
+              duration={40}
+              direction="down"
+            />
+          </div>
+
+          {/* Desktop: Three columns */}
+          <div className="mt-8 hidden md:grid gap-3 sm:grid-cols-2 md:mt-12 lg:grid-cols-3">
             {testimonialChunks.map((chunk, chunkIndex) => (
               <MarqueeColumn
                 key={chunkIndex}

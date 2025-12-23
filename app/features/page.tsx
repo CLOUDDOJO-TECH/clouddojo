@@ -69,7 +69,7 @@ export default function FeaturesPage() {
               Try It Free
             </Link>
             <Link
-              href="/pricing"
+              href="/#pricing"
               className="rounded-lg border border-border bg-background px-8 py-3 font-semibold text-foreground transition-all hover:bg-foreground/5"
             >
               View Pricing

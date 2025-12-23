@@ -66,7 +66,7 @@ export default function Tabnavbar() {
                 <NavigationMenuItem>
                   <NavigationMenuLink
                     className={navigationMenuTriggerStyle()}
-                    href="/pricing"
+                    href="/#pricing"
                   >
                     Pricing
                   </NavigationMenuLink>

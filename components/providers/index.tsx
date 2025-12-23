@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import React from "react"
-import { QueryProvider } from "./query-provider"
-import { PricingModalProvider } from "./pricing-modal-provider"
-import { ThemeProvider } from "next-themes"
+import React from "react";
+import { QueryProvider } from "./query-provider";
+import { PricingModalProvider } from "./pricing-modal-provider";
+import { ThemeProvider } from "next-themes";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -14,10 +14,8 @@ export default function Providers({ children }: { children: React.ReactNode }) {
       disableTransitionOnChange
     >
       <QueryProvider>
-        <PricingModalProvider>
-          {children}
-        </PricingModalProvider>
+        <PricingModalProvider>{children}</PricingModalProvider>
       </QueryProvider>
     </ThemeProvider>
-  )
-} 
+  );
+}

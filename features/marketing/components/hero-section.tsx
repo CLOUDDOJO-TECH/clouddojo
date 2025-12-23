@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import { ArrowRight, ChevronRight } from "lucide-react";
@@ -10,6 +12,7 @@ import GameOfLife from "../HeroBackground";
 import LogoCloud from "../logo-cloud";
 import { CloudIcon } from "./icons/cloud-icon";
 import { RocketIcon } from "./icons/rocket-icon";
+import { SignInButton, useUser } from "@clerk/nextjs";
 
 const transitionVariants = {
   item: {
@@ -32,6 +35,8 @@ const transitionVariants = {
 };
 
 export default function HeroSection() {
+  const { isSignedIn } = useUser();
+
   return (
     <>
       <HeroHeader />
@@ -65,7 +70,7 @@ export default function HeroSection() {
                     className="hover:bg-background dark:hover:border-t-border bg-muted group mx-auto flex w-fit items-center gap-4 rounded-none border p-1 pl-4 shadow-md shadow-emerald-400/5 transition-colors duration-300 dark:border-t-white/5 dark:shadow-emerald-400/20"
                   >
                     <span className="text-foreground text-sm">
-                      Trusted by over 288+ learners
+                      288+ learners enrolled
                     </span>
                     <span className="dark:border-background block h-4 w-0.5 border-l bg-white dark:bg-zinc-700"></span>
 
@@ -84,11 +89,11 @@ export default function HeroSection() {
 
                 <h1 className="mx-auto mt-8 max-w-5xl text-balance text-center text-5xl tex-bold max-md:font-bold md:text-7xl lg:mt-16 xl:text-[4.25rem] animate-fade-in-blur">
                   <span className="bg-linear-to-b from-neutral-50 to-neutral-400 bg-clip-text text-transparent bg-opacity-5">
-                    Where Cl
+                    Pass Your Cl
                   </span>
                   <CloudIcon className="inline w-[0.8em] h-[0.8em] mx-1 relative -top-[0.1em] animate-[fade-in-blur_0.8s_ease-out_0.6s_both,color-cycle_4s_ease-in-out_1s_infinite]" />
                   <span className="bg-linear-to-b from-neutral-50 to-neutral-400 bg-clip-text text-transparent bg-opacity-5">
-                    ud Careers Actually Take Off
+                    ud Certification in Weeks
                   </span>
                 </h1>
                 <TextEffect
@@ -97,10 +102,10 @@ export default function HeroSection() {
                   speedSegment={0.3}
                   delay={0.5}
                   as="p"
-                  className="mx-auto mt-8 max-w-2xl text-balance text-lg"
+                  className="mx-auto mt-8 max-w-2xl text-balance text-lg text-neutral-400/80"
                 >
-                  The complete cloud education platform for developers who want
-                  real skills, not just certifications.
+                  Pass your AWS, Azure, or GCP certification by building real
+                  infrastructure—not watching endless videos.
                 </TextEffect>
 
                 <AnimatedGroup
@@ -121,15 +126,26 @@ export default function HeroSection() {
                     key={1}
                     className="bg-foreground/10 rounded-none border p-0.5"
                   >
-                    <Button
-                      asChild
-                      size="lg"
-                      className="rounded-none px-5 text-base"
-                    >
-                      <Link href="#link">
-                        <span className="text-nowrap">Start Building</span>
-                      </Link>
-                    </Button>
+                    {isSignedIn ? (
+                      <Button
+                        asChild
+                        size="lg"
+                        className="rounded-none px-5 text-base"
+                      >
+                        <Link href="/dashboard">
+                          <span className="text-nowrap">Start Building</span>
+                        </Link>
+                      </Button>
+                    ) : (
+                      <SignInButton mode="modal">
+                        <Button
+                          size="lg"
+                          className="rounded-none px-5 text-base"
+                        >
+                          <span className="text-nowrap">Start Building</span>
+                        </Button>
+                      </SignInButton>
+                    )}
                   </div>
                   <Button
                     key={2}
@@ -138,8 +154,8 @@ export default function HeroSection() {
                     variant="ghost"
                     className="h-10.5 rounded-none px-5 bg-accent hover:bg-accent/80 hover:text-white text-black"
                   >
-                    <Link href="#link">
-                      <span className="text-nowrap">Request a demo</span>
+                    <Link href="mailto:support@clouddojo.tech" target="_blank">
+                      <span className="text-nowrap">Contact Support</span>
                     </Link>
                   </Button>
                 </AnimatedGroup>

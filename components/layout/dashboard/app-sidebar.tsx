@@ -9,15 +9,11 @@ import {
   CableCar,
   CogIcon,
   ChevronRight,
-  LayoutDashboard,
-  FileStack,
-  Upload,
 } from "lucide-react";
 import {
   AdminIcon,
   HomeIcon,
   LeaderboardIcon,
-  HandsOnLabsIcon,
   PracticeTestIcon,
   DashboardIcon,
   ManageQuizzesIcon,
@@ -51,10 +47,10 @@ import {
 } from "@/components/ui/collapsible";
 
 import { cn } from "@/lib/utils";
-import UpgradeCard from "@/components/upgrade-card";
 import { useSubscription } from "@/hooks/use-subscription";
 import SubscriptionCard from "@/app/dashboard/subscibed-card";
 import { useCurrentUserRole } from "@/lib/hooks/useCurrentUser";
+import UpgradeCard from "@/features/marketing/components/upgrade-card";
 
 // Define types for the navigation items
 type NavItem = {

@@ -1,27 +1,15 @@
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import type React from "react";
+import { Inter } from "next/font/google";
+import DashboardLayout from "@/components/layout/dashboard/dashboard-layout";
 
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
-import type React from "react"
-import { Inter } from "next/font/google"
-import DashboardLayout from "@/components/layout/dashboard/dashboard-layout"
-
-const inter = Inter({ subsets: ["latin"] })
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: "Clouddojo",
-  description: "Prepare for your AWS certification exams with interactive practice questions",
+  description: "Cloud certification practice and devops education",
+};
+
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return <DashboardLayout>{children}</DashboardLayout>;
 }
-
-export default function Layout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  return (
-    <DashboardLayout>
-        {children}
-    </DashboardLayout>
-  )
-}
-
-
-

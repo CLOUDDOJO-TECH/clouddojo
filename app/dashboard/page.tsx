@@ -55,8 +55,6 @@ export default function DashboardPage() {
     window.history.pushState({}, "", url);
   };
 
-  const { isSubscribed, planName, isLoading, isError } = useSubscription();
-
   // Redirect to profile setup if needed
   useEffect(() => {
     if (!isLoaded || isCheckingProfile) return;
@@ -65,6 +63,8 @@ export default function DashboardPage() {
       router.push("/dashboard/profile");
     }
   }, [userProfile, isCheckingProfile, isLoaded, router]);
+
+  const { isSubscribed, planName, isLoading, isError } = useSubscription();
 
   const {
     performanceStats,

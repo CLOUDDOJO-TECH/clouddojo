@@ -6,11 +6,12 @@ import { NoiseBackground } from "@/components/ui/noise-bacground";
 import { IconCheckCircle } from "./icons";
 import IconChevronRightFill12 from "./chevron-icon";
 import IconCircleArrowRightFill24 from "./circle-arrow-icon";
+import { SignInButton, useUser } from "@clerk/nextjs";
 
 const pricingPlans = [
   {
-    name: "7-Day Free Trial",
-    price: "Free",
+    name: "Free",
+    price: "$0",
     period: "for 7 days",
     description: "Try all Pro features risk-free",
     features: [
@@ -49,7 +50,7 @@ const pricingPlans = [
       "Everything in Pro",
       "Shareable Lab Reports",
       "Custom Roadmaps",
-      "Live Exercises",
+      "Join private community",
       "Cloud Job opportunities",
       "Team collaboration tools",
     ],
@@ -59,6 +60,8 @@ const pricingPlans = [
 ];
 
 export const Pricing = () => {
+  const { isSignedIn } = useUser();
+
   return (
     <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-14 max-w-7xl mx-auto font-main">
       {/* Header */}
@@ -79,7 +82,7 @@ export const Pricing = () => {
             key={index}
             className={`relative border rounded-none p-8 flex flex-col ${
               plan.highlighted
-                ? "border-foreground bg-secondary/30 shadow-lg scale-105"
+                ? "border-foreground bg-secondary/30 shadow-lg md:scale-105"
                 : "border-border bg-background"
             }`}
           >
@@ -107,35 +110,71 @@ export const Pricing = () => {
             {/* CTA Button */}
             <div className="w-full mb-8">
               {plan.highlighted ? (
-                <Link href="/sign-in" className="flex justify-center">
-                  <NoiseBackground containerClassName="w-full p-2">
-                    <button className="h-full w-full cursor-pointer bg-background px-4 py-2 text-foreground shadow-[0px_2px_0px_0px_var(--color-neutral-50)_inset,0px_0.5px_1px_0px_var(--color-neutral-400)] transition-all duration-200 active:scale-98 dark:shadow-[0px_1px_0px_0px_var(--color-neutral-950)_inset,0px_1px_0px_0px_var(--color-neutral-800)] font-semibold flex items-center justify-center gap-2 group">
+                isSignedIn ? (
+                  <Link href="/dashboard/billing" className="flex justify-center">
+                    <NoiseBackground containerClassName="w-full p-2">
+                      <button className="h-full w-full cursor-pointer bg-background px-4 py-2 text-foreground shadow-[0px_2px_0px_0px_var(--color-neutral-50)_inset,0px_0.5px_1px_0px_var(--color-neutral-400)] transition-all duration-200 active:scale-98 dark:shadow-[0px_1px_0px_0px_var(--color-neutral-950)_inset,0px_1px_0px_0px_var(--color-neutral-800)] font-semibold flex items-center justify-center gap-2 group">
+                        <span className="transition-transform duration-200 group-hover:-translate-x-1">
+                          {plan.cta}
+                        </span>
+                        <IconCircleArrowRightFill24
+                          size="20px"
+                          className="transition-transform duration-200 group-hover:translate-x-1"
+                        />
+                      </button>
+                    </NoiseBackground>
+                  </Link>
+                ) : (
+                  <SignInButton mode="modal">
+                    <div className="flex justify-center">
+                      <NoiseBackground containerClassName="w-full p-2">
+                        <button className="h-full w-full cursor-pointer bg-background px-4 py-2 text-foreground shadow-[0px_2px_0px_0px_var(--color-neutral-50)_inset,0px_0.5px_1px_0px_var(--color-neutral-400)] transition-all duration-200 active:scale-98 dark:shadow-[0px_1px_0px_0px_var(--color-neutral-950)_inset,0px_1px_0px_0px_var(--color-neutral-800)] font-semibold flex items-center justify-center gap-2 group">
+                          <span className="transition-transform duration-200 group-hover:-translate-x-1">
+                            {plan.cta}
+                          </span>
+                          <IconCircleArrowRightFill24
+                            size="20px"
+                            className="transition-transform duration-200 group-hover:translate-x-1"
+                          />
+                        </button>
+                      </NoiseBackground>
+                    </div>
+                  </SignInButton>
+                )
+              ) : (
+                isSignedIn ? (
+                  <Link href="/dashboard/billing">
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      className="w-full gap-2 rounded-none group"
+                    >
                       <span className="transition-transform duration-200 group-hover:-translate-x-1">
                         {plan.cta}
                       </span>
                       <IconCircleArrowRightFill24
                         size="20px"
-                        className="transition-transform duration-200 group-hover:translate-x-1"
+                        className={`transition-transform duration-200 group-hover:translate-x-1 ${index === 2 ? "text-[rgb(255,200,100)]" : ""}`}
                       />
-                    </button>
-                  </NoiseBackground>
-                </Link>
-              ) : (
-                <Link href="/sign-in">
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    className="w-full gap-2 rounded-none group"
-                  >
-                    <span className="transition-transform duration-200 group-hover:-translate-x-1">
-                      {plan.cta}
-                    </span>
-                    <IconCircleArrowRightFill24
-                      size="20px"
-                      className={`transition-transform duration-200 group-hover:translate-x-1 ${index === 2 ? "text-[rgb(255,200,100)]" : ""}`}
-                    />
-                  </Button>
-                </Link>
+                    </Button>
+                  </Link>
+                ) : (
+                  <SignInButton mode="modal">
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      className="w-full gap-2 rounded-none group"
+                    >
+                      <span className="transition-transform duration-200 group-hover:-translate-x-1">
+                        {plan.cta}
+                      </span>
+                      <IconCircleArrowRightFill24
+                        size="20px"
+                        className={`transition-transform duration-200 group-hover:translate-x-1 ${index === 2 ? "text-[rgb(255,200,100)]" : ""}`}
+                      />
+                    </Button>
+                  </SignInButton>
+                )
               )}
             </div>
 

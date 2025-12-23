@@ -1,13 +1,12 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
-import UpgradeButton from "./ui/upgrade-button";
+import UpgradeButton from "@/components/ui/upgrade-button";
 
 export default function UpgradeCard() {
   return (
-    <Card className="relative h-[254px] border-none overflow-hidden rounded-3xl hover:shadow-md transition-shadow duration-300 after:z-10 after:content-[''] after:absolute after:inset-0 after:outline-2 after:outline after:-outline-offset-2 after:rounded-3xl after:outline-white/20 after:pointer-events-none">
+    <Card className="relative h-[254px] border-none overflow-hidden rounded-3xl hover:shadow-md transition-shadow duration-300 after:z-10 after:content-[''] after:absolute after:inset-0 after:outline-2 after:-outline-offset-2 after:rounded-3xl after:outline-white/20 after:pointer-events-none">
       <div className="absolute inset-0">
         <Image
           src="/images/upgrade-bg.png"

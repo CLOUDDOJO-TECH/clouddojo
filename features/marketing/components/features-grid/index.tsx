@@ -76,13 +76,6 @@ const features = [
     color: "text-purple-400",
     bgColor: "bg-purple-500/10",
   },
-  {
-    icon: IconBookOpen,
-    title: "Self-paced courses",
-    description: "Learn at your own speed with comprehensive course materials",
-    color: "text-amber-400",
-    bgColor: "bg-amber-500/10",
-  },
 ];
 
 export const FeaturesGrid: React.FC = () => {
@@ -123,14 +116,14 @@ export const FeaturesGrid: React.FC = () => {
       {/* Header */}
       <div className="mb-12 md:mb-16">
         {/* Title */}
-        <h2 className="bg-clip-text text-transparent bg-linear-to-b from-neutral-50 to-neutral-400 bg-opacity-5 text-4xl md:text-5xl lg:text-5xl font-bold mb-6 leading-tight">
+        <h2 className="bg-clip-text text-center text-transparent bg-linear-to-b from-neutral-50 to-neutral-400 bg-opacity-5 text-4xl md:text-5xl lg:text-5xl font-bold mb-6 leading-tight">
           Everything you need to pass
           <br />
           your cloud certification
         </h2>
 
         {/* Description */}
-        <p className="text-lg md:text-xl text-muted-foreground max-w-4xl leading-relaxed ">
+        <p className="sr-only text-lg md:text-xl text-muted-foreground max-w-4xl leading-relaxed ">
           Get scenario-based practice tests, AI-powered feedback, hands-on
           projects, and personalized study plans that adapt to your learning
           style and help you become certification-ready.

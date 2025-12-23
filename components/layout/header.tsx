@@ -10,8 +10,6 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const menuItems = [
   { name: "Features", href: "/features", hasDropdown: true },
-  { name: "Pricing", href: "/pricing" },
-  { name: "About", href: "/about" },
   { name: "Blog", href: "/blog" },
 ];
 

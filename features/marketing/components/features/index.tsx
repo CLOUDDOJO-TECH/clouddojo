@@ -33,8 +33,8 @@ export const FeatureSection: React.FC = () => {
   useEffect(() => {
     if (isPaused) return;
 
-    const AUTO_ROTATE_INTERVAL = 3000;
-    const PROGRESS_UPDATE_INTERVAL = 30; // Update every 30ms for smooth animation
+    const AUTO_ROTATE_INTERVAL = 8000;
+    const PROGRESS_UPDATE_INTERVAL = 30; // Update every 60ms for smooth animation
 
     // Progress bar animation
     let progressValue = 0;

@@ -94,20 +94,20 @@ export const ComparisonSection: React.FC = () => {
         <div className="w-full border-t-2 border-dotted border-border/50 mb-16 md:mb-24"></div>
 
         {/* Header */}
-        <div className="mb-12 md:mb-16">
+        <div className="mb-12 md:mb-16 text-center md:text-left">
           <h2 className="text-4xl md:text-5xl lg:text-5xl font-bold mb-6 leading-tight">
             Built for cloud professionals,
             <br />
             not certification mills
           </h2>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-3xl">
+          <p className="text-lg md:text-xl text-muted-foreground max-w-3xl hidden md:block">
             We built CloudDojo because existing platforms are either too
             expensive, too outdated, or too generic. Usually all three.
           </p>
         </div>
 
-        {/* Comparison Table */}
-        <div className="space-y-1">
+        {/* Comparison Table - Desktop */}
+        <div className="hidden md:block space-y-1">
           {/* Header Row */}
           <div className="grid grid-cols-[1fr_1.5fr_1.5fr] gap-4 pb-6 border-b border-border">
             <div className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
@@ -160,6 +160,69 @@ export const ComparisonSection: React.FC = () => {
                   <span className="text-sm text-muted-foreground">
                     {row.others}
                   </span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Comparison Table - Mobile (2 columns) */}
+        <div className="md:hidden space-y-1">
+          {/* Header Row */}
+          <div className="grid grid-cols-[1fr_auto_1fr] gap-3 pb-4 border-b border-border items-center">
+            <div className="flex items-center justify-center">
+              <LogoGradientFull size="24px" />
+            </div>
+            <div className="w-px h-6 border-l border-dotted border-border/50"></div>
+            <div className="flex items-center justify-center gap-2">
+              <IconXmarkFillDuo18
+                size="20px"
+                className="text-red-500 flex-shrink-0"
+              />
+              <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                Others
+              </span>
+            </div>
+          </div>
+
+          {/* Comparison Rows */}
+          {comparisonData.map((row, index) => {
+            const Icon = row.icon;
+            return (
+              <div
+                key={index}
+                className="grid grid-cols-[1fr_auto_1fr] gap-4 py-6 border-b border-border/50 items-center"
+              >
+                {/* Feature Name - Left */}
+                <div className="flex items-center gap-2">
+                  <Icon size="18px" className={`${row.color} flex-shrink-0`} />
+                  <span className="text-sm font-semibold capitalize">
+                    {row.feature}
+                  </span>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button className="inline-flex">
+                        <IconInfoCircle
+                          size="14px"
+                          className="text-muted-foreground/50 cursor-help"
+                        />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent
+                      side="top"
+                      className="max-w-xs bg-neutral-900 text-white border-neutral-800"
+                    >
+                      <p className="text-xs">{row.tooltip}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+
+                {/* Dotted divider */}
+                <div className="w-px border-l border-dotted border-border/50 h-8"></div>
+
+                {/* Comparison - Right */}
+                <div className="text-xs text-muted-foreground leading-relaxed">
+                  {row.others}
                 </div>
               </div>
             );

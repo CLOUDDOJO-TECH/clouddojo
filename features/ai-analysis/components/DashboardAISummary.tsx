@@ -1,18 +1,26 @@
 "use client";
 
-import { trpc } from "@/lib/trpc/react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useRouter } from "next/navigation";
-import { TrendingUp, TrendingDown, ArrowRight, Lock, Zap, Target } from "lucide-react";
+import {
+  TrendingUp,
+  TrendingDown,
+  ArrowRight,
+  Lock,
+  Zap,
+  Target,
+} from "lucide-react";
 import { useSubscription } from "@/hooks/use-subscription";
 import { useAutoRefreshDashboard } from "../hooks/useAutoRefreshDashboard";
+import { trpc } from "@/src/lib/trpc/react";
 
 export function DashboardAISummary() {
   const router = useRouter();
   const { isSubscribed } = useSubscription();
-  const { data: dashboard, isLoading } = trpc.analysis.getDashboardAnalysis.useQuery();
+  const { data: dashboard, isLoading } =
+    trpc.analysis.getDashboardAnalysis.useQuery();
 
   // Auto-refresh if data is stale
   useAutoRefreshDashboard();
@@ -80,7 +88,9 @@ export function DashboardAISummary() {
                   <span className="text-sm font-medium">Down</span>
                 </>
               ) : (
-                <span className="text-sm font-medium text-muted-foreground">Stable</span>
+                <span className="text-sm font-medium text-muted-foreground">
+                  Stable
+                </span>
               )}
             </div>
           </div>
@@ -89,13 +99,20 @@ export function DashboardAISummary() {
         {/* Category Insights */}
         {dashboard.categoryBreakdown && (
           <div className="space-y-2">
-            <p className="text-xs text-muted-foreground">Performance by Category</p>
+            <p className="text-xs text-muted-foreground">
+              Performance by Category
+            </p>
             <div className="space-y-2">
-              {Object.entries(dashboard.categoryBreakdown as Record<string, any>)
+              {Object.entries(
+                dashboard.categoryBreakdown as Record<string, any>,
+              )
                 .sort((a, b) => b[1].percentage - a[1].percentage)
                 .slice(0, 3)
                 .map(([category, data]) => (
-                  <div key={category} className="flex items-center justify-between text-sm">
+                  <div
+                    key={category}
+                    className="flex items-center justify-between text-sm"
+                  >
                     <span className="text-muted-foreground">{category}</span>
                     <div className="flex items-center gap-2">
                       <div className="w-20 h-1 bg-muted rounded-full overflow-hidden">
@@ -140,13 +157,17 @@ export function DashboardAISummary() {
               {dashboard.topStrengths?.[0] && (
                 <div className="space-y-1">
                   <p className="text-xs text-muted-foreground">Top Strength</p>
-                  <p className="text-sm line-clamp-2">{dashboard.topStrengths[0]}</p>
+                  <p className="text-sm line-clamp-2">
+                    {dashboard.topStrengths[0]}
+                  </p>
                 </div>
               )}
               {dashboard.topWeaknesses?.[0] && (
                 <div className="space-y-1">
                   <p className="text-xs text-muted-foreground">Focus Area</p>
-                  <p className="text-sm line-clamp-2">{dashboard.topWeaknesses[0]}</p>
+                  <p className="text-sm line-clamp-2">
+                    {dashboard.topWeaknesses[0]}
+                  </p>
                 </div>
               )}
             </div>
@@ -195,9 +216,12 @@ export function DashboardAISummary() {
                     <Lock className="h-5 w-5" />
                   </div>
                   <div className="space-y-1">
-                    <h4 className="font-semibold">Unlock AI-Powered Insights</h4>
+                    <h4 className="font-semibold">
+                      Unlock AI-Powered Insights
+                    </h4>
                     <p className="text-xs text-muted-foreground max-w-xs">
-                      Get certification readiness scores, personalized study plans, and topic mastery tracking
+                      Get certification readiness scores, personalized study
+                      plans, and topic mastery tracking
                     </p>
                   </div>
                   <Button
