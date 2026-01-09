@@ -15,6 +15,7 @@ export const inngest = new Inngest({
 
 // Event types for type-safety
 export type InngestEvents = {
+  // Quiz events
   "quiz/completed": {
     data: {
       userId: string;
@@ -65,6 +66,48 @@ export type InngestEvents = {
   "dashboard/update-requested": {
     data: {
       userId: string;
+    };
+  };
+  
+  // Email events
+  "email/send-welcome": {
+    data: {
+      userId: string;
+      email: string;
+      name: string;
+    };
+  };
+  "email/send-password-reset": {
+    data: {
+      userId: string;
+      email: string;
+      name: string;
+      resetToken: string;
+      expiryMinutes: number;
+    };
+  };
+  "email/send-study-reminder": {
+    data: {
+      userId: string;
+      email: string;
+      name: string;
+      lastCertification: string;
+      daysSinceLastStudy: number;
+    };
+  };
+  "email/send-quiz-results": {
+    data: {
+      userId: string;
+      email: string;
+      name: string;
+      quizData: {
+        score: number;
+        totalQuestions: number;
+        passPercentage: number;
+        passed: boolean;
+        weakAreas: string[];
+        nextSteps: string;
+      };
     };
   };
 };

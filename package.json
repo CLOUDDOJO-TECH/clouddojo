@@ -17,7 +17,9 @@
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
     "test:watch": "vitest --watch",
-    "test:run": "vitest run"
+    "test:run": "vitest run",
+    "email:dev": "npx email dev --dir lib/emails/templates",
+    "email:test": "npx ts-node scripts/testEmails.ts"
   },
   "dependencies": {
     "@ai-sdk/deepseek": "^0.2.16",
@@ -113,7 +115,7 @@
     "jspdf": "^3.0.1",
     "lucide-react": "^0.525.0",
     "motion": "^12.23.24",
-    "next": "15.4.8",
+    "next": "15.4.10",
     "next-mdx-remote": "^5.0.0",
     "next-themes": "^0.4.6",
     "path": "^0.12.7",
@@ -123,6 +125,7 @@
     "react-confetti": "^6.4.0",
     "react-day-picker": "^9.6.5",
     "react-dom": "^19.1.1",
+    "react-email": "^5.2.1",
     "react-hook-form": "^7.54.1",
     "react-icons": "^5.5.0",
     "react-markdown": "^10.1.0",
@@ -156,7 +159,10 @@
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@types/three": "^0.179.0",
+    "@vitejs/plugin-react": "^5.1.2",
     "@vitest/ui": "^4.0.10",
+    "eslint": "^9.39.2",
+    "eslint-config-next": "^16.1.1",
     "happy-dom": "^20.0.10",
     "postcss": "^8.5.3",
     "prisma": "6.8.2",

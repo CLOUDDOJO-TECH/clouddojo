@@ -17,6 +17,9 @@ import { analyzeRecommendations } from "@/inngest/functions/analyze-recommendati
 import { analyzeTopicMastery } from "@/inngest/functions/analyze-topic-mastery";
 import { updateDashboardAnalysis } from "@/inngest/functions/update-dashboard-analysis";
 
+// Import email worker functions
+import { emailWorkers } from "@/lib/emails/queue/emailQueue";
+
 // Create the serve handler
 export const { GET, POST, PUT } = serve({
   client: inngest,
@@ -35,5 +38,8 @@ export const { GET, POST, PUT } = serve({
 
     // Dashboard compilation
     updateDashboardAnalysis,
+
+    // Email workers
+    ...emailWorkers,
   ],
 });
