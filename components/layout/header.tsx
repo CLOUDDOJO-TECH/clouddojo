@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import React from "react";
 import { cn } from "@/lib/utils";
 import { LogoGradientFull } from "@/public/brand/logo-gradient-full";
-import { SignInButton, useUser } from "@clerk/nextjs";
+import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
 import { motion, AnimatePresence } from "framer-motion";
 
 const menuItems = [
@@ -260,18 +260,25 @@ export const HeroHeader = () => {
                         className="flex flex-col space-y-4 pt-6 border-t border-border/50"
                       >
                         {isSignedIn ? (
-                          <Button
-                            asChild
-                            size="lg"
-                            className="rounded-none w-full"
-                          >
-                            <Link
-                              href="/dashboard"
-                              onClick={() => setMenuState(false)}
+                          <div className="flex items-center gap-3">
+                            <Button
+                              asChild
+                              size="lg"
+                              className="rounded-none w-full"
                             >
-                              <span>Dashboard</span>
-                            </Link>
-                          </Button>
+                              <Link
+                                href="/dashboard"
+                                onClick={() => setMenuState(false)}
+                              >
+                                <span>Dashboardsc</span>
+                              </Link>
+                            </Button>
+                            <SignOutButton>
+                              <Button size="lg" className="rounded-none w-full">
+                                <span>Logout</span>
+                              </Button>
+                            </SignOutButton>
+                          </div>
                         ) : (
                           <>
                             <SignInButton mode="modal">

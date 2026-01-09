@@ -11,7 +11,7 @@
  * 4. Certification: aws_focus, azure_focus, gcp_focus (based on quiz history)
  */
 
-import { prisma } from '@/server/db';
+import prisma from "@/lib/prisma";
 
 interface SegmentationResult {
   totalUsersProcessed: number;

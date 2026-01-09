@@ -16,7 +16,6 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { runAutoSegmentation } from '@/services/auto-segmentation.service';
 
 export const maxDuration = 300; // 5 minutes max execution time
 

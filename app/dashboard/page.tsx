@@ -49,7 +49,12 @@ export default function DashboardPage() {
         : "analytics";
   // function to update the URL with the selected tab
   const handleTabChange = (value: string) => {
-    const newParams = value === "report" ? "ai-report" : value === "gamification" ? "gamification" : "analytics";
+    const newParams =
+      value === "report"
+        ? "ai-report"
+        : value === "gamification"
+          ? "gamification"
+          : "analytics";
     const url = new URL(window.location.href);
     url.searchParams.set("tab", newParams);
     window.history.pushState({}, "", url);
@@ -83,9 +88,10 @@ export default function DashboardPage() {
   return (
     <div className="space-y-8  px-4 pt-6 max-w-8xl xl:mt-8 md:px-12 mx-auto container">
       <div className="px-2">
-        <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+        <h1 className="text-3xl font-bold tracking-tight">
+          Welcome {isLoaded ? user?.firstName || "there" : "there"}!
+        </h1>
         <p className="text-muted-foreground mt-2">
-          Welcome back, {isLoaded ? user?.firstName || "there" : "there"}!
           Here's an overview of your learning progress.
         </p>
       </div>

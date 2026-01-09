@@ -29,7 +29,7 @@ import { PersonalizedStudyPlan } from "./components/PersonalizedStudyPlan";
 import { useSubscription } from "@/hooks/use-subscription";
 import PaywallCard from "./paywall-card";
 import useAIAnalysis from "./utils/use-ai-analysis";
-import { AIAnalysisLoading } from "@/to-delete/components/app-components-duplicate/ai-report/loading";
+import { AIAnalysisLoading } from "./AIAnalysisLoading";
 
 // --- Premium Analysis Dashboard Component ---
 export default function PremiumAnalysisDashboard() {

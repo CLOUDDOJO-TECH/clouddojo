@@ -1,14 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { trpc } from "@/lib/trpc/react";
+import { trpc } from "@/src/lib/trpc/react";
 
 interface AnalysisStatusProps {
   quizAttemptId: string;
   onComplete?: () => void;
 }
 
-export function AnalysisStatus({ quizAttemptId, onComplete }: AnalysisStatusProps) {
+export function AnalysisStatus({
+  quizAttemptId,
+  onComplete,
+}: AnalysisStatusProps) {
   const [elapsed, setElapsed] = useState(0);
 
   // Poll status every 3 seconds
@@ -25,7 +28,7 @@ export function AnalysisStatus({ quizAttemptId, onComplete }: AnalysisStatusProp
         return 3000;
       },
       refetchOnWindowFocus: false,
-    }
+    },
   );
 
   // Track elapsed time
