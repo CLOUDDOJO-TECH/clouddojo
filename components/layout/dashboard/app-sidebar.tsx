@@ -169,22 +169,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar className="bg-sidebar !border-none " {...props}>
       <SidebarHeader>
-        <SidebarMenuButton
-          size="lg"
-          className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground gap-3 [&>svg]:size-auto"
-        >
-          <div className="flex aspect-square  items-center justify-center rounded-md overflow-hidden  text-sidebar-primary-foreground">
-            <img
-              src="/assets/cldj_logo.svg"
-              width={106}
-              height={106}
-              alt="clouddojo logo"
-            />
-          </div>
-          {/*<div className="grid flex-1 text-left text-2xl font-semibold leading-tight">
+        <div className="flex items-center pt-2 justify-start overflow-hidden  text-sidebar-primary-foreground">
+          <img
+            src="/assets/cldj_logo.svg"
+            width={120}
+            height={120}
+            alt="clouddojo logo"
+          />
+        </div>
+        {/*<div className="grid flex-1 text-left text-2xl font-semibold leading-tight">
             <span className="truncate font-kaushan ">Clouddojo</span>
           </div>*/}
-        </SidebarMenuButton>
       </SidebarHeader>
 
       <SidebarContent>
