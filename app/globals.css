@@ -1,5 +1,5 @@
 /* Syntax highlighting styles for code blocks */
-@import "./syntax-highlighting.css";
+@import "../styles/syntax-highlighting.css";
 
 @tailwind base;
 @tailwind components;

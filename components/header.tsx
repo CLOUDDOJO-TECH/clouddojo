@@ -1,17 +1,15 @@
 "use client";
 import Link from "next/link";
-import { Logo } from "@/components/logo";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import React from "react";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 const menuItems = [
   { name: "Features", href: "/features" },
   { name: "Pricing", href: "/pricing" },
-  { name: "About", href: "/about" },
   { name: "Blog", href: "/blog" },
-  { name: "Demo", href: "/demo" },
 ];
 
 export const HeroHeader = () => {
@@ -45,7 +43,12 @@ export const HeroHeader = () => {
                 aria-label="home"
                 className="flex items-center space-x-2"
               >
-                <Logo />
+                <Image
+                  src="/assets/cldj_logo.svg"
+                  alt="logo"
+                  width={120}
+                  height={120}
+                />
               </Link>
 
               <button
@@ -64,7 +67,7 @@ export const HeroHeader = () => {
                   <li key={index}>
                     <Link
                       href={item.href}
-                      className="text-muted-foreground hover:text-accent-foreground block duration-150"
+                      className="text-muted-foreground hover:text-emerald-400/80 block duration-150"
                     >
                       <span>{item.name}</span>
                     </Link>

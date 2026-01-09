@@ -9,15 +9,11 @@ import {
   CableCar,
   CogIcon,
   ChevronRight,
-  LayoutDashboard,
-  FileStack,
-  Upload,
 } from "lucide-react";
 import {
   AdminIcon,
   HomeIcon,
   LeaderboardIcon,
-  HandsOnLabsIcon,
   PracticeTestIcon,
   DashboardIcon,
   ManageQuizzesIcon,
@@ -50,7 +46,6 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 
-import { cn } from "@/lib/utils";
 import UpgradeCard from "@/components/upgrade-card";
 import { useSubscription } from "@/hooks/use-subscription";
 import SubscriptionCard from "@/app/dashboard/subscibed-card";
@@ -180,15 +175,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         >
           <div className="flex aspect-square  items-center justify-center rounded-md overflow-hidden  text-sidebar-primary-foreground">
             <img
-              src="/images/main-logo.png"
-              width={86}
-              height={86}
+              src="/assets/cldj_logo.svg"
+              width={106}
+              height={106}
               alt="clouddojo logo"
             />
           </div>
-          <div className="grid flex-1 text-left text-2xl font-semibold leading-tight">
+          {/*<div className="grid flex-1 text-left text-2xl font-semibold leading-tight">
             <span className="truncate font-kaushan ">Clouddojo</span>
-          </div>
+          </div>*/}
         </SidebarMenuButton>
       </SidebarHeader>
 

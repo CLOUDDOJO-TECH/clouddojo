@@ -17,7 +17,7 @@ const Navbar = () => {
         <Link href="#" className="text-2xl font-bold">
           <img
             draggable="false"
-            src="/images/dojo-logo.png"
+            src="/assets/cldj_logo.svg"
             alt="logo"
             width={90}
             height={90}

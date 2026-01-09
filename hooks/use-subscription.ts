@@ -7,9 +7,6 @@ import {
   getPlanById,
 } from "@/app/(actions)/user/user-actions";
 
-/**
- * Type definitions for subscription data
- */
 export type SubscriptionStatus = {
   /** Whether the user has a Pro subscription */
   isPro: boolean;
@@ -46,7 +43,6 @@ export type SubscriptionStatus = {
  * return isPro ? <ProFeature /> : <UpgradePrompt />;
  */
 export function useSubscription(): SubscriptionStatus {
-  // Fetch user data with subscription info
   const {
     data: userData,
     isLoading,
