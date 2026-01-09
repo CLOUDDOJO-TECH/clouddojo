@@ -18,9 +18,16 @@ interface BaseLayoutProps {
   unsubscribeUrl?: string;
 }
 
-const baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : 'https://www.clouddojo.tech';
+// Base URL for links - supports Vercel preview deployments
+const getBaseUrl = () => {
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+  // Default to production URL
+  return 'https://www.clouddojo.tech';
+};
+
+const baseUrl = getBaseUrl();
 
 // CloudDojo brand colors (teal-green palette)
 const tailwindConfig = {

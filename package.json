@@ -18,7 +18,7 @@
     "test:coverage": "vitest --coverage",
     "test:watch": "vitest --watch",
     "test:run": "vitest run",
-    "email:dev": "email dev --dir lib/emails/templates",
+    "email:dev": "npx email dev --dir lib/emails/templates",
     "email:test": "npx ts-node scripts/testEmails.ts"
   },
   "dependencies": {

@@ -12,7 +12,6 @@ import BaseLayout from './BaseLayout';
 
 interface WelcomeEmailProps {
   name: string;
-  loginUrl: string;
   dashboardUrl: string;
 }
 
@@ -33,7 +32,6 @@ const defaultLinks = [
 
 export const WelcomeEmail = ({
   name = 'there',
-  loginUrl = 'https://www.clouddojo.tech/signin',
   dashboardUrl = 'https://www.clouddojo.tech/dashboard',
 }: WelcomeEmailProps) => {
   const previewText = 'Welcome to CloudDojo - Your AWS Certification Journey Begins!';

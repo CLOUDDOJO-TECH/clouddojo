@@ -14,15 +14,26 @@ import {
   sendQuizResultsEmail,
 } from '../lib/emails/emailService';
 
-const TEST_EMAIL = process.env.TEST_EMAIL || 'bonyuglen@gmail.com';
+// Test email must be explicitly set via environment variable to prevent accidental sends
+const TEST_EMAIL = process.env.EMAIL_TEST_ADDRESS;
 const TEST_USER_ID = 'test-user-123';
 const TEST_NAME = 'Test User';
+
+function validateTestEmail(): boolean {
+  if (!TEST_EMAIL) {
+    console.error('❌ ERROR: EMAIL_TEST_ADDRESS environment variable is not set');
+    console.log('Please set EMAIL_TEST_ADDRESS to your test email before running this script.');
+    console.log('Example: EMAIL_TEST_ADDRESS=yourname@example.com npm run email:test');
+    return false;
+  }
+  return true;
+}
 
 async function testWelcomeEmail() {
   console.log('\n📧 Testing Welcome Email...');
   const result = await sendWelcomeEmailNew({
     userId: TEST_USER_ID,
-    email: TEST_EMAIL,
+    email: TEST_EMAIL!,
     name: TEST_NAME,
   });
   console.log('Welcome Email Result:', result.success ? '✅ Success' : '❌ Failed');
@@ -33,7 +44,7 @@ async function testPasswordResetEmail() {
   console.log('\n📧 Testing Password Reset Email...');
   const result = await sendPasswordResetEmail({
     userId: TEST_USER_ID,
-    email: TEST_EMAIL,
+    email: TEST_EMAIL!,
     name: TEST_NAME,
     resetToken: 'test-reset-token-12345',
     expiryMinutes: 60,
@@ -46,7 +57,7 @@ async function testStudyReminderEmail() {
   console.log('\n📧 Testing Study Reminder Email...');
   const result = await sendStudyReminderEmail({
     userId: TEST_USER_ID,
-    email: TEST_EMAIL,
+    email: TEST_EMAIL!,
     name: TEST_NAME,
     lastCertification: 'AWS Solutions Architect - Associate',
     daysSinceLastStudy: 5,
@@ -59,7 +70,7 @@ async function testQuizResultsEmailPassed() {
   console.log('\n📧 Testing Quiz Results Email (Passed)...');
   const result = await sendQuizResultsEmail({
     userId: TEST_USER_ID,
-    email: TEST_EMAIL,
+    email: TEST_EMAIL!,
     name: TEST_NAME,
     quizData: {
       score: 55,
@@ -78,7 +89,7 @@ async function testQuizResultsEmailFailed() {
   console.log('\n📧 Testing Quiz Results Email (Failed)...');
   const result = await sendQuizResultsEmail({
     userId: TEST_USER_ID,
-    email: TEST_EMAIL,
+    email: TEST_EMAIL!,
     name: TEST_NAME,
     quizData: {
       score: 35,
@@ -97,6 +108,12 @@ async function main() {
   console.log('='.repeat(60));
   console.log('CloudDojo Email Template Test Suite');
   console.log('='.repeat(60));
+  
+  // Validate test email is set
+  if (!validateTestEmail()) {
+    process.exit(1);
+  }
+  
   console.log(`\nTest Email: ${TEST_EMAIL}`);
   console.log(`EMAIL_TEST_MODE: ${process.env.EMAIL_TEST_MODE || 'not set'}`);
   console.log(`NODE_ENV: ${process.env.NODE_ENV || 'not set'}`);

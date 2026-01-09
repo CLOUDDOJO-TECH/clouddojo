@@ -22,7 +22,8 @@ import FeedbackNotificationEmail from './feedback-notification'
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 // Test mode configuration
-const TEST_EMAIL = 'bonyuglen@gmail.com'
+// Configure via EMAIL_TEST_ADDRESS environment variable in production
+const TEST_EMAIL = process.env.EMAIL_TEST_ADDRESS || 'test@clouddojo.tech'
 const isTestMode = process.env.EMAIL_TEST_MODE === 'true'
 const isDev = process.env.NODE_ENV === 'development'
 
@@ -50,7 +51,12 @@ interface EmailLog {
   variables?: Record<string, unknown>
 }
 
-// In-memory log for development (replace with proper logging in production)
+/**
+ * In-memory email log for development debugging.
+ * Note: This is intentionally simple - logs are lost on server restart.
+ * For production monitoring, use Resend's dashboard or integrate with
+ * your logging infrastructure (e.g., Sentry, CloudWatch, etc.)
+ */
 const emailLogs: EmailLog[] = []
 
 /**
@@ -106,7 +112,6 @@ export async function sendWelcomeEmailNew({
   const subject = 'Welcome to CloudDojo - Your AWS Certification Journey Begins!'
   const variables = {
     name,
-    loginUrl: 'https://www.clouddojo.tech/signin',
     dashboardUrl: 'https://www.clouddojo.tech/dashboard',
   }
 

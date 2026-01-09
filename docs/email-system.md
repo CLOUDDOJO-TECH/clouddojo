@@ -299,15 +299,20 @@ To prevent accidentally sending emails to real users during development:
 # Redirect all emails to test address
 EMAIL_TEST_MODE=true
 
+# Set the test email address (required for email:test script)
+EMAIL_TEST_ADDRESS=your-test@example.com
+
 # In development, emails are automatically redirected even without this flag
 NODE_ENV=development
 ```
 
 ### Test Email Address
 
-All test emails go to: `bonyuglen@gmail.com`
+Configure via the `EMAIL_TEST_ADDRESS` environment variable. This address must be set when running the email test script.
 
-To change this, update the `TEST_EMAIL` constant in `/lib/emails/emailService.ts`.
+```bash
+EMAIL_TEST_ADDRESS=your-test@example.com npm run email:test
+```
 
 ## Email Logs
 
