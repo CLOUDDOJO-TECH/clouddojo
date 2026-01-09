@@ -37,3 +37,18 @@ next-env.d.ts
 
 # Sentry Config File
 .env.sentry-build-plugin
+
+# Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+*.tfvars
+*.tfvars.json
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
