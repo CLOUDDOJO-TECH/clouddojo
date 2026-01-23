@@ -1,16 +1,9 @@
-import { google } from "@ai-sdk/google";
+import { openai } from "@ai-sdk/openai";
 import { auth } from "@clerk/nextjs/server";
 import { streamText } from "ai";
 import { NextResponse } from "next/server";
 
 export const maxDuration = 30;
-
-type GoogleModelCacheableId =
-  | "models/gemini-2.5-pro"
-  | "models/gemini-2.5-flash"
-  | "models/gemini-2.0-flash"
-  | "models/gemini-1.5-flash-001"
-  | "models/gemini-1.5-pro-001";
 
 const SYSTEM_PROMPT = `
   You are CloudDojo, an expert AI coach for cloud certification exams (AWS, GCP, Azure, etc.).
@@ -22,20 +15,38 @@ const SYSTEM_PROMPT = `
   - Never give legal, financial, or personal advice.
   `;
 
-const model: GoogleModelCacheableId = "models/gemini-2.5-pro";
-
 export async function POST(req: Request) {
-
   const { userId } = await auth();
+
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const { messages } = await req.json();
-  const result = streamText({
-    model: google("gemini-2.0-flash"),
-    system: SYSTEM_PROMPT,
-    messages,
-  });
-  return result.toDataStreamResponse();
+
+  if (!process.env.OPENAI_API_KEY) {
+    console.error("❌ Missing OPENAI_API_KEY");
+    return NextResponse.json(
+      { error: "API key not configured" },
+      { status: 500 },
+    );
+  }
+
+  try {
+    const result = await streamText({
+      model: openai("gpt-4o-mini"),
+      system: SYSTEM_PROMPT,
+      messages,
+    });
+
+    return result.toDataStreamResponse();
+  } catch (error) {
+    console.error("❌ OpenAI error:", error);
+    return NextResponse.json(
+      {
+        error: error instanceof Error ? error.message : "Stream error",
+      },
+      { status: 500 },
+    );
+  }
 }

@@ -28,15 +28,16 @@ import { ShootingStars } from "../ui/shooting-stars";
 import { StarsBackground } from "../ui/stars-background";
 
 export const Thread: FC = () => {
+
   return (
     <ThreadPrimitive.Root
-      className="text-foreground bg-background absolute box-border rounded-3xl flex h-full flex-col overflow-hidden"
+      className="text-foreground inset-0 bg-background absolute box-border rounded-3xl flex h-full flex-col overflow-hidden"
       style={{
         ["--thread-max-width" as string]: "42rem",
       }}
     >
       <ThreadPrimitive.Viewport className="relative flex h-full flex-col items-center overflow-y-scroll scroll-smooth bg-inherit px-4 pt-8">
-        <div className="relative h-full flex flex-col z-10">
+        <div className="relative w-fulll h-full flex flex-col z-10">
           <ThreadWelcome />
 
           <ThreadPrimitive.Messages
@@ -55,9 +56,8 @@ export const Thread: FC = () => {
             <ThreadScrollToBottom />
             <Composer />
           </div>
-          
         </div>
-        <ShootingStars starColor="#059669" maxDelay={3000} minDelay={2000}/>
+        <ShootingStars starColor="#059669" maxDelay={3000} minDelay={2000} />
         <StarsBackground starDensity={0.00055} />
       </ThreadPrimitive.Viewport>
     </ThreadPrimitive.Root>
@@ -83,10 +83,9 @@ const ThreadWelcome: FC = () => {
     <ThreadPrimitive.Empty>
       <div className="flex w-full max-w-[var(--thread-max-width)] flex-grow flex-col">
         <div className=" flex  w-full flex-grow flex-col items-center justify-center">
-        <h2 className="relative flex-col md:flex-row z-10 text-3xl md:text-5xl md:leading-tight max-w-5xl mx-auto text-center tracking-tight font-medium bg-clip-text text-transparent bg-gradient-to-b from-white/60 dark:from-neutral-800 dark:via-white via-neutral-600 via- dark:to-white to-neutral-800 flex items-center gap-2 md:gap-8">
-        <span>Welcome to Clouddojo AI</span>
-       
-      </h2>
+          <h2 className="relative flex-col md:flex-row z-10 text-3xl md:text-5xl md:leading-tight max-w-5xl mx-auto text-center tracking-tight font-medium bg-clip-text text-transparent bg-gradient-to-b from-white/60 dark:from-neutral-800 dark:via-white via-neutral-600 via- dark:to-white to-neutral-800 flex items-center gap-2 md:gap-8">
+            <span>Welcome to Clouddojo AI</span>
+          </h2>
         </div>
         <ThreadWelcomeSuggestions />
       </div>
@@ -122,6 +121,7 @@ const ThreadWelcomeSuggestions: FC = () => {
 };
 
 const Composer: FC = () => {
+
   return (
     <ComposerPrimitive.Root className="focus-within:border-ring/20 flex w-full flex-wrap items-end rounded-lg border bg-background px-2.5 shadow-sm transition-colors ease-in">
       <ComposerPrimitive.Input
@@ -179,6 +179,7 @@ const ComposerAction: FC = () => {
 };
 
 const UserMessage: FC = () => {
+
   return (
     <MessagePrimitive.Root className="grid auto-rows-auto grid-cols-[minmax(72px,1fr)_auto] gap-y-2 [&:where(>*)]:col-start-2 w-full max-w-[var(--thread-max-width)] py-4">
       <UserActionBar />
@@ -226,6 +227,7 @@ const EditComposer: FC = () => {
 };
 
 const AssistantMessage: FC = () => {
+
   return (
     <MessagePrimitive.Root className="grid grid-cols-[auto_auto_1fr] grid-rows-[auto_1fr] relative w-full max-w-[var(--thread-max-width)] py-4">
       <div className="text-foreground max-w-[calc(var(--thread-max-width)*0.8)] break-words leading-7 col-span-2 col-start-2 row-start-1 my-1.5">
@@ -286,7 +288,7 @@ const BranchPicker: FC<BranchPickerPrimitive.Root.Props> = ({
       hideWhenSingleBranch
       className={cn(
         "text-muted-foreground inline-flex items-center text-xs",
-        className
+        className,
       )}
       {...rest}
     >
