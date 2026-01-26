@@ -163,3 +163,8 @@ img {
     animation: pulse-glow 3s infinite alternate;
   }
 }
+
+/* Vertical text for notch button */
+.writing-vertical-rl {
+  writing-mode: vertical-rl;
+}
