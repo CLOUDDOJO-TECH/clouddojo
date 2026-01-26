@@ -4,33 +4,26 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Logo } from "@/components/logo";
+import Image from "next/image";
 
 const enterpriseLinks = [
-  { href: "/about", label: "About" },
   { href: "/contact", label: "Contact Sales" },
   { href: "/pricing", label: "Pricing" },
   { href: "/blog", label: "Blog" },
 ];
 
 const productLinks = [
-  { href: "/features", label: "Features" },
-  { href: "/demo", label: "Demo" },
   { href: "/dashboard", label: "Dashboard" },
   { href: "/pricing", label: "Pricing" },
 ];
 
 const docsLinks = [
-  { href: "/about", label: "About" },
-  { href: "/features", label: "Features" },
   { href: "/blog", label: "Blog" },
-  { href: "/demo", label: "Try Demo" },
-  { href: "/contact", label: "Contact" },
+  { href: "/#", label: "Contact" },
 ];
 
 const communityLinks = [
-  { href: "#", label: "GitHub" },
   { href: "#", label: "Discord" },
-  { href: "#", label: "Slack" },
   { href: "#", label: "X / Twitter" },
 ];
 
@@ -51,11 +44,16 @@ const footerLinks = [
 
 export default function Footer() {
   return (
-    <footer className="m-1 rounded-3xl border">
+    <footer className="m-1">
       <div className="mx-auto max-w-7xl space-y-16 px-5 py-16">
         <div className="flex flex-wrap items-center justify-between gap-4 border-b pb-8">
           <Link href="/" aria-label="go home">
-            <Logo />
+            <Image
+              src="/assets/cldj_logo.svg"
+              alt="Logo"
+              width={100}
+              height={100}
+            />
           </Link>
           <div className="flex gap-3">
             <Link
@@ -179,7 +177,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="bg-muted mt-16 flex items-center justify-between rounded-md p-4 px-6 py-3">
-          <span>&copy; CloudDojo 2025 - Present</span>
+          <span>&copy; CloudDojo {new Date().getFullYear()} - Present</span>
           <div className="flex gap-4">
             <Link
               href="/privacy"
@@ -194,15 +192,6 @@ export default function Footer() {
               Terms
             </Link>
           </div>
-        </div>
-        <div className="bg-muted mt-16 flex items-center justify-between rounded-md p-4 px-6 py-3">
-          <span>&copy; tailus 2021 - Present</span>
-          <Link
-            href="#"
-            className="text-muted-foreground hover:text-primary text-sm"
-          >
-            Licence
-          </Link>
         </div>
       </div>
     </footer>

@@ -1,6 +1,6 @@
 import { openai } from "@ai-sdk/openai";
 import { auth } from "@clerk/nextjs/server";
-import { streamText } from "ai";
+import { streamText, convertToModelMessages, type UIMessage } from "ai";
 import { NextResponse } from "next/server";
 
 export const maxDuration = 30;
@@ -16,32 +16,33 @@ const SYSTEM_PROMPT = `
   `;
 
 export async function POST(req: Request) {
-  const { userId } = await auth();
-
-  if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const { messages } = await req.json();
-
-  if (!process.env.OPENAI_API_KEY) {
-    console.error("❌ Missing OPENAI_API_KEY");
-    return NextResponse.json(
-      { error: "API key not configured" },
-      { status: 500 },
-    );
-  }
-
   try {
-    const result = await streamText({
+    const { userId } = await auth();
+
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const { messages } = await req.json();
+
+    if (!process.env.OPENAI_API_KEY) {
+      return NextResponse.json(
+        { error: "API key not configured" },
+        { status: 500 },
+      );
+    }
+
+    const modelMessages = convertToModelMessages(messages as UIMessage[]);
+
+    const result = streamText({
       model: openai("gpt-4o-mini"),
       system: SYSTEM_PROMPT,
-      messages,
+      messages: modelMessages,
     });
 
-    return result.toDataStreamResponse();
+    return result.toUIMessageStreamResponse();
   } catch (error) {
-    console.error("❌ OpenAI error:", error);
+    console.error("Chat API Error:", error);
     return NextResponse.json(
       {
         error: error instanceof Error ? error.message : "Stream error",

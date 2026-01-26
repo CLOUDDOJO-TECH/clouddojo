@@ -28,7 +28,6 @@ import { ShootingStars } from "../ui/shooting-stars";
 import { StarsBackground } from "../ui/stars-background";
 
 export const Thread: FC = () => {
-
   return (
     <ThreadPrimitive.Root
       className="text-foreground inset-0 bg-background absolute box-border rounded-3xl flex h-full flex-col overflow-hidden"
@@ -121,7 +120,6 @@ const ThreadWelcomeSuggestions: FC = () => {
 };
 
 const Composer: FC = () => {
-
   return (
     <ComposerPrimitive.Root className="focus-within:border-ring/20 flex w-full flex-wrap items-end rounded-lg border bg-background px-2.5 shadow-sm transition-colors ease-in">
       <ComposerPrimitive.Input
@@ -179,7 +177,6 @@ const ComposerAction: FC = () => {
 };
 
 const UserMessage: FC = () => {
-
   return (
     <MessagePrimitive.Root className="grid auto-rows-auto grid-cols-[minmax(72px,1fr)_auto] gap-y-2 [&:where(>*)]:col-start-2 w-full max-w-[var(--thread-max-width)] py-4">
       <UserActionBar />
@@ -227,7 +224,6 @@ const EditComposer: FC = () => {
 };
 
 const AssistantMessage: FC = () => {
-
   return (
     <MessagePrimitive.Root className="grid grid-cols-[auto_auto_1fr] grid-rows-[auto_1fr] relative w-full max-w-[var(--thread-max-width)] py-4">
       <div className="text-foreground max-w-[calc(var(--thread-max-width)*0.8)] break-words leading-7 col-span-2 col-start-2 row-start-1 my-1.5">
