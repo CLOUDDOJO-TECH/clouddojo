@@ -7,7 +7,7 @@ import {
   ThreadPrimitive,
   useAssistantState,
 } from "@assistant-ui/react";
-import { type FC, useState, useEffect } from "react";
+import { type FC } from "react";
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -17,7 +17,6 @@ import {
   CopyIcon,
   PencilIcon,
   RefreshCwIcon,
-  SparklesIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -26,6 +25,7 @@ import { MarkdownText } from "@/components/assistant-ui/markdown-text";
 import { TooltipIconButton } from "@/components/assistant-ui/tooltip-icon-button";
 import { ShootingStars } from "../ui/shooting-stars";
 import { StarsBackground } from "../ui/stars-background";
+import ThinkingIndicator from "./thinking-indicator";
 
 export const Thread: FC = () => {
   return (
@@ -35,7 +35,7 @@ export const Thread: FC = () => {
         ["--thread-max-width" as string]: "100%",
       }}
     >
-      <ThreadPrimitive.Viewport className="relative flex h-full flex-col items-center overflow-y-scroll scroll-smooth bg-inherit px-3 pt-6">
+      <ThreadPrimitive.Viewport className="relative flex h-full flex-col items-center overflow-y-scroll scroll-smooth bg-inherit px-3 pt-6 before:pointer-events-none before:sticky before:top-0 before:z-20 before:block before:h-8 before:-mb-8 before:w-full before:bg-gradient-to-b before:from-background before:to-transparent">
         <div className="relative w-full h-full flex flex-col z-10">
           <ThreadWelcome />
 
@@ -192,7 +192,7 @@ const UserMessage: FC = () => {
     <MessagePrimitive.Root className="grid auto-rows-auto grid-cols-[minmax(48px,1fr)_auto] gap-y-1 [&:where(>*)]:col-start-2 w-full max-w-[var(--thread-max-width)] py-2">
       <UserActionBar />
 
-      <div className="bg-muted text-foreground text-xs max-w-[85%] break-words rounded-2xl px-3 py-2 col-start-2 row-start-2">
+      <div className="bg-muted text-foreground text-sm  break-words rounded-2xl px-3 py-2 col-start-2 row-start-2">
         <MessagePrimitive.Parts />
       </div>
 
@@ -238,51 +238,6 @@ const EditComposer: FC = () => {
   );
 };
 
-const thinkingPhrases = [
-  "Thinking...",
-  "Analyzing your question...",
-  "Checking cloud docs...",
-  "Crafting response...",
-  "Processing...",
-  "Almost there...",
-];
-
-const ThinkingIndicator: FC = () => {
-  const [phraseIndex, setPhraseIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setPhraseIndex((prev) => (prev + 1) % thinkingPhrases.length);
-    }, 2000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <div className="flex items-center gap-2 py-2">
-      <div className="relative flex items-center justify-center size-5">
-        <SparklesIcon className="size-4 text-emerald-500 animate-pulse" />
-      </div>
-      <div className="relative overflow-hidden">
-        <span
-          key={phraseIndex}
-          className="text-sm text-muted-foreground inline-block animate-in fade-in slide-in-from-bottom-2 duration-300"
-          style={{
-            background:
-              "linear-gradient(90deg, hsl(var(--muted-foreground)) 0%, hsl(var(--muted-foreground)) 50%, transparent 100%)",
-            backgroundSize: "200% 100%",
-            WebkitBackgroundClip: "text",
-            backgroundClip: "text",
-            animation: "shimmer 2s linear infinite",
-          }}
-        >
-          {thinkingPhrases[phraseIndex]}
-        </span>
-      </div>
-    </div>
-  );
-};
-
 const AssistantMessage: FC = () => {
   const isRunning = useAssistantState(
     ({ message }) => message.status?.type === "running",
@@ -300,7 +255,7 @@ const AssistantMessage: FC = () => {
 
   return (
     <MessagePrimitive.Root className="grid grid-cols-[auto_auto_1fr] grid-rows-[auto_1fr] relative w-full max-w-[var(--thread-max-width)] py-2">
-      <div className="text-foreground text-xs max-w-[95%] break-words leading-6 col-span-2 col-start-2 row-start-1 my-1">
+      <div className="text-foreground text-sm max-w-[95%] break-words leading-6 col-span-2 col-start-2 row-start-1 my-1">
         {isRunning && !hasContent && <ThinkingIndicator />}
         <MessagePrimitive.Parts components={{ Text: MarkdownText }} />
         <MessageError />
