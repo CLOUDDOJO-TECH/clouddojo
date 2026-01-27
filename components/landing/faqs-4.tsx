@@ -30,21 +30,27 @@ export default function FAQsFour() {
     },
     {
       id: "item-1",
-      question: "Is CloudDojo really free?",
+      question: "Is CloudDojo free?",
       answer:
-        "Yes! Our free plan gives you access to limited practice tests, basic analytics, and community features. It's enough to get started and see if CloudDojo works for you. Premium unlocks unlimited tests, AI coaching, hands-on projects, and advanced analytics.",
+        "Yes! Our free plan gives you access to limited practice tests, basic analytics, and community features. It's enough to get started and see if CloudDojo works for you. Premium unlocks unlimited tests, AI coaching, and advanced analytics.",
     },
     {
       id: "item-10",
       question: "Do you offer team or enterprise plans?",
       answer:
-        "Yes! We work with bootcamps, universities, and companies training their teams. Team plans include bulk licenses, progress tracking dashboards, custom learning paths, and dedicated support. Email hello@clouddojo.tech for enterprise pricing.",
+        "Not yet, It's in beta. We plan to work with bootcamps, universities, and companies training their teams. Team plans will include bulk licenses, progress tracking dashboards, custom learning paths, and dedicated support. Email support@clouddojo.tech for enterprise pricing.",
     },
     {
       id: "item-11",
       question: "How often is content updated?",
       answer:
         "We add new practice questions, projects, and flashcards weekly. When cloud providers update their certification exams, we update our content within days. You'll always be preparing with current, relevant material.",
+    },
+    {
+      id: "item-13",
+      question: "Which AWS certifications do you cover?",
+      answer:
+        "We cover all 12 AWS certifications — from foundational (Cloud Practitioner) to professional (Solutions Architect Professional, DevOps Engineer Professional) and every specialty in between. Each certification has its own question bank, study plan, and readiness score.",
     },
     {
       id: "item-12",

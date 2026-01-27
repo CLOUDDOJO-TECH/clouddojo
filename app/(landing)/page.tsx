@@ -20,13 +20,13 @@ export default function Home() {
           <HeroSection />
           {/*<LogoCloud />*/}
           <StatsSection />
-          <ContentSection />
           <ProvidersSection />
+          <ContentSection />
           {/*<FeaturesSection />*/}
 
           <WallOfLoveSection />
-          <CallToAction />
           <FAQsFour />
+          <CallToAction />
           {/*<FaqSection />*/}
         </main>
         <Footer />

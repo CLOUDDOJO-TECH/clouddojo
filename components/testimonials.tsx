@@ -135,12 +135,13 @@ function MarqueeColumn({
   const animationName = direction === "up" ? "marquee-up" : "marquee-down";
 
   return (
-    <div className="relative h-[600px] overflow-hidden">
+    <div className="marquee-column relative h-[600px] overflow-hidden">
       <div
         className="marquee-track flex flex-col gap-3"
         style={
           {
             "--marquee-duration": `${duration}s`,
+            "--marquee-duration-slow": `${duration * 4}s`,
             animationName,
             animationDuration: "var(--marquee-duration)",
             animationTimingFunction: "linear",
@@ -171,8 +172,8 @@ export default function WallOfLoveSection() {
           0% { transform: translateY(-50%); }
           100% { transform: translateY(0%); }
         }
-        .testimonials-wrapper:hover .marquee-track {
-          animation-play-state: paused;
+        .marquee-column:hover .marquee-track {
+          animation-duration: var(--marquee-duration-slow);
         }
       `}</style>
 
@@ -188,7 +189,7 @@ export default function WallOfLoveSection() {
             </p>
           </div>
 
-          <div className="testimonials-wrapper relative mt-8 md:mt-12">
+          <div className="relative mt-8 md:mt-12">
             {/* Top fade gradient */}
             <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-24 bg-gradient-to-b from-background to-transparent" />
 
