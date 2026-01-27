@@ -60,7 +60,7 @@ export default function HeroSection() {
             <div className="h-320 -translate-y-87.5 absolute left-0 top-0 w-60 -rotate-45 bg-[radial-gradient(50%_50%_at_50%_50%,hsla(0,0%,85%,.04)_0,hsla(0,0%,45%,.02)_80%,transparent_100%)]" />
           </div>
           <section>
-            <div className="relative pt-24 md:pt-36">
+            <div className="relative overflow-clip pt-24 pb-16 md:pt-36 md:pb-24">
               <AnimatedGroup
                 variants={{
                   container: {
@@ -133,7 +133,7 @@ export default function HeroSection() {
                     as="h1"
                     className="mx-auto mt-8 max-w-4xl text-balance text-5xl max-md:font-semibold md:text-7xl lg:mt-16 xl:text-[5.25rem]"
                   >
-                    Stop Wasting Time on 700-Page PDFs
+                    Pass Any AWS Exam. First Try.
                   </TextEffect>
                   <TextEffect
                     per="line"
@@ -143,9 +143,9 @@ export default function HeroSection() {
                     as="p"
                     className="mx-auto mt-8 max-w-2xl text-balance text-lg"
                   >
-                    CloudDojo gives you AI-powered practice tests, real-time
-                    performance feedback, and a clear path from "confused" to
-                    "certified" — without the overwhelm.
+                    Practice with 1,000+ exam-style questions, get instant AI
+                    feedback on your weak spots, and know exactly when
+                    you&apos;re ready to sit the exam.
                   </TextEffect>
 
                   <AnimatedGroup
@@ -164,7 +164,7 @@ export default function HeroSection() {
                   >
                     <div
                       key={1}
-                      className="bg-foreground/10 rounded-[calc(var(--radius-xl)+0.125rem)] border p-0.5"
+                      className="rounded-[calc(var(--radius-xl)+0.125rem)] p-0.5"
                     >
                       <Button
                         asChild
@@ -172,7 +172,9 @@ export default function HeroSection() {
                         className="rounded-xl px-5 text-base"
                       >
                         <Link href="#link">
-                          <span className="text-nowrap">Start Building</span>
+                          <span className="text-nowrap">
+                            Start Practicing Free
+                          </span>
                         </Link>
                       </Button>
                     </div>
@@ -184,7 +186,7 @@ export default function HeroSection() {
                       className="h-10.5 rounded-xl px-5"
                     >
                       <Link href="#link">
-                        <span className="text-nowrap">Request a demo</span>
+                        <span className="text-nowrap">See How It Works</span>
                       </Link>
                     </Button>
                   </AnimatedGroup>

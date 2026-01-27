@@ -2,7 +2,7 @@ import FaqSection from "@/components/faq-section";
 import Footer from "@/components/footer";
 import FeaturesSection from "@/components/landing/features-8";
 import StatsSection from "@/components/landing/stats-section";
-import ProvidersSection from "@/components/landing/providers";
+import ProvidersSection from "@/components/landing/features";
 import FAQsFour from "@/components/landing/faqs-4";
 import WallOfLoveSection from "@/components/testimonials";
 import LogoCloud from "@/components/logo-cloud";
@@ -18,7 +18,7 @@ export default function Home() {
         {/*<Navbar />*/}
         <main>
           <HeroSection />
-          <LogoCloud />
+          {/*<LogoCloud />*/}
           <StatsSection />
           <ContentSection />
           <ProvidersSection />

@@ -1,3 +1,5 @@
+"use client";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -63,7 +65,7 @@ const testimonials: Testimonial[] = [
     role: "IT Consultant, Kigali",
     image: "https://randomuser.me/api/portraits/women/52.jpg",
     quote:
-      "Three weeks. That's how long it took me to go from zero to passing Azure Fundamentals. CloudDojo's study plan is no joke — it actually works if you follow it.",
+      "Three weeks. That's how long it took me to go from zero to passing AWS Cloud Practitioner. CloudDojo's study plan is no joke — it actually works if you follow it.",
   },
   {
     name: "David Osei",
@@ -90,52 +92,119 @@ const testimonialChunks = chunkArray(
   Math.ceil(testimonials.length / 3),
 );
 
+function TestimonialCard({ name, role, quote, image }: Testimonial) {
+  return (
+    <Card className="shrink-0">
+      <CardContent className="grid grid-cols-[auto_1fr] gap-3 pt-6">
+        <Avatar className="size-9">
+          <AvatarImage
+            alt={name}
+            src={image}
+            loading="lazy"
+            width="120"
+            height="120"
+          />
+          <AvatarFallback>ST</AvatarFallback>
+        </Avatar>
+
+        <div>
+          <h3 className="font-medium">{name}</h3>
+          <span className="text-muted-foreground block text-sm tracking-wide">
+            {role}
+          </span>
+          <blockquote className="mt-3">
+            <p className="text-sm text-gray-700 dark:text-gray-300">{quote}</p>
+          </blockquote>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function MarqueeColumn({
+  items,
+  direction = "up",
+  duration = 25,
+}: {
+  items: Testimonial[];
+  direction?: "up" | "down";
+  duration?: number;
+}) {
+  const doubled = [...items, ...items];
+
+  const animationName = direction === "up" ? "marquee-up" : "marquee-down";
+
+  return (
+    <div className="relative h-[600px] overflow-hidden">
+      <div
+        className="marquee-track flex flex-col gap-3"
+        style={
+          {
+            "--marquee-duration": `${duration}s`,
+            animationName,
+            animationDuration: "var(--marquee-duration)",
+            animationTimingFunction: "linear",
+            animationIterationCount: "infinite",
+          } as React.CSSProperties
+        }
+      >
+        {doubled.map((testimonial, index) => (
+          <TestimonialCard
+            key={`${testimonial.name}-${index}`}
+            {...testimonial}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function WallOfLoveSection() {
   return (
     <section>
+      <style>{`
+        @keyframes marquee-up {
+          0% { transform: translateY(0%); }
+          100% { transform: translateY(-50%); }
+        }
+        @keyframes marquee-down {
+          0% { transform: translateY(-50%); }
+          100% { transform: translateY(0%); }
+        }
+        .testimonials-wrapper:hover .marquee-track {
+          animation-play-state: paused;
+        }
+      `}</style>
+
       <div className="py-16 md:py-32">
-        <div className="mx-auto max-w-6xl px-6">
+        <div className="mx-auto max-w-6xl px-6 md:px-12">
           <div className="text-center">
-            <h2 className="text-3xl font-semibold">Loved by the Community</h2>
-            <p className="mt-6">
-              Harum quae dolore orrupti aut temporibus ariatur.
+            <h2 className="text-4xl font-semibold lg:text-5xl">
+              Loved by the Community
+            </h2>
+            <p className="text-muted-foreground mt-6">
+              Real stories from real learners who passed their AWS exams with
+              CloudDojo.
             </p>
           </div>
-          <div className="mt-8 grid gap-3 sm:grid-cols-2 md:mt-12 lg:grid-cols-3">
-            {testimonialChunks.map((chunk, chunkIndex) => (
-              <div key={chunkIndex} className="space-y-3">
-                {chunk.map(({ name, role, quote, image }, index) => (
-                  <Card key={index}>
-                    <CardContent className="grid grid-cols-[auto_1fr] gap-3 pt-6">
-                      <Avatar className="size-9">
-                        <AvatarImage
-                          alt={name}
-                          src={image}
-                          loading="lazy"
-                          width="120"
-                          height="120"
-                        />
-                        <AvatarFallback>ST</AvatarFallback>
-                      </Avatar>
 
-                      <div>
-                        <h3 className="font-medium">{name}</h3>
+          <div className="testimonials-wrapper relative mt-8 md:mt-12">
+            {/* Top fade gradient */}
+            <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-24 bg-gradient-to-b from-background to-transparent" />
 
-                        <span className="text-muted-foreground block text-sm tracking-wide">
-                          {role}
-                        </span>
+            {/* Bottom fade gradient */}
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-24 bg-gradient-to-t from-background to-transparent" />
 
-                        <blockquote className="mt-3">
-                          <p className="text-gray-700 dark:text-gray-300">
-                            {quote}
-                          </p>
-                        </blockquote>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            ))}
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {testimonialChunks.map((chunk, chunkIndex) => (
+                <MarqueeColumn
+                  key={chunkIndex}
+                  items={chunk}
+                  direction={chunkIndex % 2 === 0 ? "up" : "down"}
+                  duration={chunkIndex === 1 ? 30 : 25}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>

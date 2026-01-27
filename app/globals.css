@@ -168,3 +168,18 @@ img {
 .writing-vertical-rl {
   writing-mode: vertical-rl;
 }
+
+/* Feature card icon: gray by default, colored on hover */
+.feature-icon {
+  color: hsl(0 0% 40%);
+  opacity: 0.12;
+  transition:
+    color 0.3s ease-out,
+    opacity 0.3s ease-out,
+    transform 0.3s ease-out;
+}
+
+.group:hover .feature-icon {
+  color: var(--icon-color);
+  opacity: 0.2;
+}
