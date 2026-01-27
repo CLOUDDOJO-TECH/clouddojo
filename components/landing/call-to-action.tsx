@@ -1,10 +1,25 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+
+const Threads = dynamic(() => import("@/components/Threads"), { ssr: false });
 
 export default function CallToAction() {
   return (
-    <section className="py-16">
-      <div className="mx-auto max-w-5xl px-6 py-12 md:py-20 lg:py-32">
+    <section className="py-16 relative overflow-hidden">
+      {/* Threads Background */}
+      <div className="absolute inset-0 z-0">
+        <Threads
+          color={[0.23137254901960785, 1, 0.6470588235294118]}
+          amplitude={2}
+          distance={0}
+          enableMouseInteraction
+        />
+      </div>
+
+      <div className="mx-auto max-w-5xl px-6 py-12 md:py-20 lg:py-32 relative z-10">
         <div className="text-center">
           <h2 className="text-balance text-4xl font-semibold lg:text-5xl">
             Start Building
