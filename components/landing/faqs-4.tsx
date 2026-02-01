@@ -85,11 +85,13 @@ export default function FAQsFour() {
                   value={item.id}
                   className="data-[state=open]:bg-card dark:data-[state=open]:bg-muted peer rounded-xl border-none px-7 py-1 data-[state=open]:border-none data-[state=open]:shadow-sm"
                 >
-                  <AccordionTrigger className="cursor-pointer text-base hover:no-underline">
+                  <AccordionTrigger className="cursor-pointer text-sm sm:text-base hover:no-underline text-left">
                     {item.question}
                   </AccordionTrigger>
                   <AccordionContent>
-                    <p className="text-base">{item.answer}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {item.answer}
+                    </p>
                   </AccordionContent>
                 </AccordionItem>
                 <hr className="mx-7 border-dashed group-last:hidden peer-data-[state=open]:opacity-0" />

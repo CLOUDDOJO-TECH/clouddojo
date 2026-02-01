@@ -196,15 +196,24 @@ export default function WallOfLoveSection() {
             {/* Bottom fade gradient */}
             <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-24 bg-gradient-to-t from-background to-transparent" />
 
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {testimonialChunks.map((chunk, chunkIndex) => (
+            <div className="grid gap-3 grid-cols-1 lg:grid-cols-3">
+              <div className="lg:hidden">
                 <MarqueeColumn
-                  key={chunkIndex}
-                  items={chunk}
-                  direction={chunkIndex % 2 === 0 ? "up" : "down"}
-                  duration={chunkIndex === 1 ? 30 : 25}
+                  items={testimonials}
+                  direction="up"
+                  duration={25}
                 />
-              ))}
+              </div>
+              <div className="hidden lg:grid lg:grid-cols-3 lg:gap-3 lg:col-span-3">
+                {testimonialChunks.map((chunk, chunkIndex) => (
+                  <MarqueeColumn
+                    key={chunkIndex}
+                    items={chunk}
+                    direction={chunkIndex % 2 === 0 ? "up" : "down"}
+                    duration={chunkIndex === 1 ? 30 : 25}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </div>

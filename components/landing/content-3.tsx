@@ -23,7 +23,7 @@ export default function ContentSection() {
             Everything you need to go from studying to certified.
           </h2>
           <div className="space-y-6">
-            <p>
+            <p className="text-muted-foreground font-light">
               CloudDojo brings together practice tests, smart flashcards,
               performance analytics, and AI coaching into one platform — so you
               always know what to study, how you&apos;re improving, and when

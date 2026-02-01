@@ -8,7 +8,6 @@ import { cn } from "@/lib/utils";
 import { SignInButton, SignUpButton, useUser } from "@clerk/nextjs";
 
 const menuItems = [
-  { name: "Pricing", href: "/pricing" },
   { name: "Blog", href: "/blog" },
   { name: "Contact", href: "https://cal.com/glenmiracle/30min" },
 ];
