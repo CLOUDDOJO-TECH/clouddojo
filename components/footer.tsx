@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Logo } from "@/components/logo";
-import Image from "next/image";
 
 const resourcesLinks = [
   { href: "https://x.com/clouddojotech", label: "X / Twitter" },
