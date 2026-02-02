@@ -1,14 +1,14 @@
 "use client";
 
 import { useUser } from "@clerk/nextjs";
-import { Suspense, useState, useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import PerformanceSection from "@/components/dashboard/performance-section";
 import RecentActivitySection from "@/components/dashboard/recent-activity-section";
 import { useDashboardQueries } from "./hooks/useDashboardQueries";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ChartArea, ChartLineIcon, Zap } from "lucide-react";
+import { ChartLineIcon } from "lucide-react";
 import PremiumAnalysisDashboard from "@/components/ai-report/premium-ai-analysis";
 import { CheckUser } from "@/app/(actions)/user/check-user";
 import React from "react";
@@ -19,7 +19,7 @@ import {
   RecentActivitySkeleton,
 } from "@/components/dashboard/dashboard-loading";
 
-export default function DashboardPage() {
+function DashboardContent() {
   const { user, isLoaded } = useUser();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -120,6 +120,26 @@ export default function DashboardPage() {
           <PremiumAnalysisDashboard />
         </TabsContent>
       </Tabs>
+    </div>
+  );
+}
+
+export default function DashboardPage() {
+  return (
+    <Suspense fallback={<DashboardSkeleton />}>
+      <DashboardContent />
+    </Suspense>
+  );
+}
+
+function DashboardSkeleton() {
+  return (
+    <div className="space-y-8 px-4 pt-6 max-w-8xl xl:mt-8 md:px-12 mx-auto container">
+      <div className="px-2">
+        <div className="h-9 w-48 bg-muted animate-pulse rounded" />
+        <div className="h-5 w-96 bg-muted animate-pulse rounded mt-2" />
+      </div>
+      <QuizAttemptsSkeleton />
     </div>
   );
 }
