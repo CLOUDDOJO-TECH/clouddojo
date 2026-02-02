@@ -390,7 +390,7 @@ export default function AboutPage() {
             </Link>
           </div>
           <p className="mt-4">
-            © {new Date().getFullYear()} CloudDojo. All rights reserved.
+            Â© {new Date().getFullYear()} CloudDojo. All rights reserved.
           </p>
         </div>
       </footer>

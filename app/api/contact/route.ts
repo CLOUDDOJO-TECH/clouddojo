@@ -1,7 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Lazy-initialize Resend client to avoid build-time errors
+let resendClient: Resend | null = null;
+function getResend(): Resend {
+  if (!resendClient) {
+    resendClient = new Resend(process.env.RESEND_API_KEY);
+  }
+  return resendClient;
+}
 
 interface ContactFormData {
   name: string;
@@ -44,7 +51,7 @@ export async function POST(request: NextRequest) {
 
     // Send email using Resend
     try {
-      await resend.emails.send({
+      await getResend().emails.send({
         from: "CloudDojo Contact <noreply@clouddojo.tech>",
         to: "support@clouddojo.tech",
         replyTo: email,
@@ -74,7 +81,7 @@ export async function POST(request: NextRequest) {
       });
 
       // Send confirmation email to the user
-      await resend.emails.send({
+      await getResend().emails.send({
         from: "CloudDojo Support <noreply@clouddojo.tech>",
         to: email,
         subject: "We received your message - CloudDojo",

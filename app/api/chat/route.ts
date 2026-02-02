@@ -1,6 +1,6 @@
 import { openai } from "@ai-sdk/openai";
 import { auth } from "@clerk/nextjs/server";
-import { streamText, convertToModelMessages, type UIMessage } from "ai";
+import { streamText, type CoreMessage } from "ai";
 import { NextResponse } from "next/server";
 
 export const maxDuration = 30;
@@ -32,15 +32,13 @@ export async function POST(req: Request) {
       );
     }
 
-    const modelMessages = convertToModelMessages(messages as UIMessage[]);
-
     const result = streamText({
       model: openai("gpt-4o-mini"),
       system: SYSTEM_PROMPT,
-      messages: modelMessages,
+      messages: messages as CoreMessage[],
     });
 
-    return result.toUIMessageStreamResponse();
+    return result.toDataStreamResponse();
   } catch (error) {
     console.error("Chat API Error:", error);
     return NextResponse.json(

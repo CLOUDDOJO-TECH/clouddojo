@@ -7,8 +7,19 @@ import FeedbackNotificationEmail from './feedback-notification'
 import CloudDojoAiReportEmail from './drafts/new-report'
 import WelcomeEmail from './drafts/welcome-mail'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
 const ADMIN_EMAIL = 'bonyuglen@gmail.com'
+
+// Lazy-initialize Resend client to avoid build-time errors
+let resendClient: Resend | null = null
+function getResend(): Resend {
+  if (!resendClient) {
+    if (!process.env.RESEND_API_KEY) {
+      throw new Error('RESEND_API_KEY is not defined')
+    }
+    resendClient = new Resend(process.env.RESEND_API_KEY)
+  }
+  return resendClient
+}
 
 interface SendAnalysisNotificationProps {
   email: string
@@ -43,7 +54,7 @@ export async function sendAnalysisNotification({
   }
 
   try {
-    const data = await resend.emails.send({
+    const data = await getResend().emails.send({
       from: 'CloudDojo <welcome@clouddojo.tech>',
       to: email,
       subject: 'Your AWS Certification AI Analysis is Ready!',
@@ -72,7 +83,7 @@ export async function sendWelcomeEmail({
   }
 
   try {
-    const data = await resend.emails.send({
+    const data = await getResend().emails.send({
       from: 'CloudDojo <welcome@clouddojo.tech>',
       to: email,
       subject: 'Welcome to CloudDojo - Your AWS Certification Journey Begins!',
@@ -99,7 +110,7 @@ export async function sendFeedbackEmails({
 
   try {
     // Send thank you email to user
-    const userEmailResult = await resend.emails.send({
+    const userEmailResult = await getResend().emails.send({
       from: 'CloudDojo <support@clouddojo.tech>',
       to: userEmail,
       subject: 'Thank You for Your Feedback!',
@@ -107,7 +118,7 @@ export async function sendFeedbackEmails({
     })
 
     // Send notification email to admin
-    const adminEmailResult = await resend.emails.send({
+    const adminEmailResult = await getResend().emails.send({
       from: 'CloudDojo <feedback@clouddojo.tech>',
       to: [ADMIN_EMAIL, 'support@clouddojo.tech'], 
       subject: `New Feedback Received from ${userName}`,
