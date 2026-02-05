@@ -2,8 +2,9 @@
 
 import prisma from "@/lib/prisma";
 import { getSignedInUserOrThrow } from "@/lib/utils/database_utils";
-import { auth } from "@clerk/nextjs/server";
+import { auth, clerkClient } from "@clerk/nextjs/server";
 import { User } from "@prisma/client";
+import { redirect } from "next/navigation";
 
 // Define return type for better type safety and documentation
 type UserWithSubscriptions = User & {
@@ -27,10 +28,10 @@ type UserWithSubscriptions = User & {
  */
 export const getCurrentUserProfile = async () => {
   try {
-    const { userId: clerkUserId, redirectToSignIn } = await auth();
+    const { userId: clerkUserId } = await auth();
 
     if (!clerkUserId) {
-      return redirectToSignIn();
+      redirect("/");
     }
 
     const user = await prisma.user.findUnique({
@@ -53,7 +54,12 @@ export const getCurrentUserProfile = async () => {
 
     if (!user) {
       console.warn(`User with clerk ID ${clerkUserId} not found in database`);
-      return redirectToSignIn();
+      const client = await clerkClient();
+      const sessions = await client.sessions.getSessionList({ userId: clerkUserId });
+      await Promise.all(
+        sessions.data.map((session) => client.sessions.revokeSession(session.id))
+      );
+      redirect("/?session_expired=true");
     }
 
     return { user, userPlan };

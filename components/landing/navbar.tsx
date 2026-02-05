@@ -12,7 +12,7 @@ const Navbar = () => {
   const isMobile = useIsMobile();
 
   return (
-    <nav className="w-full py-4 px-6 md:px-12 bg-mint flex items-center justify-between">
+    <nav className="relative w-full py-4 px-6 md:px-12 bg-mint flex items-center justify-between">
       <div className="flex items-center space-x-1">
         <Link href="#" className="text-2xl font-bold">
           <img
@@ -138,38 +138,35 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden absolute top-16 left-0 w-full bg-white border-b border-gray-200 py-4 px-6 z-50 shadow-md">
+        <div className="md:hidden absolute top-full left-0 w-full bg-white border-b border-gray-200 py-4 px-6 z-50 shadow-md">
           <div className="flex flex-col space-y-4">
-            <a
-              href="/features"
-              className="text-cstm_teal hover:text-cstm_teal/80"
-            >
-              Features
-            </a>
-            <a
-              href="/pricing"
-              className="text-cstm_teal hover:text-cstm_teal/80"
-            >
-              Pricing
-            </a>
-            <a href="/about" className="text-cstm_teal hover:text-cstm_teal/80">
-              About
-            </a>
-            <a href="/blog" className="text-cstm_teal hover:text-cstm_teal/80">
+            <a href="/blog" className="text-sm text-cstm_teal hover:text-cstm_teal/80">
               Blog
             </a>
-            <a href="/demo" className="text-cstm_teal hover:text-cstm_teal/80">
-              Demo
+            <a
+              href="https://calendar.notion.so/meet/glenmiracle/7fnt4l09"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-cstm_teal hover:text-cstm_teal/80"
+            >
+              Contact
             </a>
             {isSignedIn ? (
-              <Link href="/dashboard">
-                <Button className="rounded-full bg-white text-cstm_teal hover:bg-gray-100 border border-gray-200 w-full">
-                  Dashboard
-                </Button>
-              </Link>
+              <div className="flex flex-col space-y-2">
+                <Link href="/dashboard">
+                  <Button className="rounded-full bg-cstm_teal text-white hover:bg-cstm_teal/90 w-full">
+                    Dashboard
+                  </Button>
+                </Link>
+                <SignOutButton>
+                  <Button variant="outline" className="rounded-full text-cstm_teal border-gray-200 w-full">
+                    Sign out
+                  </Button>
+                </SignOutButton>
+              </div>
             ) : (
               <SignInButton mode="modal">
-                <Button className="rounded-full bg-white text-cstm_teal hover:bg-gray-100 border border-gray-200 w-full">
+                <Button className="rounded-full bg-cstm_teal text-white hover:bg-cstm_teal/90 w-full">
                   Sign in
                 </Button>
               </SignInButton>

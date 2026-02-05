@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Link from "next/link";
 import { ArrowRight, ChevronRight } from "lucide-react";
@@ -7,6 +8,9 @@ import { TextEffect } from "@/components/ui/text-effect";
 import { AnimatedGroup } from "@/components/ui/animated-group";
 import { HeroHeader } from "./header";
 import LightRays from "./LightRays";
+import { SignInButton, useUser } from "@clerk/nextjs";
+import { useSearchParams, useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const transitionVariants = {
   item: {
@@ -29,6 +33,17 @@ const transitionVariants = {
 };
 
 export default function HeroSection() {
+  const { isSignedIn } = useUser();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  React.useEffect(() => {
+    if (searchParams.get("session_expired") === "true") {
+      toast.error("Your session has expired. Please sign in again.");
+      router.replace("/", { scroll: false });
+    }
+  }, [searchParams, router]);
+
   return (
     <>
       <div className="relative">
@@ -166,17 +181,30 @@ export default function HeroSection() {
                       key={1}
                       className="rounded-[calc(var(--radius-xl)+0.125rem)] p-0.5"
                     >
-                      <Button
-                        asChild
-                        size="lg"
-                        className="rounded-xl px-5 text-sm sm:text-base w-full sm:w-auto"
-                      >
-                        <Link href="#link">
-                          <span className="text-nowrap">
-                            Start Practicing Free
-                          </span>
-                        </Link>
-                      </Button>
+                      {isSignedIn ? (
+                        <Button
+                          asChild
+                          size="lg"
+                          className="rounded-xl px-5 text-sm sm:text-base w-full sm:w-auto"
+                        >
+                          <Link href="/dashboard">
+                            <span className="text-nowrap">
+                              Start Practicing Free
+                            </span>
+                          </Link>
+                        </Button>
+                      ) : (
+                        <SignInButton mode="modal">
+                          <Button
+                            size="lg"
+                            className="rounded-xl px-5 text-sm sm:text-base w-full sm:w-auto"
+                          >
+                            <span className="text-nowrap">
+                              Start Practicing Free
+                            </span>
+                          </Button>
+                        </SignInButton>
+                      )}
                     </div>
                     <Button
                       key={2}
