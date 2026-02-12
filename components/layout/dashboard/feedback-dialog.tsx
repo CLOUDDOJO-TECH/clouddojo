@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -16,7 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useState } from "react";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 import { sendFeedbackEmails } from "@/lib/emails/send-email";
 import { useUser } from "@clerk/nextjs";
 import { MessagesSquare } from "lucide-react";
@@ -43,29 +42,28 @@ export default function FeedbackDialog({ open, onOpenChange }: FeedbackDialogPro
   const [feedbackType, setFeedbackType] = useState<string>("");
   const [feedbackContent, setFeedbackContent] = useState("");
   const [selectedMood, setSelectedMood] = useState("");
-  const { toast } = useToast();
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const {user, isSignedIn, isLoaded } = useUser();
+
+  const validate = () => {
+    const newErrors: Record<string, string> = {};
+    if (!selectedMood) newErrors.mood = "Please select how you're feeling";
+    if (!feedbackType) newErrors.type = "Please select a feedback type";
+    if (!feedbackContent.trim()) newErrors.content = "Please enter your feedback";
+    else if (feedbackContent.trim().length < 10) newErrors.content = "Feedback must be at least 10 characters";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!isSignedIn || !isLoaded || !user) {
-      toast({
-        title: "Error",
-        description: "You must be logged in to submit feedback",
-        variant: "destructive",
-      });
+      toast.error("You must be logged in to submit feedback");
       return;
     }
 
-    if (!feedbackType || !feedbackContent.trim() || !selectedMood) {
-      toast({
-        title: "Error",
-        description: "Please fill in all fields",
-        variant: "destructive",
-      });
-      return;
-    }
+    if (!validate()) return;
 
     setLoading(true);
     try {
@@ -79,22 +77,19 @@ export default function FeedbackDialog({ open, onOpenChange }: FeedbackDialogPro
 
       if (!result.success) throw new Error("Failed to send feedback");
 
-      toast({
-        title: `💃 Thank You ${user.fullName}`,
-        description: "We really appreciate your feedback, and our experts will take a look at it 💚",
-      });
-      
       // Reset form and close dialog
       setFeedbackType("");
       setFeedbackContent("");
       setSelectedMood("");
+      setErrors({});
       onOpenChange?.(false);
+
+      // Show toast after dialog closes
+      setTimeout(() => {
+        toast.success(`Thank you ${user.fullName}! We really appreciate your feedback.`);
+      }, 150);
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to send feedback. Please try again later.",
-        variant: "destructive",
-      });
+      toast.error("Failed to send feedback. Please try again later.");
     } finally {
       setLoading(false);
     }
@@ -114,27 +109,14 @@ export default function FeedbackDialog({ open, onOpenChange }: FeedbackDialogPro
         </Button>
         </div>
       </DialogTrigger>
-      <DialogContent className="md:max-w-2xl w-[90vw] rounded-lg">
+      <DialogContent className="sm:max-w-lg w-[92vw] rounded-lg border-dashed p-0 overflow-hidden gap-0">
+        <div className="p-6 pb-4">
         <DialogHeader>
-          <DialogTitle className="text-primary text-2xl">Send us feedback</DialogTitle>
-          <DialogDescription>
-            Watch{" "}
-            <a className="text-foreground hover:underline" href="#">
-              tutorials
-            </a>
-            , read CloudDojo&lsquo;s{" "}
-            <a className="text-foreground hover:underline" href="#">
-              documentation
-            </a>
-            , or join our{" "}
-            <a className="text-foreground hover:underline" href="#">
-              Discord
-            </a>{" "}
-            for community help.
-          </DialogDescription>
+          <DialogTitle className="text-primary text-xl">Send us feedback</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="space-y-2">
+        </div>
+        <form onSubmit={handleSubmit} className="space-y-4 px-6">
+          <div className="space-y-1.5">
             <label className="text-sm font-medium">How are you feeling?</label>
             <div className="flex flex-wrap gap-2">
               {moodEmojis.map(({ emoji, label }) => (
@@ -142,26 +124,33 @@ export default function FeedbackDialog({ open, onOpenChange }: FeedbackDialogPro
                   key={emoji}
                   type="button"
                   variant="outline"
-                  className={`h-10 px-3 py-2 hover:bg-emerald-50 ${
-                    selectedMood === emoji ? "bg-emerald-50 border-emerald-500" : ""
+                  className={`h-8 px-2.5 border-dashed transition-colors hover:bg-muted ${
+                    selectedMood === emoji ? "bg-primary text-primary-foreground border-primary border-solid" : ""
                   }`}
-                  onClick={() => setSelectedMood(emoji)}
+                  onClick={() => {
+                    setSelectedMood(emoji);
+                    setErrors((prev) => ({ ...prev, mood: "" }));
+                  }}
                 >
-                  <span className="text-lg mr-2">{emoji}</span>
-                  <span className="text-sm">{label}</span>
+                  <span className="text-base mr-1.5">{emoji}</span>
+                  <span className="text-xs">{label}</span>
                 </Button>
               ))}
             </div>
+            {errors.mood && <p className="text-xs text-destructive/70">{errors.mood}</p>}
           </div>
-          <div className="space-y-2">
+          <div className="space-y-1.5">
             <label htmlFor="feedbackType" className="text-sm font-medium">
               Feedback Type
             </label>
             <Select
               value={feedbackType}
-              onValueChange={setFeedbackType}
+              onValueChange={(val) => {
+                setFeedbackType(val);
+                setErrors((prev) => ({ ...prev, type: "" }));
+              }}
             >
-              <SelectTrigger>
+              <SelectTrigger className={errors.type ? "border-destructive/50" : ""}>
                 <SelectValue placeholder="Select feedback type" />
               </SelectTrigger>
               <SelectContent>
@@ -171,32 +160,37 @@ export default function FeedbackDialog({ open, onOpenChange }: FeedbackDialogPro
                 <SelectItem value="other">Other</SelectItem>
               </SelectContent>
             </Select>
+            {errors.type && <p className="text-xs text-destructive/70">{errors.type}</p>}
           </div>
-          <div className="space-y-2">
+          <div className="space-y-1.5">
             <label htmlFor="feedback" className="text-sm font-medium">
               Your Feedback
             </label>
             <Textarea
               id="feedback"
               value={feedbackContent}
-              onChange={(e) => setFeedbackContent(e.target.value)}
+              onChange={(e) => {
+                setFeedbackContent(e.target.value);
+                setErrors((prev) => ({ ...prev, content: "" }));
+              }}
               placeholder="How can we improve CloudDojo?"
-              className="min-h-[100px]"
+              className={`min-h-[80px] ${errors.content ? "border-destructive/50" : ""}`}
             />
+            {errors.content && <p className="text-xs text-destructive/70">{errors.content}</p>}
           </div>
-          <div className="flex flex-col sm:flex-row sm:justify-end gap-2">
+          <div className="bg-muted/50 border-t border-dashed -mx-6 mt-2 px-6 py-4 flex justify-between gap-3">
             <Button
               type="button"
               variant="outline"
-              className="rounded-lg text-primary"
+              className="rounded-lg border-dashed hover:bg-background transition-colors"
               onClick={() => onOpenChange?.(false)}
               disabled={loading}
             >
               Cancel
             </Button>
-            <Button 
+            <Button
               type="submit"
-              className="bg-emerald-500 rounded-full"
+              className="rounded-lg flex-1 active:scale-[0.97] transition-transform"
               disabled={loading}
             >
               {loading ? "Sending..." : "Send feedback"}
