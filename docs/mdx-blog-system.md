@@ -83,7 +83,7 @@ The following packages were installed:
   "@mdx-js/loader": "^3.1.1",
   "@mdx-js/react": "^3.1.1",
   "gray-matter": "^4.0.3",
-  "next-mdx-remote": "^5.0.0",
+  "next-mdx-remote": "^6.0.0",
   "reading-time": "^1.5.0",
   "rehype-autolink-headings": "^7.1.0",
   "rehype-highlight": "^7.0.2",
@@ -409,6 +409,17 @@ The current file-based system can be easily extended with:
 - **Sanity**: Developer-friendly content management
 - **Notion**: Simple content editing interface
 - **GitHub**: Git-based content management with PR workflows
+
+## Security
+
+### CVE-2026-0969 (HCSEC-2026-01)
+
+`next-mdx-remote` versions 4.3.0 through 5.0.0 are vulnerable to arbitrary code execution via the `serialize` function due to insufficient sanitization of MDX content. This was fixed in version 6.0.0, which introduces two breaking changes:
+
+- **`blockJS: true`** (default) — Disables JavaScript expressions in MDX for both `serialize` and `compileMDX`.
+- **`blockDangerousJS: true`** (default) — When JS expressions are enabled (`blockJS: false`), provides best-effort protection against dangerous operations like `eval`, `Function`, `process`, `require`, and other globals.
+
+If your MDX content requires JavaScript expressions, explicitly set `blockJS: false` in the serialize options and ensure you trust the content source.
 
 ## Troubleshooting
 
