@@ -93,61 +93,86 @@ export async function GET(request: Request) {
         const sortedAttempts = [...user.quizAttempts].sort(
           (a, b) => new Date(a.startedAt).getTime() - new Date(b.startedAt).getTime()
         );
-        
-        // Calculate average score across all attempts
-        const totalScore = sortedAttempts.reduce(
-          (sum, attempt) => sum + attempt.percentageScore,
-          0
-        )
-        const averageScore = totalScore / sortedAttempts.length;
-        
-        // Find the best score
+
+        const totalQuizzes = sortedAttempts.length;
+
+        // ── Average Score (0-100) ──
+        const averageScore = sortedAttempts.reduce(
+          (sum, attempt) => sum + attempt.percentageScore, 0
+        ) / totalQuizzes;
+
+        // ── Best Score (kept for display, not used in ranking) ──
         const bestScore = Math.max(
           ...sortedAttempts.map(attempt => attempt.percentageScore)
-        )
-        
-        // Calculate improvement factor (compare last 3 vs first 3 attempts)
-        let improvementFactor = 0;
-        if (sortedAttempts.length >= 6) {
-          const firstThree = sortedAttempts.slice(0, 3);
-          const lastThree = sortedAttempts.slice(-3);
-          
-          const avgFirst = firstThree.reduce((sum, attempt) => sum + attempt.percentageScore, 0) / 3;
-          const avgLast = lastThree.reduce((sum, attempt) => sum + attempt.percentageScore, 0) / 3;
-          
-          improvementFactor = avgLast - avgFirst;
-        } else if (sortedAttempts.length >= 2) {
-          // If fewer than 6 attempts, just compare first and last
-          improvementFactor = sortedAttempts[sortedAttempts.length - 1].percentageScore - 
-                             sortedAttempts[0].percentageScore;
-        }
-        
-        // Calculate consistency (standard deviation - lower is more consistent)
-        const mean = averageScore;
-        const variance = sortedAttempts.reduce(
-          (sum, attempt) => sum + Math.pow(attempt.percentageScore - mean, 2),
-          0
-        ) / sortedAttempts.length;
-        const stdDev = Math.sqrt(variance);
-        // Invert and normalize for a 0-100 score where higher is more consistent
-        const consistencyScore = 100 / (1 + stdDev);
-        
-        // Total time spent on quizzes (in seconds)
-        const totalTimeSpent = sortedAttempts.reduce(
-          (sum, attempt) => sum + attempt.timeSpentSecs,
-          0
         );
 
-        // Calculate overall ranking score (weighted combination of factors)
-        const overallRankingScore = (
-          averageScore * 0.4 +         // 40% weight on average score
-          bestScore * 0.2 +            // 20% weight on best score
-          (improvementFactor * 2) +    // Bonus for improvement
-          consistencyScore * 0.1 +     // 10% weight on consistency
-          Math.min(sortedAttempts.length * 2, 20) + // Up to 20 points for attempt count
-          Math.min(totalTimeSpent / 3600, 10)   // Up to 10 points for time investment
+        // ── Activity Score (0-100) ──
+        // Log-scaled so there's always a reward for more quizzes,
+        // but diminishing returns prevent pure grinding.
+        // 1 quiz → ~14, 5 → ~36, 10 → ~48, 25 → ~67, 50 → ~82, 100 → ~96
+        const activityScore = Math.min(
+          100,
+          (Math.log2(totalQuizzes + 1) / Math.log2(101)) * 100
         );
-        
+
+        // ── Improvement Factor (raw, for display) ──
+        let improvementFactor = 0;
+        if (totalQuizzes >= 6) {
+          const firstThree = sortedAttempts.slice(0, 3);
+          const lastThree = sortedAttempts.slice(-3);
+          const avgFirst = firstThree.reduce((sum, a) => sum + a.percentageScore, 0) / 3;
+          const avgLast = lastThree.reduce((sum, a) => sum + a.percentageScore, 0) / 3;
+          improvementFactor = avgLast - avgFirst;
+        } else if (totalQuizzes >= 2) {
+          improvementFactor =
+            sortedAttempts[totalQuizzes - 1].percentageScore -
+            sortedAttempts[0].percentageScore;
+        }
+
+        // ── Improvement Score (0-100, clamped) ──
+        // Maps raw improvement (-100..+100) into a 0-100 scale.
+        // 0 improvement → 50, +50 → 100, -50 → 0
+        const improvementScore = Math.max(0, Math.min(100, 50 + improvementFactor));
+
+        // ── Consistency Score (0-100) ──
+        // Uses coefficient of variation (stdDev / mean) for a scale-independent measure.
+        // Perfect consistency → 100, highly erratic → closer to 0.
+        let consistencyScore = 100; // Default for single-attempt users
+        if (totalQuizzes >= 2 && averageScore > 0) {
+          const variance = sortedAttempts.reduce(
+            (sum, attempt) => sum + Math.pow(attempt.percentageScore - averageScore, 2), 0
+          ) / totalQuizzes;
+          const coeffOfVariation = Math.sqrt(variance) / averageScore;
+          // CV of 0 → 100, CV of 0.5 → 0
+          consistencyScore = Math.max(0, Math.min(100, (1 - coeffOfVariation * 2) * 100));
+        }
+
+        // ── Recent Activity Score (0-100) ──
+        // Rewards users who are actively practicing, not just historical totals.
+        // Looks at how many quizzes were taken in the last 14 days relative to total.
+        const twoWeeksAgo = sub(now, { days: 14 });
+        const recentAttempts = sortedAttempts.filter(
+          (a) => new Date(a.startedAt) >= twoWeeksAgo
+        ).length;
+        // Combine recency ratio with recent volume (log-scaled)
+        const recencyRatio = totalQuizzes > 0 ? recentAttempts / totalQuizzes : 0;
+        const recentVolume = Math.min(100, (Math.log2(recentAttempts + 1) / Math.log2(31)) * 100);
+        const recentActivityScore = recencyRatio * 40 + recentVolume * 0.6;
+
+        // Total time spent (kept for data, not used in ranking)
+        const totalTimeSpent = sortedAttempts.reduce(
+          (sum, attempt) => sum + attempt.timeSpentSecs, 0
+        );
+
+        // ── Overall Ranking Score ──
+        // Weighted combination, all inputs normalized to 0-100
+        const overallRankingScore =
+          averageScore      * 0.30 +  // 30% — Skill
+          activityScore     * 0.30 +  // 30% — Dedication (quiz volume)
+          improvementScore  * 0.15 +  // 15% — Growth trajectory
+          consistencyScore  * 0.10 +  // 10% — Reliable performance
+          recentActivityScore * 0.15; // 15% — Recent engagement
+
         return {
           userId: user.userId,
           firstName: user.firstName,
@@ -156,10 +181,10 @@ export async function GET(request: Request) {
           bestScore,
           improvementFactor,
           consistencyScore,
-          totalQuizzes: sortedAttempts.length,
+          totalQuizzes,
           totalTimeSpent,
           overallRankingScore,
-          profileImageUrl: clerkUserMap.get(user.userId)?.profileImageUrl, // Get profile image URL from Clerk data
+          profileImageUrl: clerkUserMap.get(user.userId)?.profileImageUrl,
         };
       })
       .filter(Boolean) as LeaderboardEntry[]; // Remove users with no attempts

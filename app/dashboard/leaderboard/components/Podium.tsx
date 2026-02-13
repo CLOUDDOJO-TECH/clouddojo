@@ -22,11 +22,26 @@ export function Podium({ topThree }: PodiumProps) {
         {topThree.map((user, index) => {
           const medalEmoji = index === 0 ? "🥇" : index === 1 ? "🥈" : "🥉";
 
-          // Avatar ring colors for differentiation
-          const ringColors = [
-            "ring-purple-300/60 dark:ring-purple-500/40",
-            "ring-teal-300/60 dark:ring-teal-500/40",
-            "ring-amber-300/60 dark:ring-amber-500/40",
+          // Position-specific accent styles
+          const positionStyles = [
+            { // 1st — Gold
+              ring: "ring-amber-400/70 dark:ring-amber-400/50",
+              border: "border-l-amber-400 dark:border-l-amber-500",
+              scoreBg: "bg-amber-500/10 dark:bg-amber-400/10",
+              scoreText: "text-amber-600 dark:text-amber-400",
+            },
+            { // 2nd — Silver
+              ring: "ring-slate-400/70 dark:ring-slate-300/50",
+              border: "border-l-slate-400 dark:border-l-slate-400",
+              scoreBg: "bg-slate-500/10 dark:bg-slate-400/10",
+              scoreText: "text-slate-600 dark:text-slate-300",
+            },
+            { // 3rd — Bronze (rose)
+              ring: "ring-rose-400/70 dark:ring-rose-400/50",
+              border: "border-l-rose-400 dark:border-l-rose-500",
+              scoreBg: "bg-rose-500/10 dark:bg-rose-400/10",
+              scoreText: "text-rose-600 dark:text-rose-400",
+            },
           ];
 
           // Order should be: 2nd (silver) | 1st (gold) | 3rd (bronze)
@@ -41,7 +56,7 @@ export function Podium({ topThree }: PodiumProps) {
               key={user.userId}
               user={user}
               index={index}
-              ringColor={ringColors[index]}
+              positionStyle={positionStyles[index]}
               orderClass={orderClass}
               medalEmoji={medalEmoji}
               getAvatarFallback={getAvatarFallback}
@@ -53,10 +68,17 @@ export function Podium({ topThree }: PodiumProps) {
   );
 }
 
+interface PositionStyle {
+  ring: string;
+  border: string;
+  scoreBg: string;
+  scoreText: string;
+}
+
 interface PodiumCardProps {
   user: LeaderboardEntry;
   index: number;
-  ringColor: string;
+  positionStyle: PositionStyle;
   orderClass: string;
   medalEmoji: string;
   getAvatarFallback: (firstName?: string, lastName?: string) => string;
@@ -68,21 +90,21 @@ interface PodiumCardProps {
 function PodiumCard({
   user,
   index,
-  ringColor,
+  positionStyle,
   orderClass,
   medalEmoji,
   getAvatarFallback
 }: PodiumCardProps) {
   return (
     <div className={`relative ${orderClass}`}>
-      <div className="bg-sidebar rounded-xl border border-dashed p-5 h-full">
+      <div className={`bg-sidebar rounded-xl border border-dashed border-l-4 ${positionStyle.border} p-5 h-full`}>
         {/* Content */}
         <div>
           {/* User info with profile image */}
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               <Avatar
-                className={`${index === 0 ? 'h-16 w-16 ring-4' : 'h-14 w-14 ring-2'} ${ringColor}`}
+                className={`${index === 0 ? 'h-16 w-16 ring-4' : 'h-14 w-14 ring-2'} ${positionStyle.ring}`}
               >
                 {user.profileImageUrl ? (
                   <AvatarImage src={user.profileImageUrl} alt={`${user.firstName} ${user.lastName}`} />
@@ -102,25 +124,21 @@ function PodiumCard({
           </div>
 
           {/* Ranking score */}
-          <div className="bg-muted/50 rounded-lg p-3 mb-3">
+          <div className={`${positionStyle.scoreBg} rounded-lg p-3 mb-3`}>
             <div className="flex justify-between items-center">
               <p className="font-medium text-sm">Ranking Score</p>
-              <p className={`font-bold ${index === 0 ? 'text-2xl' : 'text-xl'}`}>{user.overallRankingScore.toFixed(1)}</p>
+              <p className={`font-bold ${index === 0 ? 'text-2xl' : 'text-xl'} ${positionStyle.scoreText}`}>{user.overallRankingScore.toFixed(1)}</p>
             </div>
           </div>
 
           {/* Performance stats */}
-          <div className="grid grid-cols-2 gap-2">
-            <StatCard label="Average" value={`${user.averageScore.toFixed(1)}%`} />
+          <div className="grid grid-cols-4 gap-1.5">
+            <StatCard label="Avg" value={`${user.averageScore.toFixed(1)}%`} />
             <StatCard label="Best" value={`${user.bestScore.toFixed(1)}%`} />
-          </div>
-
-          <div className="grid grid-cols-3 gap-2 mt-2">
             <StatCard label="Quizzes" value={`${user.totalQuizzes}`} />
-
-            <div className="bg-muted/50 rounded-lg p-2 flex flex-col justify-between col-span-2">
-              <p className="text-xs text-muted-foreground">Improvement</p>
-              <p className={`font-semibold ${user.improvementFactor > 0 ? "text-emerald-600 dark:text-emerald-400" : "text-amber-600 dark:text-amber-400"}`}>
+            <div className="bg-muted/50 rounded-md px-2 py-1.5 flex flex-col justify-between">
+              <p className="text-[10px] text-muted-foreground leading-tight">Improv.</p>
+              <p className={`text-sm font-semibold ${user.improvementFactor > 0 ? "text-emerald-600 dark:text-emerald-400" : "text-amber-600 dark:text-amber-400"}`}>
                 {user.improvementFactor > 0 ? "+" : ""}{user.improvementFactor.toFixed(1)}%
               </p>
             </div>
@@ -136,9 +154,9 @@ function PodiumCard({
  */
 function StatCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="bg-muted/50 rounded-lg p-2 flex flex-col justify-between">
-      <p className="text-xs text-muted-foreground">{label}</p>
-      <p className="font-semibold">{value}</p>
+    <div className="bg-muted/50 rounded-md px-2 py-1.5 flex flex-col justify-between">
+      <p className="text-[10px] text-muted-foreground leading-tight">{label}</p>
+      <p className="text-sm font-semibold">{value}</p>
     </div>
   );
 }

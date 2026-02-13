@@ -9,7 +9,6 @@ interface TimeRangeSelectorProps {
 }
 
 const timeRanges: { value: TimeRangeOption; label: string }[] = [
-  { value: "daily", label: "Daily" },
   { value: "weekly", label: "Weekly" },
   { value: "monthly", label: "Monthly" },
   { value: "all", label: "All Time" },
@@ -27,12 +26,12 @@ export function TimeRangeSelector({
       {timeRanges.map((range) => (
         <Button
           key={range.value}
-          variant="ghost"
+          variant={timeRange === range.value ? "default" : "ghost"}
           size="sm"
           className={`rounded-md px-4 text-sm transition-all duration-300 ease-in-out ${
-            timeRange === range.value
-              ? "bg-sidebar-accent text-sidebar-foreground shadow-md"
-              : "hover:bg-sidebar-accent/40 hover:text-sidebar-foreground"
+            timeRange !== range.value
+              ? "hover:bg-sidebar-accent/40 hover:text-sidebar-foreground"
+              : ""
           }`}
           onClick={() => onTimeRangeChange(range.value)}
         >

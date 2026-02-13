@@ -26,24 +26,29 @@ export default function HowWeRank() {
 
   const stepContent = [
     {
-      title: "Your activity first",
+      title: "Skill — 30%",
       description:
-        "We prioritize your activity and contributions to the platform. Your engagement and participation are key factors in determining your ranking.",
+        "Your average score across all practice tests makes up 30% of your ranking. Consistently scoring well is the foundation of a strong position on the leaderboard.",
     },
     {
-      title: "Pass Rate",
+      title: "Dedication — 30%",
       description:
-        "Your pass rate is calculated based on the number of tests you've passed compared to the total number of tests available. A higher pass rate indicates a stronger understanding of the concepts.",
+        "The more you practice, the higher you climb. Quiz volume counts for 30% of your ranking and scales logarithmically — every additional quiz helps, with no hard cap.",
     },
     {
-      title: "Improvement",
+      title: "Growth — 15%",
       description:
-        "Your improvement is measured by the difference between your current score and your previous score. A higher improvement indicates a stronger understanding of the concepts.",
+        "We track how your scores improve over time by comparing your recent performance to your earlier attempts. Showing progress is always rewarded, never penalized.",
     },
     {
-      title: "Numder of practice tests and labs",
+      title: "Consistency — 10%",
       description:
-        "Your ranking is also influenced by the number of practice tests and labs you've completed. Completing more tests and labs demonstrates your dedication and commitment to mastering the material.",
+        "Reliable, steady performance earns you points. The less your scores fluctuate between attempts, the higher your consistency score.",
+    },
+    {
+      title: "Recent Activity — 15%",
+      description:
+        "Staying active matters. Users who have been practicing in the last two weeks get a boost over dormant accounts. Keep showing up to maintain your edge.",
     },
   ];
 
