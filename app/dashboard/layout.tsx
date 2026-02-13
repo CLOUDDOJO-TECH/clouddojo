@@ -1,7 +1,7 @@
-
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import type React from "react"
 import { Inter } from "next/font/google"
+import Script from "next/script"
 import DashboardLayout from "@/components/layout/dashboard/dashboard-layout"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -17,9 +17,16 @@ export default function Layout({
   children: React.ReactNode
 }) {
   return (
-    <DashboardLayout>
-        {children}
-    </DashboardLayout>
+    <>
+      <Script
+        src="https://app.lemonsqueezy.com/js/lemon.js"
+        strategy="beforeInteractive"
+        defer
+      />
+      <DashboardLayout>
+          {children}
+      </DashboardLayout>
+    </>
   )
 }
 
