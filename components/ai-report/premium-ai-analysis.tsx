@@ -23,6 +23,8 @@ import { PersonalizedStudyPlan } from "./components/PersonalizedStudyPlan"
 import { useSubscription } from "@/hooks/use-subscription"
 import { transformAnalysisData } from "./utils/transform-analysis"
 import PaywallCard from "./paywall-card"
+import DemoAIReport from "./demo-ai-report"
+import ReportBlurGate from "./report-blur-gate"
 import type { ReportData } from "./types"
 import useAIAnalysis from "./utils/use-ai-analysis"
 
@@ -36,12 +38,13 @@ export default function PremiumAnalysisDashboard() {
 
   // --- Subscription Check ---
   const { isSubscribed, planName, isLoading: PlanLoading, isError } = useSubscription();
-  
+
   if(!isSubscribed){
+    // Show demo report for non-subscribed users to preview the value
     return (
-      <div className="flex items-center justify-center min-h-[70vh]">
-        <PaywallCard />
-      </div>
+      <ReportBlurGate>
+        <DemoAIReport />
+      </ReportBlurGate>
     )
   }
 

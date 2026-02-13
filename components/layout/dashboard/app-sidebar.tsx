@@ -206,7 +206,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             >
               <Search size={16} />
             </button>
-            <SidebarTrigger className="h-8 w-8 text-muted-foreground hover:text-foreground dark:hover:text-white hover:bg-sidebar-accent transition-colors" />
+            <SidebarTrigger className="h-8 w-8 text-amber-500 hover:text-amber-400 hover:bg-sidebar-accent transition-colors" />
           </div>
         </div>
         {/*<div className="grid flex-1 text-left text-2xl font-semibold leading-tight">

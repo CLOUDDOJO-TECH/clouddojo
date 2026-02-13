@@ -23,14 +23,17 @@ export function SettingsContainer() {
 
       {/* Settings Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3 h-12">
-          <TabsTrigger value="account" className="text-sm">
+        <TabsList className="inline-flex w-auto rounded-lg bg-transparent p-0 gap-1 border border-dashed border-border/60 p-1">
+          <TabsTrigger value="account" className="flex items-center gap-2 px-5 py-1.5 text-sm rounded-md transition-all duration-300 ease-in-out hover:bg-sidebar-accent/40 hover:text-sidebar-foreground data-[state=active]:bg-sidebar-accent data-[state=active]:text-sidebar-foreground data-[state=active]:shadow-md">
+            <User className="h-3.5 w-3.5" />
             Account
           </TabsTrigger>
-          <TabsTrigger value="subscription" className="text-sm">
+          <TabsTrigger value="subscription" className="flex items-center gap-2 px-5 py-1.5 text-sm rounded-md transition-all duration-300 ease-in-out hover:bg-sidebar-accent/40 hover:text-sidebar-foreground data-[state=active]:bg-sidebar-accent data-[state=active]:text-sidebar-foreground data-[state=active]:shadow-md">
+            <CreditCard className="h-3.5 w-3.5" />
             Subscription
           </TabsTrigger>
-          <TabsTrigger value="preferences" className="text-sm">
+          <TabsTrigger value="preferences" className="flex items-center gap-2 px-5 py-1.5 text-sm rounded-md transition-all duration-300 ease-in-out hover:bg-sidebar-accent/40 hover:text-sidebar-foreground data-[state=active]:bg-sidebar-accent data-[state=active]:text-sidebar-foreground data-[state=active]:shadow-md">
+            <Settings className="h-3.5 w-3.5" />
             Preferences
           </TabsTrigger>
         </TabsList>
