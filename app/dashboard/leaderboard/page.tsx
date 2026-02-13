@@ -64,7 +64,7 @@ export default function LeaderboardPage() {
   const topThree = leaderboardData?.slice(0, 3) || [];
 
   return (
-    <div className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
+    <div className="container max-w-6xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
       <LeaderboardHeader
         handleTimeRangeChange={handleTimeRangeChange}
         timeRange={timeRange}

@@ -65,8 +65,9 @@ export default function HowWeRank() {
         <TooltipTrigger asChild>
           <DialogTrigger asChild>
             <Button
-              variant="default"
+              variant="outline"
               size="icon"
+              className="border-dashed"
               aria-label="Ranking system information"
             >
               <GlobeIcon className="h-7 w-7" />

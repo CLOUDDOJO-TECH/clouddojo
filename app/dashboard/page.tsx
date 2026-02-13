@@ -8,7 +8,8 @@ import PerformanceSection from "@/components/dashboard/performance-section";
 import RecentActivitySection from "@/components/dashboard/recent-activity-section";
 import { useDashboardQueries } from "./hooks/useDashboardQueries";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ChartLineIcon, Rocket } from "lucide-react";
+import { Rocket } from "lucide-react";
+import IconChartBarTrendUpFillDuo18 from "@/components/icons/chart-bar-trend-up-fill-duo";
 import PremiumAnalysisDashboard from "@/components/ai-report/premium-ai-analysis";
 import { CheckUser } from "@/app/(actions)/user/check-user";
 import React from "react";
@@ -84,15 +85,15 @@ function DashboardContent() {
         className="w-full"
         onValueChange={handleTabChange}
       >
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 rounded-xl px-2 py-1 border border-dashed border-border/60 bg-sidebar shadow-[0_8px_40px_rgba(0,0,0,0.3)]">
+        <div className="fixed bottom-6 z-50 rounded-xl px-2 py-1 border border-dashed border-border/60 bg-sidebar shadow-[0_12px_60px_rgba(0,0,0,0.7),0_4px_20px_rgba(0,0,0,0.5)]" style={{ left: "calc(50% + var(--sidebar-width, 16rem) / 2)", transform: "translateX(-50%)" }}>
           <TabsList className="grid grid-cols-2 w-auto rounded-lg bg-transparent p-0 gap-1">
-            <TabsTrigger value="analytics" className="flex items-center gap-2 px-5 py-1.5 text-sm rounded-md transition-all duration-300 ease-in-out hover:bg-sidebar-accent/40 hover:text-sidebar-foreground hover:scale-[1.02] data-[state=inactive]:active:scale-95 data-[state=active]:bg-sidebar-accent data-[state=active]:text-sidebar-foreground data-[state=active]:shadow-md">
-              <ChartLineIcon className="h-3.5 w-3.5" />
+            <TabsTrigger value="analytics" className="flex items-center gap-2 px-5 py-1.5 text-sm rounded-md transition-all duration-300 ease-in-out hover:bg-sidebar-accent/40 hover:text-sidebar-foreground hover:scale-[1.02] data-[state=inactive]:active:scale-95 data-[state=active]:bg-primary/80 data-[state=active]:text-primary-foreground data-[state=active]:shadow-md">
+              <IconChartBarTrendUpFillDuo18 size="14px" />
               Analytics
             </TabsTrigger>
-            <TabsTrigger className="flex items-center gap-2 px-5 py-1.5 text-sm rounded-md transition-all duration-300 ease-in-out hover:bg-sidebar-accent/40 hover:text-sidebar-foreground hover:scale-[1.02] data-[state=inactive]:active:scale-95 data-[state=active]:bg-sidebar-accent data-[state=active]:text-sidebar-foreground data-[state=active]:shadow-md" value="report">
+            <TabsTrigger className="flex items-center gap-2 px-5 py-1.5 text-sm rounded-md transition-all duration-300 ease-in-out hover:bg-sidebar-accent/40 hover:text-sidebar-foreground hover:scale-[1.02] data-[state=inactive]:active:scale-95 data-[state=active]:bg-primary/80 data-[state=active]:text-primary-foreground data-[state=active]:shadow-md" value="report">
               AI Report
-              {!isSubscribed && <span className="text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-500">Pro</span>}
+              {!isSubscribed && <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-400">Pro</span>}
             </TabsTrigger>
           </TabsList>
         </div>

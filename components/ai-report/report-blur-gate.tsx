@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import UpgradeButton from "@/components/ui/upgrade-button";
-import { Lock } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
+import IconLockOutlineDuo18 from "@/components/icons/lock-outline-duo";
+import IconLockOpen2OutlineDuo18 from "@/components/icons/lock-open-outline-duo";
+import { useRouter } from "next/navigation";
 
 interface ReportBlurGateProps {
   children: React.ReactNode;
@@ -10,6 +12,8 @@ interface ReportBlurGateProps {
 
 export default function ReportBlurGate({ children }: ReportBlurGateProps) {
   const contentRef = useRef<HTMLDivElement>(null);
+  const [isHovered, setIsHovered] = useState(false);
+  const router = useRouter();
 
   // Prevent copy, drag, and context menu on the gated content
   useEffect(() => {
@@ -34,62 +38,65 @@ export default function ReportBlurGate({ children }: ReportBlurGateProps) {
   }, []);
 
   return (
-    <div className="relative">
-      {/* Content layer — blurred, uninteractable, uncopyable */}
+    <div className="relative overflow-hidden" style={{ height: "calc(100vh - 80px)" }}>
+      {/* Content layer — static, uninteractable, uncopyable */}
       <div
         ref={contentRef}
         aria-hidden="true"
-        className="select-none pointer-events-none"
+        className="absolute inset-0 select-none pointer-events-none overflow-hidden"
         style={{
           WebkitUserSelect: "none",
           userSelect: "none",
-          // Apply blur directly to content so removing overlay doesn't help
-          maskImage:
-            "linear-gradient(to bottom, black 0%, black 25%, black 100%)",
-          WebkitMaskImage:
-            "linear-gradient(to bottom, black 0%, black 25%, black 100%)",
         }}
       >
-        {/* Inner wrapper that gets progressively blurred via CSS */}
-        <div
-          className="[&>*]:pointer-events-none"
-          style={{
-            filter: "blur(0px)",
-          }}
-        >
+        <div className="[&>*]:pointer-events-none">
           {children}
         </div>
       </div>
 
-      {/* Gradient blur overlay — transparent at top, fully blurred at bottom */}
+      {/* Gradient blur overlay — transparent at top, fully blurred quickly */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          backdropFilter: "blur(8px)",
-          WebkitBackdropFilter: "blur(8px)",
+          backdropFilter: "blur(24px)",
+          WebkitBackdropFilter: "blur(24px)",
           maskImage:
-            "linear-gradient(to bottom, transparent 0%, transparent 15%, rgba(0,0,0,0.3) 30%, rgba(0,0,0,0.7) 45%, black 60%)",
+            "linear-gradient(to bottom, transparent 0%, transparent 22%, rgba(0,0,0,0.3) 30%, rgba(0,0,0,0.7) 38%, black 48%)",
           WebkitMaskImage:
-            "linear-gradient(to bottom, transparent 0%, transparent 15%, rgba(0,0,0,0.3) 30%, rgba(0,0,0,0.7) 45%, black 60%)",
+            "linear-gradient(to bottom, transparent 0%, transparent 22%, rgba(0,0,0,0.3) 30%, rgba(0,0,0,0.7) 38%, black 48%)",
         }}
       />
 
-      {/* Secondary solid overlay for the bottom half to fully obscure */}
+      {/* Secondary stronger blur overlay for the lower portion */}
       <div
-        className="absolute inset-0 pointer-events-none bg-background/80"
+        className="absolute inset-0 pointer-events-none"
         style={{
+          backdropFilter: "blur(40px)",
+          WebkitBackdropFilter: "blur(40px)",
           maskImage:
-            "linear-gradient(to bottom, transparent 0%, transparent 35%, rgba(0,0,0,0.5) 55%, black 75%)",
+            "linear-gradient(to bottom, transparent 0%, transparent 30%, rgba(0,0,0,0.5) 40%, black 55%)",
           WebkitMaskImage:
-            "linear-gradient(to bottom, transparent 0%, transparent 35%, rgba(0,0,0,0.5) 55%, black 75%)",
+            "linear-gradient(to bottom, transparent 0%, transparent 30%, rgba(0,0,0,0.5) 40%, black 55%)",
         }}
       />
 
-      {/* CTA overlay — positioned in the blur zone, fully interactive */}
-      <div className="absolute inset-x-0 bottom-0 top-[40%] flex items-center justify-center pointer-events-auto">
+      {/* Edge fades — bottom and sides blend into background */}
+      <div className="absolute inset-x-0 bottom-0 h-24 pointer-events-none bg-gradient-to-t from-background to-transparent" />
+      <div className="absolute left-0 bottom-0 w-16 pointer-events-none bg-gradient-to-r from-background to-transparent" style={{ top: "30%" }} />
+      <div className="absolute right-0 bottom-0 w-16 pointer-events-none bg-gradient-to-l from-background to-transparent" style={{ top: "30%" }} />
+
+      {/* CTA overlay — positioned in the blur zone */}
+      <div className="absolute inset-x-0 bottom-0 top-[26%] flex items-center justify-center pointer-events-auto">
         <div className="flex flex-col items-center gap-4 text-center max-w-sm">
-          <div className="h-12 w-12 rounded-full bg-foreground/5 border border-border/60 flex items-center justify-center">
-            <Lock className="h-5 w-5 text-muted-foreground" />
+          <div className="h-20 w-20 rounded-full bg-foreground/5 border border-border/60 flex items-center justify-center relative">
+            <IconLockOutlineDuo18
+              size="36px"
+              className={`text-muted-foreground absolute transition-all duration-300 ease-in-out ${isHovered ? "opacity-0 scale-90" : "opacity-100 scale-100"}`}
+            />
+            <IconLockOpen2OutlineDuo18
+              size="36px"
+              className={`text-muted-foreground absolute transition-all duration-300 ease-in-out ${isHovered ? "opacity-100 scale-100" : "opacity-0 scale-110"}`}
+            />
           </div>
           <div>
             <h3 className="text-lg font-semibold mb-1">
@@ -100,9 +107,14 @@ export default function ReportBlurGate({ children }: ReportBlurGateProps) {
               personalized study resources.
             </p>
           </div>
-          <UpgradeButton size="lg" variant="primary">
+          <Button
+            size="lg"
+            onClick={() => router.push("/dashboard/billing")}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
             Upgrade to Premium
-          </UpgradeButton>
+          </Button>
         </div>
       </div>
     </div>

@@ -11,6 +11,7 @@ import {
 import { Monitor, Moon, Sun } from "lucide-react";
 import { useState, useEffect } from "react";
 import { ThemePreviewWrapper } from "./theme-previews";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const THEME_OPTIONS = [
   {
@@ -43,21 +44,19 @@ export function ThemeSelector() {
 
   if (!mounted) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Appearance</CardTitle>
-          <CardDescription>
-            Change how Untitled UI looks and feels in your browser.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="animate-pulse space-y-4">
-            <div className="h-4 bg-muted rounded w-1/3"></div>
-            <div className="grid grid-cols-3 gap-4">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="h-32 bg-muted rounded-lg"></div>
-              ))}
-            </div>
+      <Card className="border-dashed">
+        <CardContent className="p-6 space-y-6">
+          <Skeleton className="h-5 w-24" />
+          <div className="grid grid-cols-3 gap-6 max-w-xl mx-auto">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="space-y-3">
+                <Skeleton className="h-28 w-full rounded-lg" />
+                <Skeleton className="h-3 w-16 mx-auto" />
+              </div>
+            ))}
+          </div>
+          <div className="pt-4 border-t text-center">
+            <Skeleton className="h-3 w-72 mx-auto" />
           </div>
         </CardContent>
       </Card>
@@ -65,15 +64,10 @@ export function ThemeSelector() {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Appearance</CardTitle>
-        <CardDescription>
-          Change how CloudDojo looks and feels in your browser.
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        <div className="grid grid-cols-3 gap-6 max-w-lg">
+    <Card className="border-dashed">
+      <CardContent className="p-6 space-y-6">
+        <h3 className="text-base font-semibold">Appearance</h3>
+        <div className="grid grid-cols-3 gap-6 max-w-xl mx-auto">
           {THEME_OPTIONS.map((option) => {
             const isSelected = theme === option.value;
 
@@ -86,7 +80,7 @@ export function ThemeSelector() {
                 {/* Theme Preview */}
                 <div
                   className={`
-                  relative h-24 rounded-lg border-2 transition-all duration-200 overflow-hidden gap-6
+                  relative h-28 rounded-lg border-2 transition-all duration-200 overflow-hidden
                   ${
                     isSelected
                       ? "border-emerald-500"
@@ -113,7 +107,7 @@ export function ThemeSelector() {
           })}
         </div>
 
-        <div className="pt-4 border-t">
+        <div className="pt-4 border-t text-center">
           <p className="text-xs text-muted-foreground">
             Your theme preference will be saved and applied across all your
             sessions.

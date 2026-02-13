@@ -18,7 +18,7 @@ export function LeaderboardHeader({
   const [dialogOpen, setDialogOpen] = useState(false);
 
   return (
-    <div className="flex justify-between md:py-6 py-4 items-center mb-6 sm:mb-10">
+    <div className="flex justify-between py-4 items-center mb-6">
       <TimeRangeSelector
         timeRange={timeRange}
         onTimeRangeChange={handleTimeRangeChange}

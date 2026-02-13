@@ -5,7 +5,7 @@ import { Skeleton } from "@/components/ui/skeleton";
  */
 export function LeaderboardSkeleton() {
   return (
-    <div className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
+    <div className="container max-w-6xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
       {/* Podium skeleton */}
       <PodiumSkeleton />
 
@@ -47,30 +47,33 @@ export function PodiumSkeleton() {
 function PodiumCardSkeleton({ isWinner = false }: { isWinner?: boolean }) {
   return (
     <div className="relative">
-      <div className="rounded-xl border   p-5 h-full shadow-lg">
-        {/* Crown decoration for winner */}
-        {isWinner && (
-          <div className="absolute -top-6 left-1/2 transform -translate-x-1/2">
-            <Skeleton className="h-10 w-10 rounded-full " />
-          </div>
-        )}
-
-        <div className="relative z-10">
+      <div className="bg-sidebar rounded-xl border border-dashed p-5 h-full">
+        <div>
           {/* User info with profile image */}
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              {/* Avatar skeleton */}
               <Skeleton
-                className={`${isWinner ? "h-16 w-16" : "h-14 w-14"} rounded-full `}
+                className={`${isWinner ? "h-16 w-16" : "h-14 w-14"} rounded-full`}
               />
               <div className="space-y-2">
-                {/* Name skeleton */}
-                <Skeleton className="h-5 w-32 " />
-                {/* Rank skeleton */}
-                <Skeleton className="h-4 w-20 " />
+                <Skeleton className="h-5 w-32" />
+                <Skeleton className="h-4 w-20" />
               </div>
             </div>
-            {/* Medal emoji skeleton */}
+          </div>
+
+          {/* Ranking score skeleton */}
+          <div className="bg-muted/50 rounded-lg p-3 mb-3">
+            <div className="flex justify-between items-center">
+              <Skeleton className="h-4 w-24" />
+              <Skeleton className="h-6 w-12" />
+            </div>
+          </div>
+
+          {/* Stats skeleton */}
+          <div className="grid grid-cols-2 gap-2">
+            <StatCardSkeleton />
+            <StatCardSkeleton />
           </div>
 
           <div className="grid grid-cols-3 gap-2 mt-2">
@@ -90,9 +93,9 @@ function PodiumCardSkeleton({ isWinner = false }: { isWinner?: boolean }) {
  */
 function StatCardSkeleton() {
   return (
-    <div className="bg-gray-200 dark:bg-muted rounded-lg p-2 space-y-1">
-      <Skeleton className="h-3 w-12 bg-gray-300 dark:bg-muted" />
-      <Skeleton className="h-4 w-16 bg-gray-300 dark:bg-muted" />
+    <div className="bg-muted/50 rounded-lg p-2 space-y-1">
+      <Skeleton className="h-3 w-12" />
+      <Skeleton className="h-4 w-16" />
     </div>
   );
 }
@@ -103,22 +106,25 @@ function StatCardSkeleton() {
 export function LeaderboardTableSkeleton() {
   return (
     <div className="mt-8">
+      {/* Heading skeleton */}
+      <Skeleton className="h-5 w-28 mb-4" />
+
       {/* Search bar skeleton */}
-      <div className="mb-6">
-        <Skeleton className="h-10 w-full max-w-md bg-gray-200 dark:bg-muted" />
+      <div className="mb-6 max-w-md">
+        <Skeleton className="h-10 w-full" />
       </div>
 
       {/* Table skeleton */}
-      <div className="rounded-lg border bg-white dark:bg-background overflow-hidden">
+      <div className="rounded-lg border border-dashed overflow-hidden">
         {/* Table header */}
-        <div className="border-b bg-gray-50 dark:bg-muted p-4">
+        <div className="border-b bg-muted/30 p-4">
           <div className="grid grid-cols-12 gap-4">
-            <Skeleton className="h-4 w-full bg-gray-200 dark:bg-muted col-span-1" />
-            {/*<Skeleton className="h-4 w-32 bg-gray-200 dark:bg-muted col-span-4" />
-            <Skeleton className="h-4 w-24 bg-gray-200 dark:bg-muted col-span-2" />
-            <Skeleton className="h-4 w-24 bg-gray-200 dark:bg-muted col-span-2" />
-            <Skeleton className="h-4 w-24 bg-gray-200 dark:bg-muted col-span-2" />
-            <Skeleton className="h-4 w-20 bg-gray-200 dark:bg-muted col-span-1" />*/}
+            <Skeleton className="h-4 w-full col-span-1" />
+            <Skeleton className="h-4 w-full col-span-3" />
+            <Skeleton className="h-4 w-full col-span-2" />
+            <Skeleton className="h-4 w-full col-span-2" />
+            <Skeleton className="h-4 w-full col-span-2" />
+            <Skeleton className="h-4 w-full col-span-2" />
           </div>
         </div>
 
@@ -136,20 +142,18 @@ export function LeaderboardTableSkeleton() {
  */
 function TableRowSkeleton() {
   return (
-    <div className="border-b p-4 hover:bg-gray-50 dark:hover:bg-muted">
+    <div className="border-b p-4">
       <div className="grid grid-cols-12 gap-4 items-center">
-        {/* Rank */}
-
         {/* User info */}
         <div className="flex items-center gap-3 col-span-4">
-          <Skeleton className="h-8 w-8 rounded-full bg-gray-200 dark:bg-muted" />
-          <Skeleton className="h-4 w-32 bg-gray-200 dark:bg-muted" />
+          <Skeleton className="h-8 w-8 rounded-full" />
+          <Skeleton className="h-4 w-32" />
         </div>
 
         {/* Stats */}
-        <Skeleton className="h-4 w-auto bg-gray-200 dark:bg-muted col-span-2" />
-        <Skeleton className="h-4 w-auto bg-gray-200 dark:bg-muted col-span-2" />
-        <Skeleton className="h-4 w-auto bg-gray-200 dark:bg-muted col-span-2" />
+        <Skeleton className="h-4 w-auto col-span-2" />
+        <Skeleton className="h-4 w-auto col-span-2" />
+        <Skeleton className="h-4 w-auto col-span-2" />
       </div>
     </div>
   );

@@ -31,9 +31,9 @@ interface LeaderboardTableProps {
 /**
  * Component for displaying the full leaderboard table with search
  */
-export function LeaderboardTable({ 
-  leaderboardData, 
-  searchTerm, 
+export function LeaderboardTable({
+  leaderboardData,
+  searchTerm,
   setSearchTerm,
   getAvatarFallback
 }: LeaderboardTableProps) {
@@ -48,10 +48,10 @@ export function LeaderboardTable({
 
   return (
     <div>
-      <h2 className="text-3xl font-bold text-center mb-6 sm:mb-8 text-secondary-foreground">
+      <h2 className="text-base font-semibold mb-4 text-secondary-foreground">
         Full Rankings
       </h2>
-      <div className="mb-6 max-w-md mx-auto">
+      <div className="mb-6 max-w-md">
         <Input
           type="text"
           placeholder="Search by name..."
@@ -61,11 +61,11 @@ export function LeaderboardTable({
         />
       </div>
       {filteredData.length > 0 ? (
-        <Card className="overflow-hidden shadow-lg border-0 bg-black/20 backdrop-blur-sm">
+        <Card className="overflow-hidden border-dashed">
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow className="border-b border-white/10 bg-transparent hover:bg-transparent">
+                <TableRow className="border-b bg-muted/30 hover:bg-muted/30">
                   <TableHead className="w-[60px] text-center text-xs text-muted-foreground">RANK</TableHead>
                   <TableHead className="text-xs text-muted-foreground">USER</TableHead>
                   <TableColumnHeader title="RANKING SCORE" tooltip="Overall ranking score combines average score (40%), best score (20%), improvement trend, consistency, quiz count, and time invested." className="hidden md:table-cell" />
@@ -77,16 +77,16 @@ export function LeaderboardTable({
               </TableHeader>
               <TableBody>
                 {filteredData.map((user) => (
-                  <TableRow 
-                    key={user.userId} 
-                    className="border-b border-white/5 bg-transparent transition-colors hover:bg-white/5"
+                  <TableRow
+                    key={user.userId}
+                    className="border-b transition-colors hover:bg-sidebar"
                   >
                     <TableCell className="text-center font-medium">
                       {leaderboardData.findIndex(u => u.userId === user.userId) + 1}
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-3">
-                        <Avatar className="h-8 w-8 border border-white/10">
+                        <Avatar className="h-8 w-8 border border-border">
                           {user.profileImageUrl ? (
                             <AvatarImage src={user.profileImageUrl} alt={`${user.firstName} ${user.lastName}`} />
                           ) : (
@@ -135,12 +135,12 @@ export function LeaderboardTable({
 /**
  * Enhanced table column header with tooltip
  */
-function TableColumnHeader({ 
-  title, 
+function TableColumnHeader({
+  title,
   tooltip,
   className = ""
-}: { 
-  title: string; 
+}: {
+  title: string;
   tooltip: string;
   className?: string;
 }) {

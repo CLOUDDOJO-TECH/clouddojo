@@ -8,6 +8,13 @@ interface TimeRangeSelectorProps {
   onTimeRangeChange: (range: TimeRangeOption) => void;
 }
 
+const timeRanges: { value: TimeRangeOption; label: string }[] = [
+  { value: "daily", label: "Daily" },
+  { value: "weekly", label: "Weekly" },
+  { value: "monthly", label: "Monthly" },
+  { value: "all", label: "All Time" },
+];
+
 /**
  * Component for selecting the time range for leaderboard data
  */
@@ -16,37 +23,22 @@ export function TimeRangeSelector({
   onTimeRangeChange,
 }: TimeRangeSelectorProps) {
   return (
-    <div className="flex justify-end mb-6">
-      <div className="inline-flex rounded-lg border border-border overflow-hidden">
+    <div className="inline-flex rounded-lg border border-dashed border-border/60 p-1 gap-1">
+      {timeRanges.map((range) => (
         <Button
-          variant={timeRange === "daily" ? "default" : "ghost"}
-          className="rounded-none border-r border-border px-4"
-          onClick={() => onTimeRangeChange("daily")}
+          key={range.value}
+          variant="ghost"
+          size="sm"
+          className={`rounded-md px-4 text-sm transition-all duration-300 ease-in-out ${
+            timeRange === range.value
+              ? "bg-sidebar-accent text-sidebar-foreground shadow-md"
+              : "hover:bg-sidebar-accent/40 hover:text-sidebar-foreground"
+          }`}
+          onClick={() => onTimeRangeChange(range.value)}
         >
-          Daily
+          {range.label}
         </Button>
-        <Button
-          variant={timeRange === "weekly" ? "default" : "ghost"}
-          className="rounded-none border-r border-border px-4"
-          onClick={() => onTimeRangeChange("weekly")}
-        >
-          Weekly
-        </Button>
-        <Button
-          variant={timeRange === "monthly" ? "default" : "ghost"}
-          className="rounded-none px-4"
-          onClick={() => onTimeRangeChange("monthly")}
-        >
-          Monthly
-        </Button>
-        <Button
-          variant={timeRange === "all" ? "default" : "ghost"}
-          className="rounded-none border-r border-border px-4"
-          onClick={() => onTimeRangeChange("all")}
-        >
-          All Time
-        </Button>
-      </div>
+      ))}
     </div>
   );
 }
