@@ -42,7 +42,7 @@ export function SiteHeader() {
       return (
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink href="/dashboard" className="text-emerald-500">
+            <BreadcrumbLink href="/dashboard" className="text-foreground hover:text-foreground/80">
               Dashboard
             </BreadcrumbLink>
           </BreadcrumbItem>
@@ -53,7 +53,7 @@ export function SiteHeader() {
     return (
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink href="/dashboard" className="text-emerald-500">
+          <BreadcrumbLink href="/dashboard" className="text-foreground hover:text-foreground/80">
             Dashboard
           </BreadcrumbLink>
         </BreadcrumbItem>
@@ -85,10 +85,10 @@ export function SiteHeader() {
 
   return (
     <div className="">
-      <header className="dark w-full flex h-16 shrink-0 items-center gap-2 px-4 md:px-6   text-sidebar-foreground  before:absolute before:inset-y-3 before:-left-px before:w-px before:z-50">
+      <header className="w-full flex h-16 shrink-0 items-center gap-2 px-4 md:px-6 text-foreground before:absolute before:inset-y-3 before:-left-px before:w-px before:z-50">
         <div className="flex h-[--header-height] w-full items-center justify-between">
           <div className="gap-2 px-4 flex items-center">
-            <SidebarTrigger className="-ms-2" />
+            <SidebarTrigger className="-ms-2 text-muted-foreground hover:text-foreground" />
             <Separator
               orientation="vertical"
               className="mr-2 h-4 data-[orientation=verticall]:h-4"
@@ -98,24 +98,6 @@ export function SiteHeader() {
             </Breadcrumb>
           </div>
           <div className="gap-4 flex items-center mr-6">
-            <Button
-              variant="outline"
-              size="sm"
-              className="md:flex items-center hidden relative h-9 justify-between text-sm dark:text-brand-beige-500 text-gray-700 md:w-40 border-brand-beige-800 lg:w-64"
-              onClick={() => setCommandMenuOpen(true)}
-            >
-              <div className="flex items-center">
-                <Search className="mr-2 h-4 w-4" />
-                <span className="hidden sm:inline-flex font-mono">
-                  Search...
-                </span>
-              </div>
-              <Kbd.Root variant="outline" className="">
-                <Kbd.Key>⌘</Kbd.Key>
-                <Kbd.Separator />
-                <Kbd.Key title="Search">J</Kbd.Key>
-              </Kbd.Root>
-            </Button>
             <CommandMenu />
             <FeedbackDialog
               open={feedbackOpen}

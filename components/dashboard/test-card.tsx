@@ -52,7 +52,7 @@ const getLevelColor = (level: string) => {
 export default function PracticeTestCard({questionsCount, test, onStartTest, }: PracticeTestCardProps) {
   const { isSubscribed } = useSubscription()
   return (
-    <Card className="overflow-hidden transition-all hover:shadow-xl group rounded-3xl relative h-[460px] border">
+    <Card className="overflow-hidden transition-all hover:shadow-xl group rounded-2xl relative h-[340px] border">
       {/* Background Image */}
       <div className="absolute inset-0">
         <img
@@ -61,7 +61,7 @@ export default function PracticeTestCard({questionsCount, test, onStartTest, }: 
           className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
         />
         {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t dark:from-background from-gray-900  dark:via-background/80 via-gray-700 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-white via-white/80 to-transparent dark:from-background dark:via-background/80 dark:to-transparent" />
       </div>
 
       {/* Top Badges */}
@@ -85,9 +85,9 @@ export default function PracticeTestCard({questionsCount, test, onStartTest, }: 
       </div>
 
       {/* Content Overlay */}
-      <div className="absolute inset-0 flex flex-col justify-end p-5 ">
+      <div className="absolute inset-0 flex flex-col justify-end p-4 ">
         {/* Level Badge */}
-        <div className="mb-3">
+        <div className="mb-2">
           <Badge
             variant="outline"
             className={`${getLevelColor(test.level!)} backdrop-blur-sm bg-white/90 border-white/20`}
@@ -97,19 +97,19 @@ export default function PracticeTestCard({questionsCount, test, onStartTest, }: 
         </div>
 
         {/* Title */}
-        <h3 className="font-bold text-xl text-white mb-2 line-clamp-2 leading-tight">{test.title}</h3>
+        <h3 className="font-bold text-base text-foreground dark:text-white mb-1 line-clamp-2 leading-tight">{test.title}</h3>
 
         {/* Description */}
-        <p className="text-white/80 text-sm line-clamp-2 mb-4 font-mono leading-relaxed">{test.description}</p>
+        <p className="text-muted-foreground dark:text-white/80 text-xs line-clamp-2 mb-3 font-mono leading-relaxed">{test.description}</p>
 
         {/* Stats */}
-        <div className="flex items-center gap-4 text-sm text-white/70 mb-4">
+        <div className="flex items-center gap-4 text-xs text-muted-foreground dark:text-white/70 mb-3">
           <div className="flex items-center gap-1">
-            <FileQuestion className="h-4 w-4 text-brand-beige-900" />
+            <FileQuestion className="h-3.5 w-3.5 text-muted-foreground dark:text-brand-beige-900" />
             <span className="font-serif">{questionsCount} questions</span>
           </div>
           <div className="flex items-center gap-1">
-            <Clock className="h-4 w-4 text-brand-beige-900" />
+            <Clock className="h-3.5 w-3.5 text-muted-foreground dark:text-brand-beige-900" />
             <span className="font-serif">{test.duration} min</span>
           </div>
         </div>
@@ -119,7 +119,7 @@ export default function PracticeTestCard({questionsCount, test, onStartTest, }: 
           {test.free || isSubscribed ?  (
             <Button
               onClick={onStartTest}
-              className="bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-sm transition-all duration-200 hover:scale-105"
+              className="bg-primary hover:bg-primary/90 text-white border border-primary/20 dark:bg-white/10 dark:hover:bg-white/20 dark:border-white/20 backdrop-blur-sm transition-all duration-200 hover:scale-105"
             >
               Start Test
             </Button>

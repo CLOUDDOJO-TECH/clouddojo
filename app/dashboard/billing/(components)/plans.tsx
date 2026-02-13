@@ -3,26 +3,36 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { NoPlans, Plan } from "./plan";
-import { fetchPlans } from "@/config/actions"; // Import your server action
+import { fetchPlans } from "@/config/actions";
+import { Button } from "@/components/ui/button";
+import { RefreshCcw } from "lucide-react";
 
-export function Plans({ 
+export function Plans({
   className = "",
-  onSubscribeComplete 
-}: { 
+  onSubscribeComplete
+}: {
   className?: string,
   onSubscribeComplete?: () => void
 }) {
 
-  const { data: allPlans = [], isLoading, error } = useQuery({
+  const { data: allPlans = [], isLoading, error, refetch } = useQuery({
     queryKey: ["plans"],
     queryFn: async () => {
       return fetchPlans();
     },
+    retry: 2,
   });
-  console.log("Plans data:", allPlans);
 
   if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error loading plans</div>;
+  if (error) return (
+    <div className="flex flex-col items-center gap-3 py-6">
+      <p className="text-muted-foreground">Failed to load plans</p>
+      <Button variant="outline" size="sm" onClick={() => refetch()}>
+        <RefreshCcw className="h-4 w-4 mr-2" />
+        Try Again
+      </Button>
+    </div>
+  );
   if (!allPlans.length) return <NoPlans />;
 
   const sortedPlans = allPlans.sort((a, b) => (a.sort ?? 0) - (b.sort ?? 0));

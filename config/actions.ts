@@ -203,16 +203,17 @@ export async function syncPlans() {
  */
 export async function fetchPlans() {
   try {
-    await syncPlans();
-    const plans = await prisma.lsSubscriptionPlan.findMany({
+    // Try reading from the database first
+    let plans = await prisma.lsSubscriptionPlan.findMany({
       orderBy: {
         price: "asc",
       },
     });
 
+    // Only sync with Lemon Squeezy if no plans exist in the DB
     if (!plans.length) {
       await syncPlans();
-      return await prisma.lsSubscriptionPlan.findMany({
+      plans = await prisma.lsSubscriptionPlan.findMany({
         orderBy: {
           price: "asc",
         },

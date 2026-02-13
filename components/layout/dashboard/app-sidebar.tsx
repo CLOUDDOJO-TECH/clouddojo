@@ -3,18 +3,21 @@
 import * as React from "react";
 
 import {
-  BookOpen,
   Map,
-  TestTube,
-  CableCar,
-  CogIcon,
   ChevronRight,
+  CircleHelp,
+  ArrowUpCircle,
 } from "lucide-react";
 import {
   AdminIcon,
   HomeIcon,
   LeaderboardIcon,
   PracticeTestIcon,
+  SettingsIcon,
+  HandsOnLabsIcon,
+  FlashcardsIcon,
+  PeerConnectIcon,
+  ChangelogIcon,
   DashboardIcon,
   ManageQuizzesIcon,
   ManageProjectsIcon,
@@ -41,6 +44,11 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
@@ -50,6 +58,8 @@ import UpgradeCard from "@/components/upgrade-card";
 import { useSubscription } from "@/hooks/use-subscription";
 import SubscriptionCard from "@/app/dashboard/subscibed-card";
 import { useCurrentUserRole } from "@/lib/hooks/useCurrentUser";
+import { useCommandMenuStore } from "@/store/use-command-menu-store";
+import { Search } from "lucide-react";
 
 // Define types for the navigation items
 type NavItem = {
@@ -87,6 +97,11 @@ const NAVIGATION_DATA: NavSection[] = [
         url: "/dashboard/leaderboard",
         icon: LeaderboardIcon,
       },
+      {
+        title: "Settings",
+        url: "/dashboard/settings",
+        icon: SettingsIcon,
+      },
       // {
       //   title: "Hands-On Labs",
       //   url: "/dashboard/labs",
@@ -101,13 +116,13 @@ const NAVIGATION_DATA: NavSection[] = [
       {
         title: "Flashcards",
         url: "#",
-        icon: BookOpen,
+        icon: FlashcardsIcon,
         comingSoon: true,
       },
       {
         title: "Hands-On Projects",
         url: "#",
-        icon: TestTube,
+        icon: HandsOnLabsIcon,
         comingSoon: true,
       },
       {
@@ -120,7 +135,7 @@ const NAVIGATION_DATA: NavSection[] = [
       {
         title: "Peer-to-Peer Connect",
         url: "#",
-        icon: CableCar,
+        icon: PeerConnectIcon,
         comingSoon: true,
       },
     ],
@@ -157,6 +172,8 @@ const ADMIN_NAV_ITEMS: NavItem[] = [
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
 
+  const { setIsOpen: setCommandMenuOpen } = useCommandMenuStore();
+
   // Use our custom subscription hook
   const { isSubscribed, planName, isLoading, isError } = useSubscription();
   // console.log(planName)
@@ -169,13 +186,19 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar className="bg-sidebar !border-none " {...props}>
       <SidebarHeader>
-        <div className="flex items-center pt-2 justify-start overflow-hidden  text-sidebar-primary-foreground">
+        <div className="flex items-center pt-2 px-2 justify-between overflow-hidden text-sidebar-primary-foreground">
           <img
             src="/assets/cldj_logo.svg"
             width={120}
             height={120}
             alt="clouddojo logo"
           />
+          <button
+            onClick={() => setCommandMenuOpen(true)}
+            className="flex items-center justify-center h-8 w-8 rounded-md text-muted-foreground hover:text-foreground dark:hover:text-white hover:bg-sidebar-accent transition-colors"
+          >
+            <Search size={16} />
+          </button>
         </div>
         {/*<div className="grid flex-1 text-left text-2xl font-semibold leading-tight">
             <span className="truncate font-kaushan ">Clouddojo</span>
@@ -185,9 +208,35 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         {NAVIGATION_DATA.map((section) => (
           <SidebarGroup key={section.title}>
-            <SidebarGroupLabel className="uppercase text-muted-foreground/60">
-              {section.title}
-            </SidebarGroupLabel>
+            {section.title === "Coming Soon" ? (
+              <Collapsible defaultOpen className="group/collapsible">
+                <CollapsibleTrigger asChild>
+                  <SidebarGroupLabel className="uppercase text-muted-foreground/60 cursor-pointer">
+                    {section.title}
+                    <ChevronRight className="ml-auto h-4 w-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                  </SidebarGroupLabel>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <SidebarGroupContent className="px-2">
+                    <SidebarMenu>
+                      {section.items.map((item) => (
+                        <NavItem
+                          key={item.title}
+                          item={item}
+                          isActive={isActive(item.url)}
+                        />
+                      ))}
+                    </SidebarMenu>
+                  </SidebarGroupContent>
+                </CollapsibleContent>
+              </Collapsible>
+            ) : (
+            <>
+            {section.title !== "Sections" && (
+              <SidebarGroupLabel className="uppercase text-muted-foreground/60">
+                {section.title}
+              </SidebarGroupLabel>
+            )}
             <SidebarGroupContent className="px-2">
               <SidebarMenu>
                 {section.items.map((item) => (
@@ -210,7 +259,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                             tooltip="Admin"
                             className="group/admin-button font-medium gap-3 h-9"
                           >
-                            <AdminIcon className="text-muted-foreground group-hover/admin-button:text-white" />
+                            <AdminIcon className="text-muted-foreground dark:group-hover/admin-button:text-white group-hover/admin-button:text-foreground" />
                             <span>Admin</span>
                             <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                           </SidebarMenuButton>
@@ -237,32 +286,70 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   )}
               </SidebarMenu>
             </SidebarGroupContent>
+            </>
+            )}
           </SidebarGroup>
         ))}
       </SidebarContent>
 
       <SidebarFooter>
-        {planName && (
-          <span className="px-4 mb-4">
-            <SubscriptionCard plan={planName} variant="outlined" />
-          </span>
-        )}
-        {!isLoading && !isError && !isSubscribed && (
-          <div className="px-4 mb-4">
-            <UpgradeCard />
-          </div>
-        )}
-        <hr className="border-t border-border mx-2 -mt-px" />
-        <SidebarMenu>
-          <NavItem
-            item={{
-              title: "Settings",
-              url: "/dashboard/settings",
-              icon: CogIcon,
-            }}
-            isActive={isActive("/dashboard/settings")}
-          />
-        </SidebarMenu>
+        <div className="flex items-center gap-2 px-1 pb-2">
+          <Popover>
+            <PopoverTrigger asChild>
+              <button
+                className="flex items-center justify-center h-9 w-9 rounded-full border border-border/60 bg-background dark:bg-transparent text-muted-foreground hover:text-white transition-colors"
+              >
+                <CircleHelp size={18} />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent side="top" align="start" className="w-[240px] p-0">
+              <div className="px-5 py-3">
+                <p className="text-xs text-muted-foreground">What&apos;s new</p>
+              </div>
+              <div className="relative px-5 pb-4">
+                {/* Continuous dashed line */}
+                <div className="absolute left-[1.55rem] top-[0.55rem] bottom-[2.05rem] border-l border-dashed border-muted-foreground/30" />
+                {/* Item 1 */}
+                <div className="relative cursor-pointer flex items-start gap-3 py-2 hover:bg-gray-400/20 rounded-[5px] px-1 -mx-1">
+                  <span className="relative z-10 h-2.5 w-2.5 rounded-full bg-coolGray-500 shrink-0 mt-0.5" />
+                  <span className="text-sm">Practice tests are live</span>
+                </div>
+                {/* Item 2 */}
+                <div className="relative cursor-pointer flex items-start gap-3 py-2 hover:bg-gray-400/20 rounded-[5px] px-1 -mx-1">
+                  <span className="relative z-10 h-2.5 w-2.5 rounded-full bg-coolGray-500 shrink-0 mt-0.5" />
+                  <span className="text-sm">AI-powered study plans</span>
+                </div>
+                {/* Changelog link */}
+                <button
+                  className="relative flex items-start gap-3 py-2 hover:bg-gray-400/20 rounded-[5px] px-1 -mx-1 w-full"
+                >
+                  <span className="relative z-10 h-2.5 w-2.5 rounded-full bg-coolGray-500 shrink-0 mt-0.5" />
+                  <span className="text-sm flex items-center gap-1.5">
+                    Full changelog
+                    <ChangelogIcon className="text-muted-foreground" />
+                  </span>
+                </button>
+              </div>
+            </PopoverContent>
+          </Popover>
+          {isSubscribed && planName ? (
+            <Link
+              href="/dashboard/billing"
+              className="flex items-center gap-2 h-9 px-4 rounded-full border border-border/60 bg-background dark:bg-transparent text-sm text-muted-foreground hover:text-white transition-colors"
+            >
+              <ArrowUpCircle size={16} />
+              <span>{planName} plan</span>
+            </Link>
+          ) : (
+            <Link
+              href="/dashboard/billing"
+              className="flex items-center gap-2 h-9 px-4 rounded-full border border-border/60 bg-background dark:bg-transparent text-sm text-muted-foreground hover:text-white transition-colors"
+            >
+              <ArrowUpCircle size={16} />
+              <span>Free plan</span>
+            </Link>
+          )}
+        </div>
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
@@ -284,12 +371,12 @@ function NavItem({ item, isActive }: { item: NavItem; isActive: boolean }) {
           <span className="flex items-center gap-3 ">
             {item.icon && (
               <item.icon
-                className="text-muted-foreground/60 group-hover/menu-soon:text-white"
-                size={22}
+                className="text-muted-foreground/60 dark:group-hover/menu-soon:text-white group-hover/menu-soon:text-foreground"
+                size={18}
                 aria-hidden="true"
               />
             )}
-            <span className="text-muted-foreground/60 group-hover/menu-soon:text-white">
+            <span className="text-muted-foreground/60 group-hover/menu-soon:text-white text-[13px]">
               {item.title}
             </span>
           </span>
@@ -302,7 +389,7 @@ function NavItem({ item, isActive }: { item: NavItem; isActive: boolean }) {
     <SidebarMenuItem>
       <SidebarMenuButton
         asChild
-        className="group/menu-button font-medium gap-3 h-9 rounded-md bg-gradient-to-r hover:bg-transparent hover:from-sidebar-accent hover:to-sidebar-accent/40 data-[active=true]:from-primary/20 data-[active=true]:to-primary/5 [&>svg]:size-auto"
+        className="group/menu-button font-medium gap-3 h-9 rounded-md bg-gradient-to-r hover:bg-transparent hover:from-sidebar-accent hover:to-sidebar-accent/40 data-[active=true]:from-primary data-[active=true]:to-primary/80 [&>svg]:size-auto"
         isActive={isActive}
       >
         <Link href={item.url}>
@@ -311,13 +398,13 @@ function NavItem({ item, isActive }: { item: NavItem; isActive: boolean }) {
               className={
                 isActive
                   ? "text-white"
-                  : "group-hover/menu-button:text-white text-muted-foreground group-hover/menu-button-data-[active=true]/menu-button:text-primary"
+                  : "dark:group-hover/menu-button:text-white group-hover/menu-button:text-foreground text-muted-foreground"
               }
-              size={22}
+              size={18}
               aria-hidden="true"
             />
           )}
-          <span className={isActive ? "text-white" : ""}>{item.title}</span>
+          <span className={`text-[13px] ${isActive ? "text-white" : ""}`}>{item.title}</span>
           {item.isNew && (
             <div className="relative">
               <Badge variant="new" className="ml-2 transform -rotate-12">

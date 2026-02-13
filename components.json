@@ -23,6 +23,7 @@
     "@kibo-ui": "https://www.kibo-ui.com/r/{name}.json",
     "@tailark": "https://tailark.com/r/{name}.json",
     "@magicui": "https://magicui.design/r/{name}.json",
-    "@react-bits": "https://reactbits.dev/r/{name}.json"
+    "@react-bits": "https://reactbits.dev/r/{name}.json",
+    "@wigggle-ui": "https://wigggle-ui.vercel.app/r/{name}.json"
   }
 }

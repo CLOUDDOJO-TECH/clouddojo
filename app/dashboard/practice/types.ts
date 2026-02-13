@@ -46,11 +46,30 @@ export interface QuestionProps {
   type: "single" | "multiple";
 }
 
+export interface AttemptQuestion {
+  id: string;
+  userAnswer: string;
+  isCorrect: boolean;
+  question: {
+    content: string;
+    explanation: string | null;
+    isMultiSelect: boolean;
+    options: QuestionOption[];
+    correctAnswer: string[];
+  };
+}
+
+export interface AttemptData {
+  id: string;
+  quizId: string;
+  totalScore: number;
+  percentageScore: number;
+  timeSpentSecs: number;
+  questions: AttemptQuestion[];
+  quiz: Quiz & { title: string };
+  category: Category | null;
+}
+
 export interface ResultsProps {
-  quiz: QuizWithRelations;
-  answers: Record<string, string[]>;
-  markedQuestions: string[];
-  timeTaken: number;
-  onRestart: () => void;
-  onReview: () => void;
-} 
+  attempt: AttemptData;
+}

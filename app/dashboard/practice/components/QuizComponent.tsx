@@ -6,10 +6,11 @@ import { useUser } from "@clerk/nextjs";
 import {
   ChevronLeft,
   ChevronRight,
-  Clock,
   SendHorizontal,
   SendIcon,
   Layers2,
+  Bookmark,
+  Grid3X3,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -39,10 +40,16 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { toast } from "sonner";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Badge } from "@/components/ui/badge";
 
 import { QuizComponentProps, QuizWithRelations } from "../types";
 import Question from "./Question";
-import Results from "./Results";
+import ExpandableClock from "./ExpandableClock";
 import { useQuery } from "@tanstack/react-query";
 import { CheckUser } from "@/app/(actions)/user/check-user";
 import { useSaveQuizAttempt } from "../../hooks/useSaveQuizAttempts";
@@ -55,11 +62,12 @@ export default function QuizComponent({ quiz, quizId }: QuizComponentProps) {
   const [markedQuestions, setMarkedQuestions] = useState<string[]>([]);
   const [timeLeft, setTimeLeft] = useState((quiz.duration || 30) * 60);
   const [isTestSubmitted, setIsTestSubmitted] = useState(false);
-  const [showResults, setShowResults] = useState(false);
   const [showSubmitDialog, setShowSubmitDialog] = useState(false);
   const [showTimeWarning, setShowTimeWarning] = useState(false);
   const [userProfileExists, setUserProfileExists] = useState(false);
   const [toggleQuestionTraverser, setToggleQuestionTraverser] = useState(false);
+  const [questionNavOpen, setQuestionNavOpen] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
 
   // Query to check user profile
   const { data: checkUserProfile, isLoading: isCheckingProfile } = useQuery({
@@ -73,7 +81,7 @@ export default function QuizComponent({ quiz, quizId }: QuizComponentProps) {
 
   // Timer effect
   useEffect(() => {
-    if (isTestSubmitted || showResults) return;
+    if (isTestSubmitted || isPaused) return;
 
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
@@ -92,7 +100,7 @@ export default function QuizComponent({ quiz, quizId }: QuizComponentProps) {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [isTestSubmitted, showResults]);
+  }, [isTestSubmitted, isPaused]);
 
   // Profile check effect
   useEffect(() => {
@@ -117,9 +125,10 @@ export default function QuizComponent({ quiz, quizId }: QuizComponentProps) {
     const question = quiz.questions.find((q) => q.id === questionId);
 
     if (!question?.isMultiSelect) {
+      const current = answers[questionId] || [];
       setAnswers((prev) => ({
         ...prev,
-        [questionId]: [optionId],
+        [questionId]: current.includes(optionId) ? [] : [optionId],
       }));
     } else {
       const currentAnswers = answers[questionId] || [];
@@ -185,10 +194,10 @@ export default function QuizComponent({ quiz, quizId }: QuizComponentProps) {
         score: calculateResults(),
       });
 
-      if (response.success) {
+      if (response.success && response.data) {
         setIsTestSubmitted(true);
-        setShowResults(true);
         setShowSubmitDialog(false);
+        router.push(`/dashboard/practice/results/${response.data.id}`);
       }
     } catch (error) {
       // Error is handled by the mutation's onError
@@ -208,20 +217,11 @@ export default function QuizComponent({ quiz, quizId }: QuizComponentProps) {
   const answeredCount = Object.keys(answers).length;
   const progress = Math.round((answeredCount / quiz.questions.length) * 100);
 
-  // Handle restart
-  const handleRestart = () => {
-    setAnswers({});
-    setMarkedQuestions([]);
+  // Handle timer reset from clock controls
+  const handleTimerReset = () => {
     setTimeLeft((quiz.duration || 30) * 60);
-    setIsTestSubmitted(false);
-    setShowResults(false);
     setCurrentQuestionIndex(0);
-  };
-
-  // Handle review
-  const handleReview = () => {
-    setShowResults(false);
-    setCurrentQuestionIndex(0);
+    setIsPaused(false);
   };
 
   // Show loading state while checking profile
@@ -239,22 +239,20 @@ export default function QuizComponent({ quiz, quizId }: QuizComponentProps) {
     );
   }
 
-  if (showResults) {
-    return (
-      <Results
-        quiz={quiz}
-        answers={answers}
-        markedQuestions={markedQuestions}
-        timeTaken={(quiz.duration || 30) * 60 - timeLeft}
-        onRestart={handleRestart}
-        onReview={handleReview}
-      />
-    );
-  }
-
   return (
-    <div className="container font-main  lg:max-w-7xl items-center   max-w-6xl mx-auto p-4 md:p-6 pt-16 md:pt-6">
-      <Card>
+    <div className="container font-main lg:max-w-7xl items-center max-w-6xl mx-auto p-4 md:p-6 pt-16 md:pt-6 min-h-[calc(100vh-4rem)]">
+      <Card className="border-dashed border-border/60 min-h-[calc(100vh-7rem)] relative">
+        {/* Hanging Clock */}
+        <ExpandableClock
+          timeLeft={timeLeft}
+          isWarning={timeLeft <= 60}
+          isPaused={isPaused}
+          formatTime={formatTime}
+          onPause={() => setIsPaused(true)}
+          onResume={() => setIsPaused(false)}
+          onReset={handleTimerReset}
+        />
+
         <CardHeader className="pb-2">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
@@ -262,17 +260,84 @@ export default function QuizComponent({ quiz, quizId }: QuizComponentProps) {
             </div>
 
             <div className="flex items-center justify-between gap-2">
-              <div
-                className={cn(
-                  "flex items-center gap-1 px-3 py-1 rounded-full font-medium",
-                  timeLeft <= 60
-                    ? "bg-red-100 text-red-700"
-                    : "bg-brand-beige-400/20 text-brand-beige-700",
-                )}
-              >
-                <Clock className="h-4 w-4" />
-                <span>{formatTime(timeLeft)}</span>
-              </div>
+              <Popover open={questionNavOpen} onOpenChange={setQuestionNavOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="rounded-md gap-1.5"
+                  >
+                    <Grid3X3 className="h-4 w-4" />
+                    <span className="hidden sm:inline">Questions</span>
+                    {markedQuestions.length > 0 && (
+                      <Badge className="bg-amber-500 text-white hover:bg-amber-500 rounded-full px-1.5 py-0 text-[10px] min-w-[1.25rem] flex items-center justify-center">
+                        {markedQuestions.length}
+                      </Badge>
+                    )}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[320px] p-4 z-50 shadow-xl shadow-black/20 dark:shadow-black/40" align="end" side="bottom" sideOffset={4} avoidCollisions={false}>
+                  <div className="space-y-3">
+                    <h4 className="font-medium text-sm">Question Navigator</h4>
+                    <TooltipProvider delayDuration={200}>
+                      <div className="grid grid-cols-8 gap-1.5">
+                        {quiz.questions.map((question, index) => {
+                          const answered = isQuestionAnswered(question.id);
+                          const flagged = markedQuestions.includes(question.id);
+                          const current = currentQuestionIndex === index;
+                          const tooltipParts = [
+                            current ? "Current" : "",
+                            answered ? "Answered" : "Unanswered",
+                          ].filter(Boolean);
+                          const tooltipColor = flagged
+                            ? "text-amber-500"
+                            : answered
+                              ? "text-primary"
+                              : "text-muted-foreground";
+
+                          return (
+                            <Tooltip key={question.id}>
+                              <TooltipTrigger asChild>
+                                <button
+                                  onClick={() => {
+                                    goToQuestion(index);
+                                    setQuestionNavOpen(false);
+                                  }}
+                                  className={cn(
+                                    "w-8 h-8 rounded-md text-xs font-medium transition-colors",
+                                    current
+                                      ? "ring-2 ring-inset ring-primary bg-primary/10 text-primary"
+                                      : answered
+                                        ? "bg-primary text-primary-foreground"
+                                        : "bg-muted/50 text-muted-foreground hover:bg-muted",
+                                    flagged && "ring-2 ring-inset ring-amber-500"
+                                  )}
+                                >
+                                  {index + 1}
+                                </button>
+                              </TooltipTrigger>
+                              <TooltipContent side="top" className={cn("text-xs", tooltipColor)}>
+                                {tooltipParts.join(" · ")}
+                              </TooltipContent>
+                            </Tooltip>
+                          );
+                        })}
+                      </div>
+                    </TooltipProvider>
+                    <div className="flex items-center justify-between text-xs text-muted-foreground pt-2 border-t">
+                      <span className="flex items-center gap-1">
+                        <span className="w-2.5 h-2.5 rounded-sm bg-primary" /> Answered
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <span className="w-2.5 h-2.5 rounded-sm bg-muted/50" /> Unanswered
+                      </span>
+                      <span className="flex items-center gap-1">
+                        Bookmarked <span className="text-amber-500/70">{markedQuestions.length > 0 && `(${markedQuestions.length})`}</span>
+                      </span>
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
 
               <TooltipProvider>
                 <Tooltip>
@@ -280,7 +345,7 @@ export default function QuizComponent({ quiz, quizId }: QuizComponentProps) {
                     <Button
                       size="sm"
                       onClick={() => setShowSubmitDialog(true)}
-                      className="rounded-full"
+                      className="rounded-md"
                     >
                       <Layers2 className="h-4 w-4" />
                       Submit Test
@@ -296,27 +361,11 @@ export default function QuizComponent({ quiz, quizId }: QuizComponentProps) {
         </CardHeader>
 
         <CardContent className="pb-0 mt-3">
-          <Progress value={progress} className="h-2" />
-          <div className="flex items-center justify-between mb-2 px-2 py-1.5 mt-2  border border-gray-100/10 rounded-lg">
-            <div className="md:text-sm text-xs font-mono hidden md:block">
-              Progress: <span className="font-medium">{answeredCount}</span> of{" "}
-              <span className="font-medium">{quiz.questions.length}</span>{" "}
-              questions answered
-            </div>
-            <div className="md:text-sm md:hidden text-xs font-mono">
-              <span className="font-medium">{currentQuestionIndex + 1}</span> /{" "}
-              <span className="font-medium">{quiz.questions.length}</span>{" "}
-            </div>
-            <div className="md:text-sm text-xs font-mono">
-              Question{" "}
-              <span className="font-medium text-brand-beige-700">
-                {currentQuestionIndex + 1}
-              </span>{" "}
-              of{" "}
-              <span className="font-medium text-primary">
-                {quiz.questions.length}
-              </span>
-            </div>
+          <div className="flex items-center gap-3 mt-1 mb-2">
+            <Progress value={progress} className="h-2 flex-1" />
+            <span className="text-xs font-mono text-muted-foreground whitespace-nowrap">
+              {currentQuestionIndex + 1}/{quiz.questions.length}
+            </span>
           </div>
 
           <div className="md:hidden flex flex-wrap gap-2 mt-4 mb-2">
@@ -371,7 +420,7 @@ export default function QuizComponent({ quiz, quizId }: QuizComponentProps) {
                           ? "Answered"
                           : "Not answered"}
                         {markedQuestions.includes(question.id) &&
-                          " • Marked for review"}
+                          " • Bookmarked"}
                       </div>
                     </TooltipContent>
                   </Tooltip>
@@ -433,26 +482,46 @@ export default function QuizComponent({ quiz, quizId }: QuizComponentProps) {
 
       {/* Submit Confirmation Dialog */}
       <AlertDialog open={showSubmitDialog} onOpenChange={setShowSubmitDialog}>
-        <AlertDialogContent className="max-w-lg rounded-lg md:w-full w-[90%] ">
-          <AlertDialogHeader>
-            <AlertDialogTitle>Submit Test?</AlertDialogTitle>
-            <AlertDialogDescription className="w-full flex items-center justify-center flex-col">
-              You have answered {answeredCount} out of {quiz.questions.length}{" "}
-              questions.
-              {answeredCount < quiz.questions.length && (
-                <span className="block mt-2 font-medium font-mono text-xs text-center w-[70%] text-amber-600">
-                  Warning: You have {quiz.questions.length - answeredCount}{" "}
-                  unanswered questions.
-                </span>
-              )}
+        <AlertDialogContent className="max-w-sm rounded-lg border-dashed border-border/60 md:w-full w-[90%] p-6">
+          <AlertDialogHeader className="space-y-3">
+            <AlertDialogTitle className="text-center text-xl">
+              Submit Test
+            </AlertDialogTitle>
+            <AlertDialogDescription asChild>
+              <div className="text-center space-y-3">
+                <p className="text-sm text-muted-foreground">
+                  You&apos;ve completed{" "}
+                  <span className="font-semibold text-foreground">
+                    {answeredCount}
+                  </span>
+                  /{quiz.questions.length} questions.
+                  {answeredCount < quiz.questions.length
+                    ? " Are you sure you want to submit?"
+                    : " Ready to see your results?"}
+                </p>
+                {answeredCount < quiz.questions.length && (
+                  <div className="rounded-md border border-dashed border-amber-500/30 px-3 py-2">
+                    <p className="text-xs font-medium text-amber-600 dark:text-amber-400">
+                      Unanswered questions will be marked incorrect.
+                    </p>
+                  </div>
+                )}
+              </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={isSaving}>
+          <AlertDialogFooter className="mt-4 flex-row gap-3 sm:justify-center">
+            <AlertDialogCancel
+              disabled={isSaving}
+              className="flex-1 rounded-md"
+            >
               Continue Test
             </AlertDialogCancel>
-            <AlertDialogAction onClick={handleSubmitTest} disabled={isSaving}>
-              {isSaving ? "Submiting..." : "Submit Test"}
+            <AlertDialogAction
+              onClick={handleSubmitTest}
+              disabled={isSaving}
+              className="flex-1 rounded-md"
+            >
+              {isSaving ? "Submitting..." : "Submit Test"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

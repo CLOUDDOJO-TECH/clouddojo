@@ -1,70 +1,50 @@
 "use client"
 
-import { useState } from "react"
 import {
   Clock,
   CheckCircle,
   XCircle,
   AlertCircle,
   BarChart4,
-  Brain
 } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { ResultsProps } from "../types"
+import { AttemptData } from "../types"
 import QuestionAnalysis from "./QuestionAnalysis"
 import PDFGenerator from "./PDFGenerator"
-import router from "next/router"
 
-export default function AttemptResults({
-  quiz,
-  answers,
-  markedQuestions,
-  timeTaken,
-  onRestart,
-  onReview,
-}: ResultsProps) {
-  // Results data
+interface AttemptResultsProps {
+  attempt: AttemptData
+}
+
+export default function AttemptResults({ attempt }: AttemptResultsProps) {
   const results = calculateResults()
 
-  // Format time
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60)
     const secs = seconds % 60
     return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`
   }
 
-  // Calculate results
   function calculateResults() {
     let correct = 0
     let incorrect = 0
     let skipped = 0
 
-    quiz.questions.forEach((question) => {
-      const userAnswer = answers[question.id] || []
-
-      if (userAnswer.length === 0) {
+    attempt.questions.forEach((qa) => {
+      if (!qa.userAnswer || qa.userAnswer.length === 0) {
         skipped++
-      } else if (
-        userAnswer.length === question.correctAnswer.length &&
-        userAnswer.every((ans) => question.correctAnswer.includes(ans))
-      ) {
+      } else if (qa.isCorrect) {
         correct++
       } else {
         incorrect++
       }
     })
 
-    const score = Math.round((correct / quiz.questions.length) * 100)
+    const total = attempt.questions.length
+    const score = Math.round(attempt.percentageScore)
 
-    return {
-      score,
-      correct,
-      incorrect,
-      skipped,
-      total: quiz.questions.length,
-    }
+    return { score, correct, incorrect, skipped, total }
   }
 
   return (
@@ -72,7 +52,7 @@ export default function AttemptResults({
       <Card className="mb-8 mt-2 max-w-7xl mx-auto">
         <CardHeader className="pb-2">
           <div className="flex justify-between items-center">
-            <CardTitle className="text-2xl">Quiz Results: {quiz.title}</CardTitle>
+            <CardTitle className="text-2xl">Quiz Results: {attempt.quiz.title}</CardTitle>
             <div className="text-2xl font-bold">
               Score:{" "}
               <span className={cn(results.score >= 70 ? "text-green-600" : "text-red-600")}>{results.score}%</span>
@@ -137,7 +117,7 @@ export default function AttemptResults({
                 <div className="flex items-center gap-2 mb-2">
                   <Clock className="h-5 w-5 text-blue-600" />
                   <span>Time Taken:</span>
-                  <span className="font-medium">{formatTime(timeTaken)}</span>
+                  <span className="font-medium">{formatTime(attempt.timeSpentSecs)}</span>
                 </div>
 
                 <div className="flex items-center gap-2">
@@ -193,19 +173,16 @@ export default function AttemptResults({
           </div>
         </CardContent>
         <CardFooter className="flex justify-between">
-        <div className="text-sm text-foreground/50 font-mono font-bold">
-          Date Taken: {quiz.createdAt.toLocaleDateString()}
-        </div>
-          <PDFGenerator 
-            quiz={quiz}
-            answers={answers}
+          <div className="text-sm text-foreground/50 font-mono font-bold">
+            Date Taken: {new Date(attempt.quiz.createdAt).toLocaleDateString()}
+          </div>
+          <PDFGenerator
+            attempt={attempt}
             score={results.score}
-            timeTaken={timeTaken}
             correct={results.correct}
             incorrect={results.incorrect}
             skipped={results.skipped}
           />
-          
         </CardFooter>
       </Card>
 
@@ -215,9 +192,9 @@ export default function AttemptResults({
           <CardTitle>Question Analysis</CardTitle>
         </CardHeader>
         <CardContent>
-          <QuestionAnalysis quiz={quiz} answers={answers} />
+          <QuestionAnalysis questions={attempt.questions} />
         </CardContent>
       </Card>
     </div>
   )
-} 
+}

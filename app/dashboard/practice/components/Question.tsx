@@ -1,6 +1,6 @@
 "use client"
 
-import { Flag } from "lucide-react"
+import { Bookmark } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
@@ -31,8 +31,8 @@ export default function Question({
           )}
           onClick={onToggleMark}
         >
-          <Flag className="h-4 w-4" />
-          {isMarked ? "Unmark" : "Mark for Review"}
+          <Bookmark className="h-4 w-4" />
+          {isMarked ? "Bookmarked" : "Bookmark"}
         </Button>
       </div>
 
@@ -49,7 +49,7 @@ export default function Question({
               <div 
                 key={option.id} 
                 className={cn(
-                  "flex items-center space-x-2 rounded-md border p-3 hover:bg-accent dark:hover:bg-brand-beige-100/10",
+                  "flex items-center space-x-2 rounded-md border border-dashed border-border/60 p-3 hover:bg-accent dark:hover:bg-brand-beige-100/10",
                   userAnswer?.[0] === option.id ? "border-2 border-primary" : ""
                 )}
               >
@@ -74,7 +74,7 @@ export default function Question({
               <div 
                 key={option.id} 
                 className={cn(
-                  "flex items-center space-x-2 rounded-md border p-3 hover:bg-accent dark:hover:bg-brand-beige-100/10",
+                  "flex items-center space-x-2 rounded-md border border-dashed border-border/60 p-3 hover:bg-accent dark:hover:bg-brand-beige-100/10",
                   userAnswer?.includes(option.id) ? "border-2 border-emerald-500" : ""
                 )}
               >

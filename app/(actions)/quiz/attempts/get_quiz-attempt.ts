@@ -35,7 +35,8 @@ export async function GetuQizAttempt({ attemptId }: { attemptId: string }) {
                 content: true,
                 explanation: true,
                 isMultiSelect: true,
-                options: true
+                options: true,
+                correctAnswer: true
               }
             },
           },

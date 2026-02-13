@@ -4,26 +4,20 @@ import { useState, useMemo, useEffect } from "react";
 import {
   Clock,
   FileQuestion,
-  Check,
-  LayoutGrid,
-  List,
   BookmarkCheck,
-  Zap,
 } from "lucide-react";
 
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { ExitTestAlert } from "@/components/dashboard/exit-test-alert";
 
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import FilterComponent from "@/components/dashboard/filter-component";
-import SearchBar from "@/components/dashboard/search-bar";
+import ExpandableSearch from "@/components/dashboard/expandable-search";
+import SortFilterPopover from "@/components/dashboard/sort-filter-popover";
 import Link from "next/link";
 import { GetPracticeTests } from "@/app/(actions)/quiz/get-quizes";
-import prisma from "@/lib/prisma";
 import { useQuery } from "@tanstack/react-query";
-import { type DifficultyLevel, type Quiz } from "@prisma/client";
+import { type DifficultyLevel } from "@prisma/client";
 import { cn } from "@/lib/utils";
 import PracticeTestsSkeleton from "./components/PracticeTestsSkeleton";
 import { useRouter } from "next/navigation";
@@ -35,7 +29,8 @@ import MainFilters from "./main-filters";
 export default function PracticeTestsPage() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
-  const [filters, setFilters] = useState({
+  const [platformTopics, setPlatformTopics] = useState<string[]>([]);
+  const [popoverFilters, setPopoverFilters] = useState({
     topics: [] as string[],
     level: "all",
   });
@@ -50,15 +45,11 @@ export default function PracticeTestsPage() {
     if (typeof window !== "undefined") {
       return window.innerWidth < 768 ? "list" : "grid";
     }
-
     return "grid";
   });
 
-  console.log(view);
   // Check for ongoing test
   const hasOngoingTest = useMemo(() => {
-    // You should implement this based on your actual test state management
-    // For example, check localStorage or your state management solution
     if (typeof window !== "undefined") {
       return localStorage.getItem("ongoingTest") !== null;
     }
@@ -98,27 +89,27 @@ export default function PracticeTestsPage() {
     return () => mediaQuery.removeListener(handleResize);
   }, []);
 
-  const { data, isSuccess, isLoading, isError } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["practiceTests"],
     queryFn: async () => await GetPracticeTests(),
   });
 
-  // Filter and sort tests
+  // Merge platform topics and popover topics, then filter and sort
   const processedTests = useMemo(() => {
     if (!data?.data) return [];
 
-    // First filter
+    const allTopics = [...platformTopics, ...popoverFilters.topics];
+
     let results = data.data.filter((test) => {
       // Level filtering
       const matchesLevel =
-        filters.level === "all" ||
-        (test.level && test.level.toString() === filters.level);
+        popoverFilters.level === "all" ||
+        (test.level && test.level.toString() === popoverFilters.level);
 
       // Topic filtering with expanded search
-      // Check if any topic matches in category ID, title, description, or category name
       const matchesTopics =
-        filters.topics.length === 0 ||
-        filters.topics.some((topic) => {
+        allTopics.length === 0 ||
+        allTopics.some((topic) => {
           const topicLower = topic.toLowerCase();
           return (
             (test.category && test.category.id.toLowerCase() === topicLower) ||
@@ -150,31 +141,32 @@ export default function PracticeTestsPage() {
       );
     });
 
-    // final sorting
     return results.sort((a, b) => {
       switch (sortBy) {
         case "duration":
           return (a.duration || 0) - (b.duration || 0);
         case "popular":
-          // You might want to add a completions/attempts count to your test model
           return (b._count?.questions || 0) - (a._count?.questions || 0);
         case "newest":
           return (
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
           );
         default:
-          return -1; // For now, maintain original order
+          return -1;
       }
     });
-  }, [data?.data, searchQuery, filters, sortBy]);
+  }, [data?.data, searchQuery, platformTopics, popoverFilters, sortBy]);
 
-  const handleFilter = (newFilters: { topics: string[]; level: string }) => {
-    setFilters(newFilters);
+  const handleClearAll = () => {
+    setSearchQuery("");
+    setPlatformTopics([]);
+    setPopoverFilters({ topics: [], level: "all" });
+    setSortBy("newest");
   };
 
   // Show skeleton UI during loading
   if (isLoading) {
-    return <PracticeTestsSkeleton view={view} />;
+    return <PracticeTestsSkeleton />;
   }
 
   // Show error state
@@ -190,84 +182,39 @@ export default function PracticeTestsPage() {
   }
 
   return (
-    <div className="space-y-8 flex  max-w-7xl mx-auto container">
+    <div className="space-y-4 flex max-w-7xl mx-auto container">
       <ExitTestAlert
         isOpen={showExitAlert}
         onClose={() => setShowExitAlert(false)}
         onContinue={handleExitConfirm}
       />
       <div className="flex-1">
-        <div className="px-4 md:px-12  pt-10 md:pt-12 w-full">
-          <div className="flex flex-col gap-6">
-            {/* Header Section */}
-            <div className="flex flex-col gap-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h1 className="text-3xl  font-semibold">Practice Tests</h1>
-                  {/* {processedTests.length > 0 && ( */}
-                  <p className="text-muted-foreground font-mono mt-1">
-                    {processedTests.length}{" "}
-                    {processedTests.length === 1 ? "test" : "tests"} available
-                  </p>
-                  {/* )} */}
-                </div>
-              </div>
-
-              {/* Controls Section */}
-              <div className="flex flex-col w-full overflow-hidden gap-4">
-                <div className="flex flex-col md:flex-row gap-4 justify-between items-center w-full">
-                  <span className="md:flex w-full flex-col space-y-2">
-                    <SearchBar onSearch={(query) => setSearchQuery(query)} />
-                    <div className="flex md:flex-row justify-between items-center w-full">
-                      <MainFilters onFilter={handleFilter} />
-                      <div className="flex gap-3 items-center">
-                        <FilterComponent onFilter={handleFilter} />
-                        <select
-                          className="h-9 hidden md:block rounded-md border border-input bg-background px-3 text-sm"
-                          value={sortBy}
-                          onChange={(e) =>
-                            setSortBy(e.target.value as typeof sortBy)
-                          }
-                        >
-                          <option value="newest">Newest</option>
-                          <option value="popular">Most Popular</option>
-                          <option value="duration">Duration</option>
-                        </select>
-                      </div>
-                    </div>
-                  </span>
-                  <div className="flex gap-3 items-center">
-                    <div className="hidden md:block">
-                      <ToggleGroup
-                        type="single"
-                        value={view}
-                        className="p-1"
-                        onValueChange={(value) =>
-                          value && setView(value as "grid" | "list")
-                        }
-                      >
-                        <ToggleGroupItem value="grid" aria-label="Grid view">
-                          <LayoutGrid className="h-3 w-3" />
-                        </ToggleGroupItem>
-                        <ToggleGroupItem value="list" aria-label="List view">
-                          <List className="h-3 w-3" />
-                        </ToggleGroupItem>
-                      </ToggleGroup>
-                    </div>
-                  </div>
-                </div>
-              </div>
+        <div className="px-4 md:px-12 pt-6 md:pt-8 w-full">
+          <div className="flex flex-col gap-4">
+            {/* Single row: Title, platform chips, sort & filter, search */}
+            <div className="flex flex-wrap items-center gap-3">
+              <h1 className="text-3xl font-semibold tracking-normal mr-auto">
+                Practice Tests
+              </h1>
+              <MainFilters onPlatformChange={setPlatformTopics} />
+              <SortFilterPopover
+                sortBy={sortBy}
+                onSortChange={setSortBy}
+                onFilter={setPopoverFilters}
+              />
+              <ExpandableSearch onSearch={setSearchQuery} />
             </div>
 
             {/* Content Section */}
-            <div className="mt-2">
+            <div>
               {processedTests.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-12 text-center bg-muted/10 rounded-lg border border-dashed">
                   <FileQuestion className="h-12 w-12 text-muted-foreground mb-4" />
                   <h3 className="text-lg font-medium">No tests found</h3>
                   {searchQuery ||
-                  filters.topics.length > 0 ||
-                  filters.level !== "all" ? (
+                  platformTopics.length > 0 ||
+                  popoverFilters.topics.length > 0 ||
+                  popoverFilters.level !== "all" ? (
                     <div className="max-w-sm">
                       <p className="text-muted-foreground font-mono mt-2">
                         No tests match your current filters. Try adjusting your
@@ -276,10 +223,7 @@ export default function PracticeTestsPage() {
                       <Button
                         variant="outline"
                         className="mt-4"
-                        onClick={() => {
-                          setSearchQuery("");
-                          setFilters({ topics: [], level: "all" });
-                        }}
+                        onClick={handleClearAll}
                       >
                         Clear all filters
                       </Button>
@@ -352,7 +296,6 @@ function TestCard({ test, view, onStartTest }: TestCardProps) {
     isError: planError,
   } = useSubscription();
 
-  // check if the user has a Pro or Premium plan or even if the test if free in the firs place
   const hasAccess = test.free || isPro || isPremium;
 
   const getLevelColor = (level: string) => {
