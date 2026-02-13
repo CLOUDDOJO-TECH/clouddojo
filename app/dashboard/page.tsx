@@ -12,7 +12,6 @@ import { ChartLineIcon, Rocket } from "lucide-react";
 import PremiumAnalysisDashboard from "@/components/ai-report/premium-ai-analysis";
 import { CheckUser } from "@/app/(actions)/user/check-user";
 import React from "react";
-import UpgradeBadge from "@/components/ui/upgrade-badge";
 import { useSubscription } from "@/hooks/use-subscription";
 import Link from "next/link";
 import JoyrideIllustration from "@/components/dashboard/joyride-illustration";
@@ -64,10 +63,12 @@ function DashboardContent() {
   const {
     performanceStats,
     activityHistory,
+    weakAreas,
     hasAttempts,
     isLoadingPerformance,
     isLoadingActivity,
     isLoadingCategories,
+    isLoadingWeakAreas,
   } = useDashboardQueries(isLoaded && !!user);
 
   if (isProfileError) {
@@ -76,30 +77,25 @@ function DashboardContent() {
   }
 
   return (
-    <div className="space-y-8  px-4 pt-6 max-w-8xl md:px-12 mx-auto container">
-      <div className="px-2">
-        <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-        <p className="text-muted-foreground mt-2">
-          Welcome back, {isLoaded ? user?.firstName || "there" : "there"}!
-          Here's an overview of your learning progress.
-        </p>
-      </div>
+    <div className="space-y-8  px-4 pt-6 pb-16 max-w-8xl md:px-12 mx-auto container">
 
       <Tabs
         defaultValue={initialTab}
         className="w-full"
         onValueChange={handleTabChange}
       >
-        <TabsList className="grid w-full grid-cols-2 ">
-          <TabsTrigger value="analytics" className="flex items-center gap-2">
-            <ChartLineIcon className="h-4 w-4" />
-            Analytics
-          </TabsTrigger>
-          <TabsTrigger className="flex items-center gap-3" value="report">
-            AI Report
-            {!isSubscribed && <UpgradeBadge>Premium</UpgradeBadge>}
-          </TabsTrigger>
-        </TabsList>
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 rounded-xl px-2 py-1 border border-dashed border-border/60 bg-sidebar shadow-[0_8px_40px_rgba(0,0,0,0.3)]">
+          <TabsList className="grid grid-cols-2 w-auto rounded-lg bg-transparent p-0 gap-1">
+            <TabsTrigger value="analytics" className="flex items-center gap-2 px-5 py-1.5 text-sm rounded-md transition-all duration-300 ease-in-out hover:bg-sidebar-accent/40 hover:text-sidebar-foreground hover:scale-[1.02] data-[state=inactive]:active:scale-95 data-[state=active]:bg-sidebar-accent data-[state=active]:text-sidebar-foreground data-[state=active]:shadow-md">
+              <ChartLineIcon className="h-3.5 w-3.5" />
+              Analytics
+            </TabsTrigger>
+            <TabsTrigger className="flex items-center gap-2 px-5 py-1.5 text-sm rounded-md transition-all duration-300 ease-in-out hover:bg-sidebar-accent/40 hover:text-sidebar-foreground hover:scale-[1.02] data-[state=inactive]:active:scale-95 data-[state=active]:bg-sidebar-accent data-[state=active]:text-sidebar-foreground data-[state=active]:shadow-md" value="report">
+              AI Report
+              {!isSubscribed && <span className="text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-500">Pro</span>}
+            </TabsTrigger>
+          </TabsList>
+        </div>
         <TabsContent value="analytics">
           {!hasAttempts && !isLoadingPerformance && !isLoadingActivity ? (
             <div className="relative w-full">
@@ -151,7 +147,9 @@ function DashboardContent() {
                 <Suspense fallback={<RecentActivitySkeleton />}>
                   <RecentActivitySection
                     activity={activityHistory || []}
+                    weakAreas={weakAreas || []}
                     isLoading={isLoadingActivity}
+                    isLoadingWeakAreas={isLoadingWeakAreas}
                   />
                 </Suspense>
               </div>

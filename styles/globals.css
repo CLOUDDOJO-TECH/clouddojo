@@ -24,7 +24,7 @@ img {
   :root {
     --background: 220.0003 14.9678% 95.8979%;
     --foreground: 0 0% 14.902%;
-    --card: 0 0% 100%;
+    --card: 220 14% 98%;
     --card-foreground: 0 0% 14.902%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 14.902%;

@@ -26,7 +26,7 @@ import { useCommandMenuStore } from "@/store/use-command-menu-store";
 import ThemeSwitcher from "@/components/theme-switcher";
 
 export function SiteHeader() {
-  const { toggleSidebar } = useSidebar();
+  const { toggleSidebar, state: sidebarState } = useSidebar();
   const user = useUser();
   const pathname = usePathname();
   const { isOpen: feedbackOpen, setIsOpen: setFeedbackOpen } =
@@ -88,11 +88,15 @@ export function SiteHeader() {
       <header className="w-full flex h-16 shrink-0 items-center gap-2 px-4 md:px-6 text-foreground before:absolute before:inset-y-3 before:-left-px before:w-px before:z-50">
         <div className="flex h-[--header-height] w-full items-center justify-between">
           <div className="gap-2 px-4 flex items-center">
-            <SidebarTrigger className="-ms-2 text-muted-foreground hover:text-foreground" />
-            <Separator
-              orientation="vertical"
-              className="mr-2 h-4 data-[orientation=verticall]:h-4"
-            />
+            {sidebarState === "collapsed" && (
+              <>
+                <SidebarTrigger className="-ms-2 text-amber-500 hover:text-amber-400" />
+                <Separator
+                  orientation="vertical"
+                  className="mr-2 h-4 data-[orientation=verticall]:h-4"
+                />
+              </>
+            )}
             <Breadcrumb className="hidden sm:block">
               {generateBreadcrumbs()}
             </Breadcrumb>
