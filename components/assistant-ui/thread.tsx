@@ -7,7 +7,7 @@ import {
   ThreadPrimitive,
   useAssistantState,
 } from "@assistant-ui/react";
-import { type FC } from "react";
+import { type FC, useState } from "react";
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -17,12 +17,22 @@ import {
   CopyIcon,
   PencilIcon,
   RefreshCwIcon,
+  SlidersHorizontalIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
 import { MarkdownText } from "@/components/assistant-ui/markdown-text";
 import { TooltipIconButton } from "@/components/assistant-ui/tooltip-icon-button";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
+import {
+  useResponseStyle,
+  type ResponseStyle,
+} from "@/components/assistant-ui/response-style-context";
 import { ShootingStars } from "../ui/shooting-stars";
 import { StarsBackground } from "../ui/stars-background";
 import ThinkingIndicator from "./thinking-indicator";
@@ -35,8 +45,8 @@ export const Thread: FC = () => {
         ["--thread-max-width" as string]: "100%",
       }}
     >
-      <ThreadPrimitive.Viewport className="relative flex h-full flex-col items-center overflow-y-scroll scroll-smooth bg-inherit px-8 py-10 before:pointer-events-none before:sticky before:top-0 before:z-20 before:block before:h-8 before:-mb-8 before:w-full before:bg-gradient-to-b before:from-background before:to-transparent">
-        <div className="relative w-full h-full flex flex-col z-10">
+      <ThreadPrimitive.Viewport className="relative flex h-full flex-col items-center overflow-y-scroll scroll-smooth bg-inherit before:pointer-events-none before:sticky before:top-0 before:z-20 before:block before:h-8 before:-mb-8 before:w-full before:bg-gradient-to-b before:from-background before:to-transparent">
+        <div className="relative w-full h-full flex flex-col z-10 px-8 pt-10">
           <ThreadWelcome />
 
           <ThreadPrimitive.Messages
@@ -99,32 +109,32 @@ const ThreadWelcomeSuggestions: FC = () => {
   return (
     <div className="flex w-full flex-col items-stretch gap-2.5 mt-6">
       <ThreadPrimitive.Suggestion
-        className="hover:bg-muted/60 hover:border-muted-foreground/20 flex items-center justify-center rounded-xl border border-dashed border-border/50 px-12 py-3 transition-all duration-200 ease-out cursor-pointer"
+        className="group hover:bg-muted/60 hover:border-muted-foreground/20 flex items-center justify-center rounded-xl border border-dashed border-border/50 px-12 py-3 transition-all duration-200 ease-out cursor-pointer"
         prompt="When should I use an Application Load Balancer vs a Network Load Balancer in AWS?"
         method="replace"
         autoSend
       >
-        <span className="text-sm font-medium text-foreground/80">
+        <span className="text-sm font-medium text-foreground/60 transition-colors duration-200 group-hover:text-foreground">
           When should I use an ALB vs an NLB in AWS?
         </span>
       </ThreadPrimitive.Suggestion>
       <ThreadPrimitive.Suggestion
-        className="hover:bg-muted/60 hover:border-muted-foreground/20 flex items-center justify-center rounded-xl border border-dashed border-border/50 px-12 py-3 transition-all duration-200 ease-out cursor-pointer"
+        className="group hover:bg-muted/60 hover:border-muted-foreground/20 flex items-center justify-center rounded-xl border border-dashed border-border/50 px-12 py-3 transition-all duration-200 ease-out cursor-pointer"
         prompt="How do I design a highly available multi-region architecture on AWS using Route 53 and S3?"
         method="replace"
         autoSend
       >
-        <span className="text-sm font-medium text-foreground/80">
+        <span className="text-sm font-medium text-foreground/60 transition-colors duration-200 group-hover:text-foreground">
           How do I design a multi-region HA architecture with Route 53?
         </span>
       </ThreadPrimitive.Suggestion>
       <ThreadPrimitive.Suggestion
-        className="hover:bg-muted/60 hover:border-muted-foreground/20 flex items-center justify-center rounded-xl border border-dashed border-border/50 px-12 py-3 transition-all duration-200 ease-out cursor-pointer"
+        className="group hover:bg-muted/60 hover:border-muted-foreground/20 flex items-center justify-center rounded-xl border border-dashed border-border/50 px-12 py-3 transition-all duration-200 ease-out cursor-pointer"
         prompt="What's the difference between IAM roles, policies, and permission boundaries, and when should I use each?"
         method="replace"
         autoSend
       >
-        <span className="text-sm font-medium text-foreground/80">
+        <span className="text-sm font-medium text-foreground/60 transition-colors duration-200 group-hover:text-foreground">
           IAM roles vs policies vs permission boundaries — when to use each?
         </span>
       </ThreadPrimitive.Suggestion>
@@ -132,17 +142,95 @@ const ThreadWelcomeSuggestions: FC = () => {
   );
 };
 
+const STYLE_PRESETS: {
+  id: ResponseStyle;
+  label: string;
+  description: string;
+}[] = [
+  { id: "explanatory", label: "Explanatory", description: "Detailed with examples" },
+  { id: "concise", label: "Concise", description: "Short & to the point" },
+  { id: "technical", label: "Technical", description: "Deep technical detail" },
+  { id: "eli5", label: "ELI5", description: "Simple, no jargon" },
+];
+
+const StyleSelector: FC = () => {
+  const { style, setStyle } = useResponseStyle();
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <TooltipIconButton
+          tooltip="Response style"
+          variant="outline"
+          className="h-[42px] w-[42px] shrink-0 rounded-2xl border-border bg-muted/30 text-muted-foreground hover:bg-muted/50 hover:text-foreground transition-colors"
+        >
+          <SlidersHorizontalIcon className="size-4" />
+        </TooltipIconButton>
+      </PopoverTrigger>
+      <PopoverContent side="top" align="start" className="w-52 p-1">
+        <p className="px-2.5 pt-1.5 pb-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/70">
+          Response Style
+        </p>
+        {STYLE_PRESETS.map((preset) => (
+          <button
+            key={preset.id}
+            onClick={() => {
+              setStyle(preset.id);
+              setOpen(false);
+            }}
+            className={cn(
+              "flex w-full flex-col items-start rounded-md px-2.5 py-2 text-left transition-colors",
+              style === preset.id
+                ? "bg-foreground/10 text-foreground"
+                : "text-foreground/80 hover:bg-foreground/5",
+            )}
+          >
+            <span className="text-sm font-medium leading-none">
+              {preset.label}
+              {style === preset.id && (
+                <CheckIcon className="ml-1.5 inline size-3 text-emerald-500" />
+              )}
+            </span>
+            <span className="mt-0.5 text-xs text-muted-foreground">
+              {preset.description}
+            </span>
+          </button>
+        ))}
+      </PopoverContent>
+    </Popover>
+  );
+};
+
+const ActiveStyleLabel: FC = () => {
+  const { style } = useResponseStyle();
+  const preset = STYLE_PRESETS.find((p) => p.id === style);
+  if (!preset || preset.id === "explanatory") return null;
+
+  return (
+    <p className="text-[11px] text-muted-foreground/60 text-center">
+      Responding in <span className="font-medium text-muted-foreground">{preset.label}</span> mode
+    </p>
+  );
+};
+
 const Composer: FC = () => {
   return (
-    <ComposerPrimitive.Root className="flex w-full items-end gap-2 rounded-2xl border border-border bg-muted/30 px-4 py-2 shadow-sm transition-all duration-200 focus-within:border-emerald-500/60 focus-within:bg-muted/50">
-      <ComposerPrimitive.Input
-        rows={1}
-        autoFocus
-        placeholder="Ask anything about cloud..."
-        className="placeholder:text-muted-foreground/60 max-h-[120px] flex-grow resize-none border-none bg-transparent py-2 text-sm outline-none focus:ring-0 disabled:cursor-not-allowed"
-      />
-      <ComposerAction />
-    </ComposerPrimitive.Root>
+    <div className="flex w-full flex-col gap-1.5">
+      <div className="flex w-full items-center gap-2">
+        <StyleSelector />
+        <ComposerPrimitive.Root className="flex w-full items-end gap-2 rounded-2xl border border-border bg-muted/30 px-4 py-2 shadow-sm transition-all duration-200 focus-within:border-emerald-500/60 focus-within:bg-muted/50">
+          <ComposerPrimitive.Input
+            rows={1}
+            autoFocus
+            placeholder="Ask anything about cloud..."
+            className="placeholder:text-muted-foreground/60 max-h-[120px] flex-grow resize-none border-none bg-transparent py-2 text-sm outline-none focus:ring-0 disabled:cursor-not-allowed"
+          />
+          <ComposerAction />
+        </ComposerPrimitive.Root>
+      </div>
+      <ActiveStyleLabel />
+    </div>
   );
 };
 
@@ -194,7 +282,7 @@ const UserMessage: FC = () => {
     <MessagePrimitive.Root className="grid auto-rows-auto grid-cols-[minmax(48px,1fr)_auto] gap-y-1 [&:where(>*)]:col-start-2 w-full max-w-[var(--thread-max-width)] py-2">
       <UserActionBar />
 
-      <div className="bg-muted text-foreground text-sm  break-words rounded-2xl px-3 py-2 col-start-2 row-start-2">
+      <div className="bg-emerald-600/20 border border-emerald-500/20 text-foreground text-base break-words rounded-2xl px-4 py-2.5 col-start-2 row-start-2">
         <MessagePrimitive.Parts />
       </div>
 

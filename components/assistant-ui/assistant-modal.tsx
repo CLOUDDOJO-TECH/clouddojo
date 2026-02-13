@@ -1,14 +1,30 @@
 "use client";
 
-import { type FC, useState } from "react";
+import { type FC, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { XIcon } from "lucide-react";
+import { useRouter, usePathname } from "next/navigation";
 
 import { Thread } from "@/components/assistant-ui/thread";
 import { cn } from "@/lib/utils";
+import { useSubscription } from "@/hooks/use-subscription";
+import { Button } from "@/components/ui/button";
+import IconLockOutlineDuo18 from "@/components/icons/lock-outline-duo";
+import IconLockOpen2OutlineDuo18 from "@/components/icons/lock-open-outline-duo";
+import { ShootingStars } from "@/components/ui/shooting-stars";
+import { StarsBackground } from "@/components/ui/stars-background";
 
 export const AssistantModal: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const { isSubscribed, isLoading } = useSubscription();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  // Close panel on route change
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
 
   return (
     <>
@@ -96,9 +112,60 @@ export const AssistantModal: FC = () => {
                 </span>
               </button>
 
-              {/* Thread */}
+              {/* Thread or Paywall */}
               <div className="flex-1 overflow-hidden md:rounded-l-2xl">
-                <Thread />
+                {isSubscribed || isLoading ? (
+                  <Thread />
+                ) : (
+                  <div className="relative flex h-full flex-col">
+                    {/* Title */}
+                    <div className="hidden md:flex items-center justify-center pt-10">
+                      <h2 className="text-4xl md:text-5xl max-w-5xl mx-auto text-center tracking-tight font-bold bg-clip-text text-transparent bg-gradient-to-b from-neutral-700 via-neutral-500 to-neutral-400 dark:from-neutral-700 dark:via-neutral-200 dark:to-white">
+                        Clouddojo AI
+                      </h2>
+                    </div>
+
+                    {/* CTA */}
+                    <div className="relative flex flex-1 items-center justify-center p-6">
+                      <div className="relative z-10 flex flex-col items-center gap-4 text-center max-w-sm">
+                        <div className="h-28 w-28 rounded-full bg-foreground/5 border border-border/60 flex items-center justify-center relative">
+                          <IconLockOutlineDuo18
+                            size="56px"
+                            className={`text-muted-foreground absolute transition-all duration-300 ease-in-out ${isHovered ? "opacity-0 scale-90" : "opacity-100 scale-100"}`}
+                          />
+                          <IconLockOpen2OutlineDuo18
+                            size="56px"
+                            className={`text-muted-foreground absolute transition-all duration-300 ease-in-out ${isHovered ? "opacity-100 scale-100" : "opacity-0 scale-110"}`}
+                          />
+                        </div>
+                        <div>
+                          <h3 className="text-lg font-semibold mb-1">
+                            Unlock AI Coach
+                          </h3>
+                          <p className="text-sm text-muted-foreground leading-relaxed">
+                            Get instant answers, personalized study plans, and
+                            expert guidance from your AI-powered cloud coach.
+                          </p>
+                        </div>
+                        <Button
+                          size="lg"
+                          className="!bg-gradient-to-t from-amber-600 to-amber-400 text-white border-amber-700/40 hover:brightness-110"
+                          onClick={() => router.push("/dashboard/billing")}
+                          onMouseEnter={() => setIsHovered(true)}
+                          onMouseLeave={() => setIsHovered(false)}
+                        >
+                          Upgrade to Premium
+                        </Button>
+                      </div>
+
+                      {/* Stars background (dark mode only) */}
+                      <div className="hidden dark:block pointer-events-none">
+                        <ShootingStars starColor="#f59e0b" maxDelay={3000} minDelay={2000} />
+                        <StarsBackground starDensity={0.00055} />
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </motion.div>
           </>
