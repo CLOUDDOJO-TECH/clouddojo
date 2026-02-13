@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import IconDarkLightFill18 from "@/components/icons/dark-light-fill";
+import IconGauge3Outline18 from "@/components/icons/gauge-outline";
 import {
   AdminIcon,
   HomeIcon,
@@ -86,9 +87,9 @@ const NAVIGATION_DATA: NavSection[] = [
     url: "#",
     items: [
       {
-        title: "Home",
+        title: "Dashboard",
         url: "/dashboard",
-        icon: HomeIcon,
+        icon: (props: any) => <IconGauge3Outline18 size="18px" {...props} />,
       },
       {
         title: "Practice Tests",

@@ -182,7 +182,7 @@ export default function PracticeTestsPage() {
   }
 
   return (
-    <div className="space-y-4 flex max-w-7xl mx-auto container">
+    <div className="space-y-4 flex max-w-7xl mx-auto container overflow-visible">
       <ExitTestAlert
         isOpen={showExitAlert}
         onClose={() => setShowExitAlert(false)}

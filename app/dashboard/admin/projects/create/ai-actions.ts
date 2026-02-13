@@ -2,7 +2,7 @@
 
 import { streamText } from "ai";
 import { google } from "@ai-sdk/google";
-import { createStreamableValue } from "ai/rsc";
+import { createStreamableValue } from "@ai-sdk/rsc";
 
 export async function enhanceMarkdownWithAI(content: string) {
   try {

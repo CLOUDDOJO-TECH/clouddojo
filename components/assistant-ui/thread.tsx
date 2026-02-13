@@ -35,7 +35,7 @@ export const Thread: FC = () => {
         ["--thread-max-width" as string]: "100%",
       }}
     >
-      <ThreadPrimitive.Viewport className="relative flex h-full flex-col items-center overflow-y-scroll scroll-smooth bg-inherit px-3 pt-6 before:pointer-events-none before:sticky before:top-0 before:z-20 before:block before:h-8 before:-mb-8 before:w-full before:bg-gradient-to-b before:from-background before:to-transparent">
+      <ThreadPrimitive.Viewport className="relative flex h-full flex-col items-center overflow-y-scroll scroll-smooth bg-inherit px-8 py-10 before:pointer-events-none before:sticky before:top-0 before:z-20 before:block before:h-8 before:-mb-8 before:w-full before:bg-gradient-to-b before:from-background before:to-transparent">
         <div className="relative w-full h-full flex flex-col z-10">
           <ThreadWelcome />
 
@@ -56,8 +56,10 @@ export const Thread: FC = () => {
             <Composer />
           </div>
         </div>
-        <ShootingStars starColor="#059669" maxDelay={3000} minDelay={2000} />
-        <StarsBackground starDensity={0.00055} />
+        <div className="hidden dark:block">
+          <ShootingStars starColor="#059669" maxDelay={3000} minDelay={2000} />
+          <StarsBackground starDensity={0.00055} />
+        </div>
       </ThreadPrimitive.Viewport>
     </ThreadPrimitive.Root>
   );
@@ -81,7 +83,7 @@ const ThreadWelcome: FC = () => {
   return (
     <ThreadPrimitive.Empty>
       <div className="flex w-full max-w-[var(--thread-max-width)] flex-grow flex-col items-center justify-center px-2">
-        <h2 className="relative z-10 text-3xl md:text-4xl max-w-5xl mx-auto text-center tracking-tight font-bold bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 via-neutral-100 to-white dark:from-neutral-700 dark:via-neutral-200 dark:to-white">
+        <h2 className="relative z-10 text-4xl md:text-5xl max-w-5xl mx-auto text-center tracking-tight font-bold bg-clip-text text-transparent bg-gradient-to-b from-neutral-700 via-neutral-500 to-neutral-400 dark:from-neutral-700 dark:via-neutral-200 dark:to-white">
           Clouddojo AI
         </h2>
         <p className="text-sm text-muted-foreground mt-2 text-center">
@@ -97,33 +99,33 @@ const ThreadWelcomeSuggestions: FC = () => {
   return (
     <div className="flex w-full flex-col items-stretch gap-2.5 mt-6">
       <ThreadPrimitive.Suggestion
-        className="hover:bg-muted/60 hover:border-muted-foreground/20 flex items-center justify-center rounded-xl border border-border/50 px-4 py-3 transition-all duration-200 ease-out cursor-pointer"
-        prompt="What is Amazon S3?"
+        className="hover:bg-muted/60 hover:border-muted-foreground/20 flex items-center justify-center rounded-xl border border-dashed border-border/50 px-12 py-3 transition-all duration-200 ease-out cursor-pointer"
+        prompt="When should I use an Application Load Balancer vs a Network Load Balancer in AWS?"
         method="replace"
         autoSend
       >
         <span className="text-sm font-medium text-foreground/80">
-          What is Amazon S3?
+          When should I use an ALB vs an NLB in AWS?
         </span>
       </ThreadPrimitive.Suggestion>
       <ThreadPrimitive.Suggestion
-        className="hover:bg-muted/60 hover:border-muted-foreground/20 flex items-center justify-center rounded-xl border border-border/50 px-4 py-3 transition-all duration-200 ease-out cursor-pointer"
-        prompt="What is Google Cloud Run?"
+        className="hover:bg-muted/60 hover:border-muted-foreground/20 flex items-center justify-center rounded-xl border border-dashed border-border/50 px-12 py-3 transition-all duration-200 ease-out cursor-pointer"
+        prompt="How do I design a highly available multi-region architecture on AWS using Route 53 and S3?"
         method="replace"
         autoSend
       >
         <span className="text-sm font-medium text-foreground/80">
-          What is Google Cloud Run?
+          How do I design a multi-region HA architecture with Route 53?
         </span>
       </ThreadPrimitive.Suggestion>
       <ThreadPrimitive.Suggestion
-        className="hover:bg-muted/60 hover:border-muted-foreground/20 flex items-center justify-center rounded-xl border border-border/50 px-4 py-3 transition-all duration-200 ease-out cursor-pointer"
-        prompt="Explain AWS IAM roles"
+        className="hover:bg-muted/60 hover:border-muted-foreground/20 flex items-center justify-center rounded-xl border border-dashed border-border/50 px-12 py-3 transition-all duration-200 ease-out cursor-pointer"
+        prompt="What's the difference between IAM roles, policies, and permission boundaries, and when should I use each?"
         method="replace"
         autoSend
       >
         <span className="text-sm font-medium text-foreground/80">
-          Explain AWS IAM roles
+          IAM roles vs policies vs permission boundaries — when to use each?
         </span>
       </ThreadPrimitive.Suggestion>
     </div>
@@ -132,7 +134,7 @@ const ThreadWelcomeSuggestions: FC = () => {
 
 const Composer: FC = () => {
   return (
-    <ComposerPrimitive.Root className="flex w-full items-end gap-2 rounded-2xl border border-border/50 bg-muted/30 px-4 py-2 shadow-sm transition-all duration-200 focus-within:border-emerald-500/50 focus-within:bg-muted/50">
+    <ComposerPrimitive.Root className="flex w-full items-end gap-2 rounded-2xl border border-border bg-muted/30 px-4 py-2 shadow-sm transition-all duration-200 focus-within:border-emerald-500/60 focus-within:bg-muted/50">
       <ComposerPrimitive.Input
         rows={1}
         autoFocus

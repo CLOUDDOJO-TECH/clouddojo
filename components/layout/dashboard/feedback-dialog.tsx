@@ -99,9 +99,9 @@ export default function FeedbackDialog({ open, onOpenChange }: FeedbackDialogPro
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
         <div>
-        <Button size="sm" className="group md:flex hidden text-sm rounded-lg text-foreground-primary overflow-hidden relative">
-          <MessagesSquare className="h-5 left-3 w-5 text-foreground-primary mr-1.5 absolute group-hover:translate-y-10 transition-all duration-300" />
-          <MessagesSquare className="h-5 w-5 left-3 text-foreground-primary mr-1.5 absolute -translate-y-10 group-hover:translate-y-0 transition-all duration-300" />
+        <Button size="sm" className="group md:flex hidden text-sm rounded-lg text-primary-foreground overflow-hidden relative">
+          <MessagesSquare className="h-5 left-3 w-5 text-primary-foreground mr-1.5 absolute group-hover:translate-y-10 transition-all duration-300" />
+          <MessagesSquare className="h-5 w-5 left-3 text-primary-foreground mr-1.5 absolute -translate-y-10 group-hover:translate-y-0 transition-all duration-300" />
           <span className="ml-6">Feedback</span>
         </Button>
         <Button variant="outline" size="sm" className="text-sm md:hidden shadow-none hover:bg-gray-300 dark:hover:bg-gray-100/20 block rounded-sm md:border-emerald-500/30 border-none text-primary">
@@ -112,7 +112,7 @@ export default function FeedbackDialog({ open, onOpenChange }: FeedbackDialogPro
       <DialogContent className="sm:max-w-lg w-[92vw] rounded-lg border-dashed p-0 overflow-hidden gap-0">
         <div className="p-6 pb-4">
         <DialogHeader>
-          <DialogTitle className="text-primary text-xl">Send us feedback</DialogTitle>
+          <DialogTitle className="text-primary text-2xl font-bold">Send us feedback</DialogTitle>
         </DialogHeader>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4 px-6">

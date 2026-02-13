@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { DifficultyLevel, Quiz } from "@prisma/client"
 import { BookmarkCheck, Clock, FileQuestion, ShieldBan, Zap } from "lucide-react"
-import UpgradeButton from "../ui/upgrade-button"
+import IconLockFillDuo18 from "../icons/lock-fill-duo"
 import { useSubscription } from "@/hooks/use-subscription"
 
 interface QuizWithCategory {
@@ -117,14 +117,14 @@ export default function PracticeTestCard({questionsCount, test, onStartTest, }: 
         {/* Action Button */}
         <div className="flex justify-end">
           {test.free || isSubscribed ?  (
-            <Button
-              onClick={onStartTest}
-              className="bg-primary hover:bg-primary/90 text-white border border-primary/20 dark:bg-white/10 dark:hover:bg-white/20 dark:border-white/20 backdrop-blur-sm transition-all duration-200 hover:scale-105"
-            >
+            <Button onClick={onStartTest} size="sm">
               Start Test
             </Button>
           ) : (
-            <UpgradeButton className="mt-2" size="sm" variant="primary">Upgrade plan</UpgradeButton>
+            <Button onClick={() => window.location.href = "/dashboard/billing"} size="sm" className="bg-gradient-to-t from-amber-600 to-amber-500 hover:brightness-110 text-white border-amber-700/40 shadow-md shadow-amber-900/20">
+              <IconLockFillDuo18 size="14px" />
+              Upgrade plan
+            </Button>
           )}
         </div>
       </div>

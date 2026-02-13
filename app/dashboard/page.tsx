@@ -85,7 +85,7 @@ function DashboardContent() {
         className="w-full"
         onValueChange={handleTabChange}
       >
-        <div className="fixed bottom-6 z-50 rounded-xl px-2 py-1 border border-dashed border-border/60 bg-sidebar shadow-[0_12px_60px_rgba(0,0,0,0.7),0_4px_20px_rgba(0,0,0,0.5)]" style={{ left: "calc(50% + var(--sidebar-width, 16rem) / 2)", transform: "translateX(-50%)" }}>
+        <div className="fixed bottom-6 z-40 rounded-xl px-2 py-1 border border-dashed border-border/60 bg-sidebar shadow-[0_12px_60px_rgba(0,0,0,0.7),0_4px_20px_rgba(0,0,0,0.5)]" style={{ left: "calc(50% + var(--sidebar-width, 16rem) / 2)", transform: "translateX(-50%)" }}>
           <TabsList className="grid grid-cols-2 w-auto rounded-lg bg-transparent p-0 gap-1">
             <TabsTrigger value="analytics" className="flex items-center gap-2 px-5 py-1.5 text-sm rounded-md transition-all duration-300 ease-in-out hover:bg-sidebar-accent/40 hover:text-sidebar-foreground hover:scale-[1.02] data-[state=inactive]:active:scale-95 data-[state=active]:bg-primary/80 data-[state=active]:text-primary-foreground data-[state=active]:shadow-md">
               <IconChartBarTrendUpFillDuo18 size="14px" />
