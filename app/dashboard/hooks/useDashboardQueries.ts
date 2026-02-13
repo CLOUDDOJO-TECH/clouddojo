@@ -1,10 +1,11 @@
 "use client"
 
 import { useQuery } from "@tanstack/react-query"
-import { 
-  fetchUserPerformanceStats, 
-  fetchUserActivity, 
-  fetchQuizCategories 
+import {
+  fetchUserPerformanceStats,
+  fetchUserActivity,
+  fetchQuizCategories,
+  fetchWeakAreas,
 } from "@/app/(actions)/dashboard-data"
 
 export function useDashboardQueries(enabled: boolean) {
@@ -42,19 +43,33 @@ export function useDashboardQueries(enabled: boolean) {
     enabled,
     staleTime: 1000 * 60 * 30, // 30 minutes
   })
-  
+
+  // Query for weak areas
+  const {
+    data: weakAreasData,
+    isLoading: isLoadingWeakAreas
+  } = useQuery({
+    queryKey: ['weakAreas'],
+    queryFn: async () => fetchWeakAreas(),
+    enabled,
+    staleTime: 1000 * 60 * 5,
+  })
+
   // Format the data for components
   const performanceStats = performanceData?.stats || null
   const activityHistory = activityData?.activity || []
   const categories = categoriesData?.categories || []
-  
+  const weakAreas = weakAreasData?.weakAreas || []
+
   return {
     performanceStats,
     activityHistory,
     categories,
+    weakAreas,
     hasAttempts: performanceData?.hasAttempts || false,
     isLoadingPerformance,
     isLoadingActivity,
     isLoadingCategories,
+    isLoadingWeakAreas,
   }
 } 

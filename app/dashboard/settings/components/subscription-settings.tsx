@@ -20,6 +20,7 @@ import { format } from "date-fns";
 import { SubscriptionStatusBadge } from "./subscription-status-badge";
 import { BillingHistory } from "./billing-history";
 import Link from "next/link";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function SubscriptionSettings() {
   const handleManageBilling = (url: string) => {
@@ -50,11 +51,28 @@ export function SubscriptionSettings() {
   if (isLoading) {
     return (
       <div className="space-y-6">
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-center h-32">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+        <Card className="border-dashed">
+          <CardContent className="p-6 space-y-6">
+            {/* Header row: title + badge */}
+            <div className="flex items-center justify-between">
+              <Skeleton className="h-5 w-28" />
+              <Skeleton className="h-6 w-20 rounded-full" />
             </div>
+
+            {/* Plan info grid */}
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+              <div className="space-y-2">
+                <Skeleton className="h-5 w-24" />
+                <Skeleton className="h-8 w-32" />
+              </div>
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-20" />
+                <Skeleton className="h-5 w-28" />
+              </div>
+            </div>
+
+            {/* Action button */}
+            <Skeleton className="h-10 w-72 rounded-md" />
           </CardContent>
         </Card>
       </div>
@@ -64,7 +82,7 @@ export function SubscriptionSettings() {
   if (isError) {
     return (
       <div className="space-y-6">
-        <Card>
+        <Card className="border-dashed">
           <CardContent className="pt-6">
             <div className="text-center text-red-500">
               Error loading subscription information. Please try again later.
@@ -78,20 +96,15 @@ export function SubscriptionSettings() {
   return (
     <div className="space-y-6">
       {/* Current Plan Overview */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-3 justify-between">
-            Current Plan
+      <Card className="border-dashed">
+        <CardContent className="p-6 space-y-6">
+          <div className="flex items-center justify-between">
+            <h3 className="text-base font-semibold">Current Plan</h3>
             <SubscriptionStatusBadge
               state={state}
               daysUntilExpiry={daysUntilExpiry}
             />
-          </CardTitle>
-          <CardDescription>
-            View your subscription details and manage your plan.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
+          </div>
           {isSubscribed || isCancelledButActive ? (
             <div className="space-y-6">
               {/* Plan Information */}
@@ -198,20 +211,20 @@ export function SubscriptionSettings() {
               )}
             </div>
           ) : (
-            <div className="text-center py-12">
-              <CreditCard className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-xl font-semibold mb-2">
+            <div className="text-center py-8">
+              <CreditCard className="h-10 w-10 text-muted-foreground mx-auto mb-3" />
+              <h3 className="text-base font-semibold mb-1">
                 No Active Subscription
               </h3>
-              <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-                You're currently on the free plan. Upgrade to unlock premium
-                features, advanced analytics, and unlimited practice tests.
+              <p className="text-sm text-muted-foreground mb-4 max-w-sm mx-auto">
+                You're on the free plan. Upgrade to unlock premium features and unlimited practice tests.
               </p>
               <Button
-                size="lg"
+                size="sm"
                 onClick={() => (window.location.href = "/pricing")}
+                className="gap-2"
               >
-                <ArrowUpCircle className="h-5 w-5 mr-2" />
+                <ArrowUpCircle className="h-4 w-4" />
                 View Plans & Pricing
               </Button>
             </div>

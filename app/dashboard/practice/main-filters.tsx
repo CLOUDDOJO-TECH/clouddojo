@@ -6,55 +6,43 @@ import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-const cloudPlatforms = ["AWS", "Azure", "GCP"];
-
-// Map platform names to topic IDs that match the existing filter system
-const platformToTopicMap: Record<string, string> = {
-  AWS: "aws",
-  Azure: "azure",
-  GCP: "google",
-};
+const certifications = [
+  { id: "all", label: "All", search: "" },
+  { id: "saa", label: "Solutions Architect", search: "solutions architect" },
+  { id: "clf", label: "Cloud Practitioner", search: "cloud practitioner" },
+  { id: "dev", label: "Developer", search: "developer" },
+];
 
 interface MainFiltersProps {
   onPlatformChange: (topics: string[]) => void;
 }
 
 export default function MainFilters({ onPlatformChange }: MainFiltersProps) {
-  const [selected, setSelected] = useState<string[]>([]);
+  const [selected, setSelected] = useState("all");
 
-  const togglePlatform = (platform: string) => {
-    setSelected((prev) => {
-      const newSelected = prev.includes(platform)
-        ? prev.filter((p) => p !== platform)
-        : [...prev, platform];
-
-      const topicIds = newSelected
-        .map((p) => platformToTopicMap[p])
-        .filter(Boolean);
-      onPlatformChange(topicIds);
-
-      return newSelected;
-    });
+  const handleSelect = (cert: typeof certifications[number]) => {
+    setSelected(cert.id);
+    onPlatformChange(cert.search ? [cert.search] : []);
   };
 
   return (
-    <div className="flex gap-1.5 overflow-visible">
-      {cloudPlatforms.map((platform) => {
-        const isSelected = selected.includes(platform);
+    <div className="flex gap-1.5 flex-wrap">
+      {certifications.map((cert) => {
+        const isSelected = selected === cert.id;
         return (
           <Button
-            key={platform}
+            key={cert.id}
             variant="outline"
             size="default"
-            onClick={() => togglePlatform(platform)}
+            onClick={() => handleSelect(cert)}
             className={cn(
-              "gap-1.5 text-xs font-medium",
+              "gap-1.5 text-xs font-medium whitespace-nowrap shrink-0",
               isSelected && "border-primary text-primary bg-primary/5 hover:bg-primary/10"
             )}
           >
-            {platform}
+            {cert.label}
             <AnimatePresence>
-              {isSelected && (
+              {isSelected && cert.id !== "all" && (
                 <motion.span
                   initial={{ scale: 0, width: 0, opacity: 0 }}
                   animate={{ scale: 1, width: "auto", opacity: 1 }}

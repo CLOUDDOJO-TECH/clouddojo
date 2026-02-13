@@ -8,6 +8,9 @@ import {
   CircleHelp,
   ArrowUpCircle,
 } from "lucide-react";
+import { useTheme } from "next-themes";
+import IconDarkLightFill18 from "@/components/icons/dark-light-fill";
+import IconGauge3Outline18 from "@/components/icons/gauge-outline";
 import {
   AdminIcon,
   HomeIcon,
@@ -42,6 +45,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
   SidebarRail,
+  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import {
   Popover,
@@ -83,9 +87,9 @@ const NAVIGATION_DATA: NavSection[] = [
     url: "#",
     items: [
       {
-        title: "Home",
+        title: "Dashboard",
         url: "/dashboard",
-        icon: HomeIcon,
+        icon: (props: any) => <IconGauge3Outline18 size="18px" {...props} />,
       },
       {
         title: "Practice Tests",
@@ -176,7 +180,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   // Use our custom subscription hook
   const { isSubscribed, planName, isLoading, isError } = useSubscription();
-  // console.log(planName)
+
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
+  React.useEffect(() => setMounted(true), []);
 
   const { role: userRole } = useCurrentUserRole();
 
@@ -193,12 +200,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             height={120}
             alt="clouddojo logo"
           />
-          <button
-            onClick={() => setCommandMenuOpen(true)}
-            className="flex items-center justify-center h-8 w-8 rounded-md text-muted-foreground hover:text-foreground dark:hover:text-white hover:bg-sidebar-accent transition-colors"
-          >
-            <Search size={16} />
-          </button>
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => setCommandMenuOpen(true)}
+              className="flex items-center justify-center h-8 w-8 rounded-md text-muted-foreground hover:text-foreground dark:hover:text-white hover:bg-sidebar-accent transition-colors"
+            >
+              <Search size={16} />
+            </button>
+            <SidebarTrigger className="h-8 w-8 text-amber-500 hover:text-amber-400 hover:bg-sidebar-accent transition-colors" />
+          </div>
         </div>
         {/*<div className="grid flex-1 text-left text-2xl font-semibold leading-tight">
             <span className="truncate font-kaushan ">Clouddojo</span>
@@ -297,7 +307,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <Popover>
             <PopoverTrigger asChild>
               <button
-                className="flex items-center justify-center h-9 w-9 rounded-full border border-border/60 bg-background dark:bg-transparent text-muted-foreground hover:text-white transition-colors"
+                className="flex items-center justify-center h-9 w-9 rounded-full border border-foreground/20 dark:border-border/60 bg-background dark:bg-transparent text-muted-foreground hover:text-foreground dark:hover:text-white transition-colors"
               >
                 <CircleHelp size={18} />
               </button>
@@ -332,22 +342,21 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               </div>
             </PopoverContent>
           </Popover>
-          {isSubscribed && planName ? (
-            <Link
-              href="/dashboard/billing"
-              className="flex items-center gap-2 h-9 px-4 rounded-full border border-border/60 bg-background dark:bg-transparent text-sm text-muted-foreground hover:text-white transition-colors"
+          <Link
+            href="/dashboard/billing"
+            className="flex items-center gap-2 h-9 px-4 rounded-full border border-foreground/20 dark:border-border/60 bg-background dark:bg-transparent text-sm text-muted-foreground hover:text-foreground dark:hover:text-white transition-colors"
+          >
+            <ArrowUpCircle size={16} />
+            <span>{isSubscribed && planName ? `${planName} plan` : "Free plan"}</span>
+          </Link>
+          {mounted && (
+            <button
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              className="flex items-center justify-center h-9 w-9 shrink-0 rounded-full border border-foreground/20 dark:border-border/60 bg-background dark:bg-transparent text-muted-foreground hover:text-foreground dark:hover:text-white transition-colors"
+              aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
             >
-              <ArrowUpCircle size={16} />
-              <span>{planName} plan</span>
-            </Link>
-          ) : (
-            <Link
-              href="/dashboard/billing"
-              className="flex items-center gap-2 h-9 px-4 rounded-full border border-border/60 bg-background dark:bg-transparent text-sm text-muted-foreground hover:text-white transition-colors"
-            >
-              <ArrowUpCircle size={16} />
-              <span>Free plan</span>
-            </Link>
+              <IconDarkLightFill18 size="16px" className="dark:-scale-x-100 transition-transform" />
+            </button>
           )}
         </div>
       </SidebarFooter>

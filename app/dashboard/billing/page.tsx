@@ -12,8 +12,8 @@ export const PricingPage = () => {
     <div className="container font-main text-center md:max-w-7xl max-w-lg mx-auto p-6 md:p-14">
       <PricingHeader
         title="Plans and Pricing"
-        subtitle="Get access to all our practice tests, courses, labs, and resources with a single subscription."
-        frequencies={PAYMENT_FREQUENCIES}
+        subtitle=""
+        frequencies={[]}
         selectedFrequency={selectedPaymentFreq}
         onFrequencyChange={setSelectedPaymentFreq}
       />

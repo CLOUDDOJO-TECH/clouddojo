@@ -18,7 +18,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { InfoIcon } from "lucide-react";
+import { InfoIcon, Search } from "lucide-react";
 import { LeaderboardEntry } from "../types";
 
 interface LeaderboardTableProps {
@@ -31,9 +31,9 @@ interface LeaderboardTableProps {
 /**
  * Component for displaying the full leaderboard table with search
  */
-export function LeaderboardTable({ 
-  leaderboardData, 
-  searchTerm, 
+export function LeaderboardTable({
+  leaderboardData,
+  searchTerm,
   setSearchTerm,
   getAvatarFallback
 }: LeaderboardTableProps) {
@@ -48,45 +48,47 @@ export function LeaderboardTable({
 
   return (
     <div>
-      <h2 className="text-3xl font-bold text-center mb-6 sm:mb-8 text-secondary-foreground">
-        Full Rankings
-      </h2>
-      <div className="mb-6 max-w-md mx-auto">
-        <Input
-          type="text"
-          placeholder="Search by name..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full text-base py-2 px-4 border-border"
-        />
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-base font-semibold text-secondary-foreground">
+          Full Rankings
+        </h2>
+        <div className="relative max-w-xs w-full sm:w-auto">
+          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            type="text"
+            placeholder="Search by name..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full sm:w-56 text-sm py-1.5 pl-8 pr-3 border-border"
+          />
+        </div>
       </div>
       {filteredData.length > 0 ? (
-        <Card className="overflow-hidden shadow-lg border-0 bg-black/20 backdrop-blur-sm">
+        <Card className="overflow-hidden border-dashed">
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow className="border-b border-white/10 bg-transparent hover:bg-transparent">
+                <TableRow className="border-b bg-sidebar hover:bg-sidebar">
                   <TableHead className="w-[60px] text-center text-xs text-muted-foreground">RANK</TableHead>
                   <TableHead className="text-xs text-muted-foreground">USER</TableHead>
-                  <TableColumnHeader title="RANKING SCORE" tooltip="Overall ranking score combines average score (40%), best score (20%), improvement trend, consistency, quiz count, and time invested." className="hidden md:table-cell" />
+                  <TableColumnHeader title="RANKING SCORE" tooltip="Overall ranking score combines average score, improvement trend, consistency, quiz count, and time invested." className="hidden md:table-cell" />
                   <TableColumnHeader title="AVG SCORE" tooltip="Average score across all quiz attempts" className="hidden sm:table-cell" />
-                  <TableColumnHeader title="BEST SCORE" tooltip="Highest score achieved on any quiz attempt" className="hidden lg:table-cell" />
-                  <TableColumnHeader title="CONSISTENCY" tooltip="Measures how consistent performance is across attempts. Higher is better (less variation)." className="hidden lg:table-cell" />
+                  <TableHead className="text-center text-xs text-muted-foreground hidden sm:table-cell">QUIZZES</TableHead>
                   <TableColumnHeader title="IMPROVEMENT" tooltip="How much scores are improving over time. Positive numbers indicate progress." className="hidden md:table-cell" />
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filteredData.map((user) => (
-                  <TableRow 
-                    key={user.userId} 
-                    className="border-b border-white/5 bg-transparent transition-colors hover:bg-white/5"
+                  <TableRow
+                    key={user.userId}
+                    className="border-b transition-colors hover:bg-sidebar"
                   >
                     <TableCell className="text-center font-medium">
                       {leaderboardData.findIndex(u => u.userId === user.userId) + 1}
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-3">
-                        <Avatar className="h-8 w-8 border border-white/10">
+                        <Avatar className="h-8 w-8 border border-border">
                           {user.profileImageUrl ? (
                             <AvatarImage src={user.profileImageUrl} alt={`${user.firstName} ${user.lastName}`} />
                           ) : (
@@ -94,10 +96,7 @@ export function LeaderboardTable({
                           )}
                           <AvatarFallback>{getAvatarFallback(user.firstName, user.lastName)}</AvatarFallback>
                         </Avatar>
-                        <div>
-                          <p className="font-medium">{user.firstName} {user.lastName}</p>
-                          <p className="text-xs text-muted-foreground">Quizzes: {user.totalQuizzes}</p>
-                        </div>
+                        <p className="font-medium">{user.firstName} {user.lastName}</p>
                       </div>
                     </TableCell>
                     <TableCell className="text-center hidden md:table-cell">
@@ -106,11 +105,8 @@ export function LeaderboardTable({
                     <TableCell className="text-center hidden sm:table-cell">
                       <div>{user.averageScore.toFixed(1)}%</div>
                     </TableCell>
-                    <TableCell className="text-center hidden lg:table-cell">
-                      <div>{user.bestScore.toFixed(1)}%</div>
-                    </TableCell>
-                    <TableCell className="text-center hidden lg:table-cell">
-                      <div>{user.consistencyScore.toFixed(1)}</div>
+                    <TableCell className="text-center hidden sm:table-cell">
+                      <div>{user.totalQuizzes}</div>
                     </TableCell>
                     <TableCell className="text-center hidden md:table-cell">
                       <div className={user.improvementFactor > 0 ? "text-emerald-500" : "text-amber-500"}>
@@ -135,12 +131,12 @@ export function LeaderboardTable({
 /**
  * Enhanced table column header with tooltip
  */
-function TableColumnHeader({ 
-  title, 
+function TableColumnHeader({
+  title,
   tooltip,
   className = ""
-}: { 
-  title: string; 
+}: {
+  title: string;
   tooltip: string;
   className?: string;
 }) {

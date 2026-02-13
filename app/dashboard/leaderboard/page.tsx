@@ -32,7 +32,7 @@ export default function LeaderboardPage() {
   );
 
   const {
-    leaderboardData = [], // Provide default empty array
+    leaderboardData = [],
     isLoadingLeaderboardData,
     errorLeaderboardData: error,
     isErrorLeaderboardData: isError,
@@ -64,7 +64,7 @@ export default function LeaderboardPage() {
   const topThree = leaderboardData?.slice(0, 3) || [];
 
   return (
-    <div className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
+    <div className="container max-w-6xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
       <LeaderboardHeader
         handleTimeRangeChange={handleTimeRangeChange}
         timeRange={timeRange}
@@ -91,13 +91,15 @@ export default function LeaderboardPage() {
             )}
           </Suspense>
 
-          {/* Special case when we have 1-3 users and they're all on the podium */}
+          {/* When all users fit on the podium, show encouragement */}
           {leaderboardData &&
             leaderboardData.length <= 3 &&
             leaderboardData.length > 0 &&
             topThree.length === leaderboardData.length && (
-              <div className="text-center py-10 text-lg text-muted-foreground">
-                All users are on the podium!
+              <div className="flex flex-col items-center text-center py-12 px-4">
+                <p className="text-muted-foreground">
+                  Only {leaderboardData.length} {leaderboardData.length === 1 ? "person" : "people"} on the board so far. Take more practice tests to climb the ranks!
+                </p>
               </div>
             )}
         </>

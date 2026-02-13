@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import { Inter } from "next/font/google";
 import {
   SidebarInset,
@@ -14,17 +14,30 @@ import { ChatbotWindow } from "@/components/ui/ChatbotWindow";
 import { ChatbotProvider } from "@/components/ui/ChatbotProvider";
 import { useChatRuntime } from "@assistant-ui/react-ai-sdk";
 import { AssistantRuntimeProvider } from "@assistant-ui/react";
+import { DefaultChatTransport } from "ai";
 import { AssistantModal } from "@/components/assistant-ui/assistant-modal";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import {
+  ResponseStyleProvider,
+  useResponseStyle,
+} from "@/components/assistant-ui/response-style-context";
 
 const inter = Inter({ subsets: ["latin"] });
 
-const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
-  // State to control chat window visibility
-  const [chatOpen, setChatOpen] = React.useState(false);
-  const runtime = useChatRuntime({
-    api: "/api/chat",
-  });
+const DashboardLayoutInner = ({ children }: { children: React.ReactNode }) => {
+  const { style } = useResponseStyle();
+  const styleRef = useRef(style);
+  styleRef.current = style;
+
+  const [transport] = React.useState(
+    () =>
+      new DefaultChatTransport({
+        api: "/api/chat",
+        body: () => ({ responseStyle: styleRef.current }),
+      }),
+  );
+
+  const runtime = useChatRuntime({ transport });
 
   return (
     <TooltipProvider>
@@ -33,9 +46,6 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
           <AssistantModal />
         </div>
         <div className="[--header-height:calc(theme(spacing.14))]">
-          {/* Chatbot UI is rendered above all dashboard content */}
-          {/* <ChatbotButton onClick={() => setChatOpen(true)} />
-        <ChatbotWindow open={chatOpen} onOpenChange={setChatOpen} /> */}
           <SidebarProvider className="flex flex-col ">
             <div className="flex flex-1">
               <AppSidebar className="" />
@@ -50,6 +60,14 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
         </div>
       </AssistantRuntimeProvider>
     </TooltipProvider>
+  );
+};
+
+const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <ResponseStyleProvider>
+      <DashboardLayoutInner>{children}</DashboardLayoutInner>
+    </ResponseStyleProvider>
   );
 };
 

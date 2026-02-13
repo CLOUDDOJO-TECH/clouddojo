@@ -8,11 +8,11 @@ import PerformanceSection from "@/components/dashboard/performance-section";
 import RecentActivitySection from "@/components/dashboard/recent-activity-section";
 import { useDashboardQueries } from "./hooks/useDashboardQueries";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ChartLineIcon, Rocket } from "lucide-react";
+import { Rocket } from "lucide-react";
+import IconChartBarTrendUpFillDuo18 from "@/components/icons/chart-bar-trend-up-fill-duo";
 import PremiumAnalysisDashboard from "@/components/ai-report/premium-ai-analysis";
 import { CheckUser } from "@/app/(actions)/user/check-user";
 import React from "react";
-import UpgradeBadge from "@/components/ui/upgrade-badge";
 import { useSubscription } from "@/hooks/use-subscription";
 import Link from "next/link";
 import JoyrideIllustration from "@/components/dashboard/joyride-illustration";
@@ -64,10 +64,12 @@ function DashboardContent() {
   const {
     performanceStats,
     activityHistory,
+    weakAreas,
     hasAttempts,
     isLoadingPerformance,
     isLoadingActivity,
     isLoadingCategories,
+    isLoadingWeakAreas,
   } = useDashboardQueries(isLoaded && !!user);
 
   if (isProfileError) {
@@ -76,30 +78,25 @@ function DashboardContent() {
   }
 
   return (
-    <div className="space-y-8  px-4 pt-6 max-w-8xl md:px-12 mx-auto container">
-      <div className="px-2">
-        <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-        <p className="text-muted-foreground mt-2">
-          Welcome back, {isLoaded ? user?.firstName || "there" : "there"}!
-          Here's an overview of your learning progress.
-        </p>
-      </div>
+    <div className="space-y-8  px-4 pt-6 pb-16 max-w-8xl md:px-12 mx-auto container">
 
       <Tabs
         defaultValue={initialTab}
         className="w-full"
         onValueChange={handleTabChange}
       >
-        <TabsList className="grid w-full grid-cols-2 ">
-          <TabsTrigger value="analytics" className="flex items-center gap-2">
-            <ChartLineIcon className="h-4 w-4" />
-            Analytics
-          </TabsTrigger>
-          <TabsTrigger className="flex items-center gap-3" value="report">
-            AI Report
-            {!isSubscribed && <UpgradeBadge>Premium</UpgradeBadge>}
-          </TabsTrigger>
-        </TabsList>
+        <div className="fixed bottom-6 z-40 rounded-xl px-2 py-1 border border-dashed border-border/60 bg-sidebar shadow-[0_12px_60px_rgba(0,0,0,0.7),0_4px_20px_rgba(0,0,0,0.5)]" style={{ left: "calc(50% + var(--sidebar-width, 16rem) / 2)", transform: "translateX(-50%)" }}>
+          <TabsList className="grid grid-cols-2 w-auto rounded-lg bg-transparent p-0 gap-1">
+            <TabsTrigger value="analytics" className="flex items-center gap-2 px-5 py-1.5 text-sm rounded-md transition-all duration-300 ease-in-out hover:bg-sidebar-accent/40 hover:text-sidebar-foreground hover:scale-[1.02] data-[state=inactive]:active:scale-95 data-[state=active]:bg-primary/80 data-[state=active]:text-primary-foreground data-[state=active]:shadow-md">
+              <IconChartBarTrendUpFillDuo18 size="14px" />
+              Analytics
+            </TabsTrigger>
+            <TabsTrigger className="flex items-center gap-2 px-5 py-1.5 text-sm rounded-md transition-all duration-300 ease-in-out hover:bg-sidebar-accent/40 hover:text-sidebar-foreground hover:scale-[1.02] data-[state=inactive]:active:scale-95 data-[state=active]:bg-primary/80 data-[state=active]:text-primary-foreground data-[state=active]:shadow-md" value="report">
+              AI Report
+              {!isSubscribed && <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-400">Pro</span>}
+            </TabsTrigger>
+          </TabsList>
+        </div>
         <TabsContent value="analytics">
           {!hasAttempts && !isLoadingPerformance && !isLoadingActivity ? (
             <div className="relative w-full">
@@ -151,7 +148,9 @@ function DashboardContent() {
                 <Suspense fallback={<RecentActivitySkeleton />}>
                   <RecentActivitySection
                     activity={activityHistory || []}
+                    weakAreas={weakAreas || []}
                     isLoading={isLoadingActivity}
+                    isLoadingWeakAreas={isLoadingWeakAreas}
                   />
                 </Suspense>
               </div>
